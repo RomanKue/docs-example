@@ -1,0 +1,8 @@
+
+# IDE - JetBrains IntelliJ, WebStorm, ...
+.idea
+
+# IDE - VSCode
+.vscode
+
+*.bak

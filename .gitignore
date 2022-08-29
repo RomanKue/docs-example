@@ -6,3 +6,7 @@
 .vscode
 
 *.bak
+
+node_modules
+*.js
+*.d.ts

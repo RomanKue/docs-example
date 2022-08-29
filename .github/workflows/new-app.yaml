@@ -1,0 +1,47 @@
+name: handle all changes to a "New App" issue
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - reopened
+      - labeled
+      - unlabeled
+
+jobs:
+  check-terms-of-service:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      issues: write
+      contents: read
+      id-token: write
+    steps:
+      - name: print context
+        if: ${{ runner.debug }}
+        shell: bash
+        run: |
+          echo '${{ toJson(github) }}' | jq .
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          key: actions-${{ hashFiles('./.github/actions/**') }}
+          path: ./.github/actions
+      - uses: actions/setup-node@v3
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: ./.github/actions/package-lock.json
+      - name: npm ci
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        working-directory: ./.github/actions
+        run: npm ci
+      - name: tsc
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        working-directory: ./.github/actions
+        run: npx tsc
+      - name: new-app-issue
+        uses: ./.github/actions/new-app-issue/
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

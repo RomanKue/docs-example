@@ -19,6 +19,6 @@ name: *lower case app name, e.g. vehicle-visualizer*
 
 ## The Way We Work Together
 
- * [ ] I accept the [terms of service](https://atc-github.azure.cloud.bmw/UNITY/unity/blob/main/Terms%20of%20Service.md).
+ * [ ] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html).
 
 *Note: checkboxes can be checked by changing `[ ]` to `[x]`.*

@@ -9,11 +9,16 @@ assignees: ''
 
 I wish to run my app in UNITY. Here is the configuration I would like to start with:
 
-name: *lower case app name*
+name: *lower case app name, e.g. vehicle-visualizer*
 
-deployments:
+## Application Components
 
- * [] **front-end**: my app has a front-end (web application), please generate a stub from a template for me.
- * [] **back-end**: my app has a back-end (e.g. REST service), please generate a stub from a template for me.
+ * [ ] **front-end** my app has a front-end (web application), please generate a stub from a template for me.
+ * [ ] **back-end** my app has a back-end (e.g. REST service), please generate a stub from a template for me.
 
-I accept the [terms of service]().
+
+## The Way We Work Together
+
+ * [ ] I accept the [terms of service]().
+
+*Note: checkboxes can be checked by changing `[ ]` to `[x]`.*

@@ -1,0 +1,21 @@
+name: lint
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  editorconfig-checker:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pmd/setup-editorconfig-checker@v1
+      - run: editorconfig-checker
+  check-todos:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: pmd/check-todos@v1
+        with:
+          pathspec: "'*'"

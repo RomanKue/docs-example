@@ -1,0 +1,39 @@
+name: test-actions
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  eslint:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: ./.github/actions/package-lock.json
+      - name: eslint
+        working-directory: ./.github/actions
+        run: npx eslint
+  test:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: ./.github/actions/package-lock.json
+      - name: ci
+        working-directory: ./.github/actions
+        run: npm ci
+      - name: tsc
+        working-directory: ./.github/actions
+        run: npx tsc
+      - name: test
+        working-directory: ./.github/actions
+        run: npm test

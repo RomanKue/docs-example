@@ -9,7 +9,7 @@ on:
       - unlabeled
 
 jobs:
-  check-terms-of-service:
+  review-new-app-issue:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -41,7 +41,7 @@ jobs:
         if: ${{ steps.cache.outputs.cache-hit != 'true' }}
         working-directory: ./.github/actions
         run: npx tsc
-      - name: new-app-issue
-        uses: ./.github/actions/new-app-issue/
+      - name: review-review-new-app-issue
+        uses: ./.github/actions/review-review-new-app-issue/
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

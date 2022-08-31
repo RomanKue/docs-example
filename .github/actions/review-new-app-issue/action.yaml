@@ -1,0 +1,10 @@
+name: 'review-new-app-issue'
+description: 'Review an issue of type "New App".'
+inputs:
+  GITHUB_TOKEN:
+    description: the GITHUB_TOKEN to authenticate to the API
+    required: true
+
+runs:
+  using: 'node16'
+  main: 'main.js'

@@ -4,10 +4,8 @@
  * @see https://github.com/octokit/octokit.js
  */
 import * as core from "@actions/core";
-import {getIssue} from "../lib/octokit.js";
-import {marked} from 'marked';
-import Lexer = marked.Lexer;
 import {NewAppIssue, parseIssueBody} from './new-issue.js';
+import {getIssue} from '../lib/octokit.js';
 
 
 const checkAppSchema = (newAppIssue: NewAppIssue) => {

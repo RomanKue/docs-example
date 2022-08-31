@@ -7,4 +7,4 @@ inputs:
 
 runs:
   using: 'node16'
-  main: 'main.js'
+  main: '../dist/review-new-app-issue/main.js'

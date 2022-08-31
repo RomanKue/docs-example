@@ -9,16 +9,16 @@ assignees: ''
 
 I wish to run my app in UNITY. Here is the configuration I would like to start with:
 
-**Name:** *lower case app name, e.g. vehicle-visualizer*
+```yaml
+apiVersion: v1beta1
+name: <my-app-name>
+```
 
-### Application Components
+**Application Components**
 
- * [ ] **front-end** my app has a front-end (web application), please generate a stub from a template for me.
- * [ ] **back-end** my app has a back-end (e.g. REST service), please generate a stub from a template for me.
+ * [ ] please generate a front-end [Angular](http://angular.io) stub from a template for me.
+ * [ ] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.
 
-
-### The Way We Work Together
+**The Way We Work Together**
 
  * [ ] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html).
-
-*Note: checkboxes can be checked by changing `[ ]` to `[x]`.*

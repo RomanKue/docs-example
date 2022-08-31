@@ -6,17 +6,26 @@
 import * as core from "@actions/core";
 
 import * as github from "@actions/github";
-import {octokit} from "./octokit.js";
+import {octokit} from "../lib/octokit.js";
+import {marked} from 'marked';
+import {Issue} from "../lib/github/issue.js";
 
 const run = async () => {
-  const issue = await octokit.rest.issues.get({
+  const response = await octokit.rest.issues.get({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       issue_number: github.context.issue.number
     }
   );
-  core.debug(`issue: ${issue.data}`)
-  core.info(`hello world`)
+  const issue = response.data as Issue;
+  core.debug(`issue: ${response}`)
+
+  core.info(`${JSON.stringify(issue, null, 2)}`)
+
+  const lexer = new marked.Lexer({});
+  const tokens = lexer.lex(issue.body ?? '');
+
+  core.info(`${JSON.stringify(issue, null, 2)}`)
 }
 
 run().catch(e => {

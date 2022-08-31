@@ -24,3 +24,7 @@ rules:
   semi:
     - error
     - always
+  prefer-const:
+    - error
+  prefer-arrow-callback:
+    - error

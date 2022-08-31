@@ -7,27 +7,15 @@ import * as core from "@actions/core";
 import {getIssue} from "../lib/octokit.js";
 import {marked} from 'marked';
 import Lexer = marked.Lexer;
+import {NewAppIssue, parseIssueBody} from './new-issue.js';
 
-class NewAppIssue {
-
-}
-export const parseIssueBody = (body: string): NewAppIssue => {
-  const tokens = lexMarkdown(body);
-
-  // TODO
-  return new NewAppIssue();
-}
-
-const lexMarkdown = (md: string): ReturnType<Lexer['lex']> => {
-  const lexer = new marked.Lexer({});
-  const tokens = lexer.lex(md);
-  return tokens;
-}
 
 const checkAppSchema = (newAppIssue: NewAppIssue) => {
 }
 
 const checkTermsOfService = (newAppIssue: NewAppIssue) => {
+  if (!newAppIssue.termsOfServiceAccepted) {
+  }
 }
 
 const assignIssue = (newAppIssue: NewAppIssue) => {

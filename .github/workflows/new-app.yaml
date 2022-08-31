@@ -41,7 +41,7 @@ jobs:
         if: ${{ steps.cache.outputs.cache-hit != 'true' }}
         working-directory: ./.github/actions
         run: npx tsc
-      - name: review-review-new-app-issue
-        uses: ./.github/actions/review-review-new-app-issue/
+      - name: review-new-app-issue
+        uses: ./.github/actions/review-new-app-issue/
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}

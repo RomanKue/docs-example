@@ -1,4 +1,3 @@
-import {describe, expect, it} from '@jest/globals';
 import {
   isTermsOfServiceAccepted,
   NewAppIssue,
@@ -6,33 +5,18 @@ import {
   shouldDGenerateAngularStub,
   shouldGenerateQuarkusStub
 } from './new-issue';
+import * as fs from 'fs';
 
 describe('new-issue', () => {
   describe('parseIssueBody', () => {
     it('should return empty object when issue body is empty', () => {
       expect(parseIssueBody('')).toBeInstanceOf(NewAppIssue);
     });
-    it('should parse when issue is correct', () => {
-      const md = `
-I wish to run my app in UNITY. Here is the configuration I would like to start with:
-
-\`\`\`yaml
-apiVersion: v1beta1
-name: <my-app-name>
-\`\`\`
-
-**Application Components**
-
- * [x] please generate a front-end [Angular](http://angular.io) stub from a template for me.
- * [x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.
-
-**The Way We Work Together**
-
- * [x] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html).
-    `;
-
+    it('should parse when loading template file', () => {
+      const md = fs.readFileSync('../ISSUE_TEMPLATE/custom.md', 'utf8');
       const newAppIssue = parseIssueBody(md);
-      expect(newAppIssue.appYaml).toEqual('apiVersion: v1beta1\nname: <my-app-name>');
+      expect(newAppIssue.appSpec?.apiVersion).toEqual('v1beta1');
+      expect(newAppIssue.appSpec?.name).toEqual('<my-app-name>');
       expect(newAppIssue.generateAngularStub).toBe(true);
       expect(newAppIssue.generateQuarkusStub).toBe(true);
       expect(newAppIssue.termsOfServiceAccepted).toBe(true);

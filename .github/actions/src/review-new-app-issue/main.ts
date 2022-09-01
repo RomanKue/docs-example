@@ -64,7 +64,7 @@ const getTeamMembers = async (team_slug: string) => {
   // const unityAppApproversTeam = await listMembersInOrg({team_slug});
   // return unityAppApproversTeam.map(user => user.login);
   // TODO make this work via a PAT of a qq user, for now, just hard code it
-  return ['q453358']
+  return ['q453358'];
 };
 
 const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {
@@ -82,6 +82,7 @@ const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {
   if (approvers.indexOf(userLogin) >= 0) {
     // if requester is in the unityAppApproversTeam, we can skip the approval request process and approve directly
     await addLabelsToAnIssue({labels: [labels.approved]});
+    await deliver(issue, newAppIssue);
   } else {
     await addAssigneesToAnIssue({assignees: approvers});
     await addLabelsToAnIssue({labels: [labels.waitingForApproval]});

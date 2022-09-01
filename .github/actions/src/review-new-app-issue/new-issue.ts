@@ -4,16 +4,12 @@ import Code = marked.Tokens.Code;
 
 import * as yaml from 'js-yaml';
 import * as core from '@actions/core';
+import {AppSpec, AppSpecV1Beta1, isV1Beta1} from '../lib/unity/app-spec.js';
 
-export interface AppSpec {
-  apiVersion: string;
-}
 
-export interface AppSpecV1Beta1 extends AppSpec {
-  apiVersion: 'v1beta1';
-  name: string;
-}
-
+/**
+ *
+ */
 export class NewAppIssue {
   constructor(
     public appSpec: undefined | AppSpec & Partial<AppSpecV1Beta1>,
@@ -49,7 +45,7 @@ export const parseIssueBody = (body: string): NewAppIssue => {
     core.summary.addCodeBlock(appYaml, 'yaml');
     if (e instanceof Error && e.message) {
       core.summary.addRaw(`it failed with: `, true);
-      core.summary.addQuote(`e.message`);
+      core.summary.addQuote(`${e.message}`);
     }
   }
 

@@ -14,7 +14,7 @@ export const getIssue = async (
   options: Partial<Parameters<IssuesApi['get']>[0]> = {}
 ): Promise<Issue> => {
   const octokit = github.getOctokit(getGithubToken());
-  let response = await octokit.rest.issues.get({
+  const response = await octokit.rest.issues.get({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       issue_number: github.context.issue.number,

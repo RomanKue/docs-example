@@ -142,6 +142,7 @@ const run = async () => {
 
 run().catch(e => {
   if (e instanceof Error) {
+    core.error(`${e.message}\n${e.stack}`)
     core.setFailed(e.message);
   } else {
     core.setFailed(e);

@@ -2,9 +2,9 @@
   "compilerOptions": {
     "allowJs": false,
     "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
+    "forceConsistentCasingInFileNames": false,
     "lib": [
-      "ES2021"
+      "ES2020"
     ],
     "module": "ES2020",
     "moduleResolution": "Node16",

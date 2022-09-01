@@ -61,8 +61,10 @@ const isClosed = (issue: Readonly<Issue>): boolean => {
 
 
 const getTeamMembers = async (team_slug: string) => {
-  const unityAppApproversTeam = await listMembersInOrg({team_slug});
-  return unityAppApproversTeam.map(user => user.login);
+  // const unityAppApproversTeam = await listMembersInOrg({team_slug});
+  // return unityAppApproversTeam.map(user => user.login);
+  // TODO make this work via a PAT of a qq user, for now, just hard code it
+  return ['q453358']
 };
 
 const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {

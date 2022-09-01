@@ -1,0 +1,13 @@
+name: 'create-app'
+description: 'Create new UNITY app'
+inputs:
+  GITHUB_TOKEN:
+    description: the GITHUB_TOKEN to authenticate to the API
+    required: true
+  appYaml:
+    description: yaml spec of the app to create
+    required: true
+
+runs:
+  using: 'node16'
+  main: '../dist/create-app/main.js'

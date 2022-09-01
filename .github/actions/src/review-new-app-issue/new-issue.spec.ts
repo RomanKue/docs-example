@@ -17,9 +17,9 @@ describe('new-issue', () => {
       const newAppIssue = parseIssueBody(md);
       expect(newAppIssue.appSpec?.apiVersion).toEqual('v1beta1');
       expect(newAppIssue.appSpec?.name).toEqual('<my-app-name>');
-      expect(newAppIssue.generateAngularStub).toBe(true);
-      expect(newAppIssue.generateQuarkusStub).toBe(true);
-      expect(newAppIssue.termsOfServiceAccepted).toBe(true);
+      expect(newAppIssue.generateAngularStub).toBe(false);
+      expect(newAppIssue.generateQuarkusStub).toBe(false);
+      expect(newAppIssue.termsOfServiceAccepted).toBe(false);
     });
   });
 

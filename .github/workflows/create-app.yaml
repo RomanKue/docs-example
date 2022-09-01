@@ -1,0 +1,46 @@
+name: create new UNITY app
+on:
+  workflow_dispatch:
+    inputs:
+      appYaml:
+        description: yaml spec of the app to create
+        required: true
+        type: string
+
+jobs:
+  create-app:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: print context
+        if: ${{ runner.debug }}
+        shell: bash
+        run: |
+          echo '${{ toJson(github) }}' | jq .
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3
+        with:
+          key: actions-${{ hashFiles('./.github/actions/**') }}
+          path: ./.github/actions
+      - uses: actions/setup-node@v3
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        with:
+          node-version: 16
+          cache: npm
+          cache-dependency-path: ./.github/actions/package-lock.json
+      - name: npm ci
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        working-directory: ./.github/actions
+        run: npm ci
+      - name: tsc
+        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+        working-directory: ./.github/actions
+        run: npx tsc
+      - name: create-app
+        uses: ./.github/actions/create-app/
+        with:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          appYaml: ${{ inputs.appYaml }}

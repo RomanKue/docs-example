@@ -27,7 +27,7 @@ const checkAppSchema = (issue: Issue, newAppIssue: NewAppIssue): boolean => {
     let userLogin = issue.user?.login;
     commentOnIssue({
       body:
-        `❌ @${userLogin} it seems that you have chosen an app name that does not meet our requirements. Could you pleas update your issue, choosing a different app name? Here are a few examples of app names that would work: \`fancy-calculator\`, \`magicmachine\``
+        `❌ @${userLogin} it seems that you have chosen an app name that does not meet our requirements. Could you please update your issue, choosing a different app name? Here are a few examples of app names that would work: \`fancy-calculator\`, \`magicmachine\``
     });
     return false;
   }
@@ -85,14 +85,16 @@ const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {
   }
 };
 
-const removeReviewRequest = async (issue: Issue, newAppIssue: NewAppIssue) => {
+const removeApprovalRequest = async (issue: Issue, newAppIssue: NewAppIssue) => {
+  if (!isWaitingForApproval(issue)) {
+    return
+  }
   let userLogin = issue.user?.login;
   commentOnIssue({
     body:
-      `❓@${userLogin} the issue does not seem to ve ready for approval anymore, so I am removing the approval request for now. As soon as the issue is ready, I will request approval again for you.`
+      `❓@${userLogin} the issue does not seem to be ready for approval anymore, so I am removing the approval request for now. As soon as the issue is ready, I will request approval again for you.`
   });
   await removeALabelFromAnIssue({name: labels.waitingForApproval});
-
   const assignees = await getTeamMembers(teams.unityAppApproversSlug);
   await removeAssigneesFromAnIssue({assignees});
 };
@@ -134,7 +136,7 @@ const run = async () => {
       await requestApproval(issue, newAppIssue);
     }
   } else {
-    await removeReviewRequest(issue, newAppIssue);
+    await removeApprovalRequest(issue, newAppIssue);
   }
 };
 

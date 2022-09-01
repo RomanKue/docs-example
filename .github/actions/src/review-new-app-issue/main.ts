@@ -69,6 +69,7 @@ const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {
   if (isWaitingForApproval(issue) || isApproved(issue)) {
     return;
   }
+  core.info(`requesting approval`);
 
   const userLogin = issue.user?.login;
   if (!userLogin) {
@@ -87,8 +88,9 @@ const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {
 
 const removeApprovalRequest = async (issue: Issue, newAppIssue: NewAppIssue) => {
   if (!isWaitingForApproval(issue)) {
-    return
+    return;
   }
+  core.info(`removing approval request`);
   let userLogin = issue.user?.login;
   commentOnIssue({
     body:
@@ -100,6 +102,7 @@ const removeApprovalRequest = async (issue: Issue, newAppIssue: NewAppIssue) => 
 };
 
 const dispatchNewAppWorkflow = async (issue: Issue, newAppIssue: NewAppIssue) => {
+  core.info(`dispatching ${workflows.createApp} workflow`);
   await createAWorkflowDispatchEvent({
     workflow_id: workflows.createApp,
     ref: 'main', inputs: {
@@ -142,7 +145,7 @@ const run = async () => {
 
 run().catch(e => {
   if (e instanceof Error) {
-    core.error(`${e.message}\n${e.stack}`)
+    core.error(`${e.message}\n${e.stack}`);
     core.setFailed(e.message);
   } else {
     core.setFailed(e);

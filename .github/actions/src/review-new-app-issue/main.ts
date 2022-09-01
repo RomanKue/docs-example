@@ -79,9 +79,9 @@ const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {
   }
   const approvers = await getTeamMembers(teams.unityAppApproversSlug);
 
-  // if requester is in the unityAppApproversTeam, we can skip the review process
   if (approvers.indexOf(userLogin) >= 0) {
-    await addLabelsToAnIssue({labels: []});
+    // if requester is in the unityAppApproversTeam, we can skip the approval request process and approve directly
+    await addLabelsToAnIssue({labels: [labels.approved]});
   } else {
     await addAssigneesToAnIssue({assignees: approvers});
     await addLabelsToAnIssue({labels: [labels.waitingForApproval]});

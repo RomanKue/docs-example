@@ -22,6 +22,10 @@ export const getOctokit = () => {
     core.info(`${options.method} ${options.url} - ${response.status}`);
     core.debug(`${JSON.stringify(response, null, 2)}`);
   });
+  octokit.hook.error('request', async (error, options) => {
+    core.error(`${options.method} ${options.url}\n${JSON.stringify(options.data, null, 2)}\n${error.message}`);
+    throw error;
+  });
   return octokit;
 };
 

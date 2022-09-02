@@ -7,7 +7,7 @@
  * @see https://atc-github.azure.cloud.bmw/orgs/UNITY/teams
  */
 export const teams = {
-  unityAppApproversSlug: '@UNITY/unity-app-approvers',
+  unityAppApproversSlug: 'unity-app-approvers',
 } as const;
 
 /**

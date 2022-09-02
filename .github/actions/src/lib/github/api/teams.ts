@@ -1,5 +1,4 @@
 import * as github from '@actions/github';
-import * as core from '@actions/core';
 import {FullTeam} from '../response/full-team.js';
 import {SimpleUser} from '../response/simple-user.js';
 import {RestApi} from './rest.js';
@@ -17,9 +16,7 @@ export const getTeamByName = async (
     org: github.context.repo.owner,
     ...options
   });
-  const fullTeam = response.data as FullTeam;
-  core.debug(`${JSON.stringify(fullTeam, null, 2)}`);
-  return fullTeam;
+  return response.data as FullTeam;
 };
 
 /**
@@ -32,7 +29,5 @@ export const listMembersInOrg = async (
     org: github.context.repo.owner,
     ...options
   });
-  const simpleUsers = response.data as SimpleUser[];
-  core.debug(`${JSON.stringify(simpleUsers, null, 2)}`);
-  return simpleUsers;
+  return response.data as SimpleUser[];
 };

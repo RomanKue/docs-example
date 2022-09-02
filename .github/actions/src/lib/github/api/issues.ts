@@ -1,5 +1,4 @@
 import * as github from '@actions/github';
-import * as core from '@actions/core';
 import {Issue} from '../response/issue.js';
 import {IssueComment} from '../response/issue-comment.js';
 import {Label} from '../response/label.js';
@@ -21,9 +20,7 @@ export const getIssue = async (
       ...options
     }
   );
-  const issue = response.data as Issue;
-  core.debug(`${JSON.stringify(issue, null, 2)}`);
-  return issue;
+  return response.data as Issue;
 };
 
 /**
@@ -38,9 +35,7 @@ export const commentOnIssue = async (
     issue_number: github.context.issue.number,
     ...options
   });
-  const issueComment = response.data as IssueComment;
-  core.debug(`${JSON.stringify(issueComment, null, 2)}`);
-  return issueComment;
+  return response.data as IssueComment;
 };
 
 /**
@@ -55,9 +50,7 @@ export const addAssigneesToAnIssue = async (
     issue_number: github.context.issue.number,
     ...options
   });
-  const issue = response.data as Issue;
-  core.debug(`${JSON.stringify(issue, null, 2)}`);
-  return issue;
+  return response.data as Issue;
 };
 
 /**
@@ -72,9 +65,7 @@ export const removeAssigneesFromAnIssue = async (
     issue_number: github.context.issue.number,
     ...options
   });
-  const issue = response.data as Issue;
-  core.debug(`${JSON.stringify(issue, null, 2)}`);
-  return issue;
+  return response.data as Issue;
 };
 
 
@@ -90,9 +81,7 @@ export const addLabelsToAnIssue = async (
     issue_number: github.context.issue.number,
     ...options
   });
-  const labels = response.data as Label[];
-  core.debug(`${JSON.stringify(labels, null, 2)}`);
-  return labels;
+  return response.data as Label[];
 };
 
 /**
@@ -107,7 +96,5 @@ export const removeALabelFromAnIssue = async (
     issue_number: github.context.issue.number,
     ...options
   });
-  const labels = response.data as Label[];
-  core.debug(`${JSON.stringify(labels, null, 2)}`);
-  return labels;
+  return response.data as Label[];
 };

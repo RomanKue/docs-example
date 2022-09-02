@@ -145,7 +145,9 @@ const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): Promise<
         let userLogin = issue.user?.login;
         commentOnIssue({
           body:
-            `🚫 @${userLogin} it seems that the user ${member.qNumber} cannot be found in GitHub. Please check the members in app specification.\nYou can let me re-check by commenting "check" on this issue.`
+            `🚫 @${userLogin} it seems that the user ${member.qNumber} cannot be found in GitHub. Please check the members in app specification.
+
+            You can let me re-check by commenting \`${magicComments.check}\` on this issue.`
         });
         return false;
       }
@@ -171,7 +173,12 @@ const run = async () => {
   const issue = await getIssue();
   switch (github.context.eventName) {
   case 'issue_comment':
-    if (!((github.context.payload.comment as IssueComment).body ?? '').includes(magicComments.check)) {
+    const payloadComment = github.context.payload.comment as IssueComment;
+    if (payloadComment.user?.login.startsWith('qq')) {
+      // dont't react on qq-users comments
+      return;
+    }
+    if (!(payloadComment.body ?? '').includes(magicComments.check) && payloadComment.user) {
       return;
     }
     break;

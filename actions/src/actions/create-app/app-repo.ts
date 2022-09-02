@@ -41,7 +41,7 @@ export const createRepository = async (appSpec: AppSpec) => {
     message: `add README.md`
   });
 
-  for (let defaultBranch in Object.values(defaultBranches)) {
+  for (let defaultBranch of Object.values(defaultBranches)) {
     await createAReference({
       repo: appRepository.name,
       ref: `refs/heads/${defaultBranch}`,

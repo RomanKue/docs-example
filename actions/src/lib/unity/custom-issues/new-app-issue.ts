@@ -5,6 +5,7 @@ import Code = marked.Tokens.Code;
 import * as yaml from 'js-yaml';
 import * as core from '@actions/core';
 import {AppSpec, AppSpecV1Beta1, isV1Beta1, parseYaml} from '../app-spec.js';
+import {Issue} from '../../github/api/issues/response/issue.js';
 
 
 /**
@@ -20,6 +21,10 @@ export class NewAppIssue {
   }
 
 }
+
+export const isClosed = (issue: Readonly<Issue>): boolean => {
+  return !!issue.closed_at;
+};
 
 export const isTermsOfServiceAccepted = (body: string): boolean => {
   return body.indexOf('[x] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html)') >= 0;

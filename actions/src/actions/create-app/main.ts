@@ -5,12 +5,12 @@
  */
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import {Issue} from '../lib/github/api/issues/response/issue.js';
-import {AppSpec, isRepoExistent, parseYaml, repoName} from '../lib/unity/app-spec.js';
-import {commentOnIssue, getIssue, lockAnIssue, updateAnIssue} from '../lib/github/api/issues/issues.js';
-import {parseIssueBody} from '../lib/unity/custom-issues/new-app-issue.js';
-import {createAnOrganizationRepository, listOrganizationRepositories} from '../lib/github/api/repos/repositories.js';
-import {repos} from '../lib/unity/config.js';
+import {Issue} from '../../lib/github/api/issues/response/issue.js';
+import {AppSpec, isRepoExistent, parseYaml, repoName} from '../../lib/unity/app-spec.js';
+import {commentOnIssue, getIssue, lockAnIssue, updateAnIssue} from '../../lib/github/api/issues/issues.js';
+import {isClosed, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
+import {createAnOrganizationRepository, listOrganizationRepositories} from '../../lib/github/api/repos/repositories.js';
+import {labels, repos} from '../../lib/unity/config.js';
 
 const triggeredByWorkflowDispatch = (): AppSpec => {
   const appYaml = core.getInput('appYaml');
@@ -28,8 +28,8 @@ const triggeredByIssue = (issue: Issue): AppSpec => {
 
 
 const createNewApp = async (appSpec: AppSpec) => {
-  const newAppRepoName = repoName(appSpec.name)
-  if (await isRepoExistent(appSpec.name)){
+  const newAppRepoName = repoName(appSpec.name);
+  if (await isRepoExistent(appSpec.name)) {
     throw new Error(`the repository ${newAppRepoName} already exists`);
   }
 
@@ -52,6 +52,22 @@ const closeWithComment = (issue: Issue) => {
   });
 };
 
+const areRunPreconditionsMet = (issue: Issue) => {
+  if (isClosed(issue)) {
+    core.info(`aborting, issue is closed`);
+    return false;
+  }
+  if (!issue.labels.includes(labels.newApp)) {
+    core.info(`aborting, issue is not labeled with ${labels.newApp}`);
+    return false;
+  }
+  if (!issue.labels.includes(labels.approved)) {
+    core.info(`aborting, issue is not labeled with ${labels.approved}`);
+    return false;
+  }
+  return true;
+};
+
 const run = async () => {
   let issue: Issue | undefined;
   let appSpec: AppSpec | undefined;
@@ -61,6 +77,10 @@ const run = async () => {
     break;
   case 'issues':
     issue = await getIssue();
+    if (!areRunPreconditionsMet(issue)) {
+      return;
+      ;
+    }
     appSpec = triggeredByIssue(issue);
     break;
   default:
@@ -79,17 +99,12 @@ const run = async () => {
   }
 };
 
+
 run().catch(e => {
   if (e instanceof Error) {
-    core.error(`;${e.message}
-\n$;
-  {
-    e.stack;
-  }
-  `);
+    core.error(`${e.message}\n${e.stack}`);
     core.setFailed(e.message);
   } else {
     core.setFailed(e);
   }
 });
-

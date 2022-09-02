@@ -7,4 +7,4 @@ inputs:
 
 runs:
   using: 'node16'
-  main: '../../../actions/dist/review-custom-issues/main.js'
+  main: '../../../actions/dist/actions/review-custom-issues/main.js'

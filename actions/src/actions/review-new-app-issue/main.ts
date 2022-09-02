@@ -4,7 +4,7 @@
  * @see https://github.com/octokit/octokit.js
  */
 import * as core from '@actions/core';
-import {NewAppIssue, parseIssueBody} from '../lib/unity/custom-issues/new-app-issue.js';
+import {isClosed, NewAppIssue, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
 import {
   addAssigneesToAnIssue,
   addLabelsToAnIssue,
@@ -12,15 +12,15 @@ import {
   getIssue,
   removeALabelFromAnIssue,
   removeAssigneesFromAnIssue
-} from '../lib/github/api/issues/issues.js';
-import {Issue} from '../lib/github/api/issues/response/issue.js';
-import {isKebabCase} from '../lib/case-conventions.js';
-import {listMembersInOrg} from '../lib/github/api/teams/teams.js';
-import {labels, teams, workflows} from '../lib/unity/config.js';
-import {createAWorkflowDispatchEvent} from '../lib/github/api/actions/actions.js';
+} from '../../lib/github/api/issues/issues.js';
+import {Issue} from '../../lib/github/api/issues/response/issue.js';
+import {isKebabCase} from '../../lib/case-conventions.js';
+import {listMembersInOrg} from '../../lib/github/api/teams/teams.js';
+import {labels, teams, workflows} from '../../lib/unity/config.js';
+import {createAWorkflowDispatchEvent} from '../../lib/github/api/actions/actions.js';
 import * as yaml from 'js-yaml';
-import {listOrganizationRepositories} from '../lib/github/api/repos/repositories.js';
-import {isRepoExistent, repoName} from '../lib/unity/app-spec.js';
+import {listOrganizationRepositories} from '../../lib/github/api/repos/repositories.js';
+import {isRepoExistent, repoName} from '../../lib/unity/app-spec.js';
 
 const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app yaml`);
@@ -55,10 +55,6 @@ const isWaitingForApproval = (issue: Readonly<Issue>): boolean => {
 
 const isApproved = (issue: Readonly<Issue>): boolean => {
   return issue.labels.indexOf(labels.approved) >= 0;
-};
-
-const isClosed = (issue: Readonly<Issue>): boolean => {
-  return !!issue.closed_at;
 };
 
 const getTeamMembers = async (team_slug: string) => {
@@ -134,9 +130,25 @@ const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boo
   return true;
 };
 
+const areRunPreconditionsMet = (issue: Issue) => {
+  if (isClosed(issue)) {
+    core.info(`aborting, issue is closed`);
+    return false;
+  }
+  if (!issue.labels.includes(labels.newApp)) {
+    core.info(`aborting, issue is not labeled with ${labels.newApp}`);
+    return false;
+  }
+  if (!issue.labels.includes(labels.approved)) {
+    core.info(`aborting, issue is not labeled with ${labels.approved}`);
+    return false;
+  }
+  return true;
+};
+
 const run = async () => {
   const issue = await getIssue();
-  if (isClosed(issue)) {
+  if (!areRunPreconditionsMet(issue)) {
     return;
   }
   const newAppIssue = parseIssueBody(issue.body ?? '');

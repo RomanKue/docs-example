@@ -170,9 +170,10 @@ const areRunPreconditionsMet = (issue: Issue) => {
 
 const run = async () => {
   core.debug(`cwd: ${process.cwd()}`);
-  core.summary.addHeading('Event');
-  core.summary.addRaw(`event: ${github.context.eventName}`);
-  await core.summary.write();
+  await core.summary
+    .addHeading('Event')
+    .addRaw(`event: ${github.context.eventName}`)
+    .write();
 
   const issue = await getIssue();
   switch (github.context.eventName) {

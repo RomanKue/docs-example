@@ -5,35 +5,33 @@ on:
       - main
   pull_request:
 jobs:
+  build:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v3
+      - name: build-actions
+        uses: ./.github/actions/build-actions
   eslint:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 5
+    needs:
+      - build
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: npm
-          cache-dependency-path: ./.github/actions/package-lock.json
+      - uses: ./.github/actions/build-actions
       - name: eslint
         working-directory: ./.github/actions
         run: npx eslint
   test:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
+    needs:
+      - build
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-          cache: npm
-          cache-dependency-path: ./.github/actions/package-lock.json
-      - name: ci
-        working-directory: ./.github/actions
-        run: npm ci
-      - name: tsc
-        working-directory: ./.github/actions
-        run: npx tsc
+      - name: build-actions
+        uses: ./.github/actions/build-actions
       - name: test
         working-directory: ./.github/actions
         run: npm test

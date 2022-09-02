@@ -1,0 +1,32 @@
+name: 'build-actions'
+description: 'Build js actions'
+
+runs:
+  using: composite
+  steps:
+    - name: print context
+      if: ${{ runner.debug }}
+      shell: bash
+      run: |
+        echo '${{ toJson(github) }}' | jq .
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+        cache: npm
+        cache-dependency-path: ./.github/actions/package-lock.json
+    - uses: actions/cache@v3
+      id: cache
+      with:
+        key: actions-${{ hashFiles('./.github/actions/**') }}
+        path: ./.github/actions
+    - name: npm ci
+      if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+      working-directory: ./.github/actions
+      shell: bash
+      run: npm ci
+    - name: tsc
+      if: ${{ steps.cache.outputs.cache-hit != 'true' }}
+      working-directory: ./.github/actions
+      shell: bash
+      run: npx tsc

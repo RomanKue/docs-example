@@ -17,30 +17,9 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - name: print context
-        if: ${{ runner.debug }}
-        shell: bash
-        run: |
-          echo '${{ toJson(github) }}' | jq .
       - uses: actions/checkout@v3
-      - uses: actions/cache@v3
-        with:
-          key: actions-${{ hashFiles('./.github/actions/**') }}
-          path: ./.github/actions
-      - uses: actions/setup-node@v3
-        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
-        with:
-          node-version: 16
-          cache: npm
-          cache-dependency-path: ./.github/actions/package-lock.json
-      - name: npm ci
-        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
-        working-directory: ./.github/actions
-        run: npm ci
-      - name: tsc
-        if: ${{ steps.cache.outputs.cache-hit != 'true' }}
-        working-directory: ./.github/actions
-        run: npx tsc
+      - name: build-actions
+        uses: ./.github/actions/build-actions
       - name: review-new-app-issue
         uses: ./.github/actions/review-new-app-issue/
         with:

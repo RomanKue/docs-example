@@ -5,20 +5,13 @@
  */
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import * as yaml from 'js-yaml';
 import {Issue} from '../../lib/github/api/issues/response/issue.js';
-import {AppSpec, isRepoExistent, isV1Beta1, parseYaml, repoName} from '../../lib/unity/app-spec.js';
+import {AppSpec, parseYaml} from '../../lib/unity/app-spec.js';
 import {commentOnIssue, getIssue, lockAnIssue, updateAnIssue} from '../../lib/github/api/issues/issues.js';
 import {hasLabel, isClosed, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
-import {
-  addARepositoryCollaborator,
-  createAnOrganizationRepository,
-  createOrUpdateFileContents
-} from '../../lib/github/api/repos/repositories.js';
-import {defaultBranches, labels} from '../../lib/unity/config.js';
+import {labels} from '../../lib/unity/config.js';
 import {Repository} from '../../lib/github/api/repos/response/repository.js';
-import {createAReference} from '../../lib/github/api/git/git.js';
-import {FileCommit} from '../../lib/github/api/repos/response/file-commit.js';
+import {createRepository} from './app-repo.js';
 
 const triggeredByWorkflowDispatch = (): AppSpec => {
   const appYaml = core.getInput('appYaml');
@@ -34,56 +27,10 @@ const triggeredByIssue = (issue: Issue): AppSpec => {
   return newAppIssue.appSpec;
 };
 
-
-function createReadme(appSpec: AppSpec) {
-  return `
-# ${appSpec.name}
-`.trim();
-}
-
 const createNewApp = async (appSpec: AppSpec) => {
-  const newAppRepoName = repoName(appSpec.name);
-  if (await isRepoExistent(appSpec.name)) {
-    throw new Error(`the repository ${newAppRepoName} already exists`);
-  }
+  const appRepository = await createRepository(appSpec);
 
-  const appRepository = await createAnOrganizationRepository({
-    name: newAppRepoName,
-    visibility: 'internal'
-  });
-
-  let commit: FileCommit;
-  commit = await createOrUpdateFileContents({
-    repo: appRepository.name,
-    path: 'app.yaml',
-    content: Buffer.from(yaml.dump(appSpec), 'base64').toString(),
-    message: `add app.yaml`
-  });
-
-  commit = await createOrUpdateFileContents({
-    repo: appRepository.name,
-    path: 'README.md',
-    content: Buffer.from(createReadme(appSpec), 'base64').toString(),
-    message: `add app.yaml`
-  });
-
-  for (let defaultBranch in Object.values(defaultBranches)) {
-    await createAReference({
-      repo: appRepository.name,
-      ref: `refs/heads/${defaultBranch}`,
-      sha: commit.commit.sha!
-    });
-  }
-
-  if ('members' in appSpec) {
-    for (const member of appSpec.members) {
-      await addARepositoryCollaborator({
-        repo: appRepository.name,
-        username: member.qNumber,
-      });
-    }
-  }
-
+  // deploy Helm chart
 
   return appRepository;
 };

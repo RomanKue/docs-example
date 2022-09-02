@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: build-actions
         uses: ./.github/actions/build-actions
-      - name: review-custom-issues
-        uses: ./.github/actions/review-custom-issues/
+      - name: review-new-app-issue
+        uses: ./.github/actions/review-new-app-issue/
         with:
           GITHUB_TOKEN: ${{secrets.UNITY_BOT_TOKEN}}

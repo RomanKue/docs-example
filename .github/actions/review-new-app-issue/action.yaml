@@ -1,4 +1,4 @@
-name: 'review-custom-issues'
+name: 'review-new-app-issue'
 description: 'Review an issue of type "New App".'
 inputs:
   GITHUB_TOKEN:
@@ -7,4 +7,4 @@ inputs:
 
 runs:
   using: 'node16'
-  main: '../../../actions/dist/actions/review-custom-issues/main.js'
+  main: '../../../actions/dist/actions/review-new-app-issue/main.js'

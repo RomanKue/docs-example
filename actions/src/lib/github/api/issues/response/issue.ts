@@ -5,6 +5,8 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+import {Label} from './label.js';
+
 /**
  * How the author is associated with the repository.
  */
@@ -57,19 +59,7 @@ export interface Issue {
   /**
    * Labels to associate with this issue; pass one or more label names to replace the set of labels on this issue; send an empty array to clear all labels from the issue; note that the labels are silently dropped for users without push access to the repository
    */
-  labels: (
-    | string
-    | {
-        id?: number;
-        node_id?: string;
-        url?: string;
-        name?: string;
-        description?: string | null;
-        color?: string | null;
-        default?: boolean;
-        [k: string]: unknown;
-      }
-  )[];
+  labels: Label[];
   assignee: null | SimpleUser1;
   assignees?: SimpleUser2[] | null;
   milestone: null | Milestone;

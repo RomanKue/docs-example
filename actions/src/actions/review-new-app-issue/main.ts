@@ -4,7 +4,7 @@
  * @see https://github.com/octokit/octokit.js
  */
 import * as core from '@actions/core';
-import {isClosed, NewAppIssue, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
+import {hasLabel, isClosed, NewAppIssue, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
 import {
   addAssigneesToAnIssue,
   addLabelsToAnIssue,
@@ -21,6 +21,7 @@ import {createAWorkflowDispatchEvent} from '../../lib/github/api/actions/actions
 import * as yaml from 'js-yaml';
 import {listOrganizationRepositories} from '../../lib/github/api/repos/repositories.js';
 import {isRepoExistent, repoName} from '../../lib/unity/app-spec.js';
+import {is} from '@babel/types';
 
 const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app yaml`);
@@ -50,11 +51,11 @@ const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue): Prom
 };
 
 const isWaitingForApproval = (issue: Readonly<Issue>): boolean => {
-  return issue.labels.includes(labels.waitingForApproval);
+  return hasLabel(issue, labels.waitingForApproval)
 };
 
 const isApproved = (issue: Readonly<Issue>): boolean => {
-  return issue.labels.includes(labels.approved);
+  return hasLabel(issue, labels.approved)
 };
 
 const getTeamMembers = async (team_slug: string) => {
@@ -115,12 +116,8 @@ const areRunPreconditionsMet = (issue: Issue) => {
     core.info(`aborting, issue is closed`);
     return false;
   }
-  if (!issue.labels.includes(labels.newApp)) {
+  if (!hasLabel(issue, labels.newApp)) {
     core.info(`aborting, issue is not labeled with ${labels.newApp}`);
-    return false;
-  }
-  if (!issue.labels.includes(labels.approved)) {
-    core.info(`aborting, issue is not labeled with ${labels.approved}`);
     return false;
   }
   return true;

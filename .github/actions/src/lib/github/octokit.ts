@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import {Octokit} from '@octokit/rest';
 
 export const getGithubToken = (): string => {
   const githubToken = core.getInput('GITHUB_TOKEN');
@@ -10,13 +11,15 @@ export const getGithubToken = (): string => {
 };
 
 export const getOctokit = () => {
-  return github.getOctokit(getGithubToken(), {
+  return new Octokit({
+    auth: getGithubToken(),
+    baseUrl: github.context.apiUrl,
     log: {
       debug: message => core.debug(message),
       info: message => core.info(message),
       warn: message => core.warning(message),
       error: message => core.error(message),
-    }
+    },
   });
 };
 

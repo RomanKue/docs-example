@@ -1,9 +1,9 @@
 import * as github from '@actions/github';
-import {Issue} from '../response/issue.js';
-import {IssueComment} from '../response/issue-comment.js';
-import {Label} from '../response/label.js';
-import {RestApi} from './rest.js';
-import {getOctokit} from '../octokit.js';
+import {Issue} from './response/issue.js';
+import {IssueComment} from './response/issue-comment.js';
+import {Label} from './response/label.js';
+import {RestApi} from '../rest.js';
+import {getOctokit} from '../../octokit.js';
 
 type IssuesApi = RestApi['issues'];
 
@@ -51,6 +51,35 @@ export const addAssigneesToAnIssue = async (
     ...options
   });
   return response.data as Issue;
+};
+
+/**
+ * see https://docs.github.com/en/rest/issues/issues#update-an-issue
+ */
+export const updateAnIssue = async (
+  options: Partial<Parameters<IssuesApi['update']>[0]>
+): Promise<Issue> => {
+  const response = await getOctokit().rest.issues.update({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    issue_number: github.context.issue.number,
+    ...options
+  });
+  return response.data as Issue;
+};
+
+/**
+ * see https://docs.github.com/en/rest/issues/issues#lock-an-issue
+ */
+export const lockAnIssue = async (
+  options: Partial<Parameters<IssuesApi['lock']>[0]>
+): Promise<void> => {
+  const response = await getOctokit().rest.issues.lock({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    issue_number: github.context.issue.number,
+    ...options
+  });
 };
 
 /**

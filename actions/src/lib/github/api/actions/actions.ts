@@ -1,6 +1,6 @@
-import {RestApi} from './rest.js';
+import {RestApi} from '../rest.js';
 import * as github from '@actions/github';
-import {getOctokit} from '../octokit.js';
+import {getOctokit} from '../../octokit.js';
 
 type ActionsApi = RestApi['actions'];
 

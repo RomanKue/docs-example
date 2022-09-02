@@ -1,8 +1,8 @@
 import * as github from '@actions/github';
-import {FullTeam} from '../response/full-team.js';
-import {SimpleUser} from '../response/simple-user.js';
-import {RestApi} from './rest.js';
-import {getOctokit} from '../octokit.js';
+import {FullTeam} from './response/full-team.js';
+import {SimpleUser} from './response/simple-user.js';
+import {RestApi} from '../rest.js';
+import {getOctokit} from '../../octokit.js';
 
 type TeamsApi = RestApi['teams'];
 

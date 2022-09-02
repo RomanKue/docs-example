@@ -6,6 +6,9 @@ on:
         description: yaml spec of the app to create
         required: true
         type: string
+  issues:
+    types:
+      - labeled
 
 jobs:
   create-app:

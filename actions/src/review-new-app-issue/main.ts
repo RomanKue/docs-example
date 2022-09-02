@@ -4,7 +4,7 @@
  * @see https://github.com/octokit/octokit.js
  */
 import * as core from '@actions/core';
-import {NewAppIssue, parseIssueBody} from './new-issue.js';
+import {NewAppIssue, parseIssueBody} from '../lib/unity/custom-issues/new-app-issue.js';
 import {
   addAssigneesToAnIssue,
   addLabelsToAnIssue,
@@ -12,15 +12,17 @@ import {
   getIssue,
   removeALabelFromAnIssue,
   removeAssigneesFromAnIssue
-} from '../lib/github/api/issues.js';
-import {Issue} from '../lib/github/response/issue.js';
+} from '../lib/github/api/issues/issues.js';
+import {Issue} from '../lib/github/api/issues/response/issue.js';
 import {isKebabCase} from '../lib/case-conventions.js';
-import {listMembersInOrg} from '../lib/github/api/teams.js';
+import {listMembersInOrg} from '../lib/github/api/teams/teams.js';
 import {labels, teams, workflows} from '../lib/unity/config.js';
-import {createAWorkflowDispatchEvent} from '../lib/github/api/actions.js';
+import {createAWorkflowDispatchEvent} from '../lib/github/api/actions/actions.js';
 import * as yaml from 'js-yaml';
+import {listOrganizationRepositories} from '../lib/github/api/repos/repositories.js';
+import {isRepoExistent, repoName} from '../lib/unity/app-spec.js';
 
-const checkAppSchema = (issue: Issue, newAppIssue: NewAppIssue): boolean => {
+const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app yaml`);
   // later on, this should do a proper JSON schema match, for new we just check the name
   if (!isKebabCase(newAppIssue.appSpec?.name ?? '')) {
@@ -34,7 +36,7 @@ const checkAppSchema = (issue: Issue, newAppIssue: NewAppIssue): boolean => {
   return true;
 };
 
-const checkTermsOfService = (issue: Issue, newAppIssue: NewAppIssue): boolean => {
+const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking if terms of service are accepted`);
   let userLogin = issue.user?.login;
   if (!newAppIssue.termsOfServiceAccepted) {
@@ -58,7 +60,6 @@ const isApproved = (issue: Readonly<Issue>): boolean => {
 const isClosed = (issue: Readonly<Issue>): boolean => {
   return !!issue.closed_at;
 };
-
 
 const getTeamMembers = async (team_slug: string) => {
   const unityAppApproversTeam = await listMembersInOrg({team_slug});
@@ -121,6 +122,18 @@ const deliver = async (issue: Issue, newAppIssue: NewAppIssue) => {
   });
 };
 
+const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
+  if (await isRepoExistent(newAppIssue.appSpec?.name)) {
+    let userLogin = issue.user?.login;
+    commentOnIssue({
+      body:
+        `🚫 @${userLogin} it seems that the name ${newAppIssue.appSpec?.name ?? ''} is already in use, please choose a different name.`
+    });
+    return false;
+  }
+  return true;
+};
+
 const run = async () => {
   const issue = await getIssue();
   if (isClosed(issue)) {
@@ -128,12 +141,13 @@ const run = async () => {
   }
   const newAppIssue = parseIssueBody(issue.body ?? '');
 
-  let allConditionsChecked = true;
+  let allGood = true;
 
-  allConditionsChecked &&= checkTermsOfService(issue, newAppIssue);
-  allConditionsChecked &&= checkAppSchema(issue, newAppIssue);
+  allGood &&= await checkTermsOfService(issue, newAppIssue);
+  allGood &&= await checkAppSchema(issue, newAppIssue);
+  allGood &&= await checkAppName(issue, newAppIssue);
 
-  if (allConditionsChecked) {
+  if (allGood) {
     if (isApproved(issue)) {
       await deliver(issue, newAppIssue);
     } else {

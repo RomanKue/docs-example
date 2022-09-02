@@ -25,5 +25,9 @@ export const labels = {
  * @see https://atc-github.azure.cloud.bmw/UNITY/unity/actions
  */
 export const workflows = {
-  createApp : 'create-app.yaml',
+  createApp: 'create-app.yaml',
+} as const;
+
+export const repos = {
+  appPrefix: 'app-'
 } as const;

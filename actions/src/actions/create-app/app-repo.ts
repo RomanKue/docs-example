@@ -8,10 +8,12 @@ import {FileCommit} from '../../lib/github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {defaultBranches} from '../../lib/unity/config.js';
 import {createAReference} from '../../lib/github/api/git/git.js';
+import {base64} from '../../lib/encoding.js';
 
 export const createReadme = (appSpec: Readonly<AppSpec>) => `
 # ${appSpec.name}
 `.trim();
+
 
 export const createRepository = async (appSpec: AppSpec) => {
   const newAppRepoName = repoName(appSpec.name);
@@ -28,14 +30,14 @@ export const createRepository = async (appSpec: AppSpec) => {
   commit = await createOrUpdateFileContents({
     repo: appRepository.name,
     path: 'app.yaml',
-    content: Buffer.from(yaml.dump(appSpec), 'base64').toString(),
+    content: base64(yaml.dump(appSpec)),
     message: `add app.yaml`
   });
 
   commit = await createOrUpdateFileContents({
     repo: appRepository.name,
     path: 'README.md',
-    content: Buffer.from(createReadme(appSpec), 'base64').toString(),
+    content: base64(createReadme(appSpec)),
     message: `add app.yaml`
   });
 

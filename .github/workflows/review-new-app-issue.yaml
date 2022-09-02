@@ -1,4 +1,4 @@
-name: handle all changes to a "New App" issue
+name: review "New UNITY App" issue
 on:
   issues:
     types:

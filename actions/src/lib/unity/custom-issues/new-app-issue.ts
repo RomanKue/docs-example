@@ -27,15 +27,15 @@ export const isClosed = (issue: Readonly<Issue>): boolean => {
 };
 
 export const isTermsOfServiceAccepted = (body: string): boolean => {
-  return body.indexOf('[x] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html)') >= 0;
+  return body.includes('[x] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html)');
 };
 
 export const shouldDGenerateAngularStub = (body: string): boolean => {
-  return body.indexOf('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.') >= 0;
+  return body.includes('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.');
 };
 
 export const shouldGenerateQuarkusStub = (body: string): boolean => {
-  return body.indexOf('[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.') >= 0;
+  return body.includes('[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.');
 };
 
 export const parseIssueBody = (body: string): NewAppIssue => {

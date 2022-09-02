@@ -79,7 +79,6 @@ const run = async () => {
     issue = await getIssue();
     if (!areRunPreconditionsMet(issue)) {
       return;
-      ;
     }
     appSpec = triggeredByIssue(issue);
     break;

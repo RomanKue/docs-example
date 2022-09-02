@@ -50,11 +50,11 @@ const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue): Prom
 };
 
 const isWaitingForApproval = (issue: Readonly<Issue>): boolean => {
-  return issue.labels.indexOf(labels.waitingForApproval) >= 0;
+  return issue.labels.includes(labels.waitingForApproval);
 };
 
 const isApproved = (issue: Readonly<Issue>): boolean => {
-  return issue.labels.indexOf(labels.approved) >= 0;
+  return issue.labels.includes(labels.approved);
 };
 
 const getTeamMembers = async (team_slug: string) => {
@@ -74,7 +74,7 @@ const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {
   }
   const approvers = await getTeamMembers(teams.unityAppApproversSlug);
 
-  if (approvers.indexOf(userLogin) >= 0) {
+  if (approvers.includes(userLogin)) {
     // if requester is in the unityAppApproversTeam, we can skip the approval request process and approve directly
     await addLabelsToAnIssue({labels: [labels.approved]});
     await deliver(issue, newAppIssue);

@@ -55,5 +55,5 @@ export const isRepoExistent = async (appName: string | null | undefined): Promis
   const newAppRepoName = repoName(appName);
 
   const repositories = await listOrganizationRepositories();
-  return repositories.map(r => r.name).indexOf(newAppRepoName) >= 0;
+  return repositories.map(r => r.name).includes(newAppRepoName);
 };

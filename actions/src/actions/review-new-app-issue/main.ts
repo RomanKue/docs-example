@@ -77,7 +77,6 @@ const requestApproval = async (issue: Issue, newAppIssue: NewAppIssue) => {
   if (approvers.includes(userLogin)) {
     // if requester is in the unityAppApproversTeam, we can skip the approval request process and approve directly
     await addLabelsToAnIssue({labels: [labels.approved]});
-    await deliver(issue, newAppIssue);
   } else {
     await addAssigneesToAnIssue({assignees: approvers});
     await addLabelsToAnIssue({labels: [labels.waitingForApproval]});
@@ -97,25 +96,6 @@ const removeApprovalRequest = async (issue: Issue, newAppIssue: NewAppIssue) => 
   await removeALabelFromAnIssue({name: labels.waitingForApproval});
   const assignees = await getTeamMembers(teams.unityAppApproversSlug);
   await removeAssigneesFromAnIssue({assignees});
-};
-
-const dispatchNewAppWorkflow = async (issue: Issue, newAppIssue: NewAppIssue) => {
-  core.info(`dispatching ${workflows.createApp} workflow`);
-  await createAWorkflowDispatchEvent({
-    workflow_id: workflows.createApp,
-    ref: 'main', inputs: {
-      appYaml: yaml.dump(newAppIssue.appSpec)
-    }
-  });
-};
-
-const deliver = async (issue: Issue, newAppIssue: NewAppIssue) => {
-  await dispatchNewAppWorkflow(issue, newAppIssue);
-  let userLogin = issue.user?.login;
-  commentOnIssue({
-    body:
-      `📦 @${userLogin} good news, I started setting up your app. I'll let you know when the your app is delivered.`
-  });
 };
 
 const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
@@ -160,9 +140,7 @@ const run = async () => {
   allGood &&= await checkAppName(issue, newAppIssue);
 
   if (allGood) {
-    if (isApproved(issue)) {
-      await deliver(issue, newAppIssue);
-    } else {
+    if (!isApproved(issue)) {
       await requestApproval(issue, newAppIssue);
     }
   } else {

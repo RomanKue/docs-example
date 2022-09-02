@@ -12,10 +12,7 @@ jobs:
   review-new-app-issue:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
-    permissions:
-      issues: write
-      contents: write
-      id-token: write
+    permissions: write-all
     steps:
       - uses: actions/checkout@v3
       - name: build-actions

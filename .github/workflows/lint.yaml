@@ -6,6 +6,9 @@ on:
   pull_request:
 jobs:
   editorconfig-checker:
+    permissions:
+      contents: read
+      id-token: write
     runs-on: atc-ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -13,6 +16,9 @@ jobs:
       - uses: pmd/setup-editorconfig-checker@v1
       - run: editorconfig-checker
   check-todos:
+    permissions:
+      contents: read
+      id-token: write
     runs-on: atc-ubuntu-latest
     timeout-minutes: 5
     steps:

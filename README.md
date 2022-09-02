@@ -3,7 +3,7 @@
 [![Lint][lint-badge]][lint-workflow]
 [![Test][test-actions-badge]][test-actions-workflow]
 
-Want to unite with us?
+## Want to unite with us?
 
 Checkout our [wiki][wiki], read the [docs][gh-pages] or create an [issue][issues].
 

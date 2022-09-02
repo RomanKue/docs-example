@@ -29,9 +29,9 @@ export const createRepository = async (appSpec: AppSpec) => {
   let commit: FileCommit;
   commit = await createOrUpdateFileContents({
     repo: appRepository.name,
-    path: 'app.yaml',
+    path: 'unity-app.yaml',
     content: base64(yaml.dump(appSpec)),
-    message: `add app.yaml`
+    message: `add unity-.yaml`
   });
 
   commit = await createOrUpdateFileContents({

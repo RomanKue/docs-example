@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 10
     permissions: write-all
     concurrency:
-      group: ${{ github.event.issue.id }}
+      group: ${{ github.job }}-${{ github.event.issue.id }}
     steps:
       - uses: actions/checkout@v3
       - name: build-actions

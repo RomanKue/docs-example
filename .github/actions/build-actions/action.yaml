@@ -14,19 +14,19 @@ runs:
       with:
         node-version: 16
         cache: npm
-        cache-dependency-path: ./.github/actions/package-lock.json
+        cache-dependency-path: ./actions/package-lock.json
     - uses: actions/cache@v3
       id: cache
       with:
-        key: actions-${{ hashFiles('./.github/actions/**') }}
-        path: ./.github/actions
+        key: actions-${{ hashFiles('./actions/**') }}
+        path: ./actions
     - name: npm ci
       if: ${{ steps.cache.outputs.cache-hit != 'true' }}
-      working-directory: ./.github/actions
+      working-directory: ./actions
       shell: bash
       run: npm ci
     - name: tsc
       if: ${{ steps.cache.outputs.cache-hit != 'true' }}
-      working-directory: ./.github/actions
+      working-directory: ./actions
       shell: bash
       run: npx tsc

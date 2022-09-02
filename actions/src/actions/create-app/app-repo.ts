@@ -38,7 +38,7 @@ export const createRepository = async (appSpec: AppSpec) => {
     repo: appRepository.name,
     path: 'README.md',
     content: base64(createReadme(appSpec)),
-    message: `add app.yaml`
+    message: `add README.md`
   });
 
   for (let defaultBranch in Object.values(defaultBranches)) {

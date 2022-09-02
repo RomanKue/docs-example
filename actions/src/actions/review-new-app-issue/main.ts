@@ -4,7 +4,13 @@
  * @see https://github.com/octokit/octokit.js
  */
 import * as core from '@actions/core';
-import {hasLabel, isClosed, NewAppIssue, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
+import {
+  hasLabel,
+  isClosed,
+  loadSchema,
+  NewAppIssue,
+  parseIssueBody
+} from '../../lib/unity/custom-issues/new-app-issue.js';
 import {
   addAssigneesToAnIssue,
   addLabelsToAnIssue,
@@ -14,25 +20,29 @@ import {
   removeAssigneesFromAnIssue
 } from '../../lib/github/api/issues/issues.js';
 import {Issue} from '../../lib/github/api/issues/response/issue.js';
-import {isKebabCase} from '../../lib/case-conventions.js';
 import {listMembersInOrg} from '../../lib/github/api/teams/teams.js';
-import {labels, teams, workflows} from '../../lib/unity/config.js';
-import {createAWorkflowDispatchEvent} from '../../lib/github/api/actions/actions.js';
-import * as yaml from 'js-yaml';
-import {listOrganizationRepositories} from '../../lib/github/api/repos/repositories.js';
-import {isRepoExistent, repoName} from '../../lib/unity/app-spec.js';
-import {is} from '@babel/types';
+import {labels, teams} from '../../lib/unity/config.js';
+import {isRepoExistent} from '../../lib/unity/app-spec.js';
+import {validateSchema} from '../../lib/json-schema.js';
+
 
 const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app yaml`);
-  // later on, this should do a proper JSON schema match, for new we just check the name
-  if (!isKebabCase(newAppIssue.appSpec?.name ?? '')) {
-    let userLogin = issue.user?.login;
-    commentOnIssue({
-      body:
-        `❌ @${userLogin} it seems that you have chosen an app name that does not meet our requirements. Could you please update your issue, choosing a different app name? Here are a few examples of app names that would work: \`fancy-calculator\`, \`magicmachine\``
-    });
-    return false;
+  const apiVersion = newAppIssue.appSpec?.apiVersion;
+  switch (apiVersion) {
+  case 'v1beta1':
+  case 'v1':
+    const errors = validateSchema(newAppIssue.appSpec, loadSchema(apiVersion));
+    if (errors) {
+      let userLogin = issue.user?.login;
+      let body = `❌ @${userLogin} the app specification does not seem to fit our needs, please take a look at the following validation errors and update your issue, so I can proceed with your request.\n\n`;
+      body += errors;
+      commentOnIssue({body});
+      return false;
+    }
+    break;
+  default:
+    throw new Error(`got a bad api version: ${apiVersion}`);
   }
   return true;
 };
@@ -51,11 +61,11 @@ const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue): Prom
 };
 
 const isWaitingForApproval = (issue: Readonly<Issue>): boolean => {
-  return hasLabel(issue, labels.waitingForApproval)
+  return hasLabel(issue, labels.waitingForApproval);
 };
 
 const isApproved = (issue: Readonly<Issue>): boolean => {
-  return hasLabel(issue, labels.approved)
+  return hasLabel(issue, labels.approved);
 };
 
 const getTeamMembers = async (team_slug: string) => {
@@ -124,6 +134,7 @@ const areRunPreconditionsMet = (issue: Issue) => {
 };
 
 const run = async () => {
+  core.debug(`cwd: ${process.cwd()}`);
   const issue = await getIssue();
   if (!areRunPreconditionsMet(issue)) {
     return;

@@ -11,6 +11,7 @@
     "@typescript-eslint/parser": "5.36.1",
     "eslint": "8.23.0",
     "js-yaml": "4.1.0",
+    "jsonschema": "^1.4.1",
     "marked": "4.1.0",
     "ts-jest": "28.0.8",
     "ts-node": "10.9.1",

@@ -67,6 +67,7 @@ const areRunPreconditionsMet = (issue: Issue) => {
 };
 
 const run = async () => {
+  core.debug(`cwd: ${process.cwd()}`);
   let issue: Issue | undefined;
   let appSpec: AppSpec | undefined;
   switch (github.context.eventName) {

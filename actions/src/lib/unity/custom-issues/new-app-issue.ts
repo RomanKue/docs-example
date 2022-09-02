@@ -5,7 +5,7 @@ import * as yaml from 'js-yaml';
 import {AppSpec, parseYaml} from '../app-spec.js';
 import {Issue} from '../../github/api/issues/response/issue.js';
 import Code = marked.Tokens.Code;
-import {labels} from '../config.js';
+import fs from 'fs';
 
 
 /**
@@ -27,7 +27,7 @@ export const isClosed = (issue: Readonly<Issue>): boolean => {
 };
 
 export const hasLabel = (issue: Readonly<Issue>, label: string): boolean => {
-  return issue.labels.map(l => l?.name).includes(label)
+  return issue.labels.map(l => l?.name).includes(label);
 };
 
 export const isTermsOfServiceAccepted = (body: string): boolean => {
@@ -58,3 +58,8 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   );
 };
 
+export const loadSchema = (apiVersion: string, basePath = 'schema'): Object => {
+  const path = `${basePath}/unity-app.${apiVersion}.schema.json`;
+  const schemaJson = fs.readFileSync(path, 'utf8');
+  return JSON.parse(schemaJson);
+};

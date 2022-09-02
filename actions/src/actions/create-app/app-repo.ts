@@ -54,10 +54,10 @@ export const createRepository = async (appSpec: AppSpec) => {
       await addARepositoryCollaborator({
         repo: appRepository.name,
         username: member.qNumber,
+        permission: 'admin',
       });
     }
   }
-
 
   return appRepository;
 };

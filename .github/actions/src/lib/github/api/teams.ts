@@ -2,7 +2,8 @@ import * as github from '@actions/github';
 import * as core from '@actions/core';
 import {FullTeam} from '../response/full-team.js';
 import {SimpleUser} from '../response/simple-user.js';
-import {getGithubToken, RestApi} from './rest.js';
+import {RestApi} from './rest.js';
+import {getOctokit} from '../octokit.js';
 
 type TeamsApi = RestApi['teams'];
 
@@ -12,8 +13,7 @@ type TeamsApi = RestApi['teams'];
 export const getTeamByName = async (
   options: { team_slug: string } & Partial<Parameters<TeamsApi['getByName']>[0]>
 ): Promise<FullTeam> => {
-  const octokit = github.getOctokit(getGithubToken());
-  const response = await octokit.rest.teams.getByName({
+  const response = await getOctokit().rest.teams.getByName({
     org: github.context.repo.owner,
     ...options
   });
@@ -28,8 +28,7 @@ export const getTeamByName = async (
 export const listMembersInOrg = async (
   options: { team_slug: string } & Partial<Parameters<TeamsApi['listMembersInOrg']>[0]>
 ): Promise<SimpleUser[]> => {
-  const octokit = github.getOctokit(getGithubToken());
-  const response = await octokit.rest.teams.listMembersInOrg({
+  const response = await getOctokit().rest.teams.listMembersInOrg({
     org: github.context.repo.owner,
     ...options
   });

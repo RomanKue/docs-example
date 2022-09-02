@@ -3,7 +3,8 @@ import * as core from '@actions/core';
 import {Issue} from '../response/issue.js';
 import {IssueComment} from '../response/issue-comment.js';
 import {Label} from '../response/label.js';
-import {getGithubToken, RestApi} from './rest.js';
+import {RestApi} from './rest.js';
+import {getOctokit} from '../octokit.js';
 
 type IssuesApi = RestApi['issues'];
 
@@ -13,8 +14,7 @@ type IssuesApi = RestApi['issues'];
 export const getIssue = async (
   options: Partial<Parameters<IssuesApi['get']>[0]> = {}
 ): Promise<Issue> => {
-  const octokit = github.getOctokit(getGithubToken());
-  const response = await octokit.rest.issues.get({
+  const response = await getOctokit().rest.issues.get({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       issue_number: github.context.issue.number,
@@ -32,8 +32,7 @@ export const getIssue = async (
 export const commentOnIssue = async (
   options: { body: string } & Partial<Parameters<IssuesApi['createComment']>[0]>
 ): Promise<IssueComment> => {
-  const octokit = github.getOctokit(getGithubToken());
-  const response = await octokit.rest.issues.createComment({
+  const response = await getOctokit().rest.issues.createComment({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: github.context.issue.number,
@@ -50,8 +49,7 @@ export const commentOnIssue = async (
 export const addAssigneesToAnIssue = async (
   options: { assignees: string[] } & Partial<Parameters<IssuesApi['addAssignees']>[0]>
 ): Promise<Issue> => {
-  const octokit = github.getOctokit(getGithubToken());
-  const response = await octokit.rest.issues.addAssignees({
+  const response = await getOctokit().rest.issues.addAssignees({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: github.context.issue.number,
@@ -68,8 +66,7 @@ export const addAssigneesToAnIssue = async (
 export const removeAssigneesFromAnIssue = async (
   options: { assignees: string[] } & Partial<Parameters<IssuesApi['removeAssignees']>[0]>
 ): Promise<Issue> => {
-  const octokit = github.getOctokit(getGithubToken());
-  const response = await octokit.rest.issues.removeAssignees({
+  const response = await getOctokit().rest.issues.removeAssignees({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: github.context.issue.number,
@@ -87,8 +84,7 @@ export const removeAssigneesFromAnIssue = async (
 export const addLabelsToAnIssue = async (
   options: { labels: string[] } & Partial<Parameters<IssuesApi['addLabels']>[0]>
 ): Promise<Label[]> => {
-  const octokit = github.getOctokit(getGithubToken());
-  const response = await octokit.rest.issues.addLabels({
+  const response = await getOctokit().rest.issues.addLabels({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: github.context.issue.number,
@@ -105,8 +101,7 @@ export const addLabelsToAnIssue = async (
 export const removeALabelFromAnIssue = async (
   options: { name: string } & Partial<Parameters<IssuesApi['removeLabel']>[0]>
 ): Promise<Label[]> => {
-  const octokit = github.getOctokit(getGithubToken());
-  const response = await octokit.rest.issues.removeLabel({
+  const response = await getOctokit().rest.issues.removeLabel({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     issue_number: github.context.issue.number,

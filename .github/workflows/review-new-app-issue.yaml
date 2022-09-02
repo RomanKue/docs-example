@@ -2,7 +2,6 @@ name: review "New UNITY App" issue
 on:
   issues:
     types:
-      - opened
       - edited
       - reopened
       - labeled

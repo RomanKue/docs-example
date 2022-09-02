@@ -67,10 +67,6 @@ const areRunPreconditionsMet = (issue: Issue) => {
 
 const run = async () => {
   core.debug(`cwd: ${process.cwd()}`);
-  await core.summary
-    .addHeading('Event')
-    .addRaw(`event: ${github.context.eventName}`)
-    .write();
 
   let issue: Issue | undefined;
   let appSpec: AppSpec | undefined;

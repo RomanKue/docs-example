@@ -23,5 +23,17 @@ describe('json-schema', () => {
       expect(validateSchema(appSpec, schema)).toEqual(
         '`members`: does not meet minimum length of 1\n\n');
     });
+    it('should fail when the same member is mentioned twice', () => {
+      const appSpec: AppSpecV1Beta1 = {
+        apiVersion: 'v1beta1',
+        name: 'foo',
+        members: [
+          {qNumber: 'q123456'},
+          {qNumber: 'q123456'}
+        ],
+      };
+      expect(validateSchema(appSpec, schema)).toEqual(
+        '`members`: contains duplicate item\n\n');
+    });
   });
 });

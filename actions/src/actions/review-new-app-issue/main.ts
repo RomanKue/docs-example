@@ -24,6 +24,8 @@ import {listMembersInOrg} from '../../lib/github/api/teams/teams.js';
 import {labels, teams} from '../../lib/unity/config.js';
 import {isRepoExistent} from '../../lib/unity/app-spec.js';
 import {validateSchema} from '../../lib/json-schema.js';
+import {getAUser} from '../../lib/github/api/users/users.js';
+import {RequestError} from '@octokit/request-error';
 
 
 const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
@@ -121,6 +123,35 @@ const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boo
   return true;
 };
 
+const isUserExistent = async (qNumber: string) => {
+  try {
+    await getAUser({username: qNumber});
+    return true;
+  } catch (e) {
+    if (e instanceof RequestError && e.status === 404) {
+      return false;
+    }
+    throw e;
+  }
+};
+
+const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
+  const appSpec = newAppIssue.appSpec;
+  if (appSpec && 'members' in appSpec) {
+    for (let member of appSpec.members) {
+      if (!await isUserExistent(member.qNumber)) {
+        let userLogin = issue.user?.login;
+        commentOnIssue({
+          body:
+            `🚫 @${userLogin} it seems that the user ${member.qNumber} cannot be found in GitHub. Please check the members in app specification.\nYou can let me re-check by commenting "check" on this issue.`
+        });
+        return false;
+      }
+    }
+  }
+  return true;
+};
+
 const areRunPreconditionsMet = (issue: Issue) => {
   if (isClosed(issue)) {
     core.info(`aborting, issue is closed`);
@@ -146,11 +177,10 @@ const run = async () => {
   allGood &&= await checkTermsOfService(issue, newAppIssue);
   allGood &&= await checkAppSchema(issue, newAppIssue);
   allGood &&= await checkAppName(issue, newAppIssue);
+  allGood &&= await checkAppMembers(issue, newAppIssue);
 
   if (allGood) {
-    if (!isApproved(issue)) {
-      await requestApproval(issue, newAppIssue);
-    }
+    await requestApproval(issue, newAppIssue);
   } else {
     await removeApprovalRequest(issue, newAppIssue);
   }

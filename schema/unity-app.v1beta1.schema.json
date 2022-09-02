@@ -22,11 +22,12 @@
       "const": "v1beta1"
     },
     "members": {
-      "type": "array",
-      "minItems": 1,
       "items": {
         "$ref": "#/definitions/Member"
-      }
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
     },
     "name": {
       "type": "string",

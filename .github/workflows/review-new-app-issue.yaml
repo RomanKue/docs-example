@@ -20,4 +20,4 @@ jobs:
       - name: review-new-app-issue
         uses: ./.github/actions/review-new-app-issue/
         with:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.UNITY_BOT_TOKEN}}

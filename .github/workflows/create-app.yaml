@@ -19,5 +19,5 @@ jobs:
       - name: create-app
         uses: ./.github/actions/create-app/
         with:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.UNITY_BOT_TOKEN}}
           appYaml: ${{ inputs.appYaml }}

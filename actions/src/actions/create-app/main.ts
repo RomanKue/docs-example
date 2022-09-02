@@ -56,14 +56,14 @@ const createNewApp = async (appSpec: AppSpec) => {
   commit = await createOrUpdateFileContents({
     repo: appRepository.name,
     path: 'app.yaml',
-    content: yaml.dump(appSpec),
+    content: Buffer.from(yaml.dump(appSpec), 'base64').toString(),
     message: `add app.yaml`
   });
 
   commit = await createOrUpdateFileContents({
     repo: appRepository.name,
     path: 'README.md',
-    content: createReadme(appSpec),
+    content: Buffer.from(createReadme(appSpec), 'base64').toString(),
     message: `add app.yaml`
   });
 

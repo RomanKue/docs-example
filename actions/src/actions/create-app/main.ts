@@ -5,12 +5,20 @@
  */
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import * as yaml from 'js-yaml';
 import {Issue} from '../../lib/github/api/issues/response/issue.js';
-import {AppSpec, isRepoExistent, parseYaml, repoName} from '../../lib/unity/app-spec.js';
+import {AppSpec, isRepoExistent, isV1Beta1, parseYaml, repoName} from '../../lib/unity/app-spec.js';
 import {commentOnIssue, getIssue, lockAnIssue, updateAnIssue} from '../../lib/github/api/issues/issues.js';
 import {hasLabel, isClosed, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
-import {createAnOrganizationRepository} from '../../lib/github/api/repos/repositories.js';
-import {labels} from '../../lib/unity/config.js';
+import {
+  addARepositoryCollaborator,
+  createAnOrganizationRepository,
+  createOrUpdateFileContents
+} from '../../lib/github/api/repos/repositories.js';
+import {defaultBranches, labels} from '../../lib/unity/config.js';
+import {Repository} from '../../lib/github/api/repos/response/repository.js';
+import {createAReference} from '../../lib/github/api/git/git.js';
+import {FileCommit} from '../../lib/github/api/repos/response/file-commit.js';
 
 const triggeredByWorkflowDispatch = (): AppSpec => {
   const appYaml = core.getInput('appYaml');
@@ -27,6 +35,12 @@ const triggeredByIssue = (issue: Issue): AppSpec => {
 };
 
 
+function createReadme(appSpec: AppSpec) {
+  return `
+# ${appSpec.name}
+`.trim();
+}
+
 const createNewApp = async (appSpec: AppSpec) => {
   const newAppRepoName = repoName(appSpec.name);
   if (await isRepoExistent(appSpec.name)) {
@@ -35,14 +49,51 @@ const createNewApp = async (appSpec: AppSpec) => {
 
   const appRepository = await createAnOrganizationRepository({
     name: newAppRepoName,
+    visibility: 'internal'
   });
+
+  let commit: FileCommit;
+  commit = await createOrUpdateFileContents({
+    repo: appRepository.name,
+    path: 'app.yaml',
+    content: yaml.dump(appSpec),
+    message: `add app.yaml`
+  });
+
+  commit = await createOrUpdateFileContents({
+    repo: appRepository.name,
+    path: 'README.md',
+    content: createReadme(appSpec),
+    message: `add app.yaml`
+  });
+
+  for (let defaultBranch in Object.values(defaultBranches)) {
+    await createAReference({
+      repo: appRepository.name,
+      ref: `refs/heads/${defaultBranch}`,
+      sha: commit.commit.sha!
+    });
+  }
+
+  if ('members' in appSpec) {
+    for (const member of appSpec.members) {
+      await addARepositoryCollaborator({
+        repo: appRepository.name,
+        username: member.qNumber,
+      });
+    }
+  }
+
+
+  return appRepository;
 };
 
-const closeWithComment = (issue: Issue) => {
+const closeWithComment = (issue: Issue, appRepository: Repository) => {
   let userLogin = issue.user?.login;
   commentOnIssue({
     body:
-      `🚀 @${userLogin} your app has been created!`
+      `🚀 @${userLogin} your app has been created!
+      Checkout your [${appRepository.name}](${appRepository.url}) repository.`
   });
   updateAnIssue({
     state: 'closed',
@@ -92,9 +143,9 @@ const run = async () => {
     throw new Error('missing appSpec');
   }
 
-  createNewApp(appSpec);
+  const appRepository = await createNewApp(appSpec);
   if (issue) {
-    closeWithComment(issue);
+    await closeWithComment(issue, appRepository);
   }
 };
 

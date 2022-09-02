@@ -6,10 +6,15 @@ export interface ApiVersioned {
   apiVersion: string;
 }
 
+export interface AppMember {
+  qNumber: string;
+}
+
 export interface AppSpecV1Beta1 extends ApiVersioned {
   /** field defining the API version, following the K8s concept of API versioning */
   apiVersion: 'v1beta1';
   name: string;
+  members: AppMember[];
 }
 
 /**

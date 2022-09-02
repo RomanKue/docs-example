@@ -6,6 +6,8 @@ import {getOctokit} from '../../octokit.js';
 import {Repository} from './response/repository.js';
 import {FullRepository} from './response/full-repository.js';
 import {MinimalRepository} from './response/minimal-repository.js';
+import {RepositoryInvitation} from './response/repository-invitation.js';
+import {FileCommit} from './response/file-commit.js';
 
 type ReposApi = RestApi['repos'];
 
@@ -46,5 +48,34 @@ export const createAnOrganizationRepository = async (
     ...options
   });
   return response.data as Repository;
+};
+
+/**
+ * see https://docs.github.com/en/rest/collaborators/collaborators#add-a-repository-collaborator
+ */
+export const addARepositoryCollaborator = async (
+  options: { username: string } & Partial<Parameters<ReposApi['addCollaborator']>[0]>
+): Promise<RepositoryInvitation> => {
+  const response = await getOctokit().rest.repos.addCollaborator({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  });
+  return response.data as RepositoryInvitation;
+};
+
+
+/**
+ * see https://docs.github.com/en/rest/repos/contents#create-or-update-file-contents
+ */
+export const createOrUpdateFileContents = async (
+  options: { path: string, message: string, content: string } & Partial<Parameters<ReposApi['createOrUpdateFileContents']>[0]>
+): Promise<FileCommit> => {
+  const response = await getOctokit().rest.repos.createOrUpdateFileContents({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  });
+  return response.data as FileCommit;
 };
 

@@ -31,3 +31,8 @@ export const workflows = {
 export const repos = {
   appPrefix: 'app-'
 } as const;
+
+export const defaultBranches = {
+  int: 'int',
+  prod: 'prod'
+} as const;

@@ -34,5 +34,9 @@ export const repos = {
 
 export const defaultBranches = {
   int: 'int',
-  prod: 'prod'
+  prod: 'prod',
+} as const;
+
+export const magicComments = {
+  check: '/check',
 } as const;

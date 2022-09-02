@@ -21,11 +21,13 @@ import {
 } from '../../lib/github/api/issues/issues.js';
 import {Issue} from '../../lib/github/api/issues/response/issue.js';
 import {listMembersInOrg} from '../../lib/github/api/teams/teams.js';
-import {labels, teams} from '../../lib/unity/config.js';
+import {labels, magicComments, teams} from '../../lib/unity/config.js';
 import {isRepoExistent} from '../../lib/unity/app-spec.js';
 import {validateSchema} from '../../lib/json-schema.js';
 import {getAUser} from '../../lib/github/api/users/users.js';
 import {RequestError} from '@octokit/request-error';
+import * as github from '@actions/github';
+import {IssueComment} from '../../lib/github/api/issues/response/issue-comment.js';
 
 
 const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
@@ -167,6 +169,17 @@ const areRunPreconditionsMet = (issue: Issue) => {
 const run = async () => {
   core.debug(`cwd: ${process.cwd()}`);
   const issue = await getIssue();
+  switch (github.context.eventName) {
+  case 'issue_comment':
+    if (!((github.context.payload.comment as IssueComment).body ?? '').includes(magicComments.check)) {
+      return;
+    }
+    break;
+  case 'issues':
+    break;
+  default:
+    throw new Error(`unexpected eventName: ${github.context.eventName}`);
+  }
   if (!areRunPreconditionsMet(issue)) {
     return;
   }

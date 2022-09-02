@@ -40,7 +40,8 @@ const closeWithComment = (issue: Issue, appRepository: Repository) => {
   commentOnIssue({
     body:
       `🚀 @${userLogin} your app has been created!
-      Checkout your [${appRepository.name}](${appRepository.url}) repository.`
+
+      Checkout your [${appRepository.name}](${appRepository.html_url}) repository.`
   });
   updateAnIssue({
     state: 'closed',
@@ -82,9 +83,7 @@ const run = async () => {
     appSpec = triggeredByIssue(issue);
     break;
   default:
-    throw new Error(`unexpected eventName
-: ${github.context.eventName}
-  `);
+    throw new Error(`unexpected eventName: ${github.context.eventName}`);
   }
 
   if (!appSpec) {

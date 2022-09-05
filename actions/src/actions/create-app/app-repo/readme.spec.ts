@@ -1,8 +1,8 @@
-import {createReadme} from './app-repo';
-import {AppSpecV1Beta1} from '../../lib/unity/app-spec';
-import {lexMarkdown} from '../../lib/markdown';
+import {AppSpecV1Beta1} from '../../../lib/unity/app-spec.js';
+import {lexMarkdown} from '../../../lib/markdown.js';
+import {createReadme} from './readme.js';
 
-describe('app-repo', () => {
+describe('readme', () => {
   const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo', members: [{qNumber: 'q1234'}]};
   describe('createReadme', () => {
     it('should create readme when app config is passed', () => {

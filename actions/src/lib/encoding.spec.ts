@@ -1,4 +1,4 @@
-import {base64} from './encoding';
+import {base64} from './encoding.js';
 
 describe('encoding', () => {
   describe('base64', () => {

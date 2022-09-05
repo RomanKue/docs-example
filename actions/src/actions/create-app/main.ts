@@ -11,7 +11,7 @@ import {commentOnIssue, getIssue, lockAnIssue, updateAnIssue} from '../../lib/gi
 import {hasLabel, isClosed, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
 import {labels} from '../../lib/unity/config.js';
 import {Repository} from '../../lib/github/api/repos/response/repository.js';
-import {createRepository} from './app-repo.js';
+import {createRepository} from './app-repo/index.js';
 
 const triggeredByWorkflowDispatch = (): AppSpec => {
   const appYaml = core.getInput('appYaml');

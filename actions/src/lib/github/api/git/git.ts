@@ -1,4 +1,4 @@
-import {getOctokit} from '../../octokit.js';
+import {getOctokitApi} from '../../octokit.js';
 import * as github from '@actions/github';
 import {RestApi} from '../rest.js';
 import {GitReference} from './response/git-reference.js';
@@ -11,7 +11,7 @@ type GitApi = RestApi['git'];
 export const createAReference = async (
   options: { ref: string, sha: string } & Partial<Parameters<GitApi['createRef']>[0]>
 ): Promise<GitReference> => {
-  const response = await getOctokit().rest.git.createRef({
+  const response = await getOctokitApi().rest.git.createRef({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     ...options

@@ -1,6 +1,6 @@
-import {loadSchema} from './unity/custom-issues/new-app-issue';
-import {validateSchema} from './json-schema';
-import {AppSpecV1Beta1} from './unity/app-spec';
+import {validateSchema} from './json-schema.js';
+import {loadSchema} from './unity/custom-issues/new-app-issue.js';
+import {AppSpecV1Beta1} from './unity/app-spec.js';
 
 describe('json-schema', () => {
   describe('validateSchema', () => {

@@ -1,5 +1,6 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
+import {Api} from '@octokit/plugin-rest-endpoint-methods/dist-types/types.js';
 
 export const getGithubToken = (): string => {
   const githubToken = core.getInput('GITHUB_TOKEN');
@@ -9,7 +10,7 @@ export const getGithubToken = (): string => {
   return githubToken;
 };
 
-export const getOctokit = () => {
+export const getOctokitApi = (): Api => {
   const octokit = github.getOctokit(getGithubToken(), {
     log: {
       debug: message => core.debug(message),

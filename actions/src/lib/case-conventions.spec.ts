@@ -1,4 +1,4 @@
-import {isKebabCase} from './case-conventions';
+import {isKebabCase} from './case-conventions.js';
 
 describe('case-conventions', () => {
   describe('isKebabCase', () => {

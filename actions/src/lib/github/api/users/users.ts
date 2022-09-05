@@ -1,5 +1,5 @@
 import {RestApi} from '../rest.js';
-import {getOctokit} from '../../octokit.js';
+import {getOctokitApi} from '../../octokit.js';
 import {PrivateUser, PublicUser} from './response/user.js';
 
 type UsersApi = RestApi['users'];
@@ -10,7 +10,7 @@ type UsersApi = RestApi['users'];
 export const getAUser = async (
   options: { username: string } & Partial<Parameters<UsersApi['getByUsername']>[0]>
 ): Promise<PrivateUser | PublicUser> => {
-  const response = await getOctokit().rest.users.getByUsername({
+  const response = await getOctokitApi().rest.users.getByUsername({
     ...options
   });
   return response.data as PrivateUser | PublicUser;

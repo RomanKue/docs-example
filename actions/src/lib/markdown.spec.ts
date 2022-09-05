@@ -1,6 +1,6 @@
-import {lexMarkdown} from './markdown';
 import {marked} from 'marked';
 import Heading = marked.Tokens.Heading;
+import {lexMarkdown} from './markdown.js';
 
 describe('markdown', () => {
   describe('lexMarkdown', () => {

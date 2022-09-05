@@ -2,7 +2,7 @@ import * as github from '@actions/github';
 import {FullTeam} from '../teams/response/full-team.js';
 import {SimpleUser} from '../teams/response/simple-user.js';
 import {RestApi} from '../rest.js';
-import {getOctokit} from '../../octokit.js';
+import {getOctokitApi} from '../../octokit.js';
 import {Repository} from './response/repository.js';
 import {FullRepository} from './response/full-repository.js';
 import {MinimalRepository} from './response/minimal-repository.js';
@@ -17,7 +17,7 @@ type ReposApi = RestApi['repos'];
 export const getARepository = async (
   options: { repo: string } & Partial<Parameters<ReposApi['get']>[0]>
 ): Promise<FullRepository> => {
-  const response = await getOctokit().rest.repos.get({
+  const response = await getOctokitApi().rest.repos.get({
     owner: github.context.repo.owner,
     ...options
   });
@@ -30,7 +30,7 @@ export const getARepository = async (
 export const listOrganizationRepositories = async (
   options: Partial<Parameters<ReposApi['get']>[0]> = {}
 ): Promise<MinimalRepository[]> => {
-  const response = await getOctokit().rest.repos.listForOrg({
+  const response = await getOctokitApi().rest.repos.listForOrg({
     org: github.context.repo.owner,
     ...options
   });
@@ -43,7 +43,7 @@ export const listOrganizationRepositories = async (
 export const createAnOrganizationRepository = async (
   options: { name: string } & Partial<Parameters<ReposApi['createInOrg']>[0]>
 ): Promise<Repository> => {
-  const response = await getOctokit().rest.repos.createInOrg({
+  const response = await getOctokitApi().rest.repos.createInOrg({
     org: github.context.repo.owner,
     ...options
   });
@@ -56,7 +56,7 @@ export const createAnOrganizationRepository = async (
 export const addARepositoryCollaborator = async (
   options: { username: string } & Partial<Parameters<ReposApi['addCollaborator']>[0]>
 ): Promise<RepositoryInvitation> => {
-  const response = await getOctokit().rest.repos.addCollaborator({
+  const response = await getOctokitApi().rest.repos.addCollaborator({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     ...options
@@ -71,7 +71,7 @@ export const addARepositoryCollaborator = async (
 export const createOrUpdateFileContents = async (
   options: { path: string, message: string, content: string } & Partial<Parameters<ReposApi['createOrUpdateFileContents']>[0]>
 ): Promise<FileCommit> => {
-  const response = await getOctokit().rest.repos.createOrUpdateFileContents({
+  const response = await getOctokitApi().rest.repos.createOrUpdateFileContents({
     owner: github.context.repo.owner,
     repo: github.context.repo.repo,
     ...options

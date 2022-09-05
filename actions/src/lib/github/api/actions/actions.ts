@@ -1,6 +1,6 @@
 import {RestApi} from '../rest.js';
 import * as github from '@actions/github';
-import {getOctokit} from '../../octokit.js';
+import {getOctokitApi} from '../../octokit.js';
 
 type ActionsApi = RestApi['actions'];
 
@@ -13,7 +13,7 @@ export const createAWorkflowDispatchEvent = async (
     ref: string
   } & Partial<Parameters<ActionsApi['createWorkflowDispatch']>[0]>
 ): Promise<void> => {
-  const response = await getOctokit().rest.actions.createWorkflowDispatch({
+  const response = await getOctokitApi().rest.actions.createWorkflowDispatch({
       owner: github.context.repo.owner,
       repo: github.context.repo.repo,
       ...options

@@ -4,7 +4,7 @@ import {
   parseIssueBody,
   shouldDGenerateAngularStub,
   shouldGenerateQuarkusStub
-} from './new-app-issue';
+} from './new-app-issue.js';
 import * as fs from 'fs';
 
 describe('new-issue', () => {

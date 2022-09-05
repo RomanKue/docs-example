@@ -23,11 +23,12 @@ import {Issue} from '../../lib/github/api/issues/response/issue.js';
 import {listMembersInOrg} from '../../lib/github/api/teams/teams.js';
 import {labels, magicComments, teams} from '../../lib/unity/config.js';
 import {isRepoExistent} from '../../lib/unity/app-spec.js';
-import {validateSchema} from '../../lib/json-schema.js';
+import {validateSchema} from '../../lib/json/json-schema.js';
 import {getAUser} from '../../lib/github/api/users/users.js';
 import {RequestError} from '@octokit/request-error';
 import * as github from '@actions/github';
 import {IssueComment} from '../../lib/github/api/issues/response/issue-comment.js';
+import {run} from '../../lib/run.js';
 
 
 const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
@@ -168,9 +169,7 @@ const areRunPreconditionsMet = (issue: Issue) => {
   return true;
 };
 
-const run = async () => {
-  core.debug(`cwd: ${process.cwd()}`);
-
+run(async () => {
   const issue = await getIssue();
   switch (github.context.eventName) {
   case 'issue_comment':
@@ -205,14 +204,5 @@ const run = async () => {
     await requestApproval(issue, newAppIssue);
   } else {
     await removeApprovalRequest(issue, newAppIssue);
-  }
-};
-
-run().catch(e => {
-  if (e instanceof Error) {
-    core.error(`${e.message}\n${e.stack}`);
-    core.setFailed(e.message);
-  } else {
-    core.setFailed(e);
   }
 });

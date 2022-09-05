@@ -1,4 +1,4 @@
-import {lexMarkdown} from '../../markdown.js';
+import {lexMarkdown} from '../../mardown/markdown.js';
 import {marked} from 'marked';
 
 import * as yaml from 'js-yaml';

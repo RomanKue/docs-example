@@ -12,6 +12,7 @@ import {hasLabel, isClosed, parseIssueBody} from '../../lib/unity/custom-issues/
 import {labels} from '../../lib/unity/config.js';
 import {Repository} from '../../lib/github/api/repos/response/repository.js';
 import {createRepository} from './app-repo/index.js';
+import {run} from '../../lib/run.js';
 
 const triggeredByWorkflowDispatch = (): AppSpec => {
   const appYaml = core.getInput('appYaml');
@@ -65,9 +66,7 @@ const areRunPreconditionsMet = (issue: Issue) => {
   return true;
 };
 
-const run = async () => {
-  core.debug(`cwd: ${process.cwd()}`);
-
+run(async () => {
   let issue: Issue | undefined;
   let appSpec: AppSpec | undefined;
   switch (github.context.eventName) {
@@ -92,15 +91,5 @@ const run = async () => {
   const appRepository = await createNewApp(appSpec);
   if (issue) {
     await closeWithComment(issue, appRepository);
-  }
-};
-
-
-run().catch(e => {
-  if (e instanceof Error) {
-    core.error(`${e.message}\n${e.stack}`);
-    core.setFailed(e.message);
-  } else {
-    core.setFailed(e);
   }
 });

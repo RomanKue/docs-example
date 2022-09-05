@@ -1,5 +1,5 @@
 import {AppSpecV1Beta1} from '../../../lib/unity/app-spec.js';
-import {lexMarkdown} from '../../../lib/markdown.js';
+import {lexMarkdown} from '../../../lib/mardown/markdown.js';
 import {createReadme} from './readme.js';
 
 describe('readme', () => {

@@ -8,7 +8,7 @@ import {FileCommit} from '../../../lib/github/api/repos/response/file-commit.js'
 import * as yaml from 'js-yaml';
 import {defaultBranches, defaultTopics} from '../../../lib/unity/config.js';
 import {createAReference} from '../../../lib/github/api/git/git.js';
-import {base64} from '../../../lib/encoding.js';
+import {base64} from '../../../lib/strings/encoding.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
 

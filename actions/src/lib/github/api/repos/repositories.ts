@@ -8,6 +8,7 @@ import {FullRepository} from './response/full-repository.js';
 import {MinimalRepository} from './response/minimal-repository.js';
 import {RepositoryInvitation} from './response/repository-invitation.js';
 import {FileCommit} from './response/file-commit.js';
+import {Topic} from './response/topic.js';
 
 type ReposApi = RestApi['repos'];
 
@@ -48,6 +49,20 @@ export const createAnOrganizationRepository = async (
     ...options
   });
   return response.data as Repository;
+};
+
+/**
+ * see https://docs.github.com/en/rest/repos/repos#replace-all-repository-topics
+ */
+export const replaceAllRepositoryTopics = async (
+  options: { names: string[] } & Partial<Parameters<ReposApi['replaceAllTopics']>[0]>
+): Promise<Topic> => {
+  const response = await getOctokitApi().rest.repos.replaceAllTopics({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  });
+  return response.data as Topic;
 };
 
 /**

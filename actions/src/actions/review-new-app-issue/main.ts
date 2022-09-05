@@ -179,7 +179,8 @@ const run = async () => {
       // dont't react on qq-users comments
       return;
     }
-    if (!(payloadComment.body ?? '').includes(magicComments.check) && payloadComment.user) {
+    // TODO implement approval workflow based on LGTM
+    if ((payloadComment.body ?? '').trim() !== magicComments.check && payloadComment.user) {
       return;
     }
     break;

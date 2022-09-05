@@ -2,11 +2,11 @@ import {AppSpec, isRepoExistent, repoName} from '../../../lib/unity/app-spec.js'
 import {
   addARepositoryCollaborator,
   createAnOrganizationRepository,
-  createOrUpdateFileContents
+  createOrUpdateFileContents, replaceAllRepositoryTopics
 } from '../../../lib/github/api/repos/repositories.js';
 import {FileCommit} from '../../../lib/github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
-import {defaultBranches} from '../../../lib/unity/config.js';
+import {defaultBranches, defaultTopics} from '../../../lib/unity/config.js';
 import {createAReference} from '../../../lib/github/api/git/git.js';
 import {base64} from '../../../lib/encoding.js';
 import {createGitignore} from './gitignore.js';
@@ -20,7 +20,12 @@ export const createRepository = async (appSpec: AppSpec) => {
 
   const appRepository = await createAnOrganizationRepository({
     name: newAppRepoName,
-    visibility: 'internal'
+    visibility: 'internal',
+  });
+
+  const topic = await replaceAllRepositoryTopics({
+    repo: appRepository.name,
+    names: [...Object.values(defaultTopics)],
   });
 
   let commit: FileCommit;

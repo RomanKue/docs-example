@@ -3,7 +3,6 @@
  */
 
 import {Issue} from '../github/api/issues/response/issue.js';
-import {commentOnIssue} from '../github/api/issues/issues.js';
 
 /**
  * teams available in the UNITY org

@@ -13,7 +13,7 @@ describe('new-issue', () => {
       expect(parseIssueBody('')).toBeInstanceOf(NewAppIssue);
     });
     it('should parse when loading template file', () => {
-      const md = fs.readFileSync('../.github/ISSUE_TEMPLATE/custom.md', 'utf8');
+      const md = fs.readFileSync('../.github/ISSUE_TEMPLATE/new-app.md', 'utf8');
       const newAppIssue = parseIssueBody(md);
       expect(newAppIssue.appSpec?.apiVersion).toEqual('v1beta1');
       expect(newAppIssue.appSpec?.name).toEqual('<my-app-name>');

@@ -1,6 +1,5 @@
 import {approveIssue} from './approve.js';
 import {Issue, SimpleUser} from '../../../../github/api/issues/response/issue.js';
-import {mock} from 'jest-mock-extended';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
 import * as issues from '../../../../github/api/issues/issues.js';
 import * as teams from '../../../../github/api/teams/teams.js';
@@ -62,7 +61,7 @@ describe('approve', () => {
     it('should not approve when commented from approver with non matching comment', async () => {
       jest.spyOn(teams, 'listMembersInOrg').mockResolvedValue([approver]);
       jest.spyOn(issues, 'lockAnIssue').mockResolvedValue();
-      jest.spyOn(issues, 'setLabelsForAnIssue').mockResolvedValue(mock<Label[]>());
+      jest.spyOn(issues, 'setLabelsForAnIssue').mockResolvedValue(partialMock<Label[]>());
 
       issue = addLabel(issue, labels.newApp, issueState.waitingForApproval);
 
@@ -77,7 +76,7 @@ describe('approve', () => {
     it('should approve when approved by comment from approver', async () => {
       jest.spyOn(teams, 'listMembersInOrg').mockResolvedValue([approver]);
       jest.spyOn(issues, 'lockAnIssue').mockResolvedValue();
-      jest.spyOn(issues, 'setLabelsForAnIssue').mockResolvedValue(mock<Label[]>());
+      jest.spyOn(issues, 'setLabelsForAnIssue').mockResolvedValue(partialMock<Label[]>());
 
       issue = addLabel(issue, labels.newApp, issueState.waitingForApproval);
 
@@ -98,8 +97,8 @@ describe('approve', () => {
     it('should not approve when approved by comment from non-approver', async () => {
       jest.spyOn(teams, 'listMembersInOrg').mockResolvedValue([approver]);
       jest.spyOn(issues, 'lockAnIssue').mockResolvedValue();
-      jest.spyOn(issues, 'setLabelsForAnIssue').mockResolvedValue(mock<Label[]>());
-      jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(mock<IssueComment>());
+      jest.spyOn(issues, 'setLabelsForAnIssue').mockResolvedValue(partialMock<Label[]>());
+      jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
 
       issue = addLabel(issue, labels.newApp, issueState.waitingForApproval);
 

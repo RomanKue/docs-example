@@ -1,5 +1,5 @@
 import {validateSchema} from './json-schema.js';
-import {loadSchema} from '../unity/custom-issues/new-app/new-app-issue.js';
+import {loadSchema} from '../unity/issues/new-app/new-app-issue.js';
 import {AppSpecV1Beta1} from '../unity/app-spec.js';
 
 describe('json-schema', () => {

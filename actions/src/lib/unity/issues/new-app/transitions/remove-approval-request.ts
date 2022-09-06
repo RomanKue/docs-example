@@ -17,4 +17,3 @@ export const removeApprovalRequest = async (issue: Issue) => {
   const assignees = await getApprovers();
   await removeAssigneesFromAnIssue({assignees});
 };
-

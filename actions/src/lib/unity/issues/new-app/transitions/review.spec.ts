@@ -1,4 +1,5 @@
-import {reviewIssue} from './review.js';
+import * as review from './review.js';
+import {checkAppName, checkAppSchema, checkTermsOfService, reviewIssue} from './review.js';
 import {Issue, SimpleUser} from '../../../../github/api/issues/response/issue.js';
 import {freeze, produce} from 'immer';
 import {partialMock} from '../../../../mock/partial-mock.js';
@@ -12,6 +13,9 @@ import * as users from '../../../../github/api/users/users.js';
 import * as issues from '../../../../github/api/issues/issues.js';
 import {PrivateUser, PublicUser} from '../../../../github/api/users/response/user.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
+import {NewAppIssue} from '../new-app-issue.js';
+import {AppSpec, AppSpecV1Beta1, repoName} from '../../../app-spec.js';
+import {MinimalRepository} from '../../../../github/api/repos/response/minimal-repository.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {
@@ -95,6 +99,65 @@ members: # dev ops team members that have access to the app
       jest.spyOn(users, 'getAUser').mockResolvedValue(partialMock<PrivateUser | PublicUser>({login: user.login}));
       await reviewIssue(issue);
       expect(removeApprovalRequest.removeApprovalRequest).toHaveBeenCalled();
+    });
+  });
+  describe('checkTermsOfService', () => {
+    it('should be valid when terms of service are accepted', async () => {
+      const newAppIssue = partialMock<NewAppIssue>({
+        appSpec: partialMock<AppSpec>({}),
+        termsOfServiceAccepted: true
+      });
+      expect(await checkTermsOfService(issue, newAppIssue)).toBeTruthy();
+    });
+    it('should not be valid when terms of service are not accepted', async () => {
+      const newAppIssue = partialMock<NewAppIssue>({
+        appSpec: partialMock<AppSpec>({}),
+        termsOfServiceAccepted: false
+      });
+      expect(await checkTermsOfService(issue, newAppIssue)).toBeFalsy();
+    });
+  });
+  describe('checkAppSchema', () => {
+    let appSpec: AppSpecV1Beta1;
+    beforeEach(() => {
+      appSpec = {
+        apiVersion: 'v1beta1',
+        name: 'foo',
+        members: [
+          {qNumber: 'q123456'}
+        ]
+      };
+      jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
+    });
+    it('should be valid when schema is valid', async () => {
+      const newAppIssue = partialMock<NewAppIssue>({appSpec: appSpec});
+      expect(await checkAppSchema(issue, newAppIssue)).toBeTruthy();
+    });
+    it('should not be valid when schema is not valid', async () => {
+      appSpec = produce(appSpec, draft => {
+        draft.name = '/';
+      });
+      const newAppIssue = partialMock<NewAppIssue>({appSpec: appSpec});
+      expect(await checkAppSchema(issue, newAppIssue)).toBeFalsy();
+    });
+  });
+  describe('checkAppName', () => {
+    beforeEach(() => {
+      jest.spyOn(repositories, 'listOrganizationRepositories').mockResolvedValue([]);
+      jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
+    });
+    it('should be valid when name is valid', async () => {
+      const appSpec = partialMock<AppSpec>({name: 'foo'});
+      const newAppIssue = partialMock<NewAppIssue>({appSpec: appSpec});
+      expect(await checkAppName(issue, newAppIssue)).toBeTruthy();
+    });
+    it('should not be valid when name exists', async () => {
+      const appSpec = partialMock<AppSpec>({name: 'foo'});
+      const newAppIssue = partialMock<NewAppIssue>({appSpec: appSpec});
+      jest.spyOn(repositories, 'listOrganizationRepositories').mockResolvedValue([
+        partialMock<MinimalRepository>({name: repoName(appSpec.name)})
+      ]);
+      expect(await checkAppName(issue, newAppIssue)).toBeFalsy();
     });
   });
 });

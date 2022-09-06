@@ -1,6 +1,5 @@
 import {createRepository} from './index.js';
 
-import {mock} from 'jest-mock-extended';
 
 import * as repositoris from '../../github/api/repos/repositories.js';
 import * as git from '../../github/api/git/git.js';
@@ -10,6 +9,7 @@ import {RepositoryInvitation} from '../../github/api/repos/response/repository-i
 import {GitReference} from '../../github/api/git/response/git-reference.js';
 import {AppSpecV1Beta1} from '../app-spec.js';
 import {Topic} from '../../github/api/repos/response/topic.js';
+import {partialMock} from '../../mock/partial-mock.js';
 
 
 describe('index', () => {
@@ -17,11 +17,11 @@ describe('index', () => {
   beforeEach(() => {
     v1beta1 = Object.freeze({apiVersion: 'v1beta1', name: 'foo', members: [{qNumber: 'q1234'}]});
     jest.spyOn(repositoris, 'listOrganizationRepositories').mockResolvedValue([]);
-    jest.spyOn(repositoris, 'createAnOrganizationRepository').mockResolvedValue(mock<Repository>());
-    jest.spyOn(repositoris, 'createOrUpdateFileContents').mockResolvedValue(mock<FileCommit>());
-    jest.spyOn(repositoris, 'addARepositoryCollaborator').mockResolvedValue(mock<RepositoryInvitation>());
-    jest.spyOn(repositoris, 'replaceAllRepositoryTopics').mockResolvedValue(mock<Topic>());
-    jest.spyOn(git, 'createAReference').mockResolvedValue(mock<GitReference>());
+    jest.spyOn(repositoris, 'createAnOrganizationRepository').mockResolvedValue(partialMock<Repository>());
+    jest.spyOn(repositoris, 'createOrUpdateFileContents').mockResolvedValue(partialMock<FileCommit>({commit: {sha: 'foo'}}));
+    jest.spyOn(repositoris, 'addARepositoryCollaborator').mockResolvedValue(partialMock<RepositoryInvitation>());
+    jest.spyOn(repositoris, 'replaceAllRepositoryTopics').mockResolvedValue(partialMock<Topic>());
+    jest.spyOn(git, 'createAReference').mockResolvedValue(partialMock<GitReference>());
   });
   describe('createRepository', () => {
     it('should create repo when called with v1beta1 app', async () => {

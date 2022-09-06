@@ -6,11 +6,11 @@
 import {Issue} from '../lib/github/api/issues/response/issue.js';
 import {magicComments} from '../lib/unity/config.js';
 import {assertUnreachable, handleWorkflowEvent, run} from '../lib/run.js';
-import {reviewIssue} from '../lib/unity/custom-issues/new-app/transitions/review.js';
-import {requestApproval} from '../lib/unity/custom-issues/new-app/transitions/request-approval.js';
+import {reviewIssue} from '../lib/unity/issues/new-app/transitions/review.js';
+import {requestApproval} from '../lib/unity/issues/new-app/transitions/request-approval.js';
 import {IssueComment} from '../lib/github/api/issues/response/issue-comment.js';
-import {approveIssue} from '../lib/unity/custom-issues/new-app/transitions/approve.js';
-import {getIssueState} from '../lib/unity/custom-issues/new-app/state.js';
+import {approveIssue} from '../lib/unity/issues/new-app/transitions/approve.js';
+import {getIssueState} from '../lib/unity/issues/new-app/state.js';
 
 const areRunPreconditionsMet = (issue: Issue) => {
   return getIssueState(issue) !== null;

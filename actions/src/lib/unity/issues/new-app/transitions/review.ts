@@ -10,7 +10,7 @@ import {RepoUtils} from '../../../../github/api/repos/repositories.js';
 import {UserUtils} from '../../../../github/api/users/users.js';
 import addSimpleComment = IssueUtils.addSimpleComment;
 
-const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
+export const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app name: ${newAppIssue.appSpec?.name}`);
   if (await RepoUtils.isRepoExistent(newAppIssue.appSpec?.name)) {
     await addSimpleComment(issue, (user) =>
@@ -21,7 +21,7 @@ const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boo
   return true;
 };
 
-const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
+export const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   const appSpec = newAppIssue.appSpec;
   if (appSpec && 'members' in appSpec) {
     core.info(`checking app members: ${JSON.stringify(appSpec?.members)}`);
@@ -42,7 +42,7 @@ const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): Promise<
 };
 
 
-const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
+export const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app yaml`);
   const apiVersion = newAppIssue.appSpec?.apiVersion;
   switch (apiVersion) {
@@ -62,7 +62,7 @@ const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<b
   return true;
 };
 
-const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
+export const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking if terms of service are accepted`);
   if (!newAppIssue.termsOfServiceAccepted) {
     await addSimpleComment(issue, (user) =>

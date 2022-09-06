@@ -8,11 +8,11 @@ import * as github from '@actions/github';
 import {Issue} from '../lib/github/api/issues/response/issue.js';
 import {AppSpec, parseYaml} from '../lib/unity/app-spec.js';
 import {commentOnIssue, getIssue, lockAnIssue, updateAnIssue} from '../lib/github/api/issues/issues.js';
-import {parseIssueBody} from '../lib/unity/custom-issues/new-app/new-app-issue.js';
+import {parseIssueBody} from '../lib/unity/issues/new-app/new-app-issue.js';
 import {Repository} from '../lib/github/api/repos/response/repository.js';
 import {createRepository} from '../lib/unity/app-repo/index.js';
 import {run} from '../lib/run.js';
-import {getIssueState, isNewAppIssue, issueState} from '../lib/unity/custom-issues/new-app/index.js';
+import {getIssueState, isNewAppIssue, issueState} from '../lib/unity/issues/new-app/index.js';
 
 const triggeredByWorkflowDispatch = (): AppSpec => {
   const appYaml = core.getInput('appYaml');

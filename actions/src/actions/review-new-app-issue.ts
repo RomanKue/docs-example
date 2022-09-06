@@ -16,6 +16,7 @@ const areRunPreconditionsMet = (issue: Issue) => {
   return getIssueState(issue) !== null;
 };
 
+// TODO test
 const handleIssueChange = async (issue: Issue): Promise<void> => {
   if (!areRunPreconditionsMet(issue)) {
     return;
@@ -42,6 +43,7 @@ const handleIssueChange = async (issue: Issue): Promise<void> => {
 /**
  * certain comments will trigger bot actions, this handler defines which comments are 'magic'
  */
+// TODO test
 const handleMagicComments = async (issue: Issue, comment: IssueComment) => {
   if (!areRunPreconditionsMet(issue)) {
     return;

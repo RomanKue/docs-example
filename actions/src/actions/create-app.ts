@@ -56,7 +56,7 @@ const closeWithComment = (issue: Issue, appRepository: Repository) => {
 };
 
 const areRunPreconditionsMet = (issue: Issue) => {
-  return isNewAppIssue(issue) && getIssueState(issue) !== issueState.approved;
+  return isNewAppIssue(issue) && getIssueState(issue) === issueState.approved;
 };
 
 // TODO refactor this

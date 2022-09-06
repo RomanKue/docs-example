@@ -5,7 +5,7 @@ import {getApprovers} from '../new-app-issue.js';
 import {getIssueState, issueState, setIssueState} from '../state.js';
 
 export const requestApproval = async (issue: Issue) => {
-  if (getIssueState(issue) !== issueState.waitingForApproval) {
+  if (getIssueState(issue) !== issueState.waitingForReview) {
     return;
   }
   core.info(`requesting approval`);

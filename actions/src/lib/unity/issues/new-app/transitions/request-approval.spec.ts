@@ -40,8 +40,8 @@ describe('request-approval', () => {
     jest.resetAllMocks();
   });
   describe('requestApproval', () => {
-    it('should request approval when issue is waiting for approval', async () => {
-      issue = addLabel(issue, labels.newApp, issueState.waitingForApproval);
+    it('should request approval when issue is waiting for review', async () => {
+      issue = addLabel(issue, labels.newApp, issueState.waitingForReview);
       await requestApproval(issue);
       expect(issues.setLabelsForAnIssue).toHaveBeenCalledWith(expect.objectContaining({
         labels: [labels.newApp, issueState.waitingForApproval]
@@ -49,7 +49,7 @@ describe('request-approval', () => {
       expect(issues.addAssigneesToAnIssue).toHaveBeenCalledWith({assignees: [approver.login]});
     });
     it('should approve when issue is created by approver', async () => {
-      issue = addLabel(issue, labels.newApp, issueState.waitingForApproval);
+      issue = addLabel(issue, labels.newApp, issueState.waitingForReview);
       jest.spyOn(teams, 'listMembersInOrg').mockResolvedValue([user]);
       await requestApproval(issue);
       expect(issues.setLabelsForAnIssue).toHaveBeenCalledWith(expect.objectContaining({

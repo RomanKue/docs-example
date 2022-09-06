@@ -35,7 +35,7 @@ export const defaultBranches = {
 } as const;
 
 export const defaultTopics = {
-  unityApp: 'unity app',
+  unityApp: 'unity-app',
 } as const;
 
 export const magicComments = {

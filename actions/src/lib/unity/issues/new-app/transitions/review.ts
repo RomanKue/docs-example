@@ -77,14 +77,15 @@ export const reviewIssue = async (issue: Issue) => {
   core.info(`reviewing issue`);
   const newAppIssue = parseIssueBody(issue.body ?? '');
 
-  let allGood = true;
+  let ok = true;
 
-  allGood &&= await checkTermsOfService(issue, newAppIssue);
-  allGood &&= await checkAppSchema(issue, newAppIssue);
-  allGood &&= await checkAppName(issue, newAppIssue);
-  allGood &&= await checkAppMembers(issue, newAppIssue);
+  ok &&= await checkTermsOfService(issue, newAppIssue);
+  ok &&= await checkAppSchema(issue, newAppIssue);
+  ok &&= await checkAppName(issue, newAppIssue);
+  ok &&= await checkAppMembers(issue, newAppIssue);
 
-  if (allGood) {
+  core.info(`all checks have been passed with: ${ok}`);
+  if (ok) {
     await requestApproval(issue);
   } else {
     await removeApprovalRequest(issue);

@@ -1,11 +1,5 @@
 name: create new UNITY app
 on:
-  workflow_dispatch:
-    inputs:
-      appYaml:
-        description: yaml spec of the app to create
-        required: true
-        type: string
   issues:
     types:
       - labeled
@@ -25,4 +19,4 @@ jobs:
         uses: ./.github/actions/create-app/
         with:
           GITHUB_TOKEN: ${{secrets.UNITY_BOT_TOKEN}}
-          appYaml: ${{ inputs.appYaml }}
+          working-directory: actions

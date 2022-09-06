@@ -5,14 +5,14 @@
  */
 import * as core from '@actions/core';
 import * as github from '@actions/github';
-import {Issue} from '../../lib/github/api/issues/response/issue.js';
-import {AppSpec, parseYaml} from '../../lib/unity/app-spec.js';
-import {commentOnIssue, getIssue, lockAnIssue, updateAnIssue} from '../../lib/github/api/issues/issues.js';
-import {hasLabel, isClosed, parseIssueBody} from '../../lib/unity/custom-issues/new-app-issue.js';
-import {labels} from '../../lib/unity/config.js';
-import {Repository} from '../../lib/github/api/repos/response/repository.js';
-import {createRepository} from './app-repo/index.js';
-import {run} from '../../lib/run.js';
+import {Issue} from '../lib/github/api/issues/response/issue.js';
+import {AppSpec, parseYaml} from '../lib/unity/app-spec.js';
+import {commentOnIssue, getIssue, lockAnIssue, updateAnIssue} from '../lib/github/api/issues/issues.js';
+import {parseIssueBody} from '../lib/unity/custom-issues/new-app/new-app-issue.js';
+import {Repository} from '../lib/github/api/repos/response/repository.js';
+import {createRepository} from '../lib/unity/app-repo/index.js';
+import {run} from '../lib/run.js';
+import {getIssueState, isNewAppIssue, issueState} from '../lib/unity/custom-issues/new-app/index.js';
 
 const triggeredByWorkflowDispatch = (): AppSpec => {
   const appYaml = core.getInput('appYaml');
@@ -32,6 +32,11 @@ const createNewApp = async (appSpec: AppSpec) => {
   const appRepository = await createRepository(appSpec);
 
   // deploy Helm chart
+  // TODO setup workflows in the repo for create-angular-stub, create-quarkus-stub
+  // TODO trigger them via workflow dispatch
+  // TODO patch app.yaml from workflows
+  // TODO create service account and setup token in secret
+  // TODO setup workflow to install helm chart
 
   return appRepository;
 };
@@ -51,21 +56,10 @@ const closeWithComment = (issue: Issue, appRepository: Repository) => {
 };
 
 const areRunPreconditionsMet = (issue: Issue) => {
-  if (isClosed(issue)) {
-    core.info(`aborting, issue is closed`);
-    return false;
-  }
-  if (!hasLabel(issue, labels.newApp)) {
-    core.info(`aborting, issue is not labeled with ${labels.newApp}`);
-    return false;
-  }
-  if (!hasLabel(issue, labels.approved)) {
-    core.info(`aborting, issue is not labeled with ${labels.approved}`);
-    return false;
-  }
-  return true;
+  return isNewAppIssue(issue) && getIssueState(issue) !== issueState.approved;
 };
 
+// TODO refactor this
 run(async () => {
   let issue: Issue | undefined;
   let appSpec: AppSpec | undefined;

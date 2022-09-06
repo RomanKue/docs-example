@@ -1,4 +1,4 @@
-import {AppSpecV1Beta1} from '../../../lib/unity/app-spec.js';
+import {AppSpecV1Beta1} from '../app-spec.js';
 import {createGitignore} from './gitignore.js';
 
 describe('gitignore', () => {

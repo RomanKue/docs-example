@@ -1,20 +1,20 @@
-import {AppSpec, isRepoExistent, repoName} from '../../../lib/unity/app-spec.js';
+import {AppSpec, repoName} from '../app-spec.js';
 import {
   addARepositoryCollaborator,
   createAnOrganizationRepository,
-  createOrUpdateFileContents, replaceAllRepositoryTopics
-} from '../../../lib/github/api/repos/repositories.js';
-import {FileCommit} from '../../../lib/github/api/repos/response/file-commit.js';
+  createOrUpdateFileContents, replaceAllRepositoryTopics, RepoUtils
+} from '../../github/api/repos/repositories.js';
+import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
-import {defaultBranches, defaultTopics} from '../../../lib/unity/config.js';
-import {createAReference} from '../../../lib/github/api/git/git.js';
-import {base64} from '../../../lib/strings/encoding.js';
+import {defaultBranches, defaultTopics} from '../config.js';
+import {createAReference} from '../../github/api/git/git.js';
+import {base64} from '../../strings/encoding.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
 
 export const createRepository = async (appSpec: AppSpec) => {
   const newAppRepoName = repoName(appSpec.name);
-  if (await isRepoExistent(appSpec.name)) {
+  if (await RepoUtils.isRepoExistent(appSpec.name)) {
     throw new Error(`the repository ${newAppRepoName} already exists`);
   }
 

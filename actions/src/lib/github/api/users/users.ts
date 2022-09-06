@@ -1,6 +1,7 @@
 import {RestApi} from '../rest.js';
 import {getOctokitApi} from '../../octokit.js';
 import {PrivateUser, PublicUser} from './response/user.js';
+import {RequestError} from '@octokit/request-error';
 
 type UsersApi = RestApi['users'];
 
@@ -15,4 +16,18 @@ export const getAUser = async (
   });
   return response.data as PrivateUser | PublicUser;
 };
+
+export namespace UserUtils {
+  export const isUserExistent = async (qNumber: string) => {
+    try {
+      await getAUser({username: qNumber});
+      return true;
+    } catch (e) {
+      if (e instanceof RequestError && e.status === 404) {
+        return false;
+      }
+      throw e;
+    }
+  };
+}
 

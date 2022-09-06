@@ -4,10 +4,10 @@ inputs:
   GITHUB_TOKEN:
     description: the GITHUB_TOKEN to authenticate to the API
     required: true
-  appYaml:
-    description: yaml spec of the app to create
-    required: true
+  working-directory:
+    description: working directory to run the action in
+    required: false
 
 runs:
   using: 'node16'
-  main: '../../../actions/dist/actions/create-app/main.js'
+  main: 'actions/dist/actions/create-app.js'

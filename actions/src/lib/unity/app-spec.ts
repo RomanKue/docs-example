@@ -56,9 +56,3 @@ export const repoName = (appName: string | null | undefined): string => {
   return repos.appPrefix + appName;
 };
 
-export const isRepoExistent = async (appName: string | null | undefined): Promise<boolean> => {
-  const newAppRepoName = repoName(appName);
-
-  const repositories = await listOrganizationRepositories();
-  return repositories.map(r => r.name).includes(newAppRepoName);
-};

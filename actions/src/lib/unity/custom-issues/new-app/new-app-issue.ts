@@ -1,15 +1,17 @@
-import {lexMarkdown} from '../../mardown/markdown.js';
+import {lexMarkdown} from '../../../mardown/markdown.js';
 import {marked} from 'marked';
 
 import * as yaml from 'js-yaml';
-import {AppSpec, parseYaml} from '../app-spec.js';
-import {Issue} from '../../github/api/issues/response/issue.js';
-import Code = marked.Tokens.Code;
+import {AppSpec, parseYaml} from '../../app-spec.js';
 import fs from 'fs';
+import {unityTeams} from '../../config.js';
+import * as core from '@actions/core';
+import {listMembersInOrg} from '../../../github/api/teams/teams.js';
+import Code = marked.Tokens.Code;
 
 
 /**
- *
+ * Parsed, structured representation of the new app issue
  */
 export class NewAppIssue {
   constructor(
@@ -21,14 +23,6 @@ export class NewAppIssue {
   }
 
 }
-
-export const isClosed = (issue: Readonly<Issue>): boolean => {
-  return !!issue.closed_at;
-};
-
-export const hasLabel = (issue: Readonly<Issue>, label: string): boolean => {
-  return issue.labels.map(l => l?.name).includes(label);
-};
 
 export const isTermsOfServiceAccepted = (body: string): boolean => {
   return body.includes('[x] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html)');
@@ -43,6 +37,7 @@ export const shouldGenerateQuarkusStub = (body: string): boolean => {
 };
 
 export const parseIssueBody = (body: string): NewAppIssue => {
+  core.info(`parsing issue body`);
   const tokens = lexMarkdown(body);
   const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
   const appYaml = code[0]?.text ?? '';
@@ -58,8 +53,13 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   );
 };
 
-export const loadSchema = (apiVersion: string, basePath = 'schema'): Object => {
+export const loadSchema = (apiVersion: string, basePath = '../schema'): Object => {
   const path = `${basePath}/unity-app.${apiVersion}.schema.json`;
   const schemaJson = fs.readFileSync(path, 'utf8');
   return JSON.parse(schemaJson);
+};
+
+export const getApprovers = async () => {
+  const unityAppApproversTeam = await listMembersInOrg({team_slug: unityTeams.unityAppApproversSlug});
+  return unityAppApproversTeam.map(user => user.login);
 };

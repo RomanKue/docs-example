@@ -2,14 +2,14 @@ import {createRepository} from './index.js';
 
 import {mock} from 'jest-mock-extended';
 
-import * as repositoris from '../../../lib/github/api/repos/repositories.js';
-import * as git from '../../../lib/github/api/git/git.js';
-import {Repository} from '../../../lib/github/api/repos/response/repository.js';
-import {FileCommit} from '../../../lib/github/api/repos/response/file-commit.js';
-import {RepositoryInvitation} from '../../../lib/github/api/repos/response/repository-invitation.js';
-import {GitReference} from '../../../lib/github/api/git/response/git-reference.js';
-import {AppSpecV1Beta1} from '../../../lib/unity/app-spec.js';
-import {Topic} from '../../../lib/github/api/repos/response/topic.js';
+import * as repositoris from '../../github/api/repos/repositories.js';
+import * as git from '../../github/api/git/git.js';
+import {Repository} from '../../github/api/repos/response/repository.js';
+import {FileCommit} from '../../github/api/repos/response/file-commit.js';
+import {RepositoryInvitation} from '../../github/api/repos/response/repository-invitation.js';
+import {GitReference} from '../../github/api/git/response/git-reference.js';
+import {AppSpecV1Beta1} from '../app-spec.js';
+import {Topic} from '../../github/api/repos/response/topic.js';
 
 
 describe('index', () => {

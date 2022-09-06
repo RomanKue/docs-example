@@ -1,12 +1,12 @@
 import {validateSchema} from './json-schema.js';
-import {loadSchema} from '../unity/custom-issues/new-app-issue.js';
+import {loadSchema} from '../unity/custom-issues/new-app/new-app-issue.js';
 import {AppSpecV1Beta1} from '../unity/app-spec.js';
 
 describe('json-schema', () => {
   describe('validateSchema', () => {
     let schema: Object;
     beforeAll(() => {
-      schema = loadSchema('v1beta1', '../schema');
+      schema = loadSchema('v1beta1', );
     });
     it('should fail when object is empty', () => {
       expect(validateSchema({}, schema)).toEqual(

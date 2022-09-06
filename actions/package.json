@@ -10,6 +10,7 @@
     "@typescript-eslint/eslint-plugin": "5.36.1",
     "@typescript-eslint/parser": "5.36.1",
     "eslint": "8.23.0",
+    "immer": "^9.0.15",
     "jest-mock-extended": "2.0.7",
     "js-yaml": "4.1.0",
     "jsonschema": "^1.4.1",

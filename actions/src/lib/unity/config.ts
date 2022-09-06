@@ -2,11 +2,14 @@
  * General configuration of the UNITY org in GitHub.
  */
 
+import {Issue} from '../github/api/issues/response/issue.js';
+import {commentOnIssue} from '../github/api/issues/issues.js';
+
 /**
  * teams available in the UNITY org
  * @see https://atc-github.azure.cloud.bmw/orgs/UNITY/teams
  */
-export const teams = {
+export const unityTeams = {
   unityAppApproversSlug: 'unity-app-approvers',
 } as const;
 
@@ -16,16 +19,11 @@ export const teams = {
  */
 export const labels = {
   newApp: 'new app',
+  waitingForReview: 'waiting for review',
   waitingForApproval: 'waiting for approval',
   approved: 'approved',
-} as const;
-
-/**
- * workflows available in UNITY/unity which can be dispatched via workflow_dispatch
- * @see https://atc-github.azure.cloud.bmw/UNITY/unity/actions
- */
-export const workflows = {
-  createApp: 'create-app.yaml',
+  delivered: 'delivered',
+  stale: 'stale',
 } as const;
 
 export const repos = {
@@ -45,3 +43,10 @@ export const magicComments = {
   check: 'check',
   lgtm: 'LGTM',
 } as const;
+
+export const hasLabel = (
+  issue: Readonly<Pick<Issue, 'labels'>>
+  , label: typeof labels[keyof typeof labels]): boolean => {
+  return issue.labels.map(l => l?.name).includes(label);
+};
+

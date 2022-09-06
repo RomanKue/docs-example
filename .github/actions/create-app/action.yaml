@@ -10,4 +10,4 @@ inputs:
 
 runs:
   using: 'node16'
-  main: 'actions/dist/actions/create-app.js'
+  main: '../../../actions/dist/actions/create-app.js'

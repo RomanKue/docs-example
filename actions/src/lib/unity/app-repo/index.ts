@@ -16,7 +16,7 @@ import {Repository} from '../../github/api/repos/response/repository.js';
 export const appYamlPath = 'unity-app.yaml';
 export const makeStubWorkflowFileName = 'make-stub.yaml';
 export const makeStubAction = 'make-stub';
-export const deployAppWorkflowFileName = 'make-stub.yaml';
+export const deployAppWorkflowFileName = 'deploy.yaml';
 export const deployAppAction = 'deploy-unity-app';
 
 const createDeployWorkflow = () => `
@@ -28,7 +28,7 @@ on:
       - int
       - prod
 jobs:
-  deploy
+  deploy:
     permissions:
       contents: read
       id-token: write
@@ -62,7 +62,7 @@ on:
         default: 'main'
         type: string
 jobs:
-  make-stub
+  make-stub:
     permissions:
       contents: write
       id-token: write

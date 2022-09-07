@@ -1,6 +1,4 @@
 import * as github from '@actions/github';
-import {FullTeam} from '../teams/response/full-team.js';
-import {SimpleUser} from '../teams/response/simple-user.js';
 import {RestApi} from '../rest.js';
 import {getOctokitApi} from '../../octokit.js';
 import {Repository} from './response/repository.js';
@@ -9,7 +7,7 @@ import {MinimalRepository} from './response/minimal-repository.js';
 import {RepositoryInvitation} from './response/repository-invitation.js';
 import {FileCommit} from './response/file-commit.js';
 import {Topic} from './response/topic.js';
-import {repoName} from '../../../unity/app-spec.js';
+import {Content} from './response/content.js';
 
 type ReposApi = RestApi['repos'];
 
@@ -85,7 +83,11 @@ export const addARepositoryCollaborator = async (
  * see https://docs.github.com/en/rest/repos/contents#create-or-update-file-contents
  */
 export const createOrUpdateFileContents = async (
-  options: { path: string, message: string, content: string } & Partial<Parameters<ReposApi['createOrUpdateFileContents']>[0]>
+  options: {
+    path: string,
+    message: string,
+    content: string,
+  } & Partial<Parameters<ReposApi['createOrUpdateFileContents']>[0]>
 ): Promise<FileCommit> => {
   const response = await getOctokitApi().rest.repos.createOrUpdateFileContents({
     owner: github.context.repo.owner,
@@ -93,4 +95,20 @@ export const createOrUpdateFileContents = async (
     ...options
   });
   return response.data as FileCommit;
+};
+
+/**
+ * https://docs.github.com/en/rest/repos/contents#get-repository-content
+ */
+export const getRepositoryContent = async (
+  options: {
+    path: string,
+  } & Partial<Parameters<ReposApi['getContent']>[0]>
+): Promise<Content> => {
+  const response = await getOctokitApi().rest.repos.getContent({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  });
+  return response.data as Content;
 };

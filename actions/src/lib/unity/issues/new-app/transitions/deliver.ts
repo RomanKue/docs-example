@@ -33,7 +33,7 @@ const updateAppDeployments = async (appSpec: AppSpec, name: string, replicas = 2
       deployments[name] = {replicas};
       draft.deployments = deployments;
     });
-    await repositoriesUtils.addFile(repoName(appSpec.name), appYamlPath, yaml.dump(appSpec));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath, yaml.dump(appSpec));
   }
 };
 

@@ -1,5 +1,5 @@
 import {repoName} from '../../../unity/app-spec.js';
-import {createOrUpdateFileContents, listOrganizationRepositories} from './repositories.js';
+import {createOrUpdateFileContents, getRepositoryContent, listOrganizationRepositories} from './repositories.js';
 import {base64} from '../../../strings/encoding.js';
 
 export const isRepoExistent = async (appName: string | null | undefined): Promise<boolean> => {
@@ -14,6 +14,24 @@ export const addFile = async (repo: string, path: string, content: string) => {
     repo,
     path,
     content: base64(content),
-    message: `add ${path.split('/').pop()}`
+    message: `add ${path.split('/').pop()}`,
+  });
+};
+
+export const updateFile = async (repo: string, path: string, content: string) => {
+  const existingContent = await getRepositoryContent({
+    repo,
+    path,
+  });
+  let sha: string | undefined = undefined;
+  if ('sha' in existingContent) {
+    sha = existingContent.sha;
+  }
+  return await createOrUpdateFileContents({
+    repo,
+    path,
+    sha,
+    content: base64(content),
+    message: `update ${path.split('/').pop()}`,
   });
 };

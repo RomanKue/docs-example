@@ -10,7 +10,7 @@ import * as requestApproval from './request-approval.js';
 import * as removeApprovalRequest from './remove-approval-request.js';
 import * as repositories from '../../../../github/api/repos/repositories.js';
 import * as users from '../../../../github/api/users/users.js';
-import * as issues from '../../../../github/api/issues/issues.js';
+import issues from '../../../../github/api/issues/index.js';
 import {PrivateUser, PublicUser} from '../../../../github/api/users/response/user.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
 import {NewAppIssue} from '../new-app-issue.js';

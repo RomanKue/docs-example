@@ -1,9 +1,4 @@
 import {AppSpec, repoName} from '../app-spec.js';
-import {
-  addARepositoryCollaborator,
-  createAnOrganizationRepository,
-  createOrUpdateFileContents, replaceAllRepositoryTopics, RepoUtils
-} from '../../github/api/repos/repositories.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {defaultBranches, defaultTopics} from '../config.js';
@@ -11,10 +6,17 @@ import {createAReference} from '../../github/api/git/git.js';
 import {base64} from '../../strings/encoding.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
+import {repositoriesUtils} from '../../github/api/repos/index.js';
+import {
+  addARepositoryCollaborator,
+  createAnOrganizationRepository,
+  createOrUpdateFileContents,
+  replaceAllRepositoryTopics
+} from '../../github/api/repos/repositories.js';
 
 export const createRepository = async (appSpec: AppSpec) => {
   const newAppRepoName = repoName(appSpec.name);
-  if (await RepoUtils.isRepoExistent(appSpec.name)) {
+  if (await repositoriesUtils.isRepoExistent(appSpec.name)) {
     throw new Error(`the repository ${newAppRepoName} already exists`);
   }
 
@@ -51,11 +53,11 @@ export const createRepository = async (appSpec: AppSpec) => {
     message: `add unity-app.yaml`
   });
 
-  for (let defaultBranch of Object.values(defaultBranches)) {
+  for (const defaultBranch of Object.values(defaultBranches)) {
     await createAReference({
       repo: appRepository.name,
       ref: `refs/heads/${defaultBranch}`,
-      sha: commit.commit.sha!
+      sha: commit.commit.sha ?? ''
     });
   }
 

@@ -94,12 +94,3 @@ export const createOrUpdateFileContents = async (
   });
   return response.data as FileCommit;
 };
-
-export namespace RepoUtils {
-  export const isRepoExistent = async (appName: string | null | undefined): Promise<boolean> => {
-    const newAppRepoName = repoName(appName);
-
-    const repositories = await listOrganizationRepositories();
-    return repositories.map(r => r.name).includes(newAppRepoName);
-  };
-}

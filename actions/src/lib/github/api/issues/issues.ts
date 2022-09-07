@@ -14,11 +14,11 @@ export const getIssue = async (
   options: Partial<Parameters<IssuesApi['get']>[0]> = {}
 ): Promise<Issue> => {
   const response = await getOctokitApi().rest.issues.get({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      issue_number: github.context.issue.number,
-      ...options
-    }
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    issue_number: github.context.issue.number,
+    ...options
+  }
   );
   return response.data as Issue;
 };
@@ -141,20 +141,3 @@ export const removeALabelFromAnIssue = async (
   });
   return response.data as Label[];
 };
-
-export namespace IssueUtils {
-
-  export const isClosed = (issue: Readonly<Issue>): boolean => {
-    return !!issue.closed_at;
-  };
-
-  export const addSimpleComment = async (issue: Issue, callback: (reporterName: string) => string) => {
-    const userLogin = issue.user?.login;
-    if (!userLogin) {
-      throw new Error(`user ${JSON.stringify(issue.user, null, 2)} has no login.`);
-    }
-    await commentOnIssue({issue_number: issue.number, body: callback(userLogin)});
-  };
-
-}
-

@@ -4,7 +4,7 @@ import {AppSpecV1Beta1} from '../unity/app-spec.js';
 
 describe('json-schema', () => {
   describe('validateSchema', () => {
-    let schema: Object;
+    let schema: Record<string, unknown>;
     beforeAll(() => {
       schema = loadSchema('v1beta1', );
     });

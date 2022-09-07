@@ -14,9 +14,9 @@ export const createAWorkflowDispatchEvent = async (
   } & Partial<Parameters<ActionsApi['createWorkflowDispatch']>[0]>
 ): Promise<void> => {
   const response = await getOctokitApi().rest.actions.createWorkflowDispatch({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      ...options
-    }
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  }
   );
 };

@@ -28,7 +28,7 @@ jobs:
       - uses: ./.github/actions/build-actions
       - name: eslint
         working-directory: ./actions
-        run: npx eslint
+        run: npx eslint src
   test:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10

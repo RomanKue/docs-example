@@ -28,7 +28,7 @@ export interface FullTeam {
   /**
    * The level of privacy this team should have
    */
-  privacy?: "closed" | "secret";
+  privacy?: 'closed' | 'secret';
   /**
    * Permission that the team will have for its repositories
    */

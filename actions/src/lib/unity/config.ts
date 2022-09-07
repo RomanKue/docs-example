@@ -3,9 +3,15 @@
  */
 
 import {Issue} from '../github/api/issues/response/issue.js';
+import {IssueComment} from '../github/api/issues/response/issue-comment.js';
 
 /** name of the org */
-export const unityOrg = `UNITY`;
+export const unityOrg = 'UNITY';
+
+export const isUnityBotComment = (comment: Readonly<Pick<IssueComment, 'user'>>): boolean => {
+  return !!comment.user?.login.toLocaleLowerCase().localeCompare(unityBot);
+};
+
 
 /**
  * @see https://atc-github.azure.cloud.bmw/qqunit1

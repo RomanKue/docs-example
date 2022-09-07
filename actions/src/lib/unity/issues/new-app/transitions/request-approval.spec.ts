@@ -4,11 +4,11 @@ import {freeze, produce} from 'immer';
 import {removeApprovalRequest} from './remove-approval-request.js';
 import {Label} from '../../../../github/api/issues/response/label.js';
 import {issueState} from '../state.js';
-import * as issues from '../../../../github/api/issues/issues.js';
+import issues from '../../../../github/api/issues/index.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
 import {labels} from '../../../config.js';
 import {jest} from '@jest/globals';
-import * as teams from '../../../../github/api/teams/teams.js';
+import teams from '../../../../github/api/teams/index.js';
 import {requestApproval} from './request-approval.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {

@@ -53,7 +53,7 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   );
 };
 
-export const loadSchema = (apiVersion: string, basePath = '../schema'): Object => {
+export const loadSchema = (apiVersion: string, basePath = '../schema'): Record<string, unknown> => {
   const path = `${basePath}/unity-app.${apiVersion}.schema.json`;
   const schemaJson = fs.readFileSync(path, 'utf8');
   return JSON.parse(schemaJson);

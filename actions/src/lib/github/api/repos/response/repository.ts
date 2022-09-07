@@ -246,7 +246,7 @@ export interface Repository {
      * - `PR_TITLE` - default to the pull request's title.
      * - `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).
      */
-    squash_merge_commit_title?: "PR_TITLE" | "COMMIT_OR_PR_TITLE";
+    squash_merge_commit_title?: 'PR_TITLE' | 'COMMIT_OR_PR_TITLE';
     /**
      * The default value for a squash merge commit message:
      *
@@ -254,14 +254,14 @@ export interface Repository {
      * - `COMMIT_MESSAGES` - default to the branch's commit messages.
      * - `BLANK` - default to a blank commit message.
      */
-    squash_merge_commit_message?: "PR_BODY" | "COMMIT_MESSAGES" | "BLANK";
+    squash_merge_commit_message?: 'PR_BODY' | 'COMMIT_MESSAGES' | 'BLANK';
     /**
      * The default value for a merge commit title.
      *
      * - `PR_TITLE` - default to the pull request's title.
      * - `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).
      */
-    merge_commit_title?: "PR_TITLE" | "MERGE_MESSAGE";
+    merge_commit_title?: 'PR_TITLE' | 'MERGE_MESSAGE';
     /**
      * The default value for a merge commit message.
      *
@@ -269,7 +269,7 @@ export interface Repository {
      * - `PR_BODY` - default to the pull request's body.
      * - `BLANK` - default to a blank commit message.
      */
-    merge_commit_message?: "PR_BODY" | "PR_TITLE" | "BLANK";
+    merge_commit_message?: 'PR_BODY' | 'PR_TITLE' | 'BLANK';
     allow_merge_commit?: boolean;
     subscribers_count?: number;
     network_count?: number;
@@ -302,7 +302,7 @@ export interface Repository {
    * - `PR_TITLE` - default to the pull request's title.
    * - `COMMIT_OR_PR_TITLE` - default to the commit's title (if only one commit) or the pull request's title (when more than one commit).
    */
-  squash_merge_commit_title?: "PR_TITLE" | "COMMIT_OR_PR_TITLE";
+  squash_merge_commit_title?: 'PR_TITLE' | 'COMMIT_OR_PR_TITLE';
   /**
    * The default value for a squash merge commit message:
    *
@@ -310,14 +310,14 @@ export interface Repository {
    * - `COMMIT_MESSAGES` - default to the branch's commit messages.
    * - `BLANK` - default to a blank commit message.
    */
-  squash_merge_commit_message?: "PR_BODY" | "COMMIT_MESSAGES" | "BLANK";
+  squash_merge_commit_message?: 'PR_BODY' | 'COMMIT_MESSAGES' | 'BLANK';
   /**
    * The default value for a merge commit title.
    *
    * - `PR_TITLE` - default to the pull request's title.
    * - `MERGE_MESSAGE` - default to the classic title for a merge message (e.g., Merge pull request #123 from branch-name).
    */
-  merge_commit_title?: "PR_TITLE" | "MERGE_MESSAGE";
+  merge_commit_title?: 'PR_TITLE' | 'MERGE_MESSAGE';
   /**
    * The default value for a merge commit message.
    *
@@ -325,7 +325,7 @@ export interface Repository {
    * - `PR_BODY` - default to the pull request's body.
    * - `BLANK` - default to a blank commit message.
    */
-  merge_commit_message?: "PR_BODY" | "PR_TITLE" | "BLANK";
+  merge_commit_message?: 'PR_BODY' | 'PR_TITLE' | 'BLANK';
   /**
    * Whether to allow merge commits for pull requests.
    */

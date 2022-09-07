@@ -1,8 +1,8 @@
 import {approveIssue} from './approve.js';
 import {Issue, SimpleUser} from '../../../../github/api/issues/response/issue.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
-import * as issues from '../../../../github/api/issues/issues.js';
-import * as teams from '../../../../github/api/teams/teams.js';
+import issues from '../../../../github/api/issues/index.js';
+import teams from '../../../../github/api/teams/index.js';
 import {setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
 import {Label} from '../../../../github/api/issues/response/label.js';
 import {labels, magicComments, unityTeams} from '../../../config.js';
@@ -56,7 +56,7 @@ describe('approve', () => {
       issue = addLabel(issue, labels.newApp, issueState.waitingForReview);
       await approveIssue(issue, comment);
 
-      expect(getIssueState(issue)).toEqual(issueState.waitingForReview)
+      expect(getIssueState(issue)).toEqual(issueState.waitingForReview);
     });
     it('should not approve when commented from approver with non matching comment', async () => {
       jest.spyOn(teams, 'listMembersInOrg').mockResolvedValue([approver]);

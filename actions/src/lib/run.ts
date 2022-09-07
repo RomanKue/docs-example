@@ -1,14 +1,13 @@
 import * as core from '@actions/core';
 import * as github from '@actions/github';
 import {IssueComment} from './github/api/issues/response/issue-comment.js';
-import {magicComments} from './unity/config.js';
 import {getIssue} from './github/api/issues/issues.js';
 import {Issue} from './github/api/issues/response/issue.js';
 
 /**
  * wrapper for main functions with error handling and global debug logging
  */
-export const run = async (callback: () => Promise<void>) => {
+export const run = (callback: () => Promise<void>) => {
   const workingDirectory = core.getInput('working-directory');
   if (workingDirectory) {
     core.debug(`changing to: ${workingDirectory}`);
@@ -16,16 +15,14 @@ export const run = async (callback: () => Promise<void>) => {
   }
   core.info(`cwd: ${process.cwd()}`);
   core.debug(`context: ${JSON.stringify(github.context, null, 2)}`);
-  try {
-    await callback();
-  } catch (e) {
+  callback().catch(e => {
     if (e instanceof Error) {
       core.error(`${e.message}\n${e.stack}`);
       core.setFailed(e.message);
     } else {
-      core.setFailed(e as any);
+      core.setFailed(e as string | Error);
     }
-  }
+  });
 };
 
 

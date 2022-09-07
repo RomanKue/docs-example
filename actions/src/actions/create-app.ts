@@ -42,7 +42,7 @@ const createNewApp = async (appSpec: AppSpec) => {
 };
 
 const closeWithComment = (issue: Issue, appRepository: Repository) => {
-  let userLogin = issue.user?.login;
+  const userLogin = issue.user?.login;
   commentOnIssue({
     body:
       `🚀 @${userLogin} your app has been created!\n\nCheckout your [${appRepository.name}](${appRepository.html_url}) repository.`

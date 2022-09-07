@@ -11,7 +11,7 @@ export const getGithubToken = (): string => {
 };
 
 export const getOctokitApi = (): Api => {
-  let octokit = github.getOctokit(getGithubToken(), {
+  const octokit = github.getOctokit(getGithubToken(), {
     log: {
       debug: message => core.debug(message),
       info: message => core.info(message),
@@ -19,11 +19,11 @@ export const getOctokitApi = (): Api => {
       error: message => core.error(message),
     },
   });
-  octokit.hook.after('request', async (response, options) => {
+  octokit.hook.after('request', (response, options) => {
     core.info(`${options.method} ${options.url} - ${response.status}`);
     core.debug(`${JSON.stringify(response, null, 2)}`);
   });
-  octokit.hook.error('request', async (error, options) => {
+  octokit.hook.error('request', (error, options) => {
     core.error(`${options.method} ${options.url}\n\n${JSON.stringify(Object.keys(options), null, 2)}\nerror message: ${error.message}`);
     throw error;
   });

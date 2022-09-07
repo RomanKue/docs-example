@@ -72,7 +72,7 @@ jobs:
           ref: \${{ inputs.branch }}
       - uses: unity/${makeStubAction}@v1
         env:
-          GITHUB_TOKEN: \${{ env.GITHUB_TOKEN }}
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         with:
           name: \${{ inputs.name }}
           type: \${{ inputs.type }}

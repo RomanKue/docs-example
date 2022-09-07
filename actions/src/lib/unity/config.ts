@@ -9,7 +9,7 @@ import {IssueComment} from '../github/api/issues/response/issue-comment.js';
 export const unityOrg = 'UNITY';
 
 export const isUnityBotComment = (comment: Readonly<Pick<IssueComment, 'user'>>): boolean => {
-  return !!comment.user?.login.toLocaleLowerCase().localeCompare(unityBot);
+  return comment.user?.login.toLocaleLowerCase() == unityBot;
 };
 
 

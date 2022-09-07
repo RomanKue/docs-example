@@ -1,6 +1,7 @@
 import {hasLabel, labels} from '../../config.js';
 import {Issue} from '../../../github/api/issues/response/issue.js';
 import {setLabelsForAnIssue} from '../../../github/api/issues/issues.js';
+import * as core from '@actions/core';
 
 export const issueState = {
   waitingForReview: labels.waitingForReview,
@@ -17,22 +18,22 @@ export const isNewAppIssue = (
 export const getIssueState = (
   issue: Readonly<Pick<Issue, 'closed_at' | 'labels'>>
 ): typeof issueState[keyof typeof issueState] | null => {
+  let state: typeof issueState[keyof typeof issueState] | null;
   if (issue.closed_at || !isNewAppIssue(issue)) {
-    return null;
+    state = null;
+  } else if (hasLabel(issue, labels.waitingForReview)) {
+    state = issueState.waitingForReview;
+  } else if (hasLabel(issue, labels.waitingForApproval)) {
+    state = issueState.waitingForApproval;
+  } else if (hasLabel(issue, labels.approved)) {
+    state = issueState.approved;
+  } else if (hasLabel(issue, labels.delivered)) {
+    state = issueState.delivered;
+  } else {
+    throw new Error(`could not determine issue state of ${issue}`);
   }
-  if (hasLabel(issue, labels.waitingForReview)) {
-    return issueState.waitingForReview;
-  }
-  if (hasLabel(issue, labels.waitingForApproval)) {
-    return issueState.waitingForApproval;
-  }
-  if (hasLabel(issue, labels.approved)) {
-    return issueState.approved;
-  }
-  if (hasLabel(issue, labels.delivered)) {
-    return issueState.delivered;
-  }
-  throw new Error(`could not determine issue state of ${issue}`);
+  core.info(`issue is in state: ${state}`);
+  return state;
 };
 
 /**

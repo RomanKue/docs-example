@@ -13,8 +13,9 @@ import {
   createOrUpdateFileContents,
   replaceAllRepositoryTopics
 } from '../../github/api/repos/repositories.js';
+import {Repository} from '../../github/api/repos/response/repository.js';
 
-export const createRepository = async (appSpec: AppSpec) => {
+export const createRepository = async (appSpec: AppSpec): Promise<Repository> => {
   const newAppRepoName = repoName(appSpec.name);
   if (await repositoriesUtils.isRepoExistent(appSpec.name)) {
     throw new Error(`the repository ${newAppRepoName} already exists`);

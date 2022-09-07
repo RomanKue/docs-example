@@ -39,7 +39,7 @@ describe('review', () => {
     jest.resetAllMocks();
   });
   describe('reviewIssue', () => {
-    it('should request approval when issue is all good', async () => {
+    it('should request approval when issue is ok', async () => {
       issue = addLabel(issue, labels.newApp, issueState.waitingForReview);
       issue = produce(issue, draft => {
         draft.body = `

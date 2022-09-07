@@ -8,6 +8,7 @@ import {isMagicComment, isUnityBotComment, labels, magicComments, unityBot} from
 import * as core from '@actions/core';
 import {approveIssue} from './transitions/approve.js';
 import {addSimpleComment} from '../../../github/api/issues/issues-utils.js';
+import {deliver} from './transitions/deliver.js';
 
 export const handleIssueChange = async (issue: Issue): Promise<void> => {
   const issueState = getIssueState(issue);
@@ -19,6 +20,8 @@ export const handleIssueChange = async (issue: Issue): Promise<void> => {
     await requestApproval(issue);
     break;
   case 'approved':
+    await deliver(issue);
+    break;
   case 'delivered':
   case null:
     // do nothing

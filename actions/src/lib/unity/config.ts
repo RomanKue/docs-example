@@ -8,6 +8,11 @@ import {Issue} from '../github/api/issues/response/issue.js';
 export const unityOrg = `UNITY`;
 
 /**
+ * @see https://atc-github.azure.cloud.bmw/qqunit1
+ */
+export const unityBot = `qqunit1`;
+
+/**
  * teams available in the UNITY org
  * @see https://atc-github.azure.cloud.bmw/orgs/UNITY/teams
  */

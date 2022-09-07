@@ -4,7 +4,7 @@
  * @see https://github.com/octokit/octokit.js
  */
 import {Issue} from '../lib/github/api/issues/response/issue.js';
-import {magicComments} from '../lib/unity/config.js';
+import {magicComments, unityBot} from '../lib/unity/config.js';
 import {assertUnreachable, handleWorkflowEvent, run} from '../lib/run.js';
 import {reviewIssue} from '../lib/unity/issues/new-app/transitions/review.js';
 import {requestApproval} from '../lib/unity/issues/new-app/transitions/request-approval.js';
@@ -48,8 +48,8 @@ const handleMagicComments = async (issue: Issue, comment: IssueComment) => {
   if (!areRunPreconditionsMet(issue)) {
     return;
   }
-  if (comment.user?.login.startsWith('qq')) {
-    // don't react on qq-users comments
+  if (comment.user?.login.toLocaleLowerCase().localeCompare(unityBot)) {
+    // don't react on unity bot comments
     return;
   }
   const commentBody = (comment.body ?? '').trim();

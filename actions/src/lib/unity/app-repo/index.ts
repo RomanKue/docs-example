@@ -21,7 +21,6 @@ export const deployAppAction = 'deploy-unity-app';
 
 const createDeployWorkflow = () => `
 name: deploy
-description: deploy app
 on:
   push:
     branches:
@@ -41,7 +40,6 @@ jobs:
 
 const createMakeStubWorkflow = () => `
 name: ${makeStubWorkflowFileName}
-description: make a stub app and add it to the repository
 on:
   workflow_dispatch:
     inputs:

@@ -86,7 +86,6 @@ describe('approve', () => {
       expect(teams.listMembersInOrg).toHaveBeenCalledWith({
         'team_slug': unityTeams.unityAppApproversSlug,
       });
-      expect(issues.lockAnIssue).toHaveBeenCalled();
       expect(issues.setLabelsForAnIssue).toHaveBeenCalledWith(expect.objectContaining({
         labels: [labels.newApp, issueState.approved]
       }));

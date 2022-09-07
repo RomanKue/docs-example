@@ -22,7 +22,6 @@ export const approveIssue = async (
   if (isMagicComment(comment, magicComments.lgtm)) {
     const approvers = await getApprovers();
     if (approvers.includes(userLogin)) {
-      await lockAnIssue(issue);
       await setIssueState(issue, issueState.approved);
     } else {
       const s = approvers.map(a => `@${a}`).join(', ');

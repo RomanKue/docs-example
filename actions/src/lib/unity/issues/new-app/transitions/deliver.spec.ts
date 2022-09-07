@@ -1,7 +1,7 @@
 import {Issue, Repository, SimpleUser} from '../../../../github/api/issues/response/issue.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
 import issues from '../../../../github/api/issues/index.js';
-import {setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
+import {lockAnIssue, setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
 import {Label} from '../../../../github/api/issues/response/label.js';
 import {labels} from '../../../config.js';
 import {getIssueState, issueState} from '../state.js';
@@ -101,6 +101,7 @@ members: # dev ops team members that have access to the app
           `Checkout your [foo](https://foo) repository.`
         )
       }));
+      expect(issues.lockAnIssue).toHaveBeenCalledWith(expect.objectContaining({lock_reason: 'resolved'}));
       expect(issues.updateAnIssue).toHaveBeenCalledWith(expect.objectContaining({state: 'closed'}));
       expect(issues.setLabelsForAnIssue).toHaveBeenCalledWith(
         expect.objectContaining({labels: [labels.newApp, labels.delivered]})

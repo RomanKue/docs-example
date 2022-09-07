@@ -36,9 +36,6 @@ describe('request-approval', () => {
     jest.spyOn(issues, 'addAssigneesToAnIssue').mockResolvedValue(partialMock<Issue>());
     jest.spyOn(teams, 'listMembersInOrg').mockResolvedValue([approver]);
   });
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
   describe('requestApproval', () => {
     it('should request approval when issue is waiting for review', async () => {
       issue = addLabel(issue, labels.newApp, issueState.waitingForReview);
@@ -49,7 +46,7 @@ describe('request-approval', () => {
       expect(issues.addAssigneesToAnIssue).toHaveBeenCalledWith({assignees: [approver.login]});
       expect(issues.commentOnIssue).toHaveBeenCalledWith({
         body: '@UNITY/unity-app-approvers this issue requires your approval.\n' +
-          '      Please comment with "LGTM", so I can start shipping the new UNITY app.'
+          '      Please comment with "@qqunit1 LGTM", so I can start shipping the new UNITY app.'
       });
     });
     it('should approve when issue is created by approver', async () => {

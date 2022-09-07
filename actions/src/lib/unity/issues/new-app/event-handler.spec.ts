@@ -23,9 +23,6 @@ describe('event-handler.ts', () => {
     jest.spyOn(approveIssue, 'approveIssue').mockResolvedValue();
     jest.spyOn(requestApproval, 'requestApproval').mockResolvedValue();
   });
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
   describe('handleIssueChange', () => {
     it('should review issue when issue is waiting for review', async () => {
       issue = partialMock<Issue>({

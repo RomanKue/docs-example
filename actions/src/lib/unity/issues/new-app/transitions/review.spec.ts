@@ -34,9 +34,8 @@ describe('review', () => {
       user: user,
       labels: [],
     }));
-  });
-  afterEach(() => {
-    jest.resetAllMocks();
+    jest.spyOn(users, 'getAUser').mockResolvedValue(partialMock<PrivateUser | PublicUser>({login: user.login}));
+    jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>({}));
   });
   describe('reviewIssue', () => {
     it('should request approval when issue is ok', async () => {
@@ -64,7 +63,6 @@ members: # dev ops team members that have access to the app
       });
       jest.spyOn(requestApproval, 'requestApproval').mockResolvedValue();
       jest.spyOn(repositories, 'listOrganizationRepositories').mockResolvedValue([]);
-      jest.spyOn(users, 'getAUser').mockResolvedValue(partialMock<PrivateUser | PublicUser>({login: user.login}));
       await reviewIssue(issue);
       expect(users.getAUser).toHaveBeenCalled();
       expect(repositories.listOrganizationRepositories).toHaveBeenCalled();
@@ -94,9 +92,7 @@ members: # dev ops team members that have access to the app
         `;
       });
       jest.spyOn(removeApprovalRequest, 'removeApprovalRequest').mockResolvedValue();
-      jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>({}));
       jest.spyOn(repositories, 'listOrganizationRepositories').mockResolvedValue([]);
-      jest.spyOn(users, 'getAUser').mockResolvedValue(partialMock<PrivateUser | PublicUser>({login: user.login}));
       await reviewIssue(issue);
       expect(removeApprovalRequest.removeApprovalRequest).toHaveBeenCalled();
     });

@@ -1,17 +1,16 @@
 import {Issue, Repository, SimpleUser} from '../../../../github/api/issues/response/issue.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
 import issues from '../../../../github/api/issues/index.js';
-import teams from '../../../../github/api/teams/index.js';
 import {setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
 import {Label} from '../../../../github/api/issues/response/label.js';
-import {labels, magicComments, unityBot, unityTeams} from '../../../config.js';
-import {expect, jest} from '@jest/globals';
+import {labels} from '../../../config.js';
 import {getIssueState, issueState} from '../state.js';
 import {freeze, produce} from 'immer';
 import {partialMock} from '../../../../mock/partial-mock.js';
 import * as repositories from '../../../../github/api/repos/repositories.js';
 import * as deliverModule from './deliver.js';
 import {closeWithComment, createNewApp, deliver} from './deliver.js';
+import {AppSpecV1Beta1} from '../../../app-spec.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {
@@ -57,9 +56,6 @@ members: # dev ops team members that have access to the app
     jest.spyOn(issues, 'updateAnIssue').mockResolvedValue(issue);
     jest.spyOn(issues, 'setLabelsForAnIssue').mockResolvedValue(partialMock<Label[]>());
   });
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
   describe('deliver', () => {
     it('should do nothing when issue is not labeled with new app label', async () => {
       await deliver(issue);
@@ -100,15 +96,27 @@ members: # dev ops team members that have access to the app
     });
     it('should close with comment when called', async () => {
       await closeWithComment(issue, repository);
-      expect(issues.updateAnIssue).toHaveBeenCalledWith(expect.objectContaining({state: 'closed'}));
       expect(issues.commentOnIssue).toHaveBeenCalledWith(expect.objectContaining({
         body: expect.stringContaining(
           `Checkout your [foo](https://foo) repository.`
         )
       }));
+      expect(issues.updateAnIssue).toHaveBeenCalledWith(expect.objectContaining({state: 'closed'}));
       expect(issues.setLabelsForAnIssue).toHaveBeenCalledWith(
         expect.objectContaining({labels: [labels.newApp, labels.delivered]})
       );
+    });
+  });
+  describe('createNewApp', () => {
+    it('should create new app when called', async () => {
+      const appSpec: AppSpecV1Beta1 = {
+        apiVersion: 'v1beta1',
+        name: 'foo',
+        members: [],
+      };
+      jest.spyOn(deliverModule, 'createNewApp').mockResolvedValue(partialMock<Repository>());
+      await createNewApp(appSpec);
+      expect(deliverModule.createNewApp).toHaveBeenCalled();
     });
   });
 });

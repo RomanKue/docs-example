@@ -24,7 +24,7 @@ export const requestApproval = async (issue: Issue) => {
     await addAssigneesToAnIssue({assignees: approvers});
     await commentOnIssue({
       body: `@${unityOrg}/${unityTeams.unityAppApproversSlug} this issue requires your approval.
-      Please comment with ""@${unityBot} ${magicComments.lgtm}"", so I can start shipping the new UNITY app.`
+      Please comment with "@${unityBot} ${magicComments.lgtm}", so I can start shipping the new UNITY app.`
     });
     await setIssueState(issue, issueState.waitingForApproval);
   }

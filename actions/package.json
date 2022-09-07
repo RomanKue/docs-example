@@ -23,6 +23,8 @@
   },
   "jest": {
     "preset": "ts-jest/presets/default-esm",
+    "resetMocks": true,
+    "restoreMocks": true,
     "extensionsToTreatAsEsm": [
       ".ts"
     ],

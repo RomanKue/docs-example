@@ -33,9 +33,6 @@ describe('remove-approval-request', () => {
     jest.spyOn(issues, 'removeAssigneesFromAnIssue').mockResolvedValue(partialMock<Issue>());
     jest.spyOn(teams, 'listMembersInOrg').mockResolvedValue([user]);
   });
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
   describe('removeApprovalRequest', () => {
     it('should remove approval request when issue is waiting for approval', async () => {
       issue = addLabel(issue, labels.newApp, issueState.waitingForApproval);

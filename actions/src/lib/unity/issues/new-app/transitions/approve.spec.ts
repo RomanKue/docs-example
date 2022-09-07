@@ -36,9 +36,6 @@ describe('approve', () => {
         user: approver,
       });
     });
-    afterEach(() => {
-      jest.resetAllMocks();
-    });
     it('should do nothing when issue is not labeled with new app label', async () => {
       await approveIssue(issue, comment);
 
@@ -104,7 +101,7 @@ describe('approve', () => {
 
       comment = partialMock<IssueComment>({
         user: user,
-        body: magicComments.lgtm,
+        body: `@${unityBot} ${magicComments.lgtm}`,
       });
       await approveIssue(issue, comment);
 

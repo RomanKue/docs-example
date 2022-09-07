@@ -43,7 +43,7 @@ export const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): P
 
 
 export const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
-  core.info(`checking app yaml`);
+  core.info(`checking app yaml on issue: ${issue.html_url}`);
   const apiVersion = newAppIssue.appSpec?.apiVersion;
   switch (apiVersion) {
   case 'v1beta1':
@@ -63,7 +63,7 @@ export const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Pr
 };
 
 export const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
-  core.info(`checking if terms of service are accepted`);
+  core.info(`checking if terms of service are accepted in issue: ${issue.html_url}`);
   if (!newAppIssue.termsOfServiceAccepted) {
     await addSimpleComment(issue, (user) =>
       `🚫 @${user} it seems that you did not agree to the terms of service yet. Could you please check and update your issue, so I can proceed with your request.`
@@ -74,7 +74,7 @@ export const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue
 };
 
 export const reviewIssue = async (issue: Issue) => {
-  core.info(`reviewing issue`);
+  core.info(`reviewing issue: ${issue.html_url}`);
   const newAppIssue = parseIssueBody(issue.body ?? '');
 
   let ok = true;

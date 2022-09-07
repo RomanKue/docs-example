@@ -14,7 +14,7 @@ export const run = async (callback: () => Promise<void>) => {
     core.debug(`changing to: ${workingDirectory}`);
     process.chdir(workingDirectory);
   }
-  core.debug(`cwd: ${process.cwd()}`);
+  core.info(`cwd: ${process.cwd()}`);
   core.debug(`context: ${JSON.stringify(github.context, null, 2)}`);
   try {
     await callback();
@@ -50,6 +50,7 @@ export const assertUnreachable = (x: never): never => {
 
 export const handleWorkflowEvent = async (eventHandler: EventHandlers) => {
   const eventName = github.context.eventName;
+  core.info(`handling workflow event: ${eventName}`);
   switch (eventName) {
   case 'issue_comment': {
     const issue = await getIssue();

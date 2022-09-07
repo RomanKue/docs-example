@@ -11,7 +11,7 @@ export const getGithubToken = (): string => {
 };
 
 export const getOctokitApi = (): Api => {
-  const octokit = github.getOctokit(getGithubToken(), {
+  let octokit = github.getOctokit(getGithubToken(), {
     log: {
       debug: message => core.debug(message),
       info: message => core.info(message),

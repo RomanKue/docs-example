@@ -4,6 +4,9 @@
 
 import {Issue} from '../github/api/issues/response/issue.js';
 
+/** name of the org */
+export const unityOrg = `UNITY`;
+
 /**
  * teams available in the UNITY org
  * @see https://atc-github.azure.cloud.bmw/orgs/UNITY/teams
@@ -11,6 +14,7 @@ import {Issue} from '../github/api/issues/response/issue.js';
 export const unityTeams = {
   unityAppApproversSlug: 'unity-app-approvers',
 } as const;
+
 
 /**
  * labels available in UNITY/unity

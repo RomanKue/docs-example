@@ -1,14 +1,15 @@
 import {Issue} from '../../../../github/api/issues/response/issue.js';
 import * as core from '@actions/core';
-import {addAssigneesToAnIssue} from '../../../../github/api/issues/issues.js';
+import {addAssigneesToAnIssue, commentOnIssue} from '../../../../github/api/issues/issues.js';
 import {getApprovers} from '../new-app-issue.js';
 import {getIssueState, issueState, setIssueState} from '../state.js';
+import {magicComments, unityOrg, unityTeams} from '../../../config.js';
 
 export const requestApproval = async (issue: Issue) => {
   if (getIssueState(issue) !== issueState.waitingForReview) {
     return;
   }
-  core.info(`requesting approval`);
+  core.info(`requesting approval on issue: ${issue.html_url}`);
 
   const userLogin = issue.user?.login;
   if (!userLogin) {
@@ -21,6 +22,10 @@ export const requestApproval = async (issue: Issue) => {
     await setIssueState(issue, issueState.approved);
   } else {
     await addAssigneesToAnIssue({assignees: approvers});
+    await commentOnIssue({
+      body: `@${unityOrg}/${unityTeams.unityAppApproversSlug} this issue requires your approval.
+      Please comment with "${magicComments.lgtm}", so I can start shipping the new UNITY app.`
+    });
     await setIssueState(issue, issueState.waitingForApproval);
   }
 };

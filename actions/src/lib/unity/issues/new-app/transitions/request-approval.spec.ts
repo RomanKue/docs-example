@@ -47,6 +47,10 @@ describe('request-approval', () => {
         labels: [labels.newApp, issueState.waitingForApproval]
       }));
       expect(issues.addAssigneesToAnIssue).toHaveBeenCalledWith({assignees: [approver.login]});
+      expect(issues.commentOnIssue).toHaveBeenCalledWith({
+        body: '@UNITY/unity-app-approvers this issue requires your approval.\n' +
+          '      Please comment with "LGTM", so I can start shipping the new UNITY app.'
+      });
     });
     it('should approve when issue is created by approver', async () => {
       issue = addLabel(issue, labels.newApp, issueState.waitingForReview);

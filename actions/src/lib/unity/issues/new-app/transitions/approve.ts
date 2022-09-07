@@ -13,7 +13,7 @@ export const approveIssue = async (
   if (getIssueState(issue) !== issueState.waitingForApproval) {
     return;
   }
-  core.info(`approving issue`);
+  core.info(`approving issue: ${issue.html_url}`);
 
   const userLogin = comment.user?.login;
   if (!userLogin) {

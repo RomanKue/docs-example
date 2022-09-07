@@ -64,9 +64,6 @@ run(async () => {
   let issue: Issue | undefined;
   let appSpec: AppSpec | undefined;
   switch (github.context.eventName) {
-  case 'workflow_dispatch':
-    appSpec = triggeredByWorkflowDispatch();
-    break;
   case 'issues':
     issue = await getIssue();
     if (!areRunPreconditionsMet(issue)) {

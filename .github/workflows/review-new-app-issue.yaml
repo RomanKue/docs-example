@@ -5,7 +5,6 @@ on:
       - edited
       - reopened
       - labeled
-      - unlabeled
   issue_comment:
     types:
       - created
@@ -13,7 +12,7 @@ on:
 jobs:
   review-new-app-issue:
     runs-on: atc-ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     permissions: write-all
     concurrency:
       group: ${{ github.job }}-${{ github.event.issue.id }}

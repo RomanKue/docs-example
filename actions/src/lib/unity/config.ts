@@ -54,10 +54,22 @@ export const defaultTopics = {
 } as const;
 
 export const magicComments = {
-  check: 'check',
+  review: 'review',
   lgtm: 'LGTM',
 } as const;
 
+export const isMagicComment = (
+  comment: IssueComment,
+  magicComment: typeof magicComments[keyof typeof magicComments]
+): boolean => {
+  const commentBody = comment.body?.trim() ?? '';
+  let ok = true;
+  // must include bot mention
+  ok &&= commentBody.includes(`@${unityBot}`);
+  // must include keyword
+  ok &&= commentBody.includes(magicComment);
+  return ok;
+};
 export const hasLabel = (
   issue: Readonly<Pick<Issue, 'labels'>>
   , label: typeof labels[keyof typeof labels]): boolean => {

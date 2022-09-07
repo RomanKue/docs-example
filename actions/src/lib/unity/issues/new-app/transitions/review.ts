@@ -2,12 +2,13 @@ import {Issue} from '../../../../github/api/issues/response/issue.js';
 import {loadSchema, NewAppIssue, parseIssueBody} from '../new-app-issue.js';
 import * as core from '@actions/core';
 import {validateSchema} from '../../../../json/json-schema.js';
-import {magicComments} from '../../../config.js';
+import {magicComments, unityBot} from '../../../config.js';
 import {requestApproval} from './request-approval.js';
 import {removeApprovalRequest} from './remove-approval-request.js';
 import {issuesUtils} from '../../../../github/api/issues/index.js';
 import {repositoriesUtils} from '../../../../github/api/repos/index.js';
 import {usersUtils} from '../../../../github/api/users/index.js';
+import {getIssueState, issueState} from '../state.js';
 
 export const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app name: ${newAppIssue.appSpec?.name}`);
@@ -29,7 +30,7 @@ export const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): P
         await issuesUtils.addSimpleComment(issue, (user) =>
           `🚫 @${user} it seems that the user ${member.qNumber} cannot be found in GitHub. Please check the members in app specification.
 
-            You can let me re-check by commenting \`${magicComments.check}\` on this issue.`
+            You can let me re-check by commenting "@${unityBot} ${magicComments.review}" on this issue.`
         );
         return false;
       }
@@ -75,6 +76,9 @@ export const checkTermsOfService = async (issue: Issue, newAppIssue: NewAppIssue
 };
 
 export const reviewIssue = async (issue: Issue) => {
+  if (getIssueState(issue) !== issueState.waitingForReview) {
+    return;
+  }
   core.info(`reviewing issue: ${issue.html_url}`);
   const newAppIssue = parseIssueBody(issue.body ?? '');
 

@@ -3,7 +3,7 @@ import * as core from '@actions/core';
 import {addAssigneesToAnIssue, commentOnIssue} from '../../../../github/api/issues/issues.js';
 import {getApprovers} from '../new-app-issue.js';
 import {getIssueState, issueState, setIssueState} from '../state.js';
-import {magicComments, unityOrg, unityTeams} from '../../../config.js';
+import {magicComments, unityBot, unityOrg, unityTeams} from '../../../config.js';
 
 export const requestApproval = async (issue: Issue) => {
   if (getIssueState(issue) !== issueState.waitingForReview) {
@@ -24,7 +24,7 @@ export const requestApproval = async (issue: Issue) => {
     await addAssigneesToAnIssue({assignees: approvers});
     await commentOnIssue({
       body: `@${unityOrg}/${unityTeams.unityAppApproversSlug} this issue requires your approval.
-      Please comment with "${magicComments.lgtm}", so I can start shipping the new UNITY app.`
+      Please comment with ""@${unityBot} ${magicComments.lgtm}"", so I can start shipping the new UNITY app.`
     });
     await setIssueState(issue, issueState.waitingForApproval);
   }

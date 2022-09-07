@@ -1,7 +1,7 @@
 import {Issue} from '../../../../github/api/issues/response/issue.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
 import {commentOnIssue, getIssue, lockAnIssue} from '../../../../github/api/issues/issues.js';
-import {magicComments} from '../../../config.js';
+import {isMagicComment, magicComments} from '../../../config.js';
 import {getApprovers} from '../new-app-issue.js';
 import {getIssueState, issueState, setIssueState} from '../state.js';
 import * as core from '@actions/core';
@@ -19,8 +19,7 @@ export const approveIssue = async (
   if (!userLogin) {
     throw new Error(`user ${JSON.stringify(comment.user, null, 2)} has no login.`);
   }
-  const commentBody = (comment.body ?? '').trim();
-  if (commentBody === magicComments.lgtm) {
+  if (isMagicComment(comment, magicComments.lgtm)) {
     const approvers = await getApprovers();
     if (approvers.includes(userLogin)) {
       await lockAnIssue(issue);

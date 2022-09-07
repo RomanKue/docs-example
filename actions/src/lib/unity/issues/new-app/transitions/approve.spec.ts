@@ -5,7 +5,7 @@ import issues from '../../../../github/api/issues/index.js';
 import teams from '../../../../github/api/teams/index.js';
 import {setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
 import {Label} from '../../../../github/api/issues/response/label.js';
-import {labels, magicComments, unityTeams} from '../../../config.js';
+import {labels, magicComments, unityBot, unityTeams} from '../../../config.js';
 import {expect, jest} from '@jest/globals';
 import {getIssueState, issueState} from '../state.js';
 import {freeze, produce} from 'immer';
@@ -82,7 +82,7 @@ describe('approve', () => {
 
       comment = partialMock<IssueComment>({
         user: approver,
-        body: magicComments.lgtm,
+        body: `@${unityBot} ${magicComments.lgtm}`,
       });
       await approveIssue(issue, comment);
 

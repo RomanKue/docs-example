@@ -8,7 +8,6 @@ export const issueState = {
   waitingForApproval: labels.waitingForApproval,
   approved: labels.approved,
   delivered: labels.delivered,
-  stale: labels.stale,
 } as const;
 
 export const isNewAppIssue = (

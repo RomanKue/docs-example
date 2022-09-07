@@ -1,12 +1,16 @@
 import {Issue} from '../../../../github/api/issues/response/issue.js';
+import * as yaml from 'js-yaml';
 import {getIssueState, issueState, setIssueState} from '../state.js';
 import * as core from '@actions/core';
 import {parseIssueBody} from '../new-app-issue.js';
 import {lockAnIssue, updateAnIssue} from '../../../../github/api/issues/issues.js';
-import {createRepository} from '../../../app-repo/index.js';
-import {AppSpec} from '../../../app-spec.js';
+import {appYamlPath, createRepository, makeStubWorkflowFileName} from '../../../app-repo/index.js';
 import {Repository} from '../../../../github/api/repos/response/repository.js';
 import {addSimpleComment} from '../../../../github/api/issues/issues-utils.js';
+import {createAWorkflowDispatchEvent} from '../../../../github/api/actions/actions.js';
+import {AppSpec, isV1Beta1, repoName} from '../../../app-spec.js';
+import {repositoriesUtils} from '../../../../github/api/repos/index.js';
+import {produce} from 'immer';
 
 export const closeWithComment = async (issue: Issue, appRepository: Repository) => {
   const userLogin = issue.user?.login;
@@ -22,13 +26,58 @@ export const closeWithComment = async (issue: Issue, appRepository: Repository) 
   });
 };
 
-export const createNewApp = async (appSpec: AppSpec): Promise<Repository> => {
+const updateAppDeployments = async (appSpec: AppSpec, name: string, replicas = 2) => {
+  if (isV1Beta1(appSpec)) {
+    appSpec = produce(appSpec, draft => {
+      const deployments = draft.deployments ?? {};
+      deployments[name] = {replicas};
+      draft.deployments = deployments;
+    });
+    await repositoriesUtils.addFile(repoName(appSpec.name), appYamlPath, yaml.dump(appSpec));
+  }
+};
+
+
+export const createNewApp = async (issue: Issue): Promise<Repository> => {
+  const newAppIssue = parseIssueBody(issue.body ?? '');
+  const appSpec = newAppIssue.appSpec;
+  if (!appSpec) {
+    throw new Error(`could not parse appSpec from issue: ${JSON.stringify(issue, null, 2)}`);
+  }
+
   const appRepository = await createRepository(appSpec);
 
+  if (newAppIssue.generateAngularStub) {
+    const name = 'ui';
+    await createAWorkflowDispatchEvent({
+      repo: appRepository.name,
+      ref: 'main',
+      workflow_id: makeStubWorkflowFileName,
+      inputs: {
+        name: name,
+        type: 'angular',
+        branch: 'main',
+      }
+    });
+    await updateAppDeployments(appSpec, name);
+  }
+
+  if (newAppIssue.generateQuarkusStub) {
+    const name = 'business';
+    await createAWorkflowDispatchEvent({
+      repo: appRepository.name,
+      ref: 'main',
+      workflow_id: makeStubWorkflowFileName,
+      inputs: {
+        name: name,
+        type: 'quarkus',
+        branch: 'main',
+      }
+    });
+    await updateAppDeployments(appSpec, name);
+  }
+
   // deploy Helm chart
-  // TODO setup workflows in the repo for create-angular-stub, create-quarkus-stub
-  // TODO trigger them via workflow dispatch
-  // TODO patch app.yaml from workflows
   // TODO create service account and setup token in secret
   // TODO setup workflow to install helm chart
 
@@ -43,11 +92,7 @@ export const deliver = async (
     return;
   }
   core.info(`deliver app for issue: ${issue.html_url}`);
-  const newAppIssue = parseIssueBody(issue.body ?? '');
-  if (!newAppIssue.appSpec) {
-    throw new Error(`could not parse appSpec from issue: ${JSON.stringify(issue, null, 2)}`);
-  }
-  const appRepository = await createNewApp(newAppIssue.appSpec);
+  const appRepository = await createNewApp(issue);
   await closeWithComment(issue, appRepository);
 };
 

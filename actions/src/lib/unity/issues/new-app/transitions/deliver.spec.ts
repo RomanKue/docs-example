@@ -109,13 +109,8 @@ members: # dev ops team members that have access to the app
   });
   describe('createNewApp', () => {
     it('should create new app when called', async () => {
-      const appSpec: AppSpecV1Beta1 = {
-        apiVersion: 'v1beta1',
-        name: 'foo',
-        members: [],
-      };
       jest.spyOn(deliverModule, 'createNewApp').mockResolvedValue(partialMock<Repository>());
-      await createNewApp(appSpec);
+      await createNewApp(issue);
       expect(deliverModule.createNewApp).toHaveBeenCalled();
     });
   });

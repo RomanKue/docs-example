@@ -22,7 +22,7 @@ jobs:
       - name: build-actions
         uses: ./.github/actions/build-actions
       - name: new-app-issue
-        uses: ./.github/actions/new-app-issue/
+        uses: ./.github/actions/new-app-issue
         with:
           GITHUB_TOKEN: ${{secrets.UNITY_BOT_TOKEN}}
           working-directory: actions

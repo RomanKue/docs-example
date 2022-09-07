@@ -3,21 +3,44 @@ import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {defaultBranches, defaultTopics} from '../config.js';
 import {createAReference} from '../../github/api/git/git.js';
-import {base64} from '../../strings/encoding.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
 import {repositoriesUtils} from '../../github/api/repos/index.js';
 import {
   addARepositoryCollaborator,
   createAnOrganizationRepository,
-  createOrUpdateFileContents,
   replaceAllRepositoryTopics
 } from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
 
-function createMakeStubWorkflow() {
-  return `
-name: make-stub
+export const appYamlPath = 'unity-app.yaml';
+export const makeStubWorkflowFileName = 'make-stub.yaml';
+export const makeStubAction = 'make-stub';
+export const deployAppWorkflowFileName = 'make-stub.yaml';
+export const deployAppAction = 'deploy-unity-app';
+
+const createDeployWorkflow = () => `
+name: deploy
+description: deploy app
+on:
+  push:
+    branches:
+      - int
+      - prod
+jobs:
+  deploy
+    permissions:
+      contents: read
+      id-token: write
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - uses: unity/${deployAppAction}@v1
+    `;
+
+const createMakeStubWorkflow = () => `
+name: ${makeStubWorkflowFileName}
 description: make a stub app and add it to the repository
 on:
   workflow_dispatch:
@@ -49,13 +72,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: \${{ inputs.branch }}
-      - uses: unity/make-stub@v1
+      - uses: unity/${makeStubAction}@v1
         with:
           name: \${{ inputs.name }}
           type: \${{ inputs.type }}
           branch: \${{ inputs.branch }}
     `;
-}
 
 export const createRepository = async (appSpec: AppSpec): Promise<Repository> => {
   const newAppRepoName = repoName(appSpec.name);
@@ -73,20 +95,12 @@ export const createRepository = async (appSpec: AppSpec): Promise<Repository> =>
     names: [...Object.values(defaultTopics)],
   });
 
-  const addFile = async (path: string, content: string) => {
-    return await createOrUpdateFileContents({
-      repo: appRepository.name,
-      path: path,
-      content: base64(content),
-      message: `add ${path.split('/').pop()}`
-    });
-
-  };
   let commit: FileCommit;
-  commit = await addFile('.gitignore', createGitignore());
-  commit = await addFile('README.md', createReadme(appSpec));
-  commit = await addFile('unity-app.yaml', yaml.dump(appSpec));
-  commit = await addFile('.github/workflows/make-stub.yaml', createMakeStubWorkflow());
+  commit = await repositoriesUtils.addFile(appRepository.name, '.gitignore', createGitignore());
+  commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(appSpec));
+  commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath, yaml.dump(appSpec));
+  commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${makeStubWorkflowFileName}`, createMakeStubWorkflow());
+  commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
 
   // it is important after which commit branching takes place
   for (const defaultBranch of Object.values(defaultBranches)) {

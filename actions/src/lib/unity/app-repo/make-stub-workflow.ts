@@ -17,6 +17,11 @@ on:
         options:
           - angular
           - quarkus
+      branch:
+        description: 'branch which the stub should be pushed to'
+        required: true
+        default: 'main'
+        type: string
       ref:
         description: 'the ref (branch or tag) where the app should be created from'
         required: true

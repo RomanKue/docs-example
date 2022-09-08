@@ -37,14 +37,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: \${{ inputs.ref }}
+          ref: \${{ github.event.inputs.ref }}
       - uses: unity/${makeStubAction}@v1
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
         with:
-          name: \${{ inputs.name }}
-          type: \${{ inputs.type }}
-          branch: \${{ inputs.branch }}
-          ref: \${{ inputs.ref }}
+          name: \${{ github.event.inputs.name }}
+          type: \${{ github.event.inputs.type }}
+          branch: \${{ github.event.inputs.branch }}
+          ref: \${{ github.event.inputs.ref }}
     `;
 

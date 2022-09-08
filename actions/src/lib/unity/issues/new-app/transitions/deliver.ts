@@ -4,13 +4,14 @@ import {getIssueState, issueState, setIssueState} from '../state.js';
 import * as core from '@actions/core';
 import {parseIssueBody} from '../new-app-issue.js';
 import {lockAnIssue, updateAnIssue} from '../../../../github/api/issues/issues.js';
-import {appYamlPath, createRepository, makeStubWorkflowFileName} from '../../../app-repo/index.js';
+import {appYamlPath, createRepository} from '../../../app-repo/index.js';
 import {Repository} from '../../../../github/api/repos/response/repository.js';
 import {addSimpleComment} from '../../../../github/api/issues/issues-utils.js';
 import {createAWorkflowDispatchEvent} from '../../../../github/api/actions/actions.js';
 import {AppSpec, isV1Beta1, repoName} from '../../../app-spec.js';
 import {repositoriesUtils} from '../../../../github/api/repos/index.js';
 import {produce} from 'immer';
+import {makeStubWorkflowFileName} from '../../../app-repo/make-stub-workflow.js';
 
 export const closeWithComment = async (issue: Issue, appRepository: Repository) => {
   const userLogin = issue.user?.login;
@@ -57,6 +58,7 @@ export const createNewApp = async (issue: Issue): Promise<Repository> => {
         name: name,
         type: 'angular',
         branch: 'main',
+        ref: 'main',
       }
     });
     await updateAppDeployments(appSpec, name);
@@ -72,6 +74,7 @@ export const createNewApp = async (issue: Issue): Promise<Repository> => {
         name: name,
         type: 'quarkus',
         branch: 'main',
+        ref: 'main',
       }
     });
     await updateAppDeployments(appSpec, name);

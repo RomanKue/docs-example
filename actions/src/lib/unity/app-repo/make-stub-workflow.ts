@@ -17,8 +17,8 @@ on:
         options:
           - angular
           - quarkus
-      branch:
-        description: 'the branch where the app should be created'
+      ref:
+        description: 'the ref (branch or tag) where the app should be created from'
         required: true
         default: 'main'
         type: string
@@ -40,5 +40,6 @@ jobs:
           name: \${{ inputs.name }}
           type: \${{ inputs.type }}
           branch: \${{ inputs.branch }}
+          ref: \${{ inputs.ref }}
     `;
 

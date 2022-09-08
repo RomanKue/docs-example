@@ -27,15 +27,15 @@ on:
         required: true
         default: 'main'
         type: string
+concurrency:
+  # don't make two stubs in parallel
+  group: ${makeStubAction}
+  cancel-in-progress: false
 jobs:
   ${makeStubAction}:
     permissions:
       contents: write
       id-token: write
-    concurrency:
-      # don't make two stubs in parallel
-      group: ${makeStubAction}
-      cancel-in-progress: false
     runs-on: atc-ubuntu-latest
     timeout-minutes: 30
     steps:

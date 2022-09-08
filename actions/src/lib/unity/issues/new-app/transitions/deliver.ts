@@ -11,7 +11,7 @@ import {createAWorkflowDispatchEvent} from '../../../../github/api/actions/actio
 import {AppSpec, isV1Beta1, repoName} from '../../../app-spec.js';
 import {repositoriesUtils} from '../../../../github/api/repos/index.js';
 import {produce} from 'immer';
-import {makeStubWorkflowFileName} from '../../../app-repo/make-stub-workflow.js';
+import {makeStubWorkflowFileName} from '../../../app-repo/workflows/make-stub-workflow.js';
 
 export const closeWithComment = async (issue: Issue, appRepository: Repository) => {
   const userLogin = issue.user?.login;

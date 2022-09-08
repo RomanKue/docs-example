@@ -18,5 +18,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: unity/${deployAppAction}@v1
-    `;
+    `.trim();
 

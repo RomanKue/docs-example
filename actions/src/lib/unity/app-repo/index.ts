@@ -12,8 +12,8 @@ import {
   replaceAllRepositoryTopics
 } from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
-import {createDeployWorkflow, deployAppWorkflowFileName} from './deploy-workflow.js';
-import {createMakeStubWorkflow, makeStubWorkflowFileName} from './make-stub-workflow.js';
+import {createDeployWorkflow, deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
+import {createMakeStubWorkflow, makeStubWorkflowFileName} from './workflows/make-stub-workflow.js';
 
 export const appYamlPath = 'unity-app.yaml';
 

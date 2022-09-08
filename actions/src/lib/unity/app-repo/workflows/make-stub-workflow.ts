@@ -50,5 +50,5 @@ jobs:
           type: \${{ github.event.inputs.type }}
           branch: \${{ github.event.inputs.branch }}
           ref: \${{ github.event.inputs.ref }}
-    `;
+    `.trim();
 

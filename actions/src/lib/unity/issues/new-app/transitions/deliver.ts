@@ -36,12 +36,13 @@ const updateAppDeployments = async (appSpec: AppSpec, name: string, replicas = 2
     });
     await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath, yaml.dump(appSpec));
   }
+  return appSpec;
 };
 
 
 export const createNewApp = async (issue: Issue): Promise<Repository> => {
   const newAppIssue = parseIssueBody(issue.body ?? '');
-  const appSpec = newAppIssue.appSpec;
+  let appSpec = newAppIssue.appSpec;
   if (!appSpec) {
     throw new Error(`could not parse appSpec from issue: ${JSON.stringify(issue, null, 2)}`);
   }
@@ -61,7 +62,7 @@ export const createNewApp = async (issue: Issue): Promise<Repository> => {
         ref: 'main',
       }
     });
-    await updateAppDeployments(appSpec, name);
+    appSpec = await updateAppDeployments(appSpec, name);
   }
 
   if (newAppIssue.generateQuarkusStub) {
@@ -77,12 +78,8 @@ export const createNewApp = async (issue: Issue): Promise<Repository> => {
         ref: 'main',
       }
     });
-    await updateAppDeployments(appSpec, name);
+    appSpec = await updateAppDeployments(appSpec, name);
   }
-
-  // deploy Helm chart
-  // TODO create service account and setup token in secret
-  // TODO setup workflow to install helm chart
 
   return appRepository;
 };

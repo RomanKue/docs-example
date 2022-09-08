@@ -6,7 +6,7 @@ describe('json-schema', () => {
   describe('validateSchema', () => {
     let schema: Record<string, unknown>;
     beforeAll(() => {
-      schema = loadSchema('v1beta1', );
+      schema = loadSchema('v1beta1',);
     });
     it('should fail when object is empty', () => {
       expect(validateSchema({}, schema)).toEqual(
@@ -34,6 +34,48 @@ describe('json-schema', () => {
       };
       expect(validateSchema(appSpec, schema)).toEqual(
         '`members`: contains duplicate item\n\n');
+    });
+    it('should fail when replicas are negative', () => {
+      const appSpec: AppSpecV1Beta1 = {
+        apiVersion: 'v1beta1',
+        name: 'foo',
+        members: [
+          {qNumber: 'q123456'},
+        ],
+        deployments: {
+          foo: {replicas: -1}
+        }
+      };
+      expect(validateSchema(appSpec, schema)).toEqual(
+        '`deployments.foo.replicas`: must be greater than or equal to 0\n\n');
+    });
+    it('should fail when replicas are too high', () => {
+      const appSpec: AppSpecV1Beta1 = {
+        apiVersion: 'v1beta1',
+        name: 'foo',
+        members: [
+          {qNumber: 'q123456'},
+        ],
+        deployments: {
+          foo: {replicas: 99}
+        }
+      };
+      expect(validateSchema(appSpec, schema)).toEqual(
+        '`deployments.foo.replicas`: must be less than or equal to 2\n\n');
+    });
+    it('should fail when deployment name is invalid', () => {
+      const appSpec: AppSpecV1Beta1 = {
+        apiVersion: 'v1beta1',
+        name: 'foo',
+        members: [
+          {qNumber: 'q123456'},
+        ],
+        deployments: {
+          'foo/bar': {replicas: 1}
+        }
+      };
+      expect(validateSchema(appSpec, schema)).toEqual(
+        '`deployments`: is not allowed to have the additional property "foo/bar"\n\n');
     });
   });
 });

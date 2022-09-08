@@ -14,12 +14,36 @@
         "qNumber"
       ],
       "type": "object"
+    },
+    "Deployment": {
+      "type": "object",
+      "properties": {
+        "replicas": {
+          "description": "number of replicas to deploy",
+          "maximum": 2,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "replicas"
+      ]
     }
   },
   "properties": {
     "apiVersion": {
       "description": "api version of the app schema",
       "const": "v1beta1"
+    },
+    "deployments": {
+      "description": "name of the deployment in camel case",
+      "patternProperties": {
+        "^[a-z0-9]+(?:-[a-z0-9]+)*$": {
+          "$ref": "#/definitions/Deployment"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
     },
     "members": {
       "items": {

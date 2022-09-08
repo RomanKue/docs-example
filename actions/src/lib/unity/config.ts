@@ -8,6 +8,11 @@ import {IssueComment} from '../github/api/issues/response/issue-comment.js';
 /** name of the org */
 export const unityOrg = 'UNITY';
 
+/**
+ * @see https://atc-github.azure.cloud.bmw/organizations/UNITY/settings/roles
+ */
+export const unityRepositoryRoles = 'app-admin';
+
 export const isUnityBotComment = (comment: Readonly<Pick<IssueComment, 'user'>>): boolean => {
   return comment.user?.login.toLocaleLowerCase() == unityBot;
 };

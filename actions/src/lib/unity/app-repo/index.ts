@@ -1,7 +1,7 @@
 import {AppSpec, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
-import {defaultBranches, defaultTopics} from '../config.js';
+import {defaultBranches, defaultTopics, unityRepositoryRoles} from '../config.js';
 import {createAReference} from '../../github/api/git/git.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
@@ -55,7 +55,7 @@ export const createRepository = async (appSpec: AppSpec): Promise<Repository> =>
       await addARepositoryCollaborator({
         repo: appRepository.name,
         username: member.qNumber,
-        permission: 'admin',
+        permission: unityRepositoryRoles as never,
       });
     }
   }

@@ -31,6 +31,8 @@ describe('index', () => {
       expect(repositoris.listOrganizationRepositories).toHaveBeenCalledTimes(1);
       expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledTimes(1);
       expect(repositoris.replaceAllRepositoryTopics).toHaveBeenCalledTimes(1);
+
+      expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledWith(expect.objectContaining({visibility: 'private'}));
     });
   });
 });

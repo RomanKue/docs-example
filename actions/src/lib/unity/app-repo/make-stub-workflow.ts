@@ -32,8 +32,12 @@ jobs:
     permissions:
       contents: write
       id-token: write
+    concurrency:
+      # don't make two stubs in parallel
+      group: ${makeStubAction}
+      cancel-in-progress: false
     runs-on: atc-ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v3
         with:

@@ -2,14 +2,14 @@ export const deployAppWorkflowFileName = 'deploy.yaml';
 export const deployAppAction = 'deploy-unity-app';
 
 export const createDeployWorkflow = () => `
-name: deploy
+name: ${deployAppAction}
 on:
   push:
     branches:
       - int
       - prod
 jobs:
-  deploy:
+  ${deployAppAction}:
     permissions:
       contents: read
       id-token: write

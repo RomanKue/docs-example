@@ -2,7 +2,7 @@ export const makeStubWorkflowFileName = 'make-stub.yaml';
 export const makeStubAction = 'make-stub';
 
 export const createMakeStubWorkflow = () => `
-name: ${makeStubWorkflowFileName}
+name: ${makeStubAction}
 on:
   workflow_dispatch:
     inputs:
@@ -23,7 +23,7 @@ on:
         default: 'main'
         type: string
 jobs:
-  make-stub:
+  ${makeStubAction}:
     permissions:
       contents: write
       id-token: write

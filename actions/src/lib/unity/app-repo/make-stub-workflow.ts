@@ -32,7 +32,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: \${{ inputs.branch }}
+          ref: \${{ inputs.ref }}
       - uses: unity/${makeStubAction}@v1
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}

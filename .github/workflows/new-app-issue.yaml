@@ -10,13 +10,13 @@ on:
     types:
       - created
 
+concurrency:
+  group: new-app-issue-${{ github.event.issue.id }}
 jobs:
   new-app-issue:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 20
     permissions: write-all
-    concurrency:
-      group: new-app-issue-${{ github.event.issue.id }}
     steps:
       - uses: actions/checkout@v3
       - name: build-actions

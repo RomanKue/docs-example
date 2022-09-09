@@ -19,10 +19,12 @@ jobs:
     permissions: write-all
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.UNITY_BOT_TOKEN }}
       - name: build-actions
         uses: ./.github/actions/build-actions
       - name: new-app-issue
         uses: ./.github/actions/new-app-issue
         with:
-          GITHUB_TOKEN: ${{secrets.UNITY_BOT_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
           working-directory: actions

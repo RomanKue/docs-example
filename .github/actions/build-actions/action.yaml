@@ -4,16 +4,12 @@ description: 'Build js actions'
 runs:
   using: composite
   steps:
-    - name: print context
+    - name: debug info
       if: ${{ runner.debug }}
       shell: bash
       run: |
         echo '${{ toJson(github) }}' | jq .
-    - uses: actions/checkout@v3
-    - name: git config
-      if: ${{ runner.debug }}
-      shell: bash
-      run: git config -l
+        git config --list
     - uses: actions/setup-node@v3
       with:
         node-version: 16

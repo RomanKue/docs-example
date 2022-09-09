@@ -3,7 +3,7 @@ import {promisify} from 'util';
 
 import * as core from '@actions/core';
 import {Repository} from '../../github/api/repos/response/repository.js';
-import {mkdtempSync, rmSync} from 'fs';
+import * as fs from 'fs';
 import path from 'path';
 import * as os from 'os';
 
@@ -39,7 +39,10 @@ export const makeStub = async (
 ) => {
   core.info(`starting to make stub: ${name} for ${type}`);
   const scriptsPath = `${process.cwd()}/../make-stubs`;
-  const tmpDir = mkdtempSync(path.join(os.tmpdir(), `unity-${repository.name}-${name}-`));
+  core.debug(`available scripts in ${scriptsPath} are ${fs.readdirSync(scriptsPath).join(' ')}`);
+
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), `unity-${repository.name}-${name}-`));
+  core.debug(`working in tmp dir: ${tmpDir}`);
   try {
     await withErrorLogging(() => exec(`
     set -xeu pipefail
@@ -63,6 +66,6 @@ export const makeStub = async (
     `, {shell: 'bash', cwd: `${tmpDir}/${repository.name}`}));
 
   } finally {
-    rmSync(tmpDir, {recursive: true});
+    fs.rmSync(tmpDir, {recursive: true});
   }
 };

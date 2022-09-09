@@ -18,6 +18,7 @@ import {produce} from 'immer';
 import orgs from '../../github/api/orgs/index.js';
 
 import * as core from '@actions/core';
+import {createCiAngularWorkflow, createCiQuarkusWorkflow} from './workflows/ci/index.js';
 
 export const appYamlPath = 'unity-app.yaml';
 
@@ -73,12 +74,14 @@ export const createRepository = async (
     const name = 'ui';
     core.setOutput('make-angular-stub', name);
     core.info(`make-angular-stub-stub: ${name}`);
+    core.setOutput('ci-angular', createCiAngularWorkflow(name));
   }
 
   if (newAppIssue.generateQuarkusStub) {
     const name = 'business';
     core.setOutput('make-quarkus-stub', name);
     core.info(`make-quarkus-stub: ${name}`);
+    core.setOutput('ci-quarkus', createCiQuarkusWorkflow(name));
   }
 
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());

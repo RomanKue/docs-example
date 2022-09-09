@@ -22,6 +22,8 @@ jobs:
       app-repository: ${{ steps.new-app-issue.outputs.app-repository }}
       make-angular-stub: ${{ steps.new-app-issue.outputs.make-angular-stub }}
       make-quarkus-stub: ${{ steps.new-app-issue.outputs.make-quarkus-stub }}
+      ci-quarkus: ${{ steps.new-app-issue.outputs.ci-quarkus }}
+      ci-angular: ${{ steps.new-app-issue.outputs.ci-angular }}
     steps:
       - uses: actions/checkout@v3
       - name: build-actions
@@ -104,57 +106,8 @@ jobs:
         shell: bash
         run: |
           mkdir -p .github/workflows
-          echo "name: ci-$NAME
-          on:
-            push:
-              branches:
-                - main
-          env:
-            DEPLOYMENT: $NAME
-          jobs:
-            ci:
-              runs-on: atc-ubuntu-latest
-              timeout-minutes: 30
-              permissions:
-                contents: read
-                id-token: write
-                packages: write
-              steps:
-                - uses: actions/checkout@v3
-                - uses: actions/setup-node@v3
-                  with:
-                    node-version: '16'
-                    cache: npm
-                    cache-dependency-path: \${{ env.DEPLOYMENT }}/package-lock.json
-                - name: ci
-                  working-directory: \${{ env.DEPLOYMENT }}
-                  run: npm ci
-                - name: test
-                  working-directory: \${{ env.DEPLOYMENT }}
-                  run: npx ng test
-                - name: build
-                  working-directory: \${{ env.DEPLOYMENT }}
-                  run: npx ng build -c production
-                - name: build image
-                  working-directory: \${{ env.DEPLOYMENT }}
-                  env:
-                    REGISTRY: containers.atc-github.azure.cloud.bmw
-                    REGISTRY_PASSWORD: \${{ secrets.GITHUB_TOKEN }}
-                    IMAGE_GROUP: unity
-                    IMAGE_NAME: \${{ github.event.repository.name }}-\${{ env.DEPLOYMENT }}
-                    IMAGE_TAG: latest
-                  run: |
-                    echo '
-                    FROM nginxinc/nginx-unprivileged:latest
-                    LABEL org.opencontainers.image.source \${{ github.event.repository.html_url }}
-                    COPY dist/\${{ env.DEPLOYMENT }} /usr/share/nginx/html
-                    ' > docker build -t \${{ env.IMAGE_GROUP }}/\${{ env.IMAGE_NAME }}:\${{ env.IMAGE_TAG }} -
-                    echo \${{ env.REGISTRY_PASSWORD }} | docker login \${{ env.REGISTRY }} -u USERNAME --password-stdin
-                    docker push -t \${{ env.IMAGE_GROUP }}/\${{ env.IMAGE_NAME }}:\${{ env.IMAGE_TAG }}
-            " > ".github/workflows/ci-$NAME.yaml"
-
-            # list workflows
-            ls -lah .github/workflows
+          echo "${{ needs.new-app-issue.outputs.ci-angular }}" > ".github/workflows/ci-${{ env.NAME }}.yaml"
+          ls -lah .github/workflows
       - name: commit and push
         shell: bash
         run: |
@@ -163,6 +116,7 @@ jobs:
           git add ${{ env.NAME }}
           git add .github/workflows/*.yaml
           git commit --all --message 'create quarkus stub: ${{ env.NAME }}'
+          git pull --rebase origin main
           git push -u origin main
   make-quarkus-stub:
     runs-on: atc-ubuntu-latest
@@ -212,48 +166,8 @@ jobs:
         shell: bash
         run: |
           mkdir -p .github/workflows
-          echo "name: ci-$NAME
-          on:
-            push:
-              branches:
-                - main
-          Gnv:
-            DEPLOYMENT: $NAME
-          jobs:
-            ci:
-              runs-on: atc-ubuntu-latest
-              timeout-minutes: 30
-              permissions:
-                contents: read
-                id-token: write
-                packages: write
-              steps:
-                - uses: actions/checkout@v3
-                - name: setup java
-                  uses: actions/setup-java@v3
-                  with:
-                    distribution: 'zulu'
-                    java-version: '17'
-                    cache: maven
-                - name: setup maven
-                  uses: pmd/setup-maven@v1
-                - name: build image
-                  working-directory: \${{ env.DEPLOYMENT }}
-                  # see https://quarkus.io/guides/container-image#container-image-options
-                  env:
-                    QUARKUS_CONTAINER_IMAGE_REGISTRY: containers.atc-github.azure.cloud.bmw
-                    QUARKUS_CONTAINER_IMAGE_USERNAME: USERNAME
-                    QUARKUS_CONTAINER_IMAGE_PASSWORD: \${{ secrets.GITHUB_TOKEN }}
-                    QUARKUS_CONTAINER_IMAGE_NAME: \${{ github.event.repository.name }}-\${{ env.DEPLOYMENT }}
-                    QUARKUS_CONTAINER_IMAGE_TAG: latest
-                    QUARKUS_CONTAINER_IMAGE_GROUP: unity
-                    QUARKUS_CONTAINER_IMAGE_BUILD: 'true'
-                    QUARKUS_CONTAINER_IMAGE_PUSH: 'true'
-                  run: mvn clean package
-            " > ".github/workflows/ci-$NAME.yaml"
-
-            # list workflows
-            ls -lah .github/workflows
+          echo "${{ needs.new-app-issue.outputs.ci-quarkus }}" > ".github/workflows/ci-${{ env.NAME }}.yaml"
+          ls -lah .github/workflows
       - name: commit and push
         shell: bash
         run: |
@@ -262,4 +176,5 @@ jobs:
           git add ${{ env.NAME }}
           git add .github/workflows/*.yaml
           git commit --all --message 'create quarkus stub: ${{ env.NAME }}'
+          git pull --rebase origin main
           git push -u origin main

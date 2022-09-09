@@ -6,6 +6,8 @@ import {Repository} from '../../github/api/repos/response/repository.js';
 import * as fs from 'fs';
 import path from 'path';
 import * as os from 'os';
+import {unityBot} from '../config.js';
+import users from '../../github/api/users/index.js';
 
 const exec = promisify(origExec);
 const execFile = promisify(origExecFile);
@@ -37,6 +39,9 @@ export const makeStub = async (
   type: 'angular' | 'quarkus',
   repository: Readonly<Pick<Repository, 'name' | 'html_url'>>
 ) => {
+
+  const bot = await users.getAUser({username: unityBot});
+
   core.info(`starting to make stub: ${name} for ${type}`);
   const scriptsPath = `${process.cwd()}/../make-stubs`;
   core.debug(`available scripts in ${scriptsPath} are ${fs.readdirSync(scriptsPath).join(' ')}`);
@@ -52,6 +57,8 @@ export const makeStub = async (
     cp $(git rev-parse --show-toplevel)/.git/config ${tmpDir}/${repository.name}/.git/config
 
     cd ${tmpDir}/${repository.name}
+    git config --global user.name '${ bot.login }'
+    git config --global user.email '${ bot.email ?? `${bot.login}@no-mail.com` }'
     git config --list
     git remote set-url origin ${repository.html_url}
     git pull origin main

@@ -39,23 +39,23 @@ jobs:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 20
     needs: new-app-issue
-    if: ${{ needs.new-app-issue.outputs.make-angular-stub }}
+    if: needs.new-app-issue.outputs.make-angular-stub
     concurrency:
       group: make-stub
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: $${{ needs.new-app-issue.outputs.make-quarkus-stub }}
+          repository: ${{ needs.new-app-issue.outputs.app-repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}
   make-quarkus-stub:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 20
     needs: new-app-issue
-    if: ${{ needs.new-app-issue.outputs.make-quarkus-stub }}
+    if: needs.new-app-issue.outputs.make-quarkus-stub
     concurrency:
       group: make-stub
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: $${{ needs.new-app-issue.outputs.make-quarkus-stub }}
+          repository: ${{ needs.new-app-issue.outputs.app-repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}

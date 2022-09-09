@@ -52,6 +52,7 @@ export const createRepository = async (
   }
 
   core.setOutput('app-repository', newAppRepoName);
+  core.info(`app-repository: ${newAppRepoName}`);
 
   const appRepository = await createAnOrganizationRepository({
     name: newAppRepoName,
@@ -71,6 +72,7 @@ export const createRepository = async (
   if (newAppIssue.generateAngularStub) {
     const name = 'ui';
     core.setOutput('make-angular-stub', name);
+    core.info(`make-angular-stub-stub: ${name}`);
 
     // await makeStub(name, 'angular', appRepository);
 
@@ -81,6 +83,7 @@ export const createRepository = async (
   if (newAppIssue.generateQuarkusStub) {
     const name = 'business';
     core.setOutput('make-quarkus-stub', name);
+    core.info(`make-quarkus-stub: ${name}`);
 
     // await makeStub(name, 'quarkus', appRepository);
 

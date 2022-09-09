@@ -104,9 +104,12 @@ jobs:
           ls -lah
       - name: create workflow
         shell: bash
+        # workflow files are taken from a previous job output, which is not ideal but best for several reasons
+        # 1. having them here inline would make the file very long and would require to escape all workflow expressions
+        # 2. loading them from a file is not so easy, since we are on the app repo now and we don't have access to the unity repo
         run: |
           mkdir -p .github/workflows
-          echo "${{ needs.new-app-issue.outputs.ci-angular }}" > ".github/workflows/ci-${{ env.NAME }}.yaml"
+          echo '${{ needs.new-app-issue.outputs.ci-angular }}' > '.github/workflows/ci-${{ env.NAME }}.yaml'
           ls -lah .github/workflows
       - name: commit and push
         shell: bash
@@ -164,9 +167,12 @@ jobs:
           ls -lah
       - name: create workflow
         shell: bash
+        # workflow files are taken from a previous job output, which is not ideal but best for several reasons
+        # 1. having them here inline would make the file very long and would require to escape all workflow expressions
+        # 2. loading them from a file is not so easy, since we are on the app repo now and we don't have access to the unity repo
         run: |
           mkdir -p .github/workflows
-          echo "${{ needs.new-app-issue.outputs.ci-quarkus }}" > ".github/workflows/ci-${{ env.NAME }}.yaml"
+          echo '${{ needs.new-app-issue.outputs.ci-quarkus }}' > '.github/workflows/ci-${{ env.NAME }}.yaml'
           ls -lah .github/workflows
       - name: commit and push
         shell: bash

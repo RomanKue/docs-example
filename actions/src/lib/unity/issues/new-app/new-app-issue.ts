@@ -24,16 +24,25 @@ export class NewAppIssue {
 
 }
 
+/**
+ * searches for a string ignoring case and whitespace
+ */
+export const looselyIncludes = (s: string, searchString: string): boolean => {
+  s = s.toLowerCase().replace(/\s/g,'');
+  searchString = searchString.toLowerCase().replace(/\s/g,'');
+  return s.includes(searchString);
+};
+
 export const isTermsOfServiceAccepted = (body: string): boolean => {
-  return body.includes('[x] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html)');
+  return looselyIncludes(body, '[x] I accept the [terms of service]');
 };
 
 export const shouldDGenerateAngularStub = (body: string): boolean => {
-  return body.includes('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.');
+  return looselyIncludes(body, '[x] please generate a front-end [Angular]');
 };
 
 export const shouldGenerateQuarkusStub = (body: string): boolean => {
-  return body.includes('[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.');
+  return looselyIncludes(body, '[x] please generate a back-end');
 };
 
 export const parseIssueBody = (body: string): NewAppIssue => {

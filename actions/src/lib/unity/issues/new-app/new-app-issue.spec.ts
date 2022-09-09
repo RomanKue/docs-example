@@ -17,8 +17,8 @@ describe('new-issue', () => {
       const newAppIssue = parseIssueBody(md);
       expect(newAppIssue.appSpec?.apiVersion).toEqual('v1beta1');
       expect(newAppIssue.appSpec?.name).toEqual('<my-app-name>');
-      expect(newAppIssue.generateAngularStub).toBe(false);
-      expect(newAppIssue.generateQuarkusStub).toBe(false);
+      expect(newAppIssue.generateAngularStub).toBe(true);
+      expect(newAppIssue.generateQuarkusStub).toBe(true);
       expect(newAppIssue.termsOfServiceAccepted).toBe(false);
     });
   });
@@ -29,6 +29,12 @@ describe('new-issue', () => {
     });
     it('should be true when checkbox checked', () => {
       expect(shouldDGenerateAngularStub('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
+    });
+    it('should be true when checkbox checked in upper case', () => {
+      expect(shouldDGenerateAngularStub('[X] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
+    });
+    it('should be true when there is some extra space', () => {
+      expect(shouldDGenerateAngularStub('[X]  please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
     });
     it('should be false when checkbox unchecked', () => {
       expect(shouldDGenerateAngularStub('[ ] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeFalsy();

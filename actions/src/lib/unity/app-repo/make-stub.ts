@@ -37,7 +37,7 @@ const isStdout = (err: unknown): err is { stdout: string } => 'stdout' in (err a
 export const makeStub = async (
   name: string,
   type: 'angular' | 'quarkus',
-  repository: Readonly<Pick<Repository, 'name' | 'url'>>
+  repository: Readonly<Pick<Repository, 'name' | 'html_url'>>
 ) => {
   core.info(`starting to make stub: ${name} for ${type}`);
   const scriptsPath = `${process.cwd()}/../make-stubs`;
@@ -49,7 +49,7 @@ export const makeStub = async (
     await withErrorLogging(() => exec(`
     set -xeu pipefail
 
-    git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}"} clone ${repository.url}
+    git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}"} clone ${repository.html_url}
     cd ${repository.name}
     git checkout main
     `, {shell: 'bash', cwd: tmpDir}));

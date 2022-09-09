@@ -6,7 +6,7 @@ describe('make-stub', () => {
   beforeEach(() => {
     repository = {
       name: 'app-foo',
-      url: 'https://atc-github.azure.cloud.bmw/UNITY/app-foo',
+      html_url: 'https://atc-github.azure.cloud.bmw/UNITY/non-existing-repo',
     };
 
     jest.spyOn(m, 'withErrorLogging').mockResolvedValue({stdout: '', stderr: ''});

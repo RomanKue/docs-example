@@ -12,6 +12,7 @@ on:
 
 concurrency:
   group: new-app-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
 jobs:
   new-app-issue:
     runs-on: atc-ubuntu-latest

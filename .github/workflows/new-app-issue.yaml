@@ -39,11 +39,31 @@ jobs:
     if: needs.new-app-issue.outputs.make-angular-stub
     concurrency:
       group: make-stub
+    env:
+      NAME: ${{ needs.new-app-issue.outputs.make-angular-stub }}
     steps:
       - uses: actions/checkout@v3
         with:
           repository: ${{ github.repository_owner }}/${{ needs.new-app-issue.outputs.app-repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}
+      - uses: pmd/setup-git@v1
+        with:
+          setup-branch: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: make stub
+        shell: bash
+        run: ${{ github.action_path }}/make-stubs/angular.bash ${{ env.NAME }}
+      - name: commit and push
+        shell: bash
+        run: |
+          git add ${{ inputs.name }}
+          git add .github/workflows/*.yaml
+          git commit --all --message 'create quarkus stub: ${{ env.NAME }}'
+          git push -u origin main
   make-quarkus-stub:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 20
@@ -51,8 +71,32 @@ jobs:
     if: needs.new-app-issue.outputs.make-quarkus-stub
     concurrency:
       group: make-stub
+    env:
+      NAME: ${{ needs.new-app-issue.outputs.make-quarkus-stub }}
     steps:
       - uses: actions/checkout@v3
         with:
           repository: ${{ github.repository_owner }}/${{ needs.new-app-issue.outputs.app-repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}
+      - uses: pmd/setup-git@v1
+        with:
+          setup-branch: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+      - name: setup java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+      - name: setup maven
+        uses: pmd/setup-maven@v1
+      - name: make stub
+        shell: bash
+        run: ${{ github.action_path }}/make-stubs/quarkus.bash ${{ env.NAME }}
+      - name: commit and push
+        shell: bash
+        run: |
+          git add ${{ inputs.name }}
+          git add .github/workflows/*.yaml
+          git commit --all --message 'create quarkus stub: ${{ env.NAME }}'
+          git push -u origin main

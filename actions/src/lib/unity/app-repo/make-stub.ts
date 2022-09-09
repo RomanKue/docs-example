@@ -6,8 +6,6 @@ import {Repository} from '../../github/api/repos/response/repository.js';
 import * as fs from 'fs';
 import path from 'path';
 import * as os from 'os';
-import {base64} from '../../strings/encoding.js';
-import {getGithubToken} from '../../github/octokit.js';
 
 const exec = promisify(origExec);
 const execFile = promisify(origExecFile);
@@ -57,10 +55,6 @@ export const makeStub = async (
     git config --list
     git remote set-url origin ${repository.html_url}
     git pull origin main
-
-    # git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}" clone ${repository.html_url}
-    # cd ${repository.name}
-    # git checkout main
     `, {shell: 'bash'}));
 
     await withErrorLogging(() => execFile(`${scriptsPath}/${type}.bash`, [name], {
@@ -71,6 +65,8 @@ export const makeStub = async (
     await withErrorLogging(() => exec(`
     set -xeu pipefail
 
+    git add ${name}
+    git commit --all --message 'create ${type} stub: ${name}'
     git push origin main:main
     `, {shell: 'bash', cwd: `${tmpDir}/${repository.name}`}));
 

@@ -73,22 +73,12 @@ export const createRepository = async (
     const name = 'ui';
     core.setOutput('make-angular-stub', name);
     core.info(`make-angular-stub-stub: ${name}`);
-
-    // await makeStub(name, 'angular', appRepository);
-
-    // commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${ciAction}-${name}`, createCiAngularWorkflow(name));
-    // appSpec = await updateAppDeployments(appSpec, name);
   }
 
   if (newAppIssue.generateQuarkusStub) {
     const name = 'business';
     core.setOutput('make-quarkus-stub', name);
     core.info(`make-quarkus-stub: ${name}`);
-
-    // await makeStub(name, 'quarkus', appRepository);
-
-    // commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${ciAction}-${name}`, createCiQuarkusWorkflow(name));
-    // appSpec = await updateAppDeployments(appSpec, name);
   }
 
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());

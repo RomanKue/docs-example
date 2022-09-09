@@ -100,8 +100,10 @@ jobs:
 
           # list what has been created
           ls -lah
-
-          # create workflow
+      - name: create workflow
+        shell: bash
+        run: |
+          mkdir -p .github/workflows
           echo "name: ci-$NAME
           on:
             push:
@@ -206,7 +208,10 @@ jobs:
 
           # list what has been created
           ls -lah
-          # create workflow
+      - name: create workflow
+        shell: bash
+        run: |
+          mkdir -p .github/workflows
           echo "name: ci-$NAME
           on:
             push:

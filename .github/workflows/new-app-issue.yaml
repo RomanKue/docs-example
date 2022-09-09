@@ -118,7 +118,7 @@ jobs:
           git config --global user.email '${{ github.actor }}@no-mail.com'
           git add ${{ env.NAME }}
           git add .github/workflows/*.yaml
-          git commit --all --message 'create quarkus stub: ${{ env.NAME }}'
+          git commit --all --message 'create angular stub: ${{ env.NAME }}'
           git pull --rebase origin main
           git push -u origin main
   make-quarkus-stub:

@@ -15,16 +15,46 @@ concurrency:
 jobs:
   new-app-issue:
     runs-on: atc-ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     permissions: write-all
+    outputs:
+      app-repository: ${{ steps.new-app-issue.outputs.app-repository }}
+      make-angular-stub: ${{ steps.new-app-issue.outputs.make-angular-stub }}
+      make-quarkus-stub: ${{ steps.new-app-issue.outputs.make-quarkus-stub }}
     steps:
       - uses: actions/checkout@v3
+        # TODO remove
         with:
           token: ${{ secrets.UNITY_BOT_TOKEN }}
       - name: build-actions
         uses: ./.github/actions/build-actions
       - name: new-app-issue
+        id: new-app-issue
         uses: ./.github/actions/new-app-issue
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
           working-directory: actions
+  make-angular-stub:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 20
+    needs: new-app-issue
+    if: ${{ needs.new-app-issue.outputs.make-angular-stub }}
+    concurrency:
+      group: make-stub
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: $${{ needs.new-app-issue.outputs.make-quarkus-stub }}
+          token: ${{ secrets.UNITY_BOT_TOKEN }}
+  make-quarkus-stub:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 20
+    needs: new-app-issue
+    if: ${{ needs.new-app-issue.outputs.make-quarkus-stub }}
+    concurrency:
+      group: make-stub
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: $${{ needs.new-app-issue.outputs.make-quarkus-stub }}
+          token: ${{ secrets.UNITY_BOT_TOKEN }}

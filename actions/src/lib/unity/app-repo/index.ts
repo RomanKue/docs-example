@@ -15,9 +15,9 @@ import {Repository} from '../../github/api/repos/response/repository.js';
 import {createDeployWorkflow, deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {produce} from 'immer';
-import {ciAction, createCiAngularWorkflow, createCiQuarkusWorkflow} from './workflows/ci/index.js';
-import {makeStub} from './make-stub.js';
 import orgs from '../../github/api/orgs/index.js';
+
+import * as core from '@actions/core';
 
 export const appYamlPath = 'unity-app.yaml';
 
@@ -51,6 +51,8 @@ export const createRepository = async (
     throw new Error(`the repository ${newAppRepoName} already exists`);
   }
 
+  core.setOutput('app-repository', newAppRepoName);
+
   const appRepository = await createAnOrganizationRepository({
     name: newAppRepoName,
     visibility: 'private',
@@ -68,20 +70,22 @@ export const createRepository = async (
 
   if (newAppIssue.generateAngularStub) {
     const name = 'ui';
+    core.setOutput('make-angular-stub', name);
 
-    await makeStub(name, 'angular', appRepository);
+    // await makeStub(name, 'angular', appRepository);
 
-    commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${ciAction}-${name}`, createCiAngularWorkflow(name));
-    appSpec = await updateAppDeployments(appSpec, name);
+    // commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${ciAction}-${name}`, createCiAngularWorkflow(name));
+    // appSpec = await updateAppDeployments(appSpec, name);
   }
 
   if (newAppIssue.generateQuarkusStub) {
     const name = 'business';
+    core.setOutput('make-quarkus-stub', name);
 
-    await makeStub(name, 'quarkus', appRepository);
+    // await makeStub(name, 'quarkus', appRepository);
 
-    commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${ciAction}-${name}`, createCiQuarkusWorkflow(name));
-    appSpec = await updateAppDeployments(appSpec, name);
+    // commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${ciAction}-${name}`, createCiQuarkusWorkflow(name));
+    // appSpec = await updateAppDeployments(appSpec, name);
   }
 
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());

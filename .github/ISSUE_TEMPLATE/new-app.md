@@ -18,8 +18,8 @@ members: # dev ops team members that have access to the app
 
 **Application Components**
 
- * [ ] please generate a front-end [Angular](http://angular.io) stub from a template for me.
- * [ ] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.
+ * [x] please generate a front-end [Angular](http://angular.io) stub from a template for me.
+ * [x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.
 
 **The Way We Work Together**
 

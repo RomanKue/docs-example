@@ -24,9 +24,6 @@ jobs:
       make-quarkus-stub: ${{ steps.new-app-issue.outputs.make-quarkus-stub }}
     steps:
       - uses: actions/checkout@v3
-        # TODO remove
-        with:
-          token: ${{ secrets.UNITY_BOT_TOKEN }}
       - name: build-actions
         uses: ./.github/actions/build-actions
       - name: new-app-issue
@@ -45,7 +42,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: ${{ needs.new-app-issue.outputs.app-repository }}
+          repository: ${{ github.repository_owner }}/${{ needs.new-app-issue.outputs.app-repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}
   make-quarkus-stub:
     runs-on: atc-ubuntu-latest
@@ -57,5 +54,5 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          repository: ${{ needs.new-app-issue.outputs.app-repository }}
+          repository: ${{ github.repository_owner }}/${{ needs.new-app-issue.outputs.app-repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}

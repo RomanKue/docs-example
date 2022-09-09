@@ -8,5 +8,9 @@ describe('ci-quarkus-workflow', () => {
       const s = createCiQuarkusWorkflow('foo');
       expect(yaml.load(s)).toBeTruthy();
     });
+    it('should fail when yaml contains single quotes, since this will cause issues when using this from the job output', () => {
+      const s = createCiQuarkusWorkflow('foo');
+      expect(s).not.toContain("'");
+    });
   });
 });

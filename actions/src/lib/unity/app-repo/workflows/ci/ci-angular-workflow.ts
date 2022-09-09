@@ -21,7 +21,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: "16"
           cache: npm
           cache-dependency-path: \${{ env.DEPLOYMENT }}/package-lock.json
       - name: ci
@@ -42,11 +42,11 @@ jobs:
             IMAGE_NAME: \${{ github.event.repository.name }}-\${{ env.DEPLOYMENT }}
             IMAGE_TAG: latest
         run: |
-            echo '
+            echo "
             FROM nginxinc/nginx-unprivileged:latest
             LABEL org.opencontainers.image.source \${{ github.event.repository.html_url }}
             COPY dist/\${{ env.DEPLOYMENT }} /usr/share/nginx/html
-            ' > docker build -t \${{ env.IMAGE_GROUP }}/\${{ env.IMAGE_NAME }}:\${{ env.IMAGE_TAG }} -
+            " > docker build -t \${{ env.IMAGE_GROUP }}/\${{ env.IMAGE_NAME }}:\${{ env.IMAGE_TAG }} -
             echo \${{ env.REGISTRY_PASSWORD }} | docker login \${{ env.REGISTRY }} -u USERNAME --password-stdin
             docker push -t \${{ env.IMAGE_GROUP }}/\${{ env.IMAGE_NAME }}:\${{ env.IMAGE_TAG }}
     `.trim();

@@ -23,8 +23,8 @@ jobs:
       - name: setup java
         uses: actions/setup-java@v3
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
           cache: maven
       - name: setup maven
         uses: pmd/setup-maven@v1
@@ -38,8 +38,8 @@ jobs:
           QUARKUS_CONTAINER_IMAGE_NAME: \${{ github.event.repository.name }}-\${{ env.DEPLOYMENT }}
           QUARKUS_CONTAINER_IMAGE_TAG: latest
           QUARKUS_CONTAINER_IMAGE_GROUP: ${unityOrg.toLowerCase()}
-          QUARKUS_CONTAINER_IMAGE_BUILD: 'true'
-          QUARKUS_CONTAINER_IMAGE_PUSH: 'true'
+          QUARKUS_CONTAINER_IMAGE_BUILD: "true"
+          QUARKUS_CONTAINER_IMAGE_PUSH: "true"
         run: mvn clean package
     `.trim();
 

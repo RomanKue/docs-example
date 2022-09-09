@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
+
+NAME="$1"
+
 set -xeu pipefail
 
-NAME=$1
 REPO=$(basename $(git rev-parse --show-toplevel))
+
+echo "NAME=$NAME"
+echo "REPO=$REPO"
+
 
 # based on https://quarkus.io/guides/getting-started
 mvn io.quarkus.platform:quarkus-maven-plugin:2.12.1.Final:create \

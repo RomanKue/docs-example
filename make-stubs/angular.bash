@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
+
+NAME="$1"
+ANGULAR_VERSION=14
+
 set -xeu pipefail
 
-NAME=$1
-
-ANGULAR_VERSION=14
+echo "NAME=$NAME"
+echo "ANGULAR_VERSION=$ANGULAR_VERSION"
 
 npm install --location=global @angular/cli@$ANGULAR_VERSION
 ng new "$NAME" --defaults --style=scss --skip-git

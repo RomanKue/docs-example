@@ -16,7 +16,7 @@ export const withErrorLogging = async (cb: () => Promise<StdStreams>): Promise<S
   try {
     const {stdout, stderr} = await cb();
     core.info(stdout);
-    core.warning(stderr);
+    core.info(stderr);
     return {stdout, stderr};
   } catch (e) {
     if (isStdout(e)) {

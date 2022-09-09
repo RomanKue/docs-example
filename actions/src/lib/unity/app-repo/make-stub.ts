@@ -56,7 +56,7 @@ export const makeStub = async (
     cd ${tmpDir}/${repository.name}
     git config --list
     git remote set-url origin ${repository.html_url}
-    git pull main
+    git pull origin main
 
     # git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}" clone ${repository.html_url}
     # cd ${repository.name}

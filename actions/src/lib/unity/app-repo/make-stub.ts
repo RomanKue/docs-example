@@ -51,7 +51,7 @@ export const makeStub = async (
 
     mkdir ${tmpDir}/${repository.name}
     git init ${tmpDir}/${repository.name}
-    cp .git/config ${tmpDir}/${repository.name}/.git/config
+    cp $(git rev-parse --show-toplevel)/.git/config ${tmpDir}/${repository.name}/.git/config
 
     cd ${tmpDir}/${repository.name}
     git config --list

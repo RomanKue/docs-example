@@ -27,4 +27,4 @@ and wait for approval. As soon as the issue is approved, you will receive furthe
 
 [wiki]: https://atc-github.azure.cloud.bmw/UNITY/unity/wiki
 
-[New App]: https://atc-github.azure.cloud.bmw/UNITY/unity/issues/new?assignees=&labels=new+app&template=custom.md&title=New+UNITY+App
+[New App]: https://atc-github.azure.cloud.bmw/UNITY/unity/issues/new?assignees=&labels=new+app&template=new-app.md&title=New+UNITY+App

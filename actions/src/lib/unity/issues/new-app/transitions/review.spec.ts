@@ -135,6 +135,9 @@ members: # dev ops team members that have access to the app
       });
       const newAppIssue = partialMock<NewAppIssue>({appSpec: appSpec});
       expect(await checkAppSchema(issue, newAppIssue)).toBeFalsy();
+      expect(issues.commentOnIssue).toHaveBeenCalledWith(expect.objectContaining({
+        body: expect.stringContaining(`\`name\`: does not match pattern "^[a-z0-9]+(?:-[a-z0-9]+)*$"`)
+      }));
     });
   });
   describe('checkAppName', () => {

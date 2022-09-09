@@ -7,6 +7,7 @@ import {IssueComment} from '../github/api/issues/response/issue-comment.js';
 
 /** name of the org */
 export const unityOrg = 'UNITY';
+export const containerRegistry = 'containers.atc-github.azure.cloud.bmw';
 
 /**
  * @see https://atc-github.azure.cloud.bmw/organizations/UNITY/settings/roles

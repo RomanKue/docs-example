@@ -28,9 +28,9 @@ export const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): P
     for (const member of appSpec.members) {
       if (!await usersUtils.isUserExistent(member.qNumber)) {
         await issuesUtils.addSimpleComment(issue, (user) =>
-          `🚫 @${user} it seems that the user ${member.qNumber} cannot be found in GitHub. Please check the members in app specification.
-
-            You can let me re-check by commenting "@${unityBot} ${magicComments.review}" on this issue.`
+          `🚫 @${user} it seems that the user ${member.qNumber} cannot be found in GitHub. Please check the members in app specification.` +
+          `\n` +
+          `You can let me re-check by commenting "@${unityBot} ${magicComments.review}" on this issue.`
         );
         return false;
       }
@@ -52,7 +52,10 @@ export const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Pr
     const errors = validateSchema(newAppIssue.appSpec, loadSchema(apiVersion));
     if (errors) {
       await issuesUtils.addSimpleComment(issue, (user) =>
-        `❌ @${user} the app specification does not seem to fit our needs, please take a look at the following validation errors and update your issue, so I can proceed with your request.\n\n`
+        `❌ @${user} the app specification does not seem to fit our needs, ` +
+        `please take a look at the following validation errors and update your issue, ` +
+        `so I can proceed with your request.\n\n` +
+        `${errors}`
       );
       return false;
     }

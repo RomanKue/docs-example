@@ -6,6 +6,8 @@ import {Repository} from '../../github/api/repos/response/repository.js';
 import * as fs from 'fs';
 import path from 'path';
 import * as os from 'os';
+import {base64} from '../../strings/encoding.js';
+import {getGithubToken} from '../../github/octokit.js';
 
 const exec = promisify(origExec);
 const execFile = promisify(origExecFile);
@@ -47,7 +49,7 @@ export const makeStub = async (
     await withErrorLogging(() => exec(`
     set -xeu pipefail
 
-    git clone ${repository.url}
+    git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}"} clone ${repository.url}
     cd ${repository.name}
     git checkout main
     `, {shell: 'bash', cwd: tmpDir}));

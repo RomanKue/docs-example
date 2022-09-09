@@ -46,11 +46,6 @@ jobs:
         with:
           repository: ${{ github.repository_owner }}/${{ needs.new-app-issue.outputs.app-repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}
-      - uses: pmd/setup-git@v1
-        with:
-          setup-branch: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -60,6 +55,8 @@ jobs:
       - name: commit and push
         shell: bash
         run: |
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email '${{ github.actor }}@no-mail.com'
           git add ${{ inputs.name }}
           git add .github/workflows/*.yaml
           git commit --all --message 'create quarkus stub: ${{ env.NAME }}'
@@ -78,11 +75,6 @@ jobs:
         with:
           repository: ${{ github.repository_owner }}/${{ needs.new-app-issue.outputs.app-repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}
-      - uses: pmd/setup-git@v1
-        with:
-          setup-branch: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
       - name: setup java
         uses: actions/setup-java@v3
         with:
@@ -96,6 +88,8 @@ jobs:
       - name: commit and push
         shell: bash
         run: |
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email '${{ github.actor }}@no-mail.com'
           git add ${{ inputs.name }}
           git add .github/workflows/*.yaml
           git commit --all --message 'create quarkus stub: ${{ env.NAME }}'

@@ -49,10 +49,19 @@ export const makeStub = async (
     await withErrorLogging(() => exec(`
     set -xeu pipefail
 
-    git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}" clone ${repository.html_url}
-    cd ${repository.name}
-    git checkout main
-    `, {shell: 'bash', cwd: tmpDir}));
+    mkdir ${tmpDir}/${repository.name}
+    git init ${tmpDir}/${repository.name}
+    cp .git/config ${tmpDir}/${repository.name}/.git/config
+
+    cd ${tmpDir}/${repository.name}
+    git config --list
+    git remote add origin ${repository.html_url}
+    git pull main
+
+    # git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}" clone ${repository.html_url}
+    # cd ${repository.name}
+    # git checkout main
+    `, {shell: 'bash'}));
 
     await withErrorLogging(() => execFile(`${scriptsPath}/${type}.bash`, [name], {
       shell: 'bash',
@@ -63,8 +72,6 @@ export const makeStub = async (
     set -xeu pipefail
 
     git push origin main:main
-    cd ..
-    rm -rvf ${repository.name}
     `, {shell: 'bash', cwd: `${tmpDir}/${repository.name}`}));
 
   } finally {

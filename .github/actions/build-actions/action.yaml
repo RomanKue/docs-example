@@ -10,6 +10,10 @@ runs:
       run: |
         echo '${{ toJson(github) }}' | jq .
     - uses: actions/checkout@v3
+    - name: git config
+      if: ${{ runner.debug }}
+      shell: bash
+      run: git config -l
     - uses: actions/setup-node@v3
       with:
         node-version: 16

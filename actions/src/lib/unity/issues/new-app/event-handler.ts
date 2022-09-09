@@ -7,7 +7,6 @@ import {IssueComment} from '../../../github/api/issues/response/issue-comment.js
 import {isMagicComment, isUnityBotComment, labels, magicComments, unityBot} from '../../config.js';
 import * as core from '@actions/core';
 import {approveIssue} from './transitions/approve.js';
-import {addSimpleComment} from '../../../github/api/issues/issues-utils.js';
 import {deliver} from './transitions/deliver.js';
 import {commentOnIssue} from '../../../github/api/issues/issues.js';
 

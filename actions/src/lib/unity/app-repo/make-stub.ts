@@ -62,6 +62,7 @@ export const makeStub = async (
     git config --list
     git remote set-url origin ${repository.html_url}
     git pull origin main
+    git checkout main
     `, {shell: 'bash'}));
 
     await withErrorLogging(() => execFile(`${scriptsPath}/${type}.bash`, [name], {

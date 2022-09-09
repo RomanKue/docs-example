@@ -11,7 +11,7 @@ on:
       - created
 
 concurrency:
-  group: new-app-issue-${{ github.event.issue.id }}
+  group: new-app-issue-${{ github.event.issue.number }}
 jobs:
   new-app-issue:
     runs-on: atc-ubuntu-latest

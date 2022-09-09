@@ -49,7 +49,7 @@ export const makeStub = async (
     await withErrorLogging(() => exec(`
     set -xeu pipefail
 
-    git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}"} clone ${repository.html_url}
+    git -c http.extraHeader="Authorization: Basic ${base64(`:${getGithubToken()}`)}" clone ${repository.html_url}
     cd ${repository.name}
     git checkout main
     `, {shell: 'bash', cwd: tmpDir}));

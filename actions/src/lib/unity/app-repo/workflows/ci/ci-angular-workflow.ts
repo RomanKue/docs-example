@@ -72,7 +72,8 @@ jobs:
             FROM nginxinc/nginx-unprivileged:latest
             LABEL org.opencontainers.image.source \${{ github.event.repository.html_url }}
             COPY dist/\${{ env.DEPLOYMENT }} /usr/share/nginx/html
-            " > docker build -t \${{ env.IMAGE }} -
+            " > Dockerfile
+            docker build -t \${{ env.IMAGE }} .
       - name: push image
         if: \${{ steps.cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' }}
         working-directory: \${{ env.DEPLOYMENT }}

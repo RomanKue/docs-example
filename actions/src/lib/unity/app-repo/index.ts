@@ -12,6 +12,7 @@ import {
   replaceAllRepositoryTopics
 } from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
+import {createDeployWorkflow, deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {produce} from 'immer';
 import orgs from '../../github/api/orgs/index.js';
@@ -91,6 +92,8 @@ export const createRepository = async (
       }
     });
   }
+
+  commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
 
   // it is important after which commit branching takes place
   for (const defaultBranch of Object.values(defaultBranches)) {

@@ -1,4 +1,4 @@
-name: Make stub
+name: Make App Stub
 on:
   workflow_dispatch:
     inputs:

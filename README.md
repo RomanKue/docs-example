@@ -39,4 +39,4 @@ The following use cases are supported via self-service
 
 [New App]: https://atc-github.azure.cloud.bmw/UNITY/unity/issues/new?assignees=&labels=new+app&template=new-app.md&title=New+UNITY+App
 
-[Decommission App]: https://atc-github.azure.cloud.bmw/UNITY/unity/issues/new?assignees=&labels=new+app&template=decommission-app.md&title=New+UNITY+App
+[Decommission App]: https://atc-github.azure.cloud.bmw/UNITY/unity/issues/decommission?assignees=&labels=decommission+app&template=decommission-app.md&title=Decommission+UNITY+App

@@ -13,5 +13,5 @@ npm install --location=global gomplate
 
 Then execute a template with
 ```bash
-< .github/actions/make-angular-stub/templates/workflows/ci.yaml NAME=ci gomplate
+< .github/actions/make-quarkus-stub/templates/workflows/ci.yaml NAME=ci gomplate
 ```

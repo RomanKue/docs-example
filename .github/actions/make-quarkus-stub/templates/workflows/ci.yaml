@@ -10,7 +10,7 @@ env:
 jobs:
   ci-{{ .Env.NAME }}:
     outputs:
-      cache-hit: ${{ steps.cache.outputs.cache-hit }}
+      cache-hit: ${{"{{"}} steps.cache.outputs.cache-hit {{"}}"}}
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -52,5 +52,5 @@ jobs:
         run: mvn clean package
   deploy:
     needs: ci-{{ .Env.NAME }}
-    if: ${{ needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' }}
+    if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
     uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main

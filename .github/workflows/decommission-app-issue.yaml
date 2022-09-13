@@ -11,7 +11,7 @@ on:
       - created
 
 concurrency:
-  group: decommission-app-issue-${{ github.event.issue.number }}
+  group: ${{ github.event.issue.number }}
   cancel-in-progress: false
 jobs:
   decommission-app-issue:

@@ -8,7 +8,6 @@ on:
     branches:
       - int
       - prod
-  registry_package:
 jobs:
   ${deployAppAction}:
     permissions:

@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+  pull_request:
 env:
   DEPLOYMENT: ${name}
 jobs:

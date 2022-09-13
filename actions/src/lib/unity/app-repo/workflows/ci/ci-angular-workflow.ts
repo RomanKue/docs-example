@@ -1,4 +1,3 @@
-import {containerRegistry, unityOrg} from '../../../config.js';
 import {ciAction} from './index.js';
 
 export const createCiAngularWorkflow = (name: string) => `
@@ -7,8 +6,10 @@ on:
   push:
     branches:
       - main
+  pull_request:
 env:
   DEPLOYMENT: ${name}
+  REGISTRY: containers.atc-github.azure.cloud.bmw
 jobs:
   ${ciAction}-${name}:
     runs-on: atc-ubuntu-latest
@@ -53,17 +54,15 @@ jobs:
         if: \${{ steps.cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' }}
         uses: docker/login-action@v2
         with:
-          registry: containers.atc-github.azure.cloud.bmw
+          registry: \${{ env.REGISTRY }}
           username: USERNAME
           password: \${{ secrets.GITHUB_TOKEN }}
       - name: docker config
         env:
-            REGISTRY: ${containerRegistry}
-            REGISTRY_PASSWORD: \${{ secrets.GITHUB_TOKEN }}
-            IMAGE_GROUP: ${unityOrg.toLowerCase()}
-            IMAGE_NAME: \${{ github.event.repository.name }}-\${{ env.DEPLOYMENT }}
+          IMAGE_GROUP: unity
+          IMAGE_NAME: \${{ github.event.repository.name }}-\${{ env.DEPLOYMENT }}
             IMAGE_TAG: latest
-        run: echo "IMAGE=\${{ env.IMAGE_GROUP }}/\${{ env.IMAGE_NAME }}:\${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
+        run: echo "IMAGE=\${{ env.REGISTRY }}/\${{ env.IMAGE_GROUP }}/\${{ env.IMAGE_NAME }}:\${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
       - name: build image
         if: \${{ steps.cache.outputs.cache-hit != 'true' }}
         working-directory: \${{ env.DEPLOYMENT }}

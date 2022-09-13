@@ -9,7 +9,7 @@ export const removeApprovalRequest = async (issue: Issue) => {
     return;
   }
   core.info(`removing approval request from issue: ${issue.html_url}`);
-  await issuesUtils.addSimpleComment(issue, (user) =>
+  await issuesUtils.addSimpleComment(issue, user =>
     `❓@${user} the issue does not seem to be ready for approval anymore, so I am removing the approval request for now. As soon as the issue is ready, I will request approval again for you.`
   );
   await setIssueState(issue, issueState.waitingForReview);

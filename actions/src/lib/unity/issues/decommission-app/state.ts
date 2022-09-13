@@ -1,7 +1,13 @@
 import {Issue} from '../../../github/api/issues/response/issue.js';
 import {hasLabel, labels} from '../../config.js';
 import * as core from '@actions/core';
-import {issueState} from '../new-app/index.js';
+
+export const issueState = {
+  waitingForReview: labels.waitingForReview,
+  waitingForApproval: labels.waitingForApproval,
+  approved: labels.approved,
+  delivered: labels.delivered,
+} as const;
 
 export const isDecommissionAppIssue = (
   issue: Readonly<Pick<Issue, 'labels'>>

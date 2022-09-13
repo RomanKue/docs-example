@@ -1,21 +1,26 @@
 import {Issue} from '../../../github/api/issues/response/issue.js';
 import {assertUnreachable} from '../../../run.js';
 import {IssueComment} from '../../../github/api/issues/response/issue-comment.js';
-import {isUnityBotComment} from '../../config.js';
+import {isMagicComment, isUnityBotComment, labels, magicComments, unityBot} from '../../config.js';
 import * as core from '@actions/core';
-import {getIssueState, isDecommissionAppIssue} from './state.js';
+import {getIssueState, isDecommissionAppIssue, issueState} from './state.js';
+import {commentOnIssue} from '../../../github/api/issues/issues.js';
+import {reviewIssue} from './transitions/review.js';
+import {requestApproval} from './transitions/request-approval.js';
+import {deliver} from './transitions/deliver.js';
+import {approveIssue} from './transitions/approve.js';
 
 export const handleIssueChange = async (issue: Issue): Promise<void> => {
   const issueState = getIssueState(issue);
   switch (issueState) {
   case 'waiting for review':
-    throw new Error(`not implemented`);
+    await reviewIssue(issue);
     break;
   case 'waiting for approval':
-    throw new Error(`not implemented`);
+    await requestApproval(issue);
     break;
   case 'approved':
-    throw new Error(`not implemented`);
+    await deliver(issue);
     break;
   case 'delivered':
   case null:
@@ -39,5 +44,43 @@ export const handleMagicComments = async (issue: Issue, comment: IssueComment) =
     core.info(`ignoring comment, since it is a comment from myself.`);
     return;
   }
-  throw new Error(`not implemented`);
+  const commenter = comment.user?.login;
+  if (isMagicComment(comment, magicComments.review)) {
+    if (getIssueState(issue) === issueState.waitingForReview) {
+      await commentOnIssue({
+        body:
+          `@${commenter} I understood that you want me to review your issue again, I will start with that right away... `
+      });
+      await reviewIssue(issue);
+    } else {
+      await commentOnIssue({
+        body:
+          `@${commenter} I understood that you want me to review your issue again.
+        Unfortunately, I can't review your issue, as it is not labeled with "${labels.waitingForReview}".`
+      });
+    }
+  } else if (isMagicComment(comment, magicComments.lgtm)) {
+    if (getIssueState(issue) === issueState.waitingForApproval) {
+      await commentOnIssue({
+        body:
+          `@${commenter} I understood that you want me to approve the issue.`
+      });
+      await approveIssue(issue, comment);
+    } else {
+      await commentOnIssue({
+        body:
+          `@${commenter} I understood that you want to approve the issue.
+        Unfortunately, I can't approve your issue, as it is not labeled with "${labels.waitingForApproval}".`
+      });
+    }
+  } else if (comment.body ?? ''.includes(`@${unityBot}`)) {
+    const possibleComments =
+      ` * @${unityBot} ${magicComments.review}\n` +
+      ` * @${unityBot} ${magicComments.lgtm}\n` +
+      ``;
+    await commentOnIssue({
+      body:
+        `@${commenter} I am not sure I can help you with your request. Try one of the following comments:\n\n${possibleComments}`
+    });
+  }
 };

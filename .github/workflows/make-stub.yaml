@@ -1,0 +1,28 @@
+name: Make stub
+on:
+  workflow_dispatch:
+    inputs:
+      repository:
+        required: true
+
+concurrency:
+jobs:
+  make-angular-stub:
+    group: ${{ inputs.repository }}
+    cancel-in-progress: false
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository_owner }}/${{ needs.new-app-issue.outputs.app-repository }}
+          token: ${{ secrets.UNITY_BOT_TOKEN }}
+      - name: make stub
+        shell: bash
+        run: |
+          set -xeu pipefail
+
+          pwd
+          ls -lah
+
+          cd ${{ github.action_path }}

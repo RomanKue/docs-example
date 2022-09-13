@@ -6,10 +6,10 @@ on:
         required: true
 
 concurrency:
+  group: make-stub
+  cancel-in-progress: false
 jobs:
   make-angular-stub:
-    group: ${{ inputs.repository }}
-    cancel-in-progress: false
     runs-on: atc-ubuntu-latest
     timeout-minutes: 20
     steps:

@@ -6,6 +6,7 @@ echo "ORG=$ORG"
 echo "NAME=$NAME"
 REPO_PATH=$(git rev-parse --show-toplevel)
 REPO=$(basename "$REPO_PATH")
+export REPO
 echo "REPO=$REPO"
 
 SCRIPT=$(realpath "$0")

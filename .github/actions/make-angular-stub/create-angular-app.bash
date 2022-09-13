@@ -7,6 +7,7 @@ echo "NAME=$NAME"
 echo "ANGULAR_VERSION=$ANGULAR_VERSION"
 REPO_PATH=$(git rev-parse --show-toplevel)
 REPO=$(basename "$REPO_PATH")
+export REPO
 echo "REPO=$REPO"
 
 SCRIPT=$(realpath "$0")

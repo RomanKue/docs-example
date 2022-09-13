@@ -41,6 +41,7 @@ export const unityTeams = {
  */
 export const labels = {
   newApp: 'new app',
+  decommissionApp: 'decommission app',
   waitingForReview: 'waiting for review',
   waitingForApproval: 'waiting for approval',
   approved: 'approved',

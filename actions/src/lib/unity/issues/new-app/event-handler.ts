@@ -1,5 +1,5 @@
 import {Issue} from '../../../github/api/issues/response/issue.js';
-import {getIssueState, issueState} from './state.js';
+import {getIssueState, isNewAppIssue, issueState} from './state.js';
 import {reviewIssue} from './transitions/review.js';
 import {requestApproval} from './transitions/request-approval.js';
 import {assertUnreachable} from '../../../run.js';
@@ -35,6 +35,10 @@ export const handleIssueChange = async (issue: Issue): Promise<void> => {
  * certain comments will trigger bot actions, this handler defines which comments are 'magic'
  */
 export const handleMagicComments = async (issue: Issue, comment: IssueComment) => {
+  if (!isNewAppIssue(issue)) {
+    core.info(`ignoring comment, since this issue is not a new-app issue.`);
+    return;
+  }
   if (isUnityBotComment(comment)) {
     // don't react on unity bot comments
     core.info(`ignoring comment, since it is a comment from myself.`);

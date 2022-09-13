@@ -1,0 +1,36 @@
+name: |
+  "Decommission UNITY App" issue
+on:
+  issues:
+    types:
+      - edited
+      - reopened
+      - labeled
+  issue_comment:
+    types:
+      - created
+
+concurrency:
+  group: decommission-app-issue-${{ github.event.issue.number }}
+  cancel-in-progress: false
+jobs:
+  decommission-app-issue:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 10
+    permissions: write-all
+    outputs:
+      app-repository: ${{ steps.decommission-app-issue.outputs.app-repository }}
+      make-angular-stub: ${{ steps.decommission-app-issue.outputs.make-angular-stub }}
+      make-quarkus-stub: ${{ steps.decommission-app-issue.outputs.make-quarkus-stub }}
+      ci-quarkus: ${{ steps.decommission-app-issue.outputs.ci-quarkus }}
+      ci-angular: ${{ steps.decommission-app-issue.outputs.ci-angular }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: build-actions
+        uses: ./.github/actions/build-actions
+      - name: decommission-app-issue
+        id: decommission-app-issue
+        uses: ./.github/actions/decommission-app-issue
+        with:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+          working-directory: actions

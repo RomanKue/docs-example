@@ -3,26 +3,76 @@ on:
   workflow_dispatch:
     inputs:
       repository:
+        description: name of the app repo inside the unity org
         required: true
+      type:
+        required: true
+        description: type of stub to create
+        type: choice
+        options:
+          - angular
+          - quarkus
+      name:
+        required: true
+        description: name of the deployable to create
+      dry-run:
+        required: false
+        description: if true, don't push results to the repo
 
 concurrency:
-  group: make-stub
+  group: make-stub-${{ github.event.inputs.repository }}
   cancel-in-progress: false
 jobs:
   make-angular-stub:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: ${{ github.repository_owner }}/${{ needs.new-app-issue.outputs.app-repository }}
-          token: ${{ secrets.UNITY_BOT_TOKEN }}
-      - name: make stub
+      - name: debug info
+        if: ${{ runner.debug }}
         shell: bash
         run: |
-          set -xeu pipefail
+          echo '${{ toJson(github) }}' | jq .
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.UNITY_BOT_TOKEN }}
+          path: unity
+      - uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository_owner }}/${{ github.event.inputs.repository }}
+          token: ${{ secrets.UNITY_BOT_TOKEN }}
+          path: ${{ github.event.inputs.repository }}
+      - name: make-angular-stub
+        if: ${{ github.event.inputs.type == 'angular' }}
+        env:
+          NAME: ${{ github.event.inputs.name }}
+          WORKING_DIRECTORY: ${{ github.event.inputs.repository }}
+          NODE_VERSION: '16'
+          ANGULAR_VERSION: '14'
+        uses: ./unity/.github/actions/make-angular-stub
+      - name: make-quarkus-stub
+        if: ${{ github.event.inputs.type == 'quarkus' }}
+        env:
+          NAME: ${{ github.event.inputs.name }}
+          WORKING_DIRECTORY: ${{ github.event.inputs.repository }}
+          NODE_VERSION: '16'
+          JAVA_VERSION: '17'
+          JAVA_DISTRIBUTION: 'zulu'
+        uses: ./unity/.github/actions/make-quarkus-stub
+      - name: commit
+        shell: bash
+        working-directory: ${{ github.event.inputs.repository }}
+        run: |
+          git config --global user.name '${{ github.actor }}'
+          git config --global user.email '${{ github.actor }}@no-mail.com'
+          git add ${{ github.event.inputs.name}}
+          git add .github/workflows/*.yaml
+          git commit --all --message 'create ${{ github.event.inputs.type }} stub: ${{ github.event.inputs.name }}'
+          git pull --rebase origin main
+      - name: push
+        if: ${{ github.event.inputs.dry-run != 'true' }}
+        shell: bash
+        working-directory: ${{ github.event.inputs.repository }}
+        run: |
+          git push -u origin main
 
-          pwd
-          ls -lah
 
-          cd ${{ github.action_path }}

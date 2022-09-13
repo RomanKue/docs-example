@@ -1,0 +1,12 @@
+name: make-angular-stub
+description: install tools and setup stub
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+    - name: create
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+      shell: bash
+      run: ${{ github.action_path }}/create-angular-app.bash

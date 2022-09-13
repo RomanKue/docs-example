@@ -1,7 +1,7 @@
 import {AppMember, AppSpec, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
-import {defaultBranches, defaultTopics, unityRepositoryRoles} from '../config.js';
+import {defaultBranches, defaultTopics, makeStubWorkflowId, unityRepositoryRoles} from '../config.js';
 import {createAReference} from '../../github/api/git/git.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
@@ -12,13 +12,10 @@ import {
   replaceAllRepositoryTopics
 } from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
-import {createDeployWorkflow, deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {produce} from 'immer';
 import orgs from '../../github/api/orgs/index.js';
-
-import * as core from '@actions/core';
-import {createCiAngularWorkflow, createCiQuarkusWorkflow} from './workflows/ci/index.js';
+import actions from '../../github/api/actions/index.js';
 
 export const appYamlPath = 'unity-app.yaml';
 
@@ -52,9 +49,6 @@ export const createRepository = async (
     throw new Error(`the repository ${newAppRepoName} already exists`);
   }
 
-  core.setOutput('app-repository', newAppRepoName);
-  core.info(`app-repository: ${newAppRepoName}`);
-
   const appRepository = await createAnOrganizationRepository({
     name: newAppRepoName,
     visibility: 'private',
@@ -72,19 +66,31 @@ export const createRepository = async (
 
   if (newAppIssue.generateAngularStub) {
     const name = 'ui';
-    core.setOutput('make-angular-stub', name);
-    core.info(`make-angular-stub-stub: ${name}`);
-    core.setOutput('ci-angular', createCiAngularWorkflow(name));
+    appSpec = await updateAppDeployments(appSpec, name);
+    await actions.createAWorkflowDispatchEvent({
+      ref: 'main',
+      workflow_id: makeStubWorkflowId,
+      inputs: {
+        name,
+        repository: appRepository.name,
+        type: 'angular',
+      }
+    });
   }
 
   if (newAppIssue.generateQuarkusStub) {
-    const name = 'business';
-    core.setOutput('make-quarkus-stub', name);
-    core.info(`make-quarkus-stub: ${name}`);
-    core.setOutput('ci-quarkus', createCiQuarkusWorkflow(name));
+    const name = 'api';
+    appSpec = await updateAppDeployments(appSpec, name);
+    await actions.createAWorkflowDispatchEvent({
+      ref: 'main',
+      workflow_id: makeStubWorkflowId,
+      inputs: {
+        name,
+        repository: appRepository.name,
+        type: 'quarkus',
+      }
+    });
   }
-
-  commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
 
   // it is important after which commit branching takes place
   for (const defaultBranch of Object.values(defaultBranches)) {

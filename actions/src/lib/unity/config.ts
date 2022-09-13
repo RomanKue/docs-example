@@ -24,6 +24,8 @@ export const isUnityBotComment = (comment: Readonly<Pick<IssueComment, 'user'>>)
  */
 export const unityBot = `qqunit1`;
 
+export const makeStubWorkflowId = 'make-stub.yaml';
+
 /**
  * teams available in the UNITY org
  * @see https://atc-github.azure.cloud.bmw/orgs/UNITY/teams

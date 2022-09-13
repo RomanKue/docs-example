@@ -5,7 +5,7 @@ on:
       - main
   pull_request:
 env:
-  DEPLOYMENT: {{"{{"}} .Env.NAME {{"}}"}}
+  DEPLOYMENT: {{ .Env.NAME }}
   REGISTRY: containers.atc-github.azure.cloud.bmw
 jobs:
   ci-{{ .Env.NAME }}:

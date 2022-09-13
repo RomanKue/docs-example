@@ -8,6 +8,8 @@ on:
     branches:
       - int
       - prod
+concurrency:
+  group: ${deployAppAction}
 jobs:
   ${deployAppAction}:
     permissions:

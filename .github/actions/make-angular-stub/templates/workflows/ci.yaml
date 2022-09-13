@@ -9,6 +9,8 @@ env:
   REGISTRY: containers.atc-github.azure.cloud.bmw
 jobs:
   ci-{{ .Env.NAME }}:
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -74,3 +76,7 @@ jobs:
         if: ${{"{{"}} steps.cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' {{"}}"}}
         working-directory: ${{"{{"}} env.DEPLOYMENT {{"}}"}}
         run: docker push ${{"{{"}} env.IMAGE {{"}}"}}
+  deploy:
+    needs: ci-{{ .Env.NAME }}
+    if: ${{ needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' }}
+    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main

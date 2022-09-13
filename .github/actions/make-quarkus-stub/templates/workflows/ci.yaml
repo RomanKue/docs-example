@@ -6,8 +6,11 @@ on:
   pull_request:
 env:
   DEPLOYMENT: {{ .Env.NAME }}
+  REGISTRY: containers.atc-github.azure.cloud.bmw
 jobs:
   ci-{{ .Env.NAME }}:
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -38,7 +41,7 @@ jobs:
         working-directory: ${{"{{"}} env.DEPLOYMENT {{"}}"}}
         # see https://quarkus.io/guides/container-image#container-image-options
         env:
-          QUARKUS_CONTAINER_IMAGE_REGISTRY: containers.atc-github.azure.cloud.bmw
+          QUARKUS_CONTAINER_IMAGE_REGISTRY: ${{"{{"}} env.REGISTRY {{"}}"}}
           QUARKUS_CONTAINER_IMAGE_USERNAME: USERNAME
           QUARKUS_CONTAINER_IMAGE_PASSWORD: ${{"{{"}} secrets.GITHUB_TOKEN {{"}}"}}
           QUARKUS_CONTAINER_IMAGE_NAME: ${{"{{"}} github.event.repository.name {{"}}"}}-${{"{{"}} env.DEPLOYMENT {{"}}"}}
@@ -47,3 +50,7 @@ jobs:
           QUARKUS_CONTAINER_IMAGE_BUILD: "true"
           QUARKUS_CONTAINER_IMAGE_PUSH: ${{"{{"}} github.ref == 'refs/heads/main' {{"}}"}}
         run: mvn clean package
+  deploy:
+    needs: ci-{{ .Env.NAME }}
+    if: ${{ needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' }}
+    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main

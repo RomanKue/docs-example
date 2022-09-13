@@ -2,6 +2,7 @@
 
 set -xeu pipefail
 
+echo "ORG=$ORG"
 echo "NAME=$NAME"
 REPO_PATH=$(git rev-parse --show-toplevel)
 REPO=$(basename "$REPO_PATH")

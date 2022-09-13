@@ -2,8 +2,12 @@
 
 set -xeu pipefail
 
+echo "ORG=$ORG"
 echo "NAME=$NAME"
 echo "ANGULAR_VERSION=$ANGULAR_VERSION"
+REPO_PATH=$(git rev-parse --show-toplevel)
+REPO=$(basename "$REPO_PATH")
+echo "REPO=$REPO"
 
 SCRIPT=$(realpath "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")

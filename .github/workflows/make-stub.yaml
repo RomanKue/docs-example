@@ -44,6 +44,7 @@ jobs:
       - name: make-angular-stub
         if: ${{ github.event.inputs.type == 'angular' }}
         env:
+          ORG: ${{ github.repository_owner }}
           NAME: ${{ github.event.inputs.name }}
           WORKING_DIRECTORY: ${{ github.event.inputs.repository }}
           NODE_VERSION: '16'
@@ -52,6 +53,7 @@ jobs:
       - name: make-quarkus-stub
         if: ${{ github.event.inputs.type == 'quarkus' }}
         env:
+          ORG: ${{ github.repository_owner }}
           NAME: ${{ github.event.inputs.name }}
           WORKING_DIRECTORY: ${{ github.event.inputs.repository }}
           NODE_VERSION: '16'

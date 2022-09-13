@@ -8,6 +8,8 @@ on:
     branches:
       - int
       - prod
+  workflow_dispatch:
+  workflow_call:
 concurrency:
   group: ${deployAppAction}
 jobs:

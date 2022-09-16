@@ -5,6 +5,8 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+import {SimpleUser} from '../../teams/response/simple-user.js';
+
 /**
  * Repository invitations let you manage who you collaborate with.
  */
@@ -14,8 +16,8 @@ export interface RepositoryInvitation {
    */
   id: number;
   repository: MinimalRepository;
-  invitee: null | SimpleUser3;
-  inviter: null | SimpleUser4;
+  invitee: null | SimpleUser;
+  inviter: null | SimpleUser;
   /**
    * The permission associated with the invitation.
    */
@@ -31,8 +33,10 @@ export interface RepositoryInvitation {
   url: string;
   html_url: string;
   node_id: string;
+
   [k: string]: unknown;
 }
+
 /**
  * Minimal Repository
  */
@@ -137,35 +141,10 @@ export interface MinimalRepository {
   watchers?: number;
   allow_forking?: boolean;
   web_commit_signoff_required?: boolean;
+
   [k: string]: unknown;
 }
-/**
- * Simple User
- */
-export interface SimpleUser {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
+
 /**
  * A git repository
  */
@@ -181,7 +160,7 @@ export interface Repository {
   name: string;
   full_name: string;
   license: null | LicenseSimple;
-  organization?: null | SimpleUser1;
+  organization?: null | SimpleUser;
   forks: number;
   permissions?: {
     admin: boolean;
@@ -191,7 +170,7 @@ export interface Repository {
     maintain?: boolean;
     [k: string]: unknown;
   };
-  owner: SimpleUser2;
+  owner: SimpleUser;
   /**
    * Whether the repository is private or public.
    */
@@ -509,8 +488,10 @@ export interface Repository {
    * Whether anonymous git access is enabled for this repository
    */
   anonymous_access_enabled?: boolean;
+
   [k: string]: unknown;
 }
+
 /**
  * License Simple
  */
@@ -521,62 +502,10 @@ export interface LicenseSimple {
   spdx_id: string | null;
   node_id: string;
   html_url?: string;
+
   [k: string]: unknown;
 }
-/**
- * Simple User
- */
-export interface SimpleUser1 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser2 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
+
 /**
  * Code Of Conduct
  */
@@ -586,59 +515,6 @@ export interface CodeOfConduct {
   url: string;
   body?: string;
   html_url: string | null;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser3 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser4 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
+
   [k: string]: unknown;
 }

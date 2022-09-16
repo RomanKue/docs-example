@@ -3,12 +3,13 @@ import * as github from '@actions/github';
 import {IssueComment} from './github/api/issues/response/issue-comment.js';
 import {getIssue} from './github/api/issues/issues.js';
 import {Issue} from './github/api/issues/response/issue.js';
+import {getInput} from './github/input.js';
 
 /**
  * wrapper for main functions with error handling and global debug logging
  */
 export const run = (callback: () => Promise<void>) => {
-  const workingDirectory = core.getInput('working-directory');
+  const workingDirectory = getInput('working-directory');
   if (workingDirectory) {
     core.debug(`changing to: ${workingDirectory}`);
     process.chdir(workingDirectory);

@@ -5,6 +5,8 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+import {SimpleUser} from '../../teams/response/simple-user.js';
+
 /**
  * A git repository
  */
@@ -30,7 +32,7 @@ export interface Repository {
     maintain?: boolean;
     [k: string]: unknown;
   };
-  owner: SimpleUser1;
+  owner: SimpleUser;
   /**
    * Whether the repository is private or public.
    */
@@ -356,59 +358,5 @@ export interface LicenseSimple {
   spdx_id: string | null;
   node_id: string;
   html_url?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser1 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
   [k: string]: unknown;
 }

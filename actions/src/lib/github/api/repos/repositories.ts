@@ -8,6 +8,7 @@ import {RepositoryInvitation} from './response/repository-invitation.js';
 import {FileCommit} from './response/file-commit.js';
 import {Topic} from './response/topic.js';
 import {Content} from './response/content.js';
+import {Environment} from './response/environment.js';
 
 type ReposApi = RestApi['repos'];
 
@@ -111,4 +112,20 @@ export const getRepositoryContent = async (
     ...options
   });
   return response.data as Content;
+};
+
+/**
+ * https://docs.github.com/en/rest/deployments/environments#create-or-update-an-environment
+ */
+export const createOrUpdateAnEnvironment = async (
+  options: {
+    environment_name: string,
+  } & Partial<Parameters<ReposApi['createOrUpdateEnvironment']>[0]>
+): Promise<Environment> => {
+  const response = await getOctokitApi().rest.repos.createOrUpdateEnvironment({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  });
+  return response.data as Environment;
 };

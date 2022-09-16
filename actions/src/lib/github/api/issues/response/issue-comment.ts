@@ -49,34 +49,6 @@ export interface IssueComment {
   [k: string]: unknown;
 }
 
-/**
- * Simple User
- */
-export interface SimpleUser {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-
-  [k: string]: unknown;
-}
 
 /**
  * GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub.
@@ -91,7 +63,7 @@ export interface GitHubApp {
    */
   slug?: string;
   node_id: string;
-  owner: null | SimpleUser1;
+  owner: null | SimpleUser;
   /**
    * The name of the GitHub app
    */
@@ -131,7 +103,7 @@ export interface GitHubApp {
 /**
  * Simple User
  */
-export interface SimpleUser1 {
+export interface SimpleUser {
   name?: string | null;
   email?: string | null;
   login: string;

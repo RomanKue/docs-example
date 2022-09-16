@@ -57,6 +57,12 @@ export const environments = {
   prod: 'prod',
 } as const;
 
+export const secretKeys = {
+  kubernetesToken: 'KUBERNETES_TOKEN',
+  kubernetesHost: 'KUBERNETES_HOST',
+  kubernetesNamespace: 'KUBERNETES_NAMESPACE',
+} as const;
+
 export const defaultTopics = {
   unityApp: 'unity-app',
 } as const;

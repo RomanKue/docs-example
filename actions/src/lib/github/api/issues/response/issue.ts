@@ -6,6 +6,7 @@
  */
 
 import {Label} from './label.js';
+import {SimpleUser} from './issue-comment.js';
 
 /**
  * How the author is associated with the repository.
@@ -60,8 +61,8 @@ export interface Issue {
    * Labels to associate with this issue; pass one or more label names to replace the set of labels on this issue; send an empty array to clear all labels from the issue; note that the labels are silently dropped for users without push access to the repository
    */
   labels: Label[];
-  assignee: null | SimpleUser1;
-  assignees?: SimpleUser2[] | null;
+  assignee: null | SimpleUser;
+  assignees?: SimpleUser[] | null;
   milestone: null | Milestone;
   locked: boolean;
   active_lock_reason?: string | null;
@@ -78,7 +79,7 @@ export interface Issue {
   created_at: string;
   updated_at: string;
   draft?: boolean;
-  closed_by?: null | SimpleUser4;
+  closed_by?: null | SimpleUser;
   body_html?: string;
   body_text?: string;
   timeline_url?: string;
@@ -86,87 +87,6 @@ export interface Issue {
   performed_via_github_app?: null | GitHubApp;
   author_association: AuthorAssociation;
   reactions?: ReactionRollup;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser1 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser2 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
   [k: string]: unknown;
 }
 /**
@@ -191,67 +111,13 @@ export interface Milestone {
    */
   title: string;
   description: string | null;
-  creator: null | SimpleUser3;
+  creator: null | SimpleUser;
   open_issues: number;
   closed_issues: number;
   created_at: string;
   updated_at: string;
   closed_at: string | null;
   due_on: string | null;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser3 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser4 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
   [k: string]: unknown;
 }
 /**
@@ -269,7 +135,7 @@ export interface Repository {
   name: string;
   full_name: string;
   license: null | LicenseSimple;
-  organization?: null | SimpleUser5;
+  organization?: null | SimpleUser;
   forks: number;
   permissions?: {
     admin: boolean;
@@ -279,7 +145,7 @@ export interface Repository {
     maintain?: boolean;
     [k: string]: unknown;
   };
-  owner: SimpleUser6;
+  owner: SimpleUser;
   /**
    * Whether the repository is private or public.
    */
@@ -608,60 +474,6 @@ export interface LicenseSimple {
   [k: string]: unknown;
 }
 /**
- * Simple User
- */
-export interface SimpleUser5 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser6 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
  * GitHub apps are a new way to extend GitHub. They can be installed directly on organizations and user accounts and granted access to specific repositories. They come with granular permissions and built-in webhooks. GitHub apps are first class actors within GitHub.
  */
 export interface GitHubApp {
@@ -674,7 +486,7 @@ export interface GitHubApp {
    */
   slug?: string;
   node_id: string;
-  owner: null | SimpleUser7;
+  owner: null | SimpleUser;
   /**
    * The name of the GitHub app
    */
@@ -707,33 +519,6 @@ export interface GitHubApp {
   client_secret?: string;
   webhook_secret?: string | null;
   pem?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser7 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
   [k: string]: unknown;
 }
 export interface ReactionRollup {

@@ -1,13 +1,14 @@
 import {AppSpec, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
-import {defaultTopics, environments, makeStubWorkflowId, unityRepositoryRoles} from '../config.js';
+import {defaultTopics, environments, makeStubWorkflowId, secretKeys, unityRepositoryRoles} from '../config.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
 import {repositoriesUtils} from '../../github/api/repos/index.js';
 import {
   addARepositoryCollaborator,
   createAnOrganizationRepository,
+  createOrUpdateAnEnvironment,
   replaceAllRepositoryTopics
 } from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
@@ -19,6 +20,8 @@ import actions from '../../github/api/actions/index.js';
 import {Issue} from '../../github/api/issues/response/issue.js';
 import {ReadonlyDeep} from 'type-fest';
 import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
+import {getInput} from '../../github/input.js';
+import {createServiceAccount} from './k8s.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -99,6 +102,19 @@ export const createRepository = async (
   }
 
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
+
+  for (const env of Object.values(environments)) {
+    await createOrUpdateAnEnvironment({
+      repo: appRepository.name,
+      environment_name: env
+    });
+  }
+
+  // currently this is set up for int only
+  const token = await createServiceAccount(environments.int, appRepository.name);
+  await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesToken, token);
+  await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesHost, getInput('INT_KUBERNETES_HOST'));
+  await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesNamespace, getInput('INT_KUBERNETES_NAMESPACE'));
 
   let appMembers = issue.user ? [issue.user] : [];
   appMembers = await removeOrgMembers(appMembers);

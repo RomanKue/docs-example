@@ -13,7 +13,7 @@ concurrency:
   group: ${{ github.event.issue.number }}
   cancel-in-progress: false
 jobs:
-  new-app-issue:
+  issue-updated:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
     permissions: write-all
@@ -25,4 +25,10 @@ jobs:
         uses: ./.github/actions/issue-updated
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+          INT_KUBERNETES_TOKEN: ${{ secrets.INT_KUBERNETES_TOKEN }}
+          INT_KUBERNETES_HOST: ${{ secrets.INT_KUBERNETES_HOST }}
+          INT_KUBERNETES_NAMESPACE: ${{ secrets.INT_KUBERNETES_NAMESPACE }}
+          PROD_KUBERNETES_TOKEN: ${{ secrets.PROD_KUBERNETES_TOKEN }}
+          PROD_KUBERNETES_HOST: ${{ secrets.PROD_KUBERNETES_HOST }}
+          PROD_KUBERNETES_NAMESPACE: ${{ secrets.PROD_KUBERNETES_NAMESPACE }}
           working-directory: actions

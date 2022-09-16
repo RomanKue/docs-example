@@ -139,7 +139,7 @@ export interface FullRepository {
   subscribers_count: number;
   network_count: number;
   license: null | LicenseSimple1;
-  organization?: null | SimpleUser3;
+  organization?: null | SimpleUser;
   parent?: Repository1;
   source?: Repository2;
   forks: number;
@@ -169,33 +169,6 @@ export interface FullRepository {
   [k: string]: unknown;
 }
 /**
- * Simple User
- */
-export interface SimpleUser {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
  * A git repository
  */
 export interface Repository {
@@ -210,7 +183,7 @@ export interface Repository {
   name: string;
   full_name: string;
   license: null | LicenseSimple;
-  organization?: null | SimpleUser1;
+  organization?: null | SimpleUser;
   forks: number;
   permissions?: {
     admin: boolean;
@@ -220,7 +193,7 @@ export interface Repository {
     maintain?: boolean;
     [k: string]: unknown;
   };
-  owner: SimpleUser2;
+  owner: SimpleUser;
   /**
    * Whether the repository is private or public.
    */
@@ -549,60 +522,6 @@ export interface LicenseSimple {
   [k: string]: unknown;
 }
 /**
- * Simple User
- */
-export interface SimpleUser1 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser2 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
  * License Simple
  */
 export interface LicenseSimple1 {
@@ -617,7 +536,7 @@ export interface LicenseSimple1 {
 /**
  * Simple User
  */
-export interface SimpleUser3 {
+export interface SimpleUser {
   name?: string | null;
   email?: string | null;
   login: string;
@@ -656,7 +575,7 @@ export interface Repository1 {
   name: string;
   full_name: string;
   license: null | LicenseSimple2;
-  organization?: null | SimpleUser4;
+  organization?: null | SimpleUser;
   forks: number;
   permissions?: {
     admin: boolean;
@@ -666,7 +585,7 @@ export interface Repository1 {
     maintain?: boolean;
     [k: string]: unknown;
   };
-  owner: SimpleUser5;
+  owner: SimpleUser;
   /**
    * Whether the repository is private or public.
    */
@@ -995,60 +914,6 @@ export interface LicenseSimple2 {
   [k: string]: unknown;
 }
 /**
- * Simple User
- */
-export interface SimpleUser4 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser5 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
  * A git repository
  */
 export interface Repository2 {
@@ -1063,7 +928,7 @@ export interface Repository2 {
   name: string;
   full_name: string;
   license: null | LicenseSimple3;
-  organization?: null | SimpleUser6;
+  organization?: null | SimpleUser;
   forks: number;
   permissions?: {
     admin: boolean;
@@ -1073,7 +938,7 @@ export interface Repository2 {
     maintain?: boolean;
     [k: string]: unknown;
   };
-  owner: SimpleUser7;
+  owner: SimpleUser;
   /**
    * Whether the repository is private or public.
    */
@@ -1399,60 +1264,6 @@ export interface LicenseSimple3 {
   spdx_id: string | null;
   node_id: string;
   html_url?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser6 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
-  [k: string]: unknown;
-}
-/**
- * Simple User
- */
-export interface SimpleUser7 {
-  name?: string | null;
-  email?: string | null;
-  login: string;
-  id: number;
-  node_id: string;
-  avatar_url: string;
-  gravatar_id: string | null;
-  url: string;
-  html_url: string;
-  followers_url: string;
-  following_url: string;
-  gists_url: string;
-  starred_url: string;
-  subscriptions_url: string;
-  organizations_url: string;
-  repos_url: string;
-  events_url: string;
-  received_events_url: string;
-  type: string;
-  site_admin: boolean;
-  starred_at?: string;
   [k: string]: unknown;
 }
 /**

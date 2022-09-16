@@ -13,6 +13,10 @@ import {partialMock} from '../../mock/partial-mock.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import orgs from '../../github/api/orgs/index.js';
 import {Issue, SimpleUser} from '../../github/api/issues/response/issue.js';
+import {Environment} from '../../github/api/repos/response/environment.js';
+import * as k8s from './k8s.js';
+import * as input from '../../github/input.js';
+import {repositoriesUtils} from '../../github/api/repos/index.js';
 
 
 describe('index', () => {
@@ -28,8 +32,13 @@ describe('index', () => {
     jest.spyOn(repositoris, 'createOrUpdateFileContents').mockResolvedValue(partialMock<FileCommit>({commit: {sha: 'foo'}}));
     jest.spyOn(repositoris, 'addARepositoryCollaborator').mockResolvedValue(partialMock<RepositoryInvitation>());
     jest.spyOn(repositoris, 'replaceAllRepositoryTopics').mockResolvedValue(partialMock<Topic>());
+    jest.spyOn(repositoris, 'createOrUpdateAnEnvironment').mockResolvedValue(partialMock<Environment>());
+    jest.spyOn(repositoriesUtils, 'createEnvironmentSecret').mockResolvedValue();
     jest.spyOn(git, 'createAReference').mockResolvedValue(partialMock<GitReference>());
     jest.spyOn(orgs, 'listOrganizationMembers').mockResolvedValue([]);
+    jest.spyOn(k8s, 'createServiceAccount').mockResolvedValue('token-string');
+
+    jest.spyOn(input, 'getInput').mockReturnValue('foo');
   });
   describe('createRepository', () => {
     it('should create repo when called with v1beta1 app', async () => {
@@ -39,7 +48,12 @@ describe('index', () => {
       expect(repositoris.addARepositoryCollaborator).toHaveBeenCalledTimes(1);
       expect(repositoris.listOrganizationRepositories).toHaveBeenCalledTimes(1);
       expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledTimes(1);
+      expect(repositoris.createOrUpdateAnEnvironment).toHaveBeenCalledTimes(2);
       expect(repositoris.replaceAllRepositoryTopics).toHaveBeenCalledTimes(1);
+
+      expect(k8s.createServiceAccount).toHaveBeenCalledTimes(1);
+
+      expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(3);
 
       expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledWith(expect.objectContaining({visibility: 'private'}));
     });

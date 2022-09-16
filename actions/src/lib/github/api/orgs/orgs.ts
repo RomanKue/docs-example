@@ -1,7 +1,7 @@
 import * as github from '@actions/github';
-import {SimpleUser} from './response/simple-user.js';
 import {RestApi} from '../rest.js';
 import {getOctokitApi} from '../../octokit.js';
+import {SimpleUser} from '../teams/response/simple-user.js';
 
 type OrgsApi = RestApi['orgs'];
 

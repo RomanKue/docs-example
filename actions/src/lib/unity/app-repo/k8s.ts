@@ -179,7 +179,15 @@ export const createServiceAccount = async (
       apiGroup: 'rbac.authorization.k8s.io',
       kind: 'Role',
       name: name,
-    }
+    },
+    subjects: [
+      {
+        kind: `ServiceAccount`,
+        name: name,
+        namespace: getCurrentNamespace(kc)
+      }
+    ]
+
   });
 
   await upsertSecret(kc, {

@@ -2,7 +2,6 @@ import {AppSpec, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {defaultTopics, environments, makeStubWorkflowId, unityRepositoryRoles} from '../config.js';
-import {createAReference} from '../../github/api/git/git.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
 import {repositoriesUtils} from '../../github/api/repos/index.js';
@@ -100,14 +99,6 @@ export const createRepository = async (
   }
 
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
-
-  for (const defaultBranch of Object.values(environments)) {
-    await createAReference({
-      repo: appRepository.name,
-      ref: `refs/heads/${defaultBranch}`,
-      sha: commit.commit.sha ?? ''
-    });
-  }
 
   let appMembers = issue.user ? [issue.user] : [];
   appMembers = await removeOrgMembers(appMembers);

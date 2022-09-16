@@ -18,10 +18,7 @@ on:
       environment:
         required: true
         description: environment to deploy to
-        type: choice
-        options:
-          - int
-          - prod
+        type: string
 concurrency:
   group: ${deployAppAction}
 jobs:

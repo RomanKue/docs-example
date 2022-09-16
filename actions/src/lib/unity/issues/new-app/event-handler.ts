@@ -10,7 +10,7 @@ import {approveIssue} from './transitions/approve.js';
 import {deliver} from './transitions/deliver.js';
 import {commentOnIssue} from '../../../github/api/issues/issues.js';
 
-export const handleIssueChange = async (issue: Issue): Promise<void> => {
+export const handleNewAppIssueChange = async (issue: Issue): Promise<void> => {
   const issueState = getIssueState(issue);
   switch (issueState) {
   case 'waiting for review':
@@ -34,7 +34,7 @@ export const handleIssueChange = async (issue: Issue): Promise<void> => {
 /**
  * certain comments will trigger bot actions, this handler defines which comments are 'magic'
  */
-export const handleMagicComments = async (issue: Issue, comment: IssueComment) => {
+export const handleNewAppMagicComments = async (issue: Issue, comment: IssueComment) => {
   if (!isNewAppIssue(issue)) {
     core.info(`ignoring comment, since this issue is not a new-app issue.`);
     return;

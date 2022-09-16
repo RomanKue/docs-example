@@ -1,5 +1,5 @@
 import {handleWorkflowEvent, run} from '../lib/run.js';
-import {handleIssueChange, handleMagicComments} from '../lib/unity/issues/new-app/event-handler.js';
+import {handleIssueChange, handleMagicComments} from '../lib/unity/issues/index.js';
 
 run(async () => {
   await handleWorkflowEvent({

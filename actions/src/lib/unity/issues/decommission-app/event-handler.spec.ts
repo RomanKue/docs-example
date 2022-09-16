@@ -4,7 +4,7 @@ import {IssueComment} from '../../../github/api/issues/response/issue-comment.js
 import * as reviewIssue from './transitions/review.js';
 import {labels, magicComments, unityBot} from '../../config.js';
 import {Label} from '../../../github/api/issues/response/label.js';
-import {handleIssueChange, handleMagicComments} from './event-handler.js';
+import {handleDecommissionAppIssueChange, handleDecommissionAppMagicComments} from './event-handler.js';
 import {jest} from '@jest/globals';
 import issues from '../../../github/api/issues/index.js';
 
@@ -19,7 +19,7 @@ describe('event-handler.ts', () => {
     jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
     jest.spyOn(reviewIssue, 'reviewIssue').mockResolvedValue();
   });
-  describe('handleIssueChange', () => {
+  describe('handleDecommissionAppIssueChange', () => {
     it('should review issue when issue is waiting for review', async () => {
       issue = partialMock<Issue>({
         user: user,
@@ -28,7 +28,7 @@ describe('event-handler.ts', () => {
           partialMock<Label>({name: labels.waitingForReview}),
         ]
       });
-      await handleIssueChange(issue);
+      await handleDecommissionAppIssueChange(issue);
       expect(reviewIssue.reviewIssue).toHaveBeenCalled();
     });
     it('should request approval issue when issue is waiting for approval', async () => {
@@ -39,7 +39,7 @@ describe('event-handler.ts', () => {
           partialMock<Label>({name: labels.waitingForApproval}),
         ]
       });
-      await handleIssueChange(issue);
+      await handleDecommissionAppIssueChange(issue);
       expect(reviewIssue.reviewIssue).not.toHaveBeenCalled();
     });
     it('should do nothing when issue is delivered', async () => {
@@ -50,11 +50,11 @@ describe('event-handler.ts', () => {
           partialMock<Label>({name: labels.delivered}),
         ]
       });
-      await handleIssueChange(issue);
+      await handleDecommissionAppIssueChange(issue);
       expect(reviewIssue.reviewIssue).not.toHaveBeenCalled();
     });
   });
-  describe('handleMagicComments', () => {
+  describe('handleDecommissionAppMagicComments', () => {
     it('should ignore comment when magic comment is from unity bot', async () => {
       issue = partialMock<Issue>({
         user: user,
@@ -64,7 +64,7 @@ describe('event-handler.ts', () => {
         ]
       });
       comment = partialMock<IssueComment>({user: partialMock<SimpleUser>({login: unityBot}), body: `@${unityBot} foo`});
-      await handleMagicComments(issue, comment);
+      await handleDecommissionAppMagicComments(issue, comment);
       expect(issues.commentOnIssue).not.toHaveBeenCalled();
     });
     it('should comment when magic comment is not understood', async () => {
@@ -76,7 +76,7 @@ describe('event-handler.ts', () => {
         ]
       });
       comment = partialMock<IssueComment>({user: user, body: `@${unityBot} foo`});
-      await handleMagicComments(issue, comment);
+      await handleDecommissionAppMagicComments(issue, comment);
       expect(issues.commentOnIssue).toHaveBeenCalledWith(
         expect.objectContaining({
           body:
@@ -94,7 +94,7 @@ describe('event-handler.ts', () => {
         ]
       });
       comment = partialMock<IssueComment>({user: user, body: `@${unityBot} ${magicComments.review}`});
-      await handleMagicComments(issue, comment);
+      await handleDecommissionAppMagicComments(issue, comment);
       expect(issues.commentOnIssue).toHaveBeenCalledWith(
         expect.objectContaining({
           body: expect.stringContaining('I will start with that right away...')
@@ -110,7 +110,7 @@ describe('event-handler.ts', () => {
         ]
       });
       comment = partialMock<IssueComment>({user: user, body: `@${unityBot} ${magicComments.review}`});
-      await handleMagicComments(issue, comment);
+      await handleDecommissionAppMagicComments(issue, comment);
       expect(issues.commentOnIssue).toHaveBeenCalledWith(
         expect.objectContaining({
           body: expect.stringContaining('Unfortunately, I can\'t review your issue, as it is not labeled with "waiting for review".')
@@ -125,7 +125,7 @@ describe('event-handler.ts', () => {
         ]
       });
       comment = partialMock<IssueComment>({user: user, body: `@${unityBot} ${magicComments.lgtm}`});
-      await handleMagicComments(issue, comment);
+      await handleDecommissionAppMagicComments(issue, comment);
       expect(issues.commentOnIssue).toHaveBeenCalledWith(
         expect.objectContaining({
           body: expect.stringContaining('@q123456 I understood that you want me to approve the issue.')
@@ -140,7 +140,7 @@ describe('event-handler.ts', () => {
         ]
       });
       comment = partialMock<IssueComment>({user: user, body: `@${unityBot} ${magicComments.lgtm}`});
-      await handleMagicComments(issue, comment);
+      await handleDecommissionAppMagicComments(issue, comment);
       expect(issues.commentOnIssue).toHaveBeenCalledWith(
         expect.objectContaining({
           body: expect.stringContaining('Unfortunately, I can\'t approve your issue, as it is not labeled with "waiting for approval".')

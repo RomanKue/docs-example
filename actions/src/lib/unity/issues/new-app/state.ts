@@ -3,6 +3,11 @@ import {Issue} from '../../../github/api/issues/response/issue.js';
 import {setLabelsForAnIssue} from '../../../github/api/issues/issues.js';
 import * as core from '@actions/core';
 
+export const issueType = {
+  newApp: labels.newApp,
+  decommissionApp: labels.decommissionApp,
+} as const;
+
 export const issueState = {
   waitingForReview: labels.waitingForReview,
   waitingForApproval: labels.waitingForApproval,

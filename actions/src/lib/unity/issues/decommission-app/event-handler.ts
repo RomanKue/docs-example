@@ -10,7 +10,7 @@ import {requestApproval} from './transitions/request-approval.js';
 import {deliver} from './transitions/deliver.js';
 import {approveIssue} from './transitions/approve.js';
 
-export const handleIssueChange = async (issue: Issue): Promise<void> => {
+export const handleDecommissionAppIssueChange = async (issue: Issue): Promise<void> => {
   const issueState = getIssueState(issue);
   switch (issueState) {
   case 'waiting for review':
@@ -34,7 +34,7 @@ export const handleIssueChange = async (issue: Issue): Promise<void> => {
 /**
  * certain comments will trigger bot actions, this handler defines which comments are 'magic'
  */
-export const handleMagicComments = async (issue: Issue, comment: IssueComment) => {
+export const handleDecommissionAppMagicComments = async (issue: Issue, comment: IssueComment) => {
   if (!isDecommissionAppIssue(issue)) {
     core.info(`ignoring comment, since this issue is not a decommission-app issue.`);
     return;

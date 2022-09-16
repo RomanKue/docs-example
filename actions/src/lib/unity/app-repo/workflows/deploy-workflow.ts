@@ -28,10 +28,14 @@ jobs:
       id-token: write
     runs-on: atc-ubuntu-latest
     timeout-minutes: 30
+    environment: \${{ github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v3
       - uses: unity/${deployAppAction}@v1
         with:
           environment: \${{ github.event.inputs.environment }}
+          KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
+          KUBERNETES_HOST: \${{ secrets.KUBERNETES_HOST }}
+          KUBERNETES_NAMESPACE: \${{ secrets.KUBERNETES_NAMESPACE }}
     `.trim();
 

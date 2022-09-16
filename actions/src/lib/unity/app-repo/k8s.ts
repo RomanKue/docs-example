@@ -1,5 +1,5 @@
 import * as k8s from '@kubernetes/client-node';
-import {CoreV1Api, KubeConfig, RbacAuthorizationV1Api} from '@kubernetes/client-node';
+import {CoreV1Api, HttpError, KubeConfig, RbacAuthorizationV1Api} from '@kubernetes/client-node';
 import {base64Decode} from '../../strings/encoding.js';
 import {ReadonlyDeep} from 'type-fest';
 import {getInput} from '../../github/input.js';
@@ -33,14 +33,28 @@ const getLabels = (name: string) => {
   };
 };
 
+/**
+ * check for not found HTTP response
+ */
+const notFound = async <T>(cb: () => Promise<T>) => {
+  try {
+    return await cb();
+  } catch (e) {
+    if (e instanceof HttpError && e.statusCode === constants.HTTP_STATUS_NOT_FOUND) {
+      return false;
+    }
+    throw e;
+  }
+};
+
 export const upsertServiceAccount = async (kc: KubeConfig, body: Parameters<CoreV1Api['createNamespacedServiceAccount']>[1]) => {
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);
-  if ((await coreV1API.readNamespacedServiceAccount(name, namespace)).response.statusCode === constants.HTTP_STATUS_NOT_FOUND) {
-    await coreV1API.createNamespacedServiceAccount(namespace, body);
-  } else {
+  if (await notFound(async () => await coreV1API.readNamespacedServiceAccount(name, namespace))) {
     await coreV1API.replaceNamespacedServiceAccount(name, namespace, body);
+  } else {
+    await coreV1API.createNamespacedServiceAccount(namespace, body);
   }
 };
 
@@ -48,10 +62,10 @@ export const upsertSecret = async (kc: KubeConfig, body: Parameters<CoreV1Api['c
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);
-  if ((await coreV1API.readNamespacedSecret(name, namespace)).response.statusCode === constants.HTTP_STATUS_NOT_FOUND) {
-    await coreV1API.createNamespacedSecret(namespace, body);
-  } else {
+  if (await notFound(async () => await coreV1API.readNamespacedSecret(name, namespace))) {
     await coreV1API.replaceNamespacedSecret(name, namespace, body);
+  } else {
+    await coreV1API.createNamespacedSecret(namespace, body);
   }
 };
 
@@ -59,10 +73,10 @@ export const upsertRole = async (kc: KubeConfig, body: Parameters<RbacAuthorizat
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const rbacAuthorizationV1Api = kc.makeApiClient(k8s.RbacAuthorizationV1Api);
-  if ((await rbacAuthorizationV1Api.readNamespacedRole(name, namespace)).response.statusCode === constants.HTTP_STATUS_NOT_FOUND) {
-    await rbacAuthorizationV1Api.createNamespacedRole(namespace, body);
-  } else {
+  if (await notFound(async () => await rbacAuthorizationV1Api.readNamespacedRole(name, namespace))) {
     await rbacAuthorizationV1Api.replaceNamespacedRole(name, namespace, body);
+  } else {
+    await rbacAuthorizationV1Api.createNamespacedRole(namespace, body);
   }
 };
 
@@ -70,10 +84,10 @@ export const upsertRoleBinding = async (kc: KubeConfig, body: Parameters<RbacAut
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const rbacAuthorizationV1Api = kc.makeApiClient(k8s.RbacAuthorizationV1Api);
-  if ((await rbacAuthorizationV1Api.readNamespacedRoleBinding(name, namespace)).response.statusCode === constants.HTTP_STATUS_NOT_FOUND) {
-    await rbacAuthorizationV1Api.createNamespacedRoleBinding(namespace, body);
-  } else {
+  if (await notFound(async () => await rbacAuthorizationV1Api.readNamespacedRoleBinding(name, namespace))) {
     await rbacAuthorizationV1Api.replaceNamespacedRoleBinding(name, namespace, body);
+  } else {
+    await rbacAuthorizationV1Api.createNamespacedRoleBinding(namespace, body);
   }
 };
 

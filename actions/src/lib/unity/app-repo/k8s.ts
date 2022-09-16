@@ -83,7 +83,7 @@ const getKubeConfig = (environment: Environment) => {
     const host = getInput('INT_KUBERNETES_HOST');
     const namespace = getInput('INT_KUBERNETES_NAMESPACE');
     const token = getInput('INT_KUBERNETES_TOKEN');
-    kc.addCluster({name: environment, server: `https://${host}`, skipTLSVerify: false});
+    kc.addCluster({name: environment, server: `https://${host}`, skipTLSVerify: true});
     kc.addUser({name: environment, token: token});
     kc.addContext({
       name: environment,
@@ -97,7 +97,7 @@ const getKubeConfig = (environment: Environment) => {
     const host = getInput('PROD_KUBERNETES_HOST');
     const namespace = getInput('PROD_KUBERNETES_NAMESPACE');
     const token = getInput('PROD_KUBERNETES_TOKEN');
-    kc.addCluster({name: environment, server: `https://${host}`, skipTLSVerify: false});
+    kc.addCluster({name: environment, server: `https://${host}`, skipTLSVerify: true});
     kc.addUser({name: environment, token: token});
     kc.addContext({
       name: environment,

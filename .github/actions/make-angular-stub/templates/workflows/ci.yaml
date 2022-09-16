@@ -76,7 +76,18 @@ jobs:
         if: ${{"{{"}} steps.cache.outputs.cache-hit != 'true' && github.ref == 'refs/heads/main' {{"}}"}}
         working-directory: ${{"{{"}} env.DEPLOYMENT {{"}}"}}
         run: docker push ${{"{{"}} env.IMAGE {{"}}"}}
-  deploy:
-    needs: ci-{{ .Env.NAME }}
+  deploy-int:
+    needs:
+      - ci-{{ .Env.NAME }}
     if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
     uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
+    with:
+      environment: int
+  deploy-prod:
+    needs:
+      - ci-{{ .Env.NAME }}
+      - deploy-int
+    if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
+    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
+    with:
+      environment: prod

@@ -4,12 +4,24 @@ export const deployAppAction = 'deploy-unity-app';
 export const createDeployWorkflow = () => `
 name: ${deployAppAction}
 on:
-  push:
-    branches:
-      - int
-      - prod
   workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        description: environment to deploy to
+        type: choice
+        options:
+          - int
+          - prod
   workflow_call:
+    inputs:
+      environment:
+        required: true
+        description: environment to deploy to
+        type: choice
+        options:
+          - int
+          - prod
 concurrency:
   group: ${deployAppAction}
 jobs:
@@ -22,5 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: unity/${deployAppAction}@v1
+        with:
+          environment: \${{ github.event.inputs.environment }}
     `.trim();
 

@@ -1,5 +1,5 @@
-name: 'new-app-issue'
-description: 'Review an issue of type "New App".'
+name: 'issue-updated'
+description: handle an updated issue
 inputs:
   GITHUB_TOKEN:
     description: the GITHUB_TOKEN to authenticate to the API
@@ -10,4 +10,4 @@ inputs:
 
 runs:
   using: 'node16'
-  main: '../../../actions/dist/actions/new-app-issue.js'
+  main: '../../../actions/dist/actions/issue-updated.js'

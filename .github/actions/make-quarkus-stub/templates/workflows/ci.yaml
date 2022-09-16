@@ -54,10 +54,14 @@ jobs:
     needs:
       - ci-{{ .Env.NAME }}
     if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
-    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@int
+    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
+    with:
+      environment: int
   deploy-prod:
     needs:
       - ci-{{ .Env.NAME }}
       - deploy-int
     if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
-    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@prod
+    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
+    with:
+      environment: prod

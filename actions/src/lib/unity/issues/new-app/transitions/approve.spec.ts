@@ -1,5 +1,5 @@
 import {approveIssue} from './approve.js';
-import {Issue, SimpleUser} from '../../../../github/api/issues/response/issue.js';
+import {Issue} from '../../../../github/api/issues/response/issue.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
 import issues from '../../../../github/api/issues/index.js';
 import teams from '../../../../github/api/teams/index.js';
@@ -10,6 +10,7 @@ import {expect, jest} from '@jest/globals';
 import {getIssueState, issueState} from '../state.js';
 import {freeze, produce} from 'immer';
 import {partialMock} from '../../../../mock/partial-mock.js';
+import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {

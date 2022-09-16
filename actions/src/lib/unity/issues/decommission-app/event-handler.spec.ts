@@ -1,4 +1,4 @@
-import {Issue, SimpleUser} from '../../../github/api/issues/response/issue.js';
+import {Issue} from '../../../github/api/issues/response/issue.js';
 import {partialMock} from '../../../mock/partial-mock.js';
 import {IssueComment} from '../../../github/api/issues/response/issue-comment.js';
 import * as reviewIssue from './transitions/review.js';
@@ -7,6 +7,7 @@ import {Label} from '../../../github/api/issues/response/label.js';
 import {handleDecommissionAppIssueChange, handleDecommissionAppMagicComments} from './event-handler.js';
 import {jest} from '@jest/globals';
 import issues from '../../../github/api/issues/index.js';
+import {SimpleUser} from '../../../github/api/teams/response/simple-user.js';
 
 describe('event-handler.ts', () => {
   let issue: Issue;

@@ -12,11 +12,12 @@ import {Topic} from '../../github/api/repos/response/topic.js';
 import {partialMock} from '../../mock/partial-mock.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import orgs from '../../github/api/orgs/index.js';
-import {Issue, SimpleUser} from '../../github/api/issues/response/issue.js';
+import {Issue} from '../../github/api/issues/response/issue.js';
 import {Environment} from '../../github/api/repos/response/environment.js';
 import * as k8s from './k8s.js';
 import * as input from '../../github/input.js';
 import {repositoriesUtils} from '../../github/api/repos/index.js';
+import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
 
 
 describe('index', () => {

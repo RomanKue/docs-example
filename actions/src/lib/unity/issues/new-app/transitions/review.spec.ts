@@ -1,6 +1,6 @@
 import * as review from './review.js';
 import {checkAppName, checkAppSchema, checkTermsOfService, reviewIssue} from './review.js';
-import {Issue, SimpleUser} from '../../../../github/api/issues/response/issue.js';
+import {Issue} from '../../../../github/api/issues/response/issue.js';
 import {freeze, produce} from 'immer';
 import {partialMock} from '../../../../mock/partial-mock.js';
 import {labels} from '../../../config.js';
@@ -16,6 +16,7 @@ import {IssueComment} from '../../../../github/api/issues/response/issue-comment
 import {NewAppIssue} from '../new-app-issue.js';
 import {AppSpec, AppSpecV1Beta1, repoName} from '../../../app-spec.js';
 import {MinimalRepository} from '../../../../github/api/repos/response/minimal-repository.js';
+import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {

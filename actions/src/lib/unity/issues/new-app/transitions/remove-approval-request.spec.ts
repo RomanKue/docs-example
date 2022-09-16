@@ -1,4 +1,4 @@
-import {Issue, SimpleUser} from '../../../../github/api/issues/response/issue.js';
+import {Issue} from '../../../../github/api/issues/response/issue.js';
 import {partialMock} from '../../../../mock/partial-mock.js';
 import {freeze, produce} from 'immer';
 import {removeApprovalRequest} from './remove-approval-request.js';
@@ -9,6 +9,7 @@ import {IssueComment} from '../../../../github/api/issues/response/issue-comment
 import {labels} from '../../../config.js';
 import {jest} from '@jest/globals';
 import teams from '../../../../github/api/teams/index.js';
+import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {

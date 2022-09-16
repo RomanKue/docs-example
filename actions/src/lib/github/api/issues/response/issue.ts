@@ -5,8 +5,8 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
+import {SimpleUser} from '../../teams/response/simple-user.js';
 import {Label} from './label.js';
-import {SimpleUser} from './issue-comment.js';
 
 /**
  * How the author is associated with the repository.

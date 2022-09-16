@@ -1,6 +1,7 @@
 import {isMagicComment, isUnityBotComment, magicComments, unityBot} from './config.js';
 import {partialMock} from '../mock/partial-mock.js';
-import {IssueComment, SimpleUser} from '../github/api/issues/response/issue-comment.js';
+import {IssueComment} from '../github/api/issues/response/issue-comment.js';
+import {SimpleUser} from '../github/api/teams/response/simple-user.js';
 
 describe('config', () => {
   let user: SimpleUser;

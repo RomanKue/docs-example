@@ -1,4 +1,4 @@
-import {Issue, Repository, SimpleUser} from '../../../../github/api/issues/response/issue.js';
+import {Issue, Repository} from '../../../../github/api/issues/response/issue.js';
 import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
 import issues from '../../../../github/api/issues/index.js';
 import {lockAnIssue, setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
@@ -10,7 +10,7 @@ import {partialMock} from '../../../../mock/partial-mock.js';
 import * as repositories from '../../../../github/api/repos/repositories.js';
 import * as deliverModule from './deliver.js';
 import {closeWithComment, createNewApp, deliver} from './deliver.js';
-import {AppSpecV1Beta1} from '../../../app-spec.js';
+import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {

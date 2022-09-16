@@ -5,7 +5,7 @@ import {ReadonlyDeep} from 'type-fest';
 import {Repository} from './response/repository.js';
 import {createOrUpdateAnEnvironmentSecret, getAnEnvironmentPublicKey} from '../actions/actions.js';
 
-import {seal} from 'tweetsodium';
+import sodium from 'tweetsodium';
 
 export const isRepoExistent = async (appName: string | null | undefined): Promise<boolean> => {
   const newAppRepoName = repoName(appName);
@@ -52,7 +52,7 @@ export const updateFile = async (repo: string, path: string, content: string, br
 export const encrypt = (message: string, key: string) => {
   const messageBytes = Buffer.from(message);
   const keyBytes = Buffer.from(key, 'base64');
-  const encryptedBytes = seal(messageBytes, keyBytes);
+  const encryptedBytes = sodium.seal(messageBytes, keyBytes);
   return Buffer.from(encryptedBytes).toString('base64');
 };
 

@@ -190,11 +190,12 @@ export const createServiceAccount = async (
 
   });
 
+  const tokenSecretName = `${name}-service-account-token`;
   await upsertSecret(kc, {
     apiVersion: 'v1',
     kind: 'Secret',
     metadata: {
-      name,
+      name: tokenSecretName,
       labels: getLabels(name),
       annotations:
         {'kubernetes.io/service-account.name': name}
@@ -203,7 +204,7 @@ export const createServiceAccount = async (
   });
   let base64Token: string | undefined;
   while (!base64Token) {
-    const tokenSecret = await readSecret(kc, name);
+    const tokenSecret = await readSecret(kc, tokenSecretName);
     base64Token = tokenSecret.body?.data?.['token'];
   }
   return base64Decode(base64Token);

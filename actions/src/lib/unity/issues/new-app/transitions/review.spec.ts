@@ -47,8 +47,6 @@ I wish to run my app in UNITY. Here is the configuration I would like to start w
 \`\`\`yaml
 apiVersion: v1beta1
 name: my-app-name
-members: # dev ops team members that have access to the app
-  - qNumber: q123456
 \`\`\`
 
 **Application Components**
@@ -64,7 +62,6 @@ members: # dev ops team members that have access to the app
       jest.spyOn(requestApproval, 'requestApproval').mockResolvedValue();
       jest.spyOn(repositories, 'listOrganizationRepositories').mockResolvedValue([]);
       await reviewIssue(issue);
-      expect(users.getAUser).toHaveBeenCalled();
       expect(repositories.listOrganizationRepositories).toHaveBeenCalled();
       expect(requestApproval.requestApproval).toHaveBeenCalled();
     });
@@ -77,8 +74,6 @@ I wish to run my app in UNITY. Here is the configuration I would like to start w
 \`\`\`yaml
 apiVersion: v1beta1
 name: my-app-name
-members: # dev ops team members that have access to the app
-  - qNumber: q123456
 \`\`\`
 
 **Application Components**
@@ -119,9 +114,6 @@ members: # dev ops team members that have access to the app
       appSpec = {
         apiVersion: 'v1beta1',
         name: 'foo',
-        members: [
-          {qNumber: 'q123456'}
-        ]
       };
       jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
     });

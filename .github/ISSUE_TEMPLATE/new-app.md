@@ -12,8 +12,6 @@ I wish to run my app in UNITY. Here is the configuration I would like to start w
 ```yaml
 apiVersion: v1beta1
 name: <my-app-name>
-members: # dev ops team members that have access to the app
-  - qNumber: <q-number>
 ```
 
 **Application Components**

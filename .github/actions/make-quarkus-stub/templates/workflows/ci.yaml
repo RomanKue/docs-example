@@ -50,7 +50,14 @@ jobs:
           QUARKUS_CONTAINER_IMAGE_BUILD: "true"
           QUARKUS_CONTAINER_IMAGE_PUSH: ${{"{{"}} github.ref == 'refs/heads/main' {{"}}"}}
         run: mvn clean package
-  deploy:
-    needs: ci-{{ .Env.NAME }}
+  deploy-int:
+    needs:
+      - ci-{{ .Env.NAME }}
     if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
-    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
+    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@int
+  deploy-prod:
+    needs:
+      - ci-{{ .Env.NAME }}
+      - deploy-int
+    if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
+    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@prod

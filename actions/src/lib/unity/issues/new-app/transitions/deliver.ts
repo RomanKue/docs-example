@@ -6,8 +6,9 @@ import {lockAnIssue, updateAnIssue} from '../../../../github/api/issues/issues.j
 import {createRepository} from '../../../app-repo/index.js';
 import {Repository} from '../../../../github/api/repos/response/repository.js';
 import {addSimpleComment} from '../../../../github/api/issues/issues-utils.js';
+import {ReadonlyDeep} from 'type-fest';
 
-export const closeWithComment = async (issue: Issue, appRepository: Repository) => {
+export const closeWithComment = async (issue: Issue, appRepository: ReadonlyDeep<Repository>) => {
   const userLogin = issue.user?.login;
   await addSimpleComment(issue, user =>
     `🚀 @${userLogin} your app has been created!\n\nCheckout your [${appRepository.name}](${appRepository.html_url}) repository.`
@@ -21,14 +22,14 @@ export const closeWithComment = async (issue: Issue, appRepository: Repository) 
   });
 };
 
-export const createNewApp = async (issue: Issue): Promise<Repository> => {
+export const createNewApp = async (issue: Issue): Promise<ReadonlyDeep<Repository>> => {
   const newAppIssue = parseIssueBody(issue.body ?? '');
   let appSpec = newAppIssue.appSpec;
   if (!appSpec) {
     throw new Error(`could not parse appSpec from issue: ${JSON.stringify(issue, null, 2)}`);
   }
 
-  const {appSpec: updatedAppSpec, appRepository} = await createRepository(newAppIssue, appSpec);
+  const {appSpec: updatedAppSpec, appRepository} = await createRepository(issue, newAppIssue, appSpec);
 
   // if we ever continue to do something with appSpec, we need to continue with the updated one
   appSpec = updatedAppSpec;

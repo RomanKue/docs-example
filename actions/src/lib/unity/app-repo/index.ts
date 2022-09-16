@@ -1,7 +1,7 @@
-import {AppMember, AppSpec, isV1Beta1, repoName} from '../app-spec.js';
+import {AppSpec, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
-import {defaultBranches, defaultTopics, makeStubWorkflowId, unityRepositoryRoles} from '../config.js';
+import {defaultTopics, environments, makeStubWorkflowId, unityRepositoryRoles} from '../config.js';
 import {createAReference} from '../../github/api/git/git.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
@@ -17,34 +17,39 @@ import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {produce} from 'immer';
 import orgs from '../../github/api/orgs/index.js';
 import actions from '../../github/api/actions/index.js';
+import {Issue} from '../../github/api/issues/response/issue.js';
+import {ReadonlyDeep} from 'type-fest';
+import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
 
-export const appYamlPath = 'unity-app.yaml';
+export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
-const updateAppDeployments = async (appSpec: AppSpec, name: string, replicas = 2) => {
+const updateAppDeployments = async (appSpec: ReadonlyDeep<AppSpec>, name: string, replicas = 2) => {
   if (isV1Beta1(appSpec)) {
     appSpec = produce(appSpec, draft => {
       const deployments = draft.deployments ?? {};
       deployments[name] = {replicas};
       draft.deployments = deployments;
     });
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath, yaml.dump(appSpec));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(environments.int), yaml.dump(appSpec));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(environments.prod), yaml.dump(appSpec));
   }
   return appSpec;
 };
 
 
-export const removeOrgMembers = async (appMembers: AppMember[]) => {
+export const removeOrgMembers = async (appMembers: ReadonlyDeep<SimpleUser[]>) => {
   const orgMembers = (await orgs.listOrganizationMembers()).map(u => u.login);
   if (orgMembers.length >= 100) {
     throw new Error(`need to implement pagination, as there are more org members than can be fetched in one request: ${orgMembers.length}`);
   }
-  return appMembers.filter(m => !orgMembers.includes(m.qNumber));
+  return appMembers.filter(m => !orgMembers.includes(m.login));
 };
 
 export const createRepository = async (
-  newAppIssue: NewAppIssue,
-  appSpec: AppSpec
-): Promise<{ appSpec: AppSpec; appRepository: Repository }> => {
+  issue: ReadonlyDeep<Issue>,
+  newAppIssue: ReadonlyDeep<NewAppIssue>,
+  appSpec: ReadonlyDeep<AppSpec>
+): Promise<{ appSpec: ReadonlyDeep<AppSpec>; appRepository: ReadonlyDeep<Repository> }> => {
   const newAppRepoName = repoName(appSpec.name);
   if (await repositoriesUtils.isRepoExistent(appSpec.name)) {
     throw new Error(`the repository ${newAppRepoName} already exists`);
@@ -63,7 +68,8 @@ export const createRepository = async (
   let commit: FileCommit;
   commit = await repositoriesUtils.addFile(appRepository.name, '.gitignore', createGitignore());
   commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(appSpec));
-  commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath, yaml.dump(appSpec));
+  commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.int), yaml.dump(appSpec));
+  commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.prod), yaml.dump(appSpec));
 
   if (newAppIssue.generateAngularStub) {
     const name = 'ui';
@@ -95,8 +101,7 @@ export const createRepository = async (
 
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
 
-  // it is important after which commit branching takes place
-  for (const defaultBranch of Object.values(defaultBranches)) {
+  for (const defaultBranch of Object.values(environments)) {
     await createAReference({
       repo: appRepository.name,
       ref: `refs/heads/${defaultBranch}`,
@@ -104,16 +109,14 @@ export const createRepository = async (
     });
   }
 
-  if ('members' in appSpec) {
-    let appMembers = appSpec.members;
-    appMembers = await removeOrgMembers(appMembers);
-    for (const member of appMembers) {
-      await addARepositoryCollaborator({
-        repo: appRepository.name,
-        username: member.qNumber,
-        permission: unityRepositoryRoles as never,
-      });
-    }
+  let appMembers = issue.user ? [issue.user] : [];
+  appMembers = await removeOrgMembers(appMembers);
+  for (const member of appMembers) {
+    await addARepositoryCollaborator({
+      repo: appRepository.name,
+      username: member.login,
+      permission: unityRepositoryRoles as never,
+    });
   }
 
   return {appSpec, appRepository};

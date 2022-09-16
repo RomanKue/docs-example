@@ -2,12 +2,10 @@ import {Issue} from '../../../../github/api/issues/response/issue.js';
 import {loadSchema, NewAppIssue, parseIssueBody} from '../new-app-issue.js';
 import * as core from '@actions/core';
 import {validateSchema} from '../../../../json/json-schema.js';
-import {magicComments, unityBot} from '../../../config.js';
 import {requestApproval} from './request-approval.js';
 import {removeApprovalRequest} from './remove-approval-request.js';
 import {issuesUtils} from '../../../../github/api/issues/index.js';
 import {repositoriesUtils} from '../../../../github/api/repos/index.js';
-import {usersUtils} from '../../../../github/api/users/index.js';
 import {getIssueState, issueState} from '../state.js';
 
 export const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
@@ -20,27 +18,6 @@ export const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Prom
   }
   return true;
 };
-
-export const checkAppMembers = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
-  const appSpec = newAppIssue.appSpec;
-  if (appSpec && 'members' in appSpec) {
-    core.info(`checking app members: ${JSON.stringify(appSpec?.members)}`);
-    for (const member of appSpec.members) {
-      if (!await usersUtils.isUserExistent(member.qNumber)) {
-        await issuesUtils.addSimpleComment(issue, user =>
-          `🚫 @${user} it seems that the user ${member.qNumber} cannot be found in GitHub. Please check the members in app specification.` +
-          `\n` +
-          `You can let me re-check by commenting "@${unityBot} ${magicComments.review}" on this issue.`
-        );
-        return false;
-      }
-    }
-  } else {
-    core.warning(`no app members defined.`);
-  }
-  return true;
-};
-
 
 export const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app yaml on issue: ${issue.html_url}`);
@@ -90,7 +67,6 @@ export const reviewIssue = async (issue: Issue) => {
   ok &&= await checkTermsOfService(issue, newAppIssue);
   ok &&= await checkAppSchema(issue, newAppIssue);
   ok &&= await checkAppName(issue, newAppIssue);
-  ok &&= await checkAppMembers(issue, newAppIssue);
 
   core.info(`all checks have been passed with: ${ok}`);
   if (ok) {

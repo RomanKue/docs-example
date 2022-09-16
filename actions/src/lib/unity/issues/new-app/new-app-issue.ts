@@ -7,6 +7,7 @@ import fs from 'fs';
 import {unityTeams} from '../../config.js';
 import * as core from '@actions/core';
 import {listMembersInOrg} from '../../../github/api/teams/teams.js';
+import {ReadonlyDeep} from 'type-fest';
 import Code = marked.Tokens.Code;
 
 
@@ -15,7 +16,7 @@ import Code = marked.Tokens.Code;
  */
 export class NewAppIssue {
   constructor(
-    public appSpec: undefined | AppSpec,
+    public appSpec: undefined | ReadonlyDeep<AppSpec>,
     public termsOfServiceAccepted: boolean,
     public generateAngularStub: boolean,
     public generateQuarkusStub: boolean,

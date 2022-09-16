@@ -3,7 +3,7 @@ import {lexMarkdown} from '../../mardown/markdown.js';
 import {createReadme} from './readme.js';
 
 describe('readme', () => {
-  const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo', members: [{qNumber: 'q1234'}]};
+  const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo'};
   describe('createReadme', () => {
     it('should create readme when app config is passed', () => {
       const content = createReadme(v1beta1);

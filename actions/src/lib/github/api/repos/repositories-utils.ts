@@ -9,19 +9,21 @@ export const isRepoExistent = async (appName: string | null | undefined): Promis
   return repositories.map(r => r.name).includes(newAppRepoName);
 };
 
-export const addFile = async (repo: string, path: string, content: string) => {
+export const addFile = async (repo: string, path: string, content: string, branch = 'main') => {
   return await createOrUpdateFileContents({
     repo,
     path,
+    branch,
     content: base64(content),
     message: `add ${path.split('/').pop()}`,
   });
 };
 
-export const updateFile = async (repo: string, path: string, content: string) => {
+export const updateFile = async (repo: string, path: string, content: string, branch = 'main') => {
   const existingContent = await getRepositoryContent({
     repo,
     path,
+    branch,
   });
   let sha: string | undefined = undefined;
   if ('sha' in existingContent) {
@@ -30,6 +32,7 @@ export const updateFile = async (repo: string, path: string, content: string) =>
   return await createOrUpdateFileContents({
     repo,
     path,
+    branch,
     sha,
     content: base64(content),
     message: `update ${path.split('/').pop()}`,

@@ -1,13 +1,9 @@
 import * as yaml from 'js-yaml';
 import {repos} from './config.js';
-import {listOrganizationRepositories} from '../github/api/repos/repositories.js';
+import {ReadonlyDeep} from 'type-fest';
 
 export interface ApiVersioned {
   apiVersion: string;
-}
-
-export interface AppMember {
-  qNumber: string;
 }
 
 export interface AppDeployment {
@@ -18,14 +14,13 @@ export interface AppSpecV1Beta1 extends ApiVersioned {
   /** field defining the API version, following the K8s concept of API versioning */
   apiVersion: 'v1beta1';
   name: string;
-  members: AppMember[];
   deployments?: Record<string, AppDeployment>;
 }
 
 /**
  * type guard for {@link AppSpecV1Beta1}
  */
-export const isV1Beta1 = (appSpec: AppSpec): appSpec is AppSpecV1Beta1 => {
+export const isV1Beta1 = (appSpec: ReadonlyDeep<AppSpec>): appSpec is AppSpecV1Beta1 => {
   return (appSpec as AppSpecV1Beta1).apiVersion === 'v1beta1';
 };
 

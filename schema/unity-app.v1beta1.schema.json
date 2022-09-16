@@ -2,19 +2,6 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "additionalProperties": false,
   "definitions": {
-    "Member": {
-      "properties": {
-        "qNumber": {
-          "type": "string",
-          "minLength": 7,
-          "pattern": "^q[a-z0-9]+"
-        }
-      },
-      "required": [
-        "qNumber"
-      ],
-      "type": "object"
-    },
     "Deployment": {
       "type": "object",
       "properties": {
@@ -45,14 +32,6 @@
       "additionalProperties": false,
       "type": "object"
     },
-    "members": {
-      "items": {
-        "$ref": "#/definitions/Member"
-      },
-      "minItems": 1,
-      "type": "array",
-      "uniqueItems": true
-    },
     "name": {
       "type": "string",
       "description": "name of the app in kebab case",
@@ -61,8 +40,7 @@
   },
   "required": [
     "apiVersion",
-    "name",
-    "members"
+    "name"
   ],
   "title": "UNITY App",
   "type": "object"

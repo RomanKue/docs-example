@@ -27,7 +27,6 @@ const getName = (body: { metadata?: { name?: string } }) => {
 
 const getLabels = (name: string) => {
   return {
-    'app.kubernetes.io/component': name,
     'app.kubernetes.io/managed-by': 'unity',
     'app.kubernetes.io/name': name,
   };
@@ -137,11 +136,24 @@ export const readSecret = async (kc: KubeConfig, name: string) => {
   return await coreV1API.readNamespacedSecret(name, namespace);
 };
 
-export const createServiceAccount = async (
+export const createK8sObjects = async (
   environment: ReadonlyDeep<Environment>,
   name: string
 ): Promise<string> => {
   const kc = getKubeConfig(environment);
+  await upsertSecret(kc, {
+    apiVersion: 'v1',
+    kind: 'Secret',
+    metadata: {
+      name: name,
+      labels: {
+        ...getLabels(name),
+        'net.bmwgroup.unity/app-operator': 'disabled'
+      },
+    },
+    type: 'net.bmwgroup.unity/app'
+  });
+
   await upsertServiceAccount(kc, {
     apiVersion: 'v1',
     kind: 'ServiceAccount',
@@ -162,7 +174,8 @@ export const createServiceAccount = async (
       {
         apiGroups: [''],
         resources: ['secrets'],
-        verbs: ['create', 'delete', 'get', 'patch', 'update', 'watch'],
+        // cannot allow to create secret, see https://github.com/kubernetes/kubernetes/issues/80295
+        verbs: ['get', 'patch', 'update', 'watch'],
         resourceNames: [name]
       }
     ]

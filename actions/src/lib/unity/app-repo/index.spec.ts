@@ -37,7 +37,7 @@ describe('index', () => {
     jest.spyOn(repositoriesUtils, 'createEnvironmentSecret').mockResolvedValue();
     jest.spyOn(git, 'createAReference').mockResolvedValue(partialMock<GitReference>());
     jest.spyOn(orgs, 'listOrganizationMembers').mockResolvedValue([]);
-    jest.spyOn(k8s, 'createServiceAccount').mockResolvedValue('token-string');
+    jest.spyOn(k8s, 'createK8sObjects').mockResolvedValue('token-string');
 
     jest.spyOn(input, 'getInput').mockReturnValue('foo');
   });
@@ -52,7 +52,7 @@ describe('index', () => {
       expect(repositoris.createOrUpdateAnEnvironment).toHaveBeenCalledTimes(2);
       expect(repositoris.replaceAllRepositoryTopics).toHaveBeenCalledTimes(1);
 
-      expect(k8s.createServiceAccount).toHaveBeenCalledTimes(1);
+      expect(k8s.createK8sObjects).toHaveBeenCalledTimes(1);
 
       expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(3);
 

@@ -1,5 +1,5 @@
 import * as k8s from './k8s.js';
-import {createServiceAccount} from './k8s.js';
+import {createK8sObjects} from './k8s.js';
 import {environments} from '../config.js';
 import * as input from '../../github/input.js';
 import {partialMock} from '../../mock/partial-mock.js';
@@ -31,12 +31,12 @@ describe('k8s.ts', () => {
       jest.spyOn(k8s, 'readSecret').mockResolvedValue(partialMock<{ response: IncomingMessage, body: V1Secret }>({
         body: v1Secret
       }));
-      const token = await createServiceAccount(environments.int, 'foo');
+      const token = await createK8sObjects(environments.int, 'foo');
       expect(token).toEqual('foo-token');
 
       expect(k8s.upsertServiceAccount).toBeCalledTimes(1);
       expect(k8s.upsertRole).toBeCalledTimes(1);
-      expect(k8s.upsertSecret).toBeCalledTimes(1);
+      expect(k8s.upsertSecret).toBeCalledTimes(2);
       expect(k8s.upsertRoleBinding).toBeCalledTimes(1);
     });
   });

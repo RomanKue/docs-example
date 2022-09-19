@@ -21,7 +21,7 @@ import {Issue} from '../../github/api/issues/response/issue.js';
 import {ReadonlyDeep} from 'type-fest';
 import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
 import {getInput} from '../../github/input.js';
-import {createServiceAccount} from './k8s.js';
+import {createK8sObjects} from './k8s.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -111,7 +111,7 @@ export const createRepository = async (
   }
 
   // currently this is set up for int only
-  const token = await createServiceAccount(environments.int, appRepository.name);
+  const token = await createK8sObjects(environments.int, appRepository.name);
   await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesToken, token);
   await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesHost, getInput('INT_KUBERNETES_HOST'));
   await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesNamespace, getInput('INT_KUBERNETES_NAMESPACE'));

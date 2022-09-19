@@ -19,6 +19,16 @@ on:
         required: true
         description: environment to deploy to
         type: string
+    secrets:
+      KUBERNETES_TOKEN:
+        required: true
+        description: token to authenticate to a K8s cluster
+      KUBERNETES_HOST:
+        required: true
+        description: host of the K8s cluster
+      KUBERNETES_NAMESPACE:
+        required: true
+        description: namespace to create resources in
 concurrency:
   group: ${deployAppAction}
 jobs:
@@ -28,12 +38,12 @@ jobs:
       id-token: write
     runs-on: atc-ubuntu-latest
     timeout-minutes: 30
-    environment: \${{ github.event.inputs.environment }}
+    environment: \${{ inputs.environment || github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v3
       - uses: unity/${deployAppAction}@v1
         with:
-          environment: \${{ github.event.inputs.environment }}
+          environment: \${{ inputs.environment || github.event.inputs.environment }}
           KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
           KUBERNETES_HOST: \${{ secrets.KUBERNETES_HOST }}
           KUBERNETES_NAMESPACE: \${{ secrets.KUBERNETES_NAMESPACE }}

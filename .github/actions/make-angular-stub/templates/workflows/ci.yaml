@@ -83,6 +83,10 @@ jobs:
     uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
     with:
       environment: int
+    secrets:
+      KUBERNETES_TOKEN: ${{"{{"}} secrets.KUBERNETES_TOKEN {{"}}"}}
+      KUBERNETES_HOST: ${{"{{"}} secrets.KUBERNETES_HOST {{"}}"}}
+      KUBERNETES_NAMESPACE: ${{"{{"}} secrets.KUBERNETES_NAMESPACE {{"}}"}}
   deploy-prod:
     needs:
       - ci-{{ .Env.NAME }}
@@ -91,3 +95,7 @@ jobs:
     uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
     with:
       environment: prod
+    secrets:
+      KUBERNETES_TOKEN: ${{"{{"}} secrets.KUBERNETES_TOKEN {{"}}"}}
+      KUBERNETES_HOST: ${{"{{"}} secrets.KUBERNETES_HOST {{"}}"}}
+      KUBERNETES_NAMESPACE: ${{"{{"}} secrets.KUBERNETES_NAMESPACE {{"}}"}}

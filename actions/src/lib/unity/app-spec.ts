@@ -7,7 +7,11 @@ export interface ApiVersioned {
 }
 
 export interface AppDeployment {
-  replicas: number;
+  replicas?: number;
+  container?: {
+    image: string
+    tag: string
+  };
 }
 
 export interface AppSpecV1Beta1 extends ApiVersioned {
@@ -56,3 +60,6 @@ export const repoName = (appName: string | null | undefined): string => {
   return repos.appPrefix + appName;
 };
 
+export const imageName = (appName: string | null | undefined, deploymentName: string): string => {
+  return `${repoName(appName)}-${deploymentName}`;
+};

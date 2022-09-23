@@ -1,4 +1,4 @@
-import {AppSpec, isV1Beta1, repoName} from '../app-spec.js';
+import {AppSpec, imageName, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {defaultTopics, environments, makeStubWorkflowId, secretKeys, unityRepositoryRoles} from '../config.js';
@@ -25,11 +25,17 @@ import {createK8sObjects} from './k8s.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
-const updateAppDeployments = async (appSpec: ReadonlyDeep<AppSpec>, name: string, replicas = 2) => {
+const updateAppDeployments = async (appSpec: ReadonlyDeep<AppSpec>, name: string) => {
   if (isV1Beta1(appSpec)) {
     appSpec = produce(appSpec, draft => {
       const deployments = draft.deployments ?? {};
-      deployments[name] = {replicas};
+      deployments[name] = {
+        container: {
+          image: imageName(appSpec.name, name),
+          tag: 'latest',
+        },
+        replicas: 2,
+      };
       draft.deployments = deployments;
     });
     await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(environments.int), yaml.dump(appSpec));

@@ -138,16 +138,16 @@ export const readSecret = async (kc: KubeConfig, name: string) => {
 
 export const createK8sObjects = async (
   environment: ReadonlyDeep<Environment>,
-  name: string
+  repoName: string
 ): Promise<string> => {
   const kc = getKubeConfig(environment);
   await upsertSecret(kc, {
     apiVersion: 'v1',
     kind: 'Secret',
     metadata: {
-      name: name,
+      name: repoName,
       labels: {
-        ...getLabels(name),
+        ...getLabels(repoName),
         // see https://atc-github.azure.cloud.bmw/UNITY/unity-operator
         'net.bmwgroup.unity/unity-operator': 'disabled'
       },
@@ -159,8 +159,8 @@ export const createK8sObjects = async (
     apiVersion: 'v1',
     kind: 'ServiceAccount',
     metadata: {
-      name,
-      labels: getLabels(name),
+      name: repoName,
+      labels: getLabels(repoName),
     }
   });
 
@@ -168,8 +168,8 @@ export const createK8sObjects = async (
     apiVersion: 'rbac.authorization.k8s.io/v1',
     kind: 'Role',
     metadata: {
-      name,
-      labels: getLabels(name),
+      name: repoName,
+      labels: getLabels(repoName),
     },
     rules: [
       {
@@ -177,7 +177,7 @@ export const createK8sObjects = async (
         resources: ['secrets'],
         // cannot allow to create secret, see https://github.com/kubernetes/kubernetes/issues/80295
         verbs: ['get', 'patch', 'update', 'watch'],
-        resourceNames: [name]
+        resourceNames: [repoName]
       }
     ]
   });
@@ -186,33 +186,33 @@ export const createK8sObjects = async (
     apiVersion: 'rbac.authorization.k8s.io/v1',
     kind: 'RoleBinding',
     metadata: {
-      name,
-      labels: getLabels(name),
+      name: repoName,
+      labels: getLabels(repoName),
     },
     roleRef: {
       apiGroup: 'rbac.authorization.k8s.io',
       kind: 'Role',
-      name: name,
+      name: repoName,
     },
     subjects: [
       {
         kind: `ServiceAccount`,
-        name: name,
+        name: repoName,
         namespace: getCurrentNamespace(kc)
       }
     ]
 
   });
 
-  const tokenSecretName = `${name}-service-account-token`;
+  const tokenSecretName = `${repoName}-service-account-token`;
   await upsertSecret(kc, {
     apiVersion: 'v1',
     kind: 'Secret',
     metadata: {
       name: tokenSecretName,
-      labels: getLabels(name),
+      labels: getLabels(repoName),
       annotations:
-        {'kubernetes.io/service-account.name': name}
+        {'kubernetes.io/service-account.name': repoName}
     },
     type: 'kubernetes.io/service-account-token'
   });

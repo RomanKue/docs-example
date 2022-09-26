@@ -151,7 +151,7 @@ export const createK8sObjects = async (
       },
       annotations:{
         // see https://atc-github.azure.cloud.bmw/UNITY/unity-operator
-        'unity-operator.unity.bmwgroup.net/enabled': 'false'
+        'unity-operator.unity.bmwgroup.net/disabled': 'true'
       }
     },
     type: 'net.bmwgroup.unity/app'

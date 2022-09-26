@@ -22,6 +22,7 @@ import {ReadonlyDeep} from 'type-fest';
 import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
 import {getInput} from '../../github/input.js';
 import {createK8sObjects} from './k8s.js';
+import {assertUnreachable} from '../../run.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -114,13 +115,23 @@ export const createRepository = async (
       repo: appRepository.name,
       environment_name: env
     });
-  }
 
-  // currently this is set up for int only
-  const token = await createK8sObjects(environments.int, appRepository.name);
-  await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesToken, token);
-  await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesHost, getInput('INT_KUBERNETES_HOST'));
-  await repositoriesUtils.createEnvironmentSecret(appRepository, environments.int, secretKeys.kubernetesNamespace, getInput('INT_KUBERNETES_NAMESPACE'));
+    const token = await createK8sObjects(env, appRepository.name);
+    await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesToken, token);
+
+    switch (env) {
+    case 'int':
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesHost, getInput('INT_KUBERNETES_HOST'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesNamespace, getInput('INT_KUBERNETES_NAMESPACE'));
+      break;
+    case 'prod':
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesHost, getInput('PROD_KUBERNETES_HOST'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesNamespace, getInput('PROD_KUBERNETES_NAMESPACE'));
+      break;
+    default:
+      assertUnreachable(env);
+    }
+  }
 
   let appMembers = issue.user ? [issue.user] : [];
   appMembers = await removeOrgMembers(appMembers);

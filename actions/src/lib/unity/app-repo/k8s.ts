@@ -148,9 +148,11 @@ export const createK8sObjects = async (
       name: repoName,
       labels: {
         ...getLabels(repoName),
-        // see https://atc-github.azure.cloud.bmw/UNITY/unity-operator
-        'net.bmwgroup.unity/unity-operator': 'disabled'
       },
+      annotations:{
+        // see https://atc-github.azure.cloud.bmw/UNITY/unity-operator
+        'unity-operator.unity.bmwgroup.net/enabled': 'false'
+      }
     },
     type: 'net.bmwgroup.unity/app'
   });

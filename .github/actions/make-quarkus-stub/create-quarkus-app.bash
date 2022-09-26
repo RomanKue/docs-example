@@ -29,6 +29,12 @@ mvn io.quarkus.platform:quarkus-maven-plugin:2.12.1.Final:create \
   # see https://quarkus.io/guides/container-image#docker
   ./mvnw quarkus:add-extension -Dextensions="container-image-docker"
 
+  # patch docker file
+  echo 'RUN \
+      chmod a+x /opt/jboss/container/java/run/run-java.sh && \
+      chmod -R a+x /opt/jboss/container/java
+  ' >> src/main/docker/Dockerfile.jvm
+
   # list what has been created
   ls -lah
 )

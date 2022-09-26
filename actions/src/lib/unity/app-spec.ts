@@ -11,6 +11,8 @@ export interface AppDeployment {
   container?: {
     image: string
     tag: string
+    tmpDirs?: string[]
+    runAsUser?: number
   };
 }
 

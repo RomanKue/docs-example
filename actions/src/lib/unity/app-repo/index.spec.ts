@@ -52,9 +52,9 @@ describe('index', () => {
       expect(repositoris.createOrUpdateAnEnvironment).toHaveBeenCalledTimes(2);
       expect(repositoris.replaceAllRepositoryTopics).toHaveBeenCalledTimes(1);
 
-      expect(k8s.createK8sObjects).toHaveBeenCalledTimes(1);
+      expect(k8s.createK8sObjects).toHaveBeenCalledTimes(2);
 
-      expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(3);
+      expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(6);
 
       expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledWith(expect.objectContaining({visibility: 'private'}));
     });

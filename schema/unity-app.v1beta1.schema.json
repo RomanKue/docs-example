@@ -22,13 +22,6 @@
               "minLength": 1,
               "maxLength": 32
             },
-            "tag": {
-              "type": "string",
-              "description": "tag of the image to deploy",
-              "pattern": "[a-z09_.-]+",
-              "minLength": 1,
-              "maxLength": 128
-            },
             "port": {
               "type": [
                 "number",
@@ -38,6 +31,37 @@
               "default": 8080,
               "minimum": 1025,
               "maximum": 65535
+            },
+            "tag": {
+              "type": "string",
+              "description": "tag of the image to deploy",
+              "pattern": "[a-z09_.-]+",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "tmpDirs": {
+              "description": "a tmpdir is an empty volume that is writable inside the container",
+              "examples": [
+                "/tmp/foo"
+              ],
+              "type": [
+                "null",
+                "array"
+              ],
+              "minLength": 0,
+              "items": {
+                "type": "string"
+              }
+            },
+            "runAsUser": {
+              "default": 10000,
+              "description": "see https://docs.bridgecrew.io/docs/bc_k8s_37",
+              "type": [
+                "null",
+                "number"
+              ],
+              "minimum": 10000,
+              "maximum": 65536
             }
           },
           "required": [

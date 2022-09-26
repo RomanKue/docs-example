@@ -1,4 +1,4 @@
-import {AppSpec, imageName, isV1Beta1, repoName} from '../app-spec.js';
+import {AppDeployment, AppSpec, imageName, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {defaultTopics, environments, makeStubWorkflowId, secretKeys, unityRepositoryRoles} from '../config.js';
@@ -26,15 +26,15 @@ import {assertUnreachable} from '../../run.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
-const updateAppDeployments = async (appSpec: ReadonlyDeep<AppSpec>, name: string) => {
+const updateAppDeployments = async (
+  appSpec: ReadonlyDeep<AppSpec>,
+  name: string, container: AppDeployment['container']
+) => {
   if (isV1Beta1(appSpec)) {
     appSpec = produce(appSpec, draft => {
       const deployments = draft.deployments ?? {};
       deployments[name] = {
-        container: {
-          image: imageName(appSpec.name, name),
-          tag: 'latest',
-        },
+        container,
         replicas: 2,
       };
       draft.deployments = deployments;
@@ -82,7 +82,13 @@ export const createRepository = async (
 
   if (newAppIssue.generateAngularStub) {
     const name = 'ui';
-    appSpec = await updateAppDeployments(appSpec, name);
+    appSpec = await updateAppDeployments(appSpec, name,
+      {
+        image: imageName(appSpec.name, name),
+        tag: 'latest',
+        tmpDirs: ['/tmp']
+      },
+    );
     await actions.createAWorkflowDispatchEvent({
       ref: 'main',
       workflow_id: makeStubWorkflowId,
@@ -96,7 +102,12 @@ export const createRepository = async (
 
   if (newAppIssue.generateQuarkusStub) {
     const name = 'api';
-    appSpec = await updateAppDeployments(appSpec, name);
+    appSpec = await updateAppDeployments(appSpec, name,
+      {
+        image: imageName(appSpec.name, name),
+        tag: 'latest',
+        tmpDirs: ['/tmp']
+      },);
     await actions.createAWorkflowDispatchEvent({
       ref: 'main',
       workflow_id: makeStubWorkflowId,

@@ -7,6 +7,7 @@ echo "NAME=$NAME"
 echo "ANGULAR_VERSION=$ANGULAR_VERSION"
 REPO_PATH=$(git rev-parse --show-toplevel)
 REPO=$(basename "$REPO_PATH")
+APP_NAME=${REPO#"app-"}
 export REPO
 echo "REPO=$REPO"
 
@@ -27,6 +28,9 @@ ng new "$NAME" --defaults --style=scss --skip-git
   # increase budget size to be able to built with design system
   npx ng config "projects.$NAME.architect.build.configurations.production.budgets[0].maximumWarning" 2mb
   npx ng config "projects.$NAME.architect.build.configurations.production.budgets[0].maximumError" 2mb
+
+  # set base href
+  npx ng config "projects.$NAME.architect.build.options.baseHref" "/$APP_NAME/$NAME/"
 
   # design system, see https://density.bmwgroup.net/v7/guides/setup/getting-started
   npm config set @bmw-ds:registry https://nexus.bmwgroup.net/repository/bmw_npm_repositories/

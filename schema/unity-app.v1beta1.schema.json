@@ -53,6 +53,31 @@
                 "type": "string"
               }
             },
+            "capabilities": {
+              "description": "Any capabilities added beyond the allowed list (AUDIT_WRITE,\n    CHOWN, DAC_OVERRIDE, FOWNER, FSETID, KILL, MKNOD, NET_BIND_SERVICE, SETFCAP, SETGID,\n    SETPCAP, SETUID, SYS_CHROOT) are disallowed.\nSee also https://unofficial-kubernetes.readthedocs.io/en/latest/concepts/policy/container-capabilities/.",
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "string",
+                "enum": [
+                  "AUDIT_WRITE",
+                  "CHOWN",
+                  "DAC_OVERRIDE",
+                  "FOWNER",
+                  "FSETID",
+                  "KILL",
+                  "MKNOD",
+                  "NET_BIND_SERVICE",
+                  "SETFCAP",
+                  "SETGID",
+                  "SETPCAP",
+                  "SETUID",
+                  "SYS_CHROOT"
+                ]
+              }
+            },
             "runAsUser": {
               "default": 10000,
               "description": "see https://docs.bridgecrew.io/docs/bc_k8s_37",

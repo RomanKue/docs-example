@@ -12,6 +12,7 @@ export interface AppDeployment {
     image: string
     tag: string
     tmpDirs?: string[]
+    capabilities?: string[]
     runAsUser?: number
   };
 }

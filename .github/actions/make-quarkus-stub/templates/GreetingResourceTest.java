@@ -14,8 +14,8 @@ public class GreetingResourceTest {
         given()
             .when().get("/")
             .then()
-               .statusCode(200)
-               .body(is("Hello from RESTEasy Reactive"));
+                .statusCode(200)
+                .body(is("Hello from RESTEasy Reactive"));
     }
 
 }

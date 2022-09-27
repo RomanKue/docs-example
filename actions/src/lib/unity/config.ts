@@ -4,9 +4,12 @@
 
 import {Issue} from '../github/api/issues/response/issue.js';
 import {IssueComment} from '../github/api/issues/response/issue-comment.js';
+import {repoName} from './app-spec.js';
 
 /** name of the org */
 export const unityOrg = 'UNITY';
+
+export const repoUrl = (appName: string | undefined) => `https://atc-github.azure.cloud.bmw/${unityOrg}/${repoName(appName)}`;
 
 /**
  * @see https://atc-github.azure.cloud.bmw/organizations/UNITY/settings/roles

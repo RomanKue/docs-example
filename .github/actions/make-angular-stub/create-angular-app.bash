@@ -7,12 +7,11 @@ echo "NAME=$NAME"
 echo "ANGULAR_VERSION=$ANGULAR_VERSION"
 REPO_PATH=$(git rev-parse --show-toplevel)
 REPO=$(basename "$REPO_PATH")
-APP_NAME=${REPO#"app-"}
 export REPO
-echo "REPO=$REPO"
+APP_NAME=${REPO#"app-"}
+export APP_NAME
 
-SCRIPT=$(realpath "$0")
-SCRIPT_PATH=$(dirname "$SCRIPT")
+SCRIPT_PATH=$(cd "$(dirname "$0")" && pwd)
 
 pwd
 ls -lah

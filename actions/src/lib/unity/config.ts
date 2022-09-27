@@ -52,6 +52,9 @@ export const repos = {
   appPrefix: 'app-'
 } as const;
 
+export const angularStubName = 'ui';
+export const quarkusStubName = 'api';
+
 export const environments = {
   int: 'int',
   prod: 'prod',

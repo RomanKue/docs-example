@@ -6,12 +6,11 @@ echo "ORG=$ORG"
 echo "NAME=$NAME"
 REPO_PATH=$(git rev-parse --show-toplevel)
 REPO=$(basename "$REPO_PATH")
-APP_NAME=${REPO#"app-"}
 export REPO
-echo "REPO=$REPO"
+APP_NAME=${REPO#"app-"}
+export APP_NAME
 
-SCRIPT=$(realpath "$0")
-SCRIPT_PATH=$(dirname "$SCRIPT")
+SCRIPT_PATH=$(cd "$(dirname "$0")" && pwd)
 
 pwd
 ls -lah
@@ -19,7 +18,7 @@ ls -lah
 npm install --location=global gomplate
 
 # based on https://quarkus.io/guides/getting-started
-mvn io.quarkus.platform:quarkus-maven-plugin:2.12.1.Final:create \
+mvn io.quarkus.platform:quarkus-maven-plugin:2.12.3.Final:create \
 -DprojectGroupId=com.bmw.unity."$REPO"."$NAME" \
 -DprojectArtifactId="$NAME" \
 -Dextensions="resteasy-reactive"
@@ -28,7 +27,7 @@ mvn io.quarkus.platform:quarkus-maven-plugin:2.12.1.Final:create \
   cd "$NAME"
 
   # see https://quarkus.io/guides/container-image#docker
-  ./mvnw quarkus:add-extension -Dextensions="container-image-docker"
+  ./mvnw quarkus:add-extension -Dextensions="container-image-docker,quarkus-smallrye-openapi"
 
   # patch docker file
   echo 'RUN \
@@ -38,6 +37,9 @@ mvn io.quarkus.platform:quarkus-maven-plugin:2.12.1.Final:create \
 
   # remove boiler plate home page
   rm "src/main/resources/META-INF/resources/index.html"
+
+  # set properties
+  < "$SCRIPT_PATH/templates/application.properties" gomplate >> "src/main/resources/application.properties"
 
   # get package name
   PACKAGE=$(grep "package com.bmw.unity.app" < "src/main/java/com/bmw/unity/app/$APP_NAME/api/GreetingResource.java" )

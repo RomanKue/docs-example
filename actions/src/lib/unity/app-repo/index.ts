@@ -1,7 +1,15 @@
 import {AppDeployment, AppSpec, imageName, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
-import {defaultTopics, environments, makeStubWorkflowId, secretKeys, unityRepositoryRoles} from '../config.js';
+import {
+  angularStubName,
+  defaultTopics,
+  environments,
+  makeStubWorkflowId,
+  quarkusStubName,
+  secretKeys,
+  unityRepositoryRoles
+} from '../config.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
 import {repositoriesUtils} from '../../github/api/repos/index.js';
@@ -76,12 +84,12 @@ export const createRepository = async (
 
   let commit: FileCommit;
   commit = await repositoriesUtils.addFile(appRepository.name, '.gitignore', createGitignore());
-  commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(appSpec));
+  commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(newAppIssue));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.int), yaml.dump(appSpec));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.prod), yaml.dump(appSpec));
 
   if (newAppIssue.generateAngularStub) {
-    const name = 'ui';
+    const name = angularStubName;
     appSpec = await updateAppDeployments(appSpec, name,
       {
         image: imageName(appSpec.name, name),
@@ -101,7 +109,7 @@ export const createRepository = async (
   }
 
   if (newAppIssue.generateQuarkusStub) {
-    const name = 'api';
+    const name = quarkusStubName;
     appSpec = await updateAppDeployments(appSpec, name,
       {
         image: imageName(appSpec.name, name),

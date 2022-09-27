@@ -40,6 +40,7 @@ mvn io.quarkus.platform:quarkus-maven-plugin:2.12.3.Final:create \
 
   # set properties
   < "$SCRIPT_PATH/templates/application.properties" gomplate >> "src/main/resources/application.properties"
+  < "$SCRIPT_PATH/templates/.editorconfig" gomplate >> ".editorconfig"
 
   # get package name
   PACKAGE=$(grep "package com.bmw.unity.app" < "src/main/java/com/bmw/unity/app/$APP_NAME/api/GreetingResource.java" )

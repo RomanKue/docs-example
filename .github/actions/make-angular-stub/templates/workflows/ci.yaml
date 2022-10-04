@@ -67,7 +67,7 @@ jobs:
         working-directory: ${{"{{"}} env.DEPLOYMENT {{"}}"}}
         run: |
           echo "
-          FROM nginxinc/nginx-unprivileged:latest
+          FROM nginxinc/nginx-unprivileged:alpine-slim
           LABEL org.opencontainers.image.source ${{"{{"}} github.event.repository.html_url {{"}}"}}
           COPY dist/${{"{{"}} env.DEPLOYMENT {{"}}"}}/ /usr/share/nginx/html
           " > Dockerfile

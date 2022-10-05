@@ -18,6 +18,9 @@ import * as k8s from './k8s.js';
 import * as input from '../../github/input.js';
 import {repositoriesUtils} from '../../github/api/repos/index.js';
 import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
+import {jest} from '@jest/globals';
+import issues from '../../github/api/issues/index.js';
+import {IssueComment} from '../../github/api/issues/response/issue-comment.js';
 
 
 describe('index', () => {
@@ -34,6 +37,7 @@ describe('index', () => {
     jest.spyOn(repositoris, 'addARepositoryCollaborator').mockResolvedValue(partialMock<RepositoryInvitation>());
     jest.spyOn(repositoris, 'replaceAllRepositoryTopics').mockResolvedValue(partialMock<Topic>());
     jest.spyOn(repositoris, 'createOrUpdateAnEnvironment').mockResolvedValue(partialMock<Environment>());
+    jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
     jest.spyOn(repositoriesUtils, 'createEnvironmentSecret').mockResolvedValue();
     jest.spyOn(git, 'createAReference').mockResolvedValue(partialMock<GitReference>());
     jest.spyOn(orgs, 'listOrganizationMembers').mockResolvedValue([]);

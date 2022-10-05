@@ -9,9 +9,8 @@ import {addSimpleComment} from '../../../../github/api/issues/issues-utils.js';
 import {ReadonlyDeep} from 'type-fest';
 
 export const closeWithComment = async (issue: Issue, appRepository: ReadonlyDeep<Repository>) => {
-  const userLogin = issue.user?.login;
   await addSimpleComment(issue, user =>
-    `🚀 @${userLogin} your app has been created!\n\nCheckout your [${appRepository.name}](${appRepository.html_url}) repository.`
+    `🚀 @${user} your app has been created!\n\nCheckout your [${appRepository.name}](${appRepository.html_url}) repository.`
   );
   await setIssueState(issue, issueState.delivered);
   await updateAnIssue({

@@ -21,25 +21,15 @@ export const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Prom
 
 export const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app yaml on issue: ${issue.html_url}`);
-  const apiVersion = newAppIssue.appSpec?.apiVersion;
-  switch (apiVersion) {
-  case 'v1beta1':
-  case 'v1': {
-
-    const errors = validateSchema(newAppIssue.appSpec, loadSchema(apiVersion));
-    if (errors) {
-      await issuesUtils.addSimpleComment(issue, user =>
-        `❌ @${user} the app specification does not seem to fit our needs, ` +
-        `please take a look at the following validation errors and update your issue, ` +
-        `so I can proceed with your request.\n\n` +
-        `${errors}`
-      );
-      return false;
-    }
-    break;
-  }
-  default:
-    throw new Error(`got a bad api version: ${apiVersion}`);
+  const errors = validateSchema(newAppIssue.appSpec, await loadSchema());
+  if (errors) {
+    await issuesUtils.addSimpleComment(issue, user =>
+      `❌ @${user} the app specification does not seem to fit our needs, ` +
+      `please take a look at the following validation errors and update your issue, ` +
+      `so I can proceed with your request.\n\n` +
+      `${errors}`
+    );
+    return false;
   }
   return true;
 };

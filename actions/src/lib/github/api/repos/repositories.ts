@@ -10,7 +10,7 @@ import {Topic} from './response/topic.js';
 import {Content} from './response/content.js';
 import {Environment} from './response/environment.js';
 
-type ReposApi = RestApi['repos'];
+export type ReposApi = RestApi['repos'];
 
 /**
  * see https://docs.github.com/en/rest/repos/repos#get-a-repository

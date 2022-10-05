@@ -26,7 +26,6 @@ export type ContentDirectory = {
     self: string;
     [k: string]: unknown;
   };
-  [k: string]: unknown;
 }[];
 
 /**
@@ -52,7 +51,6 @@ export interface ContentFile {
   };
   target?: string;
   submodule_git_url?: string;
-  [k: string]: unknown;
 }
 /**
  * An object describing a symlink
@@ -74,7 +72,6 @@ export interface SymlinkContent {
     self: string;
     [k: string]: unknown;
   };
-  [k: string]: unknown;
 }
 /**
  * An object describing a submodule
@@ -96,5 +93,4 @@ export interface SubmoduleContent {
     self: string;
     [k: string]: unknown;
   };
-  [k: string]: unknown;
 }

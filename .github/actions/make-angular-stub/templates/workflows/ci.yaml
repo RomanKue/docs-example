@@ -12,7 +12,7 @@ jobs:
     outputs:
       cache-hit: ${{"{{"}} steps.cache.outputs.cache-hit {{"}}"}}
     runs-on: atc-ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     permissions:
       contents: read
       id-token: write

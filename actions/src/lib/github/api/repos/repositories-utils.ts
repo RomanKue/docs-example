@@ -1,11 +1,17 @@
 import {repoName} from '../../../unity/app-spec.js';
-import {createOrUpdateFileContents, getRepositoryContent, listOrganizationRepositories} from './repositories.js';
+import {
+  createOrUpdateFileContents,
+  getRepositoryContent,
+  listOrganizationRepositories,
+  ReposApi
+} from './repositories.js';
 import {base64} from '../../../strings/encoding.js';
 import {ReadonlyDeep} from 'type-fest';
 import {Repository} from './response/repository.js';
 import {createOrUpdateAnEnvironmentSecret, getAnEnvironmentPublicKey} from '../actions/actions.js';
 
 import sodium from 'tweetsodium';
+import {RequestError} from '@octokit/request-error';
 
 export const isRepoExistent = async (appName: string | null | undefined): Promise<boolean> => {
   const newAppRepoName = repoName(appName);
@@ -78,3 +84,19 @@ export const createEnvironmentSecret = async (
   });
 };
 
+
+export const isContentExistent = async (
+  options: {
+    path: string,
+  } & Partial<Parameters<ReposApi['getContent']>[0]>
+) => {
+  try {
+    await getRepositoryContent(options);
+    return true;
+  } catch (e) {
+    if (e instanceof RequestError && e.status === 404) {
+      return false;
+    }
+    throw e;
+  }
+};

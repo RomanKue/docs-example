@@ -31,8 +31,12 @@ import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
 import {getInput} from '../../github/input.js';
 import {createK8sObjects} from './k8s.js';
 import {assertUnreachable} from '../../run.js';
+import {addSimpleComment} from '../../github/api/issues/issues-utils.js';
+import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const updateAppDeployments = async (
   appSpec: ReadonlyDeep<AppSpec>,
@@ -106,6 +110,9 @@ export const createRepository = async (
         type: 'angular',
       }
     });
+    await addSimpleComment(issue, user =>
+      `🏗 be patient while creating the angular app "${name}".`
+    );
   }
 
   if (newAppIssue.generateQuarkusStub) {
@@ -126,6 +133,9 @@ export const createRepository = async (
         type: 'quarkus',
       }
     });
+    await addSimpleComment(issue, user =>
+      `🚧 quarkus app "${name}" is in the works and will be ready soon.`
+    );
   }
 
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
@@ -150,6 +160,32 @@ export const createRepository = async (
       break;
     default:
       assertUnreachable(env);
+    }
+  }
+
+  // wait for delivery of app stubs
+  if (newAppIssue.generateAngularStub) {
+    for (; ;) {
+      if (await isContentExistent({
+        repo: appRepository.name,
+        path: angularStubName,
+        ref: 'main'
+      })) {
+        break;
+      }
+      await sleep(1_000);
+    }
+  }
+  if (newAppIssue.generateQuarkusStub) {
+    for (; ;) {
+      if (await isContentExistent({
+        repo: appRepository.name,
+        path: quarkusStubName,
+        ref: 'main'
+      })) {
+        break;
+      }
+      await sleep(1_000);
     }
   }
 

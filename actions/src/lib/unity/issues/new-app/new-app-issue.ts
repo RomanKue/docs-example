@@ -3,11 +3,13 @@ import {marked} from 'marked';
 
 import * as yaml from 'js-yaml';
 import {AppSpec, parseYaml} from '../../app-spec.js';
-import fs from 'fs';
 import {unityTeams} from '../../config.js';
 import * as core from '@actions/core';
 import {listMembersInOrg} from '../../../github/api/teams/teams.js';
 import {ReadonlyDeep} from 'type-fest';
+import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
+import {Content, ContentFile} from '../../../github/api/repos/response/content.js';
+import {base64Decode} from '../../../strings/encoding.js';
 import Code = marked.Tokens.Code;
 
 
@@ -29,8 +31,8 @@ export class NewAppIssue {
  * searches for a string ignoring case and whitespace
  */
 export const looselyIncludes = (s: string, searchString: string): boolean => {
-  s = s.toLowerCase().replace(/\s/g,'');
-  searchString = searchString.toLowerCase().replace(/\s/g,'');
+  s = s.toLowerCase().replace(/\s/g, '');
+  searchString = searchString.toLowerCase().replace(/\s/g, '');
   return s.includes(searchString);
 };
 
@@ -63,10 +65,21 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   );
 };
 
-export const loadSchema = (apiVersion: string, basePath = '../schema'): Record<string, unknown> => {
-  const path = `${basePath}/unity-app.${apiVersion}.schema.json`;
-  const schemaJson = fs.readFileSync(path, 'utf8');
-  return JSON.parse(schemaJson);
+const isContentFile = (content: Content): content is ContentFile => {
+  return (content as ContentFile).type === 'file';
+};
+
+export const loadSchema = async (): Promise<Record<string, unknown>> => {
+  const content: Content = await getRepositoryContent({
+    repo: 'schema',
+    path: 'unity-app.schema.yaml',
+    ref: 'main'
+  });
+  if (isContentFile(content)) {
+    const str = base64Decode(content.content);
+    return yaml.load(str) as Record<string, unknown>;
+  }
+  throw new Error(`could not load schema, got ${JSON.stringify(content)} instead`);
 };
 
 export const getApprovers = async () => {

@@ -2,6 +2,7 @@ import {RestApi} from '../rest.js';
 import * as github from '@actions/github';
 import {getOctokitApi} from '../../octokit.js';
 import {ActionsPublicKey} from './response/actions-public-key.js';
+import {WorkflowRuns} from './response/workflow-runs.js';
 
 type ActionsApi = RestApi['actions'];
 
@@ -19,6 +20,22 @@ export const createAWorkflowDispatchEvent = async (
     repo: github.context.repo.repo,
     ...options
   });
+};
+
+/**
+ * see https://docs.github.com/en/rest/actions/workflow-runs#list-workflow-runs-for-a-workflow
+ */
+export const listWorkflowRunsForAWorkflow = async (
+  options: {
+    workflow_id: string,
+  } & Partial<Parameters<ActionsApi['listWorkflowRuns']>[0]>
+): Promise<WorkflowRuns> => {
+  const response = await getOctokitApi().rest.actions.listWorkflowRuns({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  });
+  return response.data as WorkflowRuns;
 };
 
 /**

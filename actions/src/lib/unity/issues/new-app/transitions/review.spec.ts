@@ -1,5 +1,6 @@
 import * as review from './review.js';
 import {checkAppName, checkAppSchema, checkTermsOfService, reviewIssue} from './review.js';
+import * as yaml from 'js-yaml';
 import {Issue} from '../../../../github/api/issues/response/issue.js';
 import {freeze, produce} from 'immer';
 import {partialMock} from '../../../../mock/partial-mock.js';
@@ -17,6 +18,8 @@ import {NewAppIssue} from '../new-app-issue.js';
 import {AppSpec, AppSpecV1Beta1, repoName} from '../../../app-spec.js';
 import {MinimalRepository} from '../../../../github/api/repos/response/minimal-repository.js';
 import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
+import {ContentFile} from '../../../../github/api/repos/response/content.js';
+import {base64} from '../../../../strings/encoding.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {
@@ -29,7 +32,120 @@ const addLabel = (issue: Issue, ...labels: string[]) => {
 describe('review', () => {
   let issue: Issue;
   let user: SimpleUser;
+  let schema: Record<string, unknown>;
   beforeEach(() => {
+    schema = {
+      '$schema': 'http://json-schema.org/draft-07/schema',
+      'definitions': {
+        'containerV1': {
+          'description': 'specs for the container to deploy',
+          'type': 'object',
+          'properties': {
+            'image': {
+              'description': 'name of the image inside the unity org registry',
+              'type': 'string',
+              'pattern': 'app-[a-zA-Z0-9_.-]+',
+              'minLength': 1,
+              'maxLength': 32
+            },
+            'tag': {
+              'type': 'string',
+              'description': 'tag of the image to deploy',
+              'pattern': '[a-z09_.-]+',
+              'minLength': 1,
+              'maxLength': 128
+            },
+          },
+          'required': [
+            'image',
+            'tag'
+          ]
+        },
+        'deploymentsV1': {
+          'description': 'name of the deployment in camel case',
+          'propertyNames': {
+            'minLength': 2,
+            'maxLength': 12
+          },
+          'patternProperties': {
+            '^[a-z0-9]+(?:-[a-z0-9]+)*$': {
+              '$ref': '#/definitions/DeploymentV1'
+            }
+          },
+          'additionalProperties': false,
+          'type': 'object'
+        },
+        'nameV1': {
+          'type': 'string',
+          'description': 'name of the app in kebab case',
+          'pattern': '^[a-z0-9]+(?:-[a-z0-9]+)*$',
+          'maxLength': 32,
+          'minLength': 3
+        },
+        'v1beta1': {
+          'properties': {
+            'apiVersion': {
+              'description': 'api version of the app schema',
+              'const': 'v1beta1'
+            },
+            'deployments': {
+              '$ref': '#/definitions/deploymentsV1'
+            },
+            'name': {
+              '$ref': '#/definitions/nameV1'
+            }
+          },
+          'additionalProperties': false,
+          'required': [
+            'apiVersion',
+            'name'
+          ]
+        },
+        'v1': {
+          'properties': {
+            'apiVersion': {
+              'description': 'api version of the app schema',
+              'const': 'v1'
+            },
+            'name': {
+              '$ref': '#/definitions/nameV1'
+            }
+          },
+          'additionalProperties': false,
+          'required': [
+            'apiVersion',
+            'name'
+          ]
+        },
+        'DeploymentV1': {
+          'type': 'object',
+          'properties': {
+            'replicas': {
+              'description': 'number of replicas to deploy',
+              'maximum': 2,
+              'minimum': 0,
+              'type': 'number'
+            },
+            'container': {
+              '$ref': '#/definitions/containerV1'
+            }
+          },
+          'required': [
+            'container'
+          ]
+        }
+      },
+      'oneOf': [
+        {
+          '$ref': '#/definitions/v1beta1'
+        },
+        {
+          '$ref': '#/definitions/v1'
+        }
+      ],
+      'title': 'UNITY App',
+      'type': 'object'
+    };
     user = partialMock<SimpleUser>({login: 'q123456'});
     issue = freeze(partialMock<Issue>({
       user: user,
@@ -62,6 +178,10 @@ name: my-app-name
       });
       jest.spyOn(requestApproval, 'requestApproval').mockResolvedValue();
       jest.spyOn(repositories, 'listOrganizationRepositories').mockResolvedValue([]);
+      jest.spyOn(repositories, 'getRepositoryContent').mockResolvedValue(partialMock<ContentFile>({
+        type: 'file',
+        content: base64(yaml.dump(schema))
+      }));
       await reviewIssue(issue);
       expect(repositories.listOrganizationRepositories).toHaveBeenCalled();
       expect(requestApproval.requestApproval).toHaveBeenCalled();
@@ -117,6 +237,11 @@ name: my-app-name
         name: 'foo',
       };
       jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
+      jest.spyOn(repositories, 'getRepositoryContent').mockResolvedValue(partialMock<ContentFile>());
+      jest.spyOn(repositories, 'getRepositoryContent').mockResolvedValue(partialMock<ContentFile>({
+        type: 'file',
+        content: base64(yaml.dump(schema))
+      }));
     });
     it('should be valid when schema is valid', async () => {
       const newAppIssue = partialMock<NewAppIssue>({appSpec: appSpec});

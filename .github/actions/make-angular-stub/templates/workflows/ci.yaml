@@ -87,15 +87,16 @@ jobs:
       KUBERNETES_TOKEN: ${{"{{"}} secrets.KUBERNETES_TOKEN {{"}}"}}
       KUBERNETES_HOST: ${{"{{"}} secrets.KUBERNETES_HOST {{"}}"}}
       KUBERNETES_NAMESPACE: ${{"{{"}} secrets.KUBERNETES_NAMESPACE {{"}}"}}
-  deploy-prod:
-    needs:
-      - ci-{{ .Env.NAME }}
-      - deploy-int
-    if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
-    uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
-    with:
-      environment: prod
-    secrets:
-      KUBERNETES_TOKEN: ${{"{{"}} secrets.KUBERNETES_TOKEN {{"}}"}}
-      KUBERNETES_HOST: ${{"{{"}} secrets.KUBERNETES_HOST {{"}}"}}
-      KUBERNETES_NAMESPACE: ${{"{{"}} secrets.KUBERNETES_NAMESPACE {{"}}"}}
+# Uncomment the following lines, when the production environment is available
+#   deploy-prod:
+#     needs:
+#       - ci-{{ .Env.NAME }}
+#       - deploy-int
+#     if: ${{"{{"}} needs.ci-{{ .Env.NAME }}.outputs.cache-hit != 'true' {{"}}"}}
+#     uses: {{ .Env.ORG }}/{{ .Env.REPO }}/.github/workflows/deploy.yaml@main
+#     with:
+#       environment: prod
+#     secrets:
+#       KUBERNETES_TOKEN: ${{"{{"}} secrets.KUBERNETES_TOKEN {{"}}"}}
+#       KUBERNETES_HOST: ${{"{{"}} secrets.KUBERNETES_HOST {{"}}"}}
+#       KUBERNETES_NAMESPACE: ${{"{{"}} secrets.KUBERNETES_NAMESPACE {{"}}"}}

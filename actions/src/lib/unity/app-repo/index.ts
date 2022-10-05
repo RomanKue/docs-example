@@ -77,6 +77,10 @@ export const createRepository = async (
     throw new Error(`the repository ${newAppRepoName} already exists`);
   }
 
+  await addSimpleComment(issue, user =>
+    `🏗 ${user} be patient while creating your repository, it should be ready soon.`
+  );
+
   const appRepository = await createAnOrganizationRepository({
     name: newAppRepoName,
     visibility: 'private',
@@ -111,9 +115,6 @@ export const createRepository = async (
         type: 'angular',
       }
     });
-    await addSimpleComment(issue, user =>
-      `🏗 be patient while creating the angular app "${name}".`
-    );
   }
 
   if (newAppIssue.generateQuarkusStub) {
@@ -134,9 +135,6 @@ export const createRepository = async (
         type: 'quarkus',
       }
     });
-    await addSimpleComment(issue, user =>
-      `🚧 quarkus app "${name}" is in the works and will be ready soon.`
-    );
   }
 
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());

@@ -5,7 +5,6 @@ import {deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
 
 
 const createQuarkusReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
-
 ## ${quarkusStubName.toUpperCase()}
 
 The folder \`${quarkusStubName}\` contains a [Quarkus](https://quarkus.io) application.
@@ -16,7 +15,6 @@ The [ci-${quarkusStubName}](${repoUrl(newAppIssue.appSpec?.name)}/actions/workfl
 `;
 
 const createAngularReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
-
 ## ${angularStubName.toUpperCase()}
 
 The folder \`${angularStubName}\` contains an [Angular](https://angular.io) application.

@@ -23,7 +23,7 @@ concurrency:
   group: make-stub-${{ github.event.inputs.repository }}
   cancel-in-progress: false
 jobs:
-  make-angular-stub:
+  make-stub:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 20
     steps:

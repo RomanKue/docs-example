@@ -32,6 +32,8 @@ import {getInput} from '../../github/input.js';
 import {createK8sObjects} from './k8s.js';
 import {assertUnreachable} from '../../run.js';
 import {addSimpleComment} from '../../github/api/issues/issues-utils.js';
+import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
+import * as core from '@actions/core';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -138,11 +140,13 @@ export const createRepository = async (
   commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
 
   for (const env of Object.values(environments)) {
+    core.debug(`creating environment "${env}"`);
     await createOrUpdateAnEnvironment({
       repo: appRepository.name,
       environment_name: env
     });
 
+    core.debug(`generating token "${env}"`);
     const token = await createK8sObjects(env, appRepository.name);
     await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesToken, token);
 
@@ -157,6 +161,40 @@ export const createRepository = async (
       break;
     default:
       assertUnreachable(env);
+    }
+  }
+
+  // wait for delivery of app stubs
+  if (newAppIssue.generateAngularStub) {
+    core.debug(`waiting for angular stub to be generated`);
+    for (; ;) {
+      const contentExists = await isContentExistent({
+        repo: appRepository.name,
+        path: angularStubName,
+        ref: 'main'
+      });
+      if (contentExists) {
+        core.debug(`angular content exists`);
+        break;
+      }
+      core.debug(`waiting...`);
+      await sleep(1_000);
+    }
+  }
+  if (newAppIssue.generateQuarkusStub) {
+    core.debug(`waiting for quarkus stub to be generated`);
+    for (; ;) {
+      const contentExists = await isContentExistent({
+        repo: appRepository.name,
+        path: quarkusStubName,
+        ref: 'main'
+      });
+      if (contentExists) {
+        core.debug(`quarkus content exists`);
+        break;
+      }
+      core.debug(`waiting...`);
+      await sleep(1_000);
     }
   }
 

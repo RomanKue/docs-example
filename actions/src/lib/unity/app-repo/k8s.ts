@@ -6,6 +6,7 @@ import {getInput} from '../../github/input.js';
 import {assertUnreachable} from '../../run.js';
 import {environments} from '../config.js';
 import {constants} from 'http2';
+import * as core from '@actions/core';
 
 type Environment = typeof environments[keyof typeof environments];
 
@@ -51,8 +52,10 @@ export const upsertServiceAccount = async (kc: KubeConfig, body: Parameters<Core
   const name = getName(body);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);
   if (await notFound(async () => await coreV1API.readNamespacedServiceAccount(name, namespace))) {
+    core.info(`replacing serviceaccount "${name}"`);
     await coreV1API.replaceNamespacedServiceAccount(name, namespace, body);
   } else {
+    core.info(`creating serviceaccount "${name}"`);
     await coreV1API.createNamespacedServiceAccount(namespace, body);
   }
 };
@@ -62,8 +65,10 @@ export const upsertSecret = async (kc: KubeConfig, body: Parameters<CoreV1Api['c
   const name = getName(body);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);
   if (await notFound(async () => await coreV1API.readNamespacedSecret(name, namespace))) {
+    core.info(`replacing secret "${name}"`);
     await coreV1API.replaceNamespacedSecret(name, namespace, body);
   } else {
+    core.info(`creating secret "${name}"`);
     await coreV1API.createNamespacedSecret(namespace, body);
   }
 };
@@ -73,8 +78,10 @@ export const upsertRole = async (kc: KubeConfig, body: Parameters<RbacAuthorizat
   const name = getName(body);
   const rbacAuthorizationV1Api = kc.makeApiClient(k8s.RbacAuthorizationV1Api);
   if (await notFound(async () => await rbacAuthorizationV1Api.readNamespacedRole(name, namespace))) {
+    core.info(`replacing role "${name}"`);
     await rbacAuthorizationV1Api.replaceNamespacedRole(name, namespace, body);
   } else {
+    core.info(`creating role "${name}"`);
     await rbacAuthorizationV1Api.createNamespacedRole(namespace, body);
   }
 };
@@ -84,13 +91,16 @@ export const upsertRoleBinding = async (kc: KubeConfig, body: Parameters<RbacAut
   const name = getName(body);
   const rbacAuthorizationV1Api = kc.makeApiClient(k8s.RbacAuthorizationV1Api);
   if (await notFound(async () => await rbacAuthorizationV1Api.readNamespacedRoleBinding(name, namespace))) {
+    core.info(`replacing rolebinding "${name}"`);
     await rbacAuthorizationV1Api.replaceNamespacedRoleBinding(name, namespace, body);
   } else {
+    core.info(`updating rolebinding "${name}"`);
     await rbacAuthorizationV1Api.createNamespacedRoleBinding(namespace, body);
   }
 };
 
 const getKubeConfig = (environment: Environment) => {
+  core.debug(`creating kubeconfig for environment "${environment}"`);
   const kc = new k8s.KubeConfig();
   switch (environment) {
   case 'int': {
@@ -122,6 +132,7 @@ const getKubeConfig = (environment: Environment) => {
     break;
   }
   default:
+    core.error(`bad environment "${environment}"`);
     assertUnreachable(environment);
   }
 

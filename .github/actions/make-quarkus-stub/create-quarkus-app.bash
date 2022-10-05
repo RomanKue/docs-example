@@ -43,11 +43,13 @@ mvn io.quarkus.platform:quarkus-maven-plugin:2.12.3.Final:create \
   < "$SCRIPT_PATH/templates/.editorconfig" gomplate >> ".editorconfig"
 
   # get package name
-  SRC_PATH="src/main/java/com/bmw/unity/app/$APP_NAME/$NAME"
-  PACKAGE=$(grep "package com.bmw.unity.app" < "$SCRIPT_PATH/GreetingResource.java" )
+  GREETING_RESOURCE_PATH=$(find . -name GreetingResource.java)
+  GREETING_RESOURCE_TEST_PATH=$(find . -name GreetingResource.java)
+  PACKAGE=$(grep "package com.bmw.unity.app" < "$GREETING_RESOURCE_PATH" )
   # adjust sample code
-  < "$SCRIPT_PATH/templates/GreetingResource.java" gomplate > "$SCRIPT_PATH/GreetingResource.java"
-  < "$SCRIPT_PATH/templates/GreetingResourceTest.java" gomplate > "$SCRIPT_PATH/GreetingResourceTest.java"
+  export PACKAGE
+  < "$SCRIPT_PATH/templates/GreetingResource.java" gomplate > "$GREETING_RESOURCE_PATH"
+  < "$SCRIPT_PATH/templates/GreetingResourceTest.java" gomplate > "$GREETING_RESOURCE_TEST_PATH"
 
   # list what has been created
   ls -lah

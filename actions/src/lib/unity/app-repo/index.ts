@@ -166,11 +166,12 @@ export const createRepository = async (
   if (newAppIssue.generateAngularStub) {
     core.debug(`waiting for angular stub to be generated`);
     for (; ;) {
-      if (await isContentExistent({
+      const contentExists = await isContentExistent({
         repo: appRepository.name,
         path: angularStubName,
         ref: 'main'
-      })) {
+      });
+      if (contentExists) {
         core.debug(`angular content exists`);
         break;
       }
@@ -181,11 +182,12 @@ export const createRepository = async (
   if (newAppIssue.generateQuarkusStub) {
     core.debug(`waiting for quarkus stub to be generated`);
     for (; ;) {
-      if (await isContentExistent({
+      const contentExists = await isContentExistent({
         repo: appRepository.name,
         path: quarkusStubName,
         ref: 'main'
-      })) {
+      });
+      if (contentExists) {
         core.debug(`quarkus content exists`);
         break;
       }

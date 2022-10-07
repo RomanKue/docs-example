@@ -78,7 +78,7 @@ export const createRepository = async (
   }
 
   await addSimpleComment(issue, user =>
-    `🏗 ${user} be patient while creating your repository, it should be ready soon.`
+    `🏗 @${user} be patient while creating your repository, it should be ready soon.`
   );
 
   const appRepository = await createAnOrganizationRepository({

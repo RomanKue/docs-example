@@ -8,7 +8,7 @@ const createQuarkusReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 ## ${quarkusStubName.toUpperCase()}
 
 The folder \`${quarkusStubName}\` contains a [Quarkus](https://quarkus.io) application.
-In the [${quarkusStubName}/README.md](${quarkusStubName}/README.md) you will find instructions on how to run an develop
+In the [${quarkusStubName}/README.md](${quarkusStubName}/README.md) you will find instructions on how to run and develop
 locally.
 
 The [ci-${quarkusStubName}](${repoUrl(newAppIssue.appSpec?.name)}/actions/workflows/ci-${quarkusStubName}.yaml) workflow builds the application and deploys it to UNITY.
@@ -18,7 +18,7 @@ const createAngularReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 ## ${angularStubName.toUpperCase()}
 
 The folder \`${angularStubName}\` contains an [Angular](https://angular.io) application.
-In the [${angularStubName}/README.md](${angularStubName}/README.md) you will find instructions on how to run an develop
+In the [${angularStubName}/README.md](${angularStubName}/README.md) you will find instructions on how to run and develop
 locally.
 [\`@bmw-ds/components\`](http://density.bmwgroup.net) are already added to the dependencies.
 

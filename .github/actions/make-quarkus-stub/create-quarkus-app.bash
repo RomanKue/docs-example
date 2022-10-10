@@ -45,7 +45,7 @@ mvn io.quarkus.platform:quarkus-maven-plugin:2.12.3.Final:create \
   # get package name
   GREETING_RESOURCE_PATH=$(find . -name GreetingResource.java)
   GREETING_RESOURCE_TEST_PATH=$(find . -name GreetingResourceTest.java)
-  PACKAGE=$(grep "package com.bmw.unity.app" < "$GREETING_RESOURCE_PATH" )
+  PACKAGE=$(grep "package com.bmw.unity" < "$GREETING_RESOURCE_PATH" )
   # adjust sample code
   export PACKAGE
   < "$SCRIPT_PATH/templates/GreetingResource.java" gomplate > "$GREETING_RESOURCE_PATH"

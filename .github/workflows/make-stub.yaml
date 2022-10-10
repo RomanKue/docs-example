@@ -17,7 +17,7 @@ on:
         description: name of the deployable to create
       dry-run:
         required: false
-        description: if true, don't push results to the repo
+        description: dry-run flag (if true, don't push results to the repo)
 
 concurrency:
   group: make-stub-${{ github.event.inputs.repository }}

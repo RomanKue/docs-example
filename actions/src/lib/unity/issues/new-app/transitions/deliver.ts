@@ -7,6 +7,7 @@ import {createRepository} from '../../../app-repo/index.js';
 import {Repository} from '../../../../github/api/repos/response/repository.js';
 import {addSimpleComment} from '../../../../github/api/issues/issues-utils.js';
 import {ReadonlyDeep} from 'type-fest';
+import {unityTeams} from '../../../config.js';
 
 export const closeWithComment = async (issue: Issue, appRepository: ReadonlyDeep<Repository>) => {
   await addSimpleComment(issue, user =>
@@ -28,12 +29,19 @@ export const createNewApp = async (issue: Issue): Promise<ReadonlyDeep<Repositor
     throw new Error(`could not parse appSpec from issue: ${JSON.stringify(issue, null, 2)}`);
   }
 
-  const {appSpec: updatedAppSpec, appRepository} = await createRepository(issue, newAppIssue, appSpec);
+  try {
+    const {appSpec: updatedAppSpec, appRepository} = await createRepository(issue, newAppIssue, appSpec);
 
-  // if we ever continue to do something with appSpec, we need to continue with the updated one
-  appSpec = updatedAppSpec;
+    // if we ever continue to do something with appSpec, we need to continue with the updated one
+    appSpec = updatedAppSpec;
 
-  return appRepository;
+    return appRepository;
+  } catch (e) {
+    await addSimpleComment(issue, user =>
+      `❗️ @${user} something unexpected happened. I suggest you get in touch with the @${unityTeams.unityAppApproversSlug}, so they can take a look at the issue.`
+    );
+    throw e;
+  }
 };
 
 

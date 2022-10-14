@@ -107,7 +107,11 @@ const getKubeConfig = (environment: Environment) => {
     const host = getInput('INT_KUBERNETES_HOST');
     const namespace = getInput('INT_KUBERNETES_NAMESPACE');
     const token = getInput('INT_KUBERNETES_TOKEN');
-    kc.addCluster({name: environment, server: `https://${host}`, skipTLSVerify: true});
+    let server = host;
+    if (!server.startsWith('https://')) {
+      server = `https://${host}`;
+    }
+    kc.addCluster({name: environment, server: server, skipTLSVerify: true});
     kc.addUser({name: environment, token: token});
     kc.addContext({
       name: environment,
@@ -160,7 +164,7 @@ export const createK8sObjects = async (
       labels: {
         ...getLabels(repoName),
       },
-      annotations:{
+      annotations: {
         // see https://atc-github.azure.cloud.bmw/UNITY/unity-operator
         'unity-operator.unity.bmwgroup.net/disabled': 'true'
       }

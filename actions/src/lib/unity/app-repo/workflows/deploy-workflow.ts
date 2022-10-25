@@ -1,8 +1,8 @@
 export const deployAppWorkflowFileName = 'deploy.yaml';
-export const deployAppAction = 'deploy-unity-app';
+export const deployAppWorkflowName = 'deploy-unity-app';
 
 export const createDeployWorkflow = () => `
-name: ${deployAppAction}
+name: ${deployAppWorkflowName}
 on:
   workflow_dispatch:
     inputs:
@@ -30,9 +30,9 @@ on:
         required: true
         description: namespace to create resources in
 concurrency:
-  group: ${deployAppAction}
+  group: ${deployAppWorkflowName}
 jobs:
-  ${deployAppAction}:
+  ${deployAppWorkflowName}:
     permissions:
       contents: read
       id-token: write
@@ -41,7 +41,7 @@ jobs:
     environment: \${{ inputs.environment || github.event.inputs.environment }}
     steps:
       - uses: actions/checkout@v3
-      - uses: unity/${deployAppAction}@v1
+      - uses: unity/${deployAppWorkflowName}@v1
         with:
           environment: \${{ inputs.environment || github.event.inputs.environment }}
           KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}

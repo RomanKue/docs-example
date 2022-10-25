@@ -3,7 +3,6 @@ import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {angularStubName, quarkusStubName, repoUrl} from '../config.js';
 import {deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
 
-
 const createQuarkusReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 ## ${quarkusStubName.toUpperCase()}
 
@@ -12,6 +11,13 @@ In the [${quarkusStubName}/README.md](${quarkusStubName}/README.md) you will fin
 locally.
 
 The [ci-${quarkusStubName}](${repoUrl(newAppIssue.appSpec?.name)}/actions/workflows/ci-${quarkusStubName}.yaml) workflow builds the application and deploys it to UNITY.
+
+### URLs
+
+Here are the URLs for the environments:
+
+* [https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/](https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/)
+* [https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/](https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/)
 `;
 
 const createAngularReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
@@ -23,6 +29,13 @@ locally.
 [\`@bmw-ds/components\`](http://density.bmwgroup.net) are already added to the dependencies.
 
 The [ci-${angularStubName}](${repoUrl(newAppIssue.appSpec?.name)}/actions/workflows/ci-${angularStubName}.yaml) workflow builds the application and deploys it to UNITY.
+
+### URLs
+
+Here are the URLs for the environments:
+
+* [https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/](https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/)
+* [https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/](https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/)
 `;
 
 

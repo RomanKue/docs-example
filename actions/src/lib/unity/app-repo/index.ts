@@ -34,6 +34,7 @@ import {assertUnreachable} from '../../run.js';
 import {addSimpleComment} from '../../github/api/issues/issues-utils.js';
 import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
 import * as core from '@actions/core';
+import {configChangeWorkflowFileName, createConfigChangeWorkflow} from './workflows/config-change-workflow.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -137,7 +138,14 @@ export const createRepository = async (
     });
   }
 
-  commit = await repositoriesUtils.addFile(appRepository.name, `.github/workflows/${deployAppWorkflowFileName}`, createDeployWorkflow());
+  commit = await repositoriesUtils.addFile(
+    appRepository.name,
+    `.github/workflows/${deployAppWorkflowFileName}`,
+    createDeployWorkflow());
+  commit = await repositoriesUtils.addFile(
+    appRepository.name,
+    `.github/workflows/${configChangeWorkflowFileName}`,
+    createConfigChangeWorkflow(appSpec));
 
   for (const env of Object.values(environments)) {
     core.debug(`creating environment "${env}"`);

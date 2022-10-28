@@ -42,14 +42,14 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const updateAppDeployments = async (
   appSpec: ReadonlyDeep<AppSpec>,
-  name: string, container: AppDeployment['container']
+  name: string, deployment: AppDeployment
 ) => {
   if (isV1Beta1(appSpec)) {
     appSpec = produce(appSpec, draft => {
       const deployments = draft.deployments ?? {};
       deployments[name] = {
-        container,
         replicas: 2,
+        ...deployment,
       };
       draft.deployments = deployments;
     });
@@ -102,9 +102,14 @@ export const createRepository = async (
     const name = angularStubName;
     appSpec = await updateAppDeployments(appSpec, name,
       {
-        image: imageName(appSpec.name, name),
-        tag: 'latest',
-        tmpDirs: ['/tmp']
+        oauth2: {
+          enabled: true
+        },
+        container: {
+          image: imageName(appSpec.name, name),
+          tag: 'latest',
+          tmpDirs: ['/tmp']
+        }
       },
     );
     await actions.createAWorkflowDispatchEvent({
@@ -122,10 +127,15 @@ export const createRepository = async (
     const name = quarkusStubName;
     appSpec = await updateAppDeployments(appSpec, name,
       {
-        image: imageName(appSpec.name, name),
-        tag: 'latest',
-        tmpDirs: ['/tmp'],
-        capabilities: ['DAC_OVERRIDE']
+        oauth2: {
+          enabled: true
+        },
+        container: {
+          image: imageName(appSpec.name, name),
+          tag: 'latest',
+          tmpDirs: ['/tmp'],
+          capabilities: ['DAC_OVERRIDE']
+        }
       },);
     await actions.createAWorkflowDispatchEvent({
       ref: 'main',

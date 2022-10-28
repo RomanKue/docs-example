@@ -8,6 +8,9 @@ export interface ApiVersioned {
 
 export interface AppDeployment {
   replicas?: number;
+  oauth2?: {
+    enabled: boolean
+  };
   container?: {
     image: string
     tag: string

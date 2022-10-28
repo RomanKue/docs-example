@@ -11,6 +11,10 @@ export interface AppDeployment {
   oauth2?: {
     enabled: boolean
   };
+  ingress?: {
+    rewriteTarget?: string | null
+    path?: string | null
+  };
   container?: {
     image: string
     tag: string

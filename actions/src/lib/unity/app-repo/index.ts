@@ -127,8 +127,8 @@ export const createRepository = async (
     const name = quarkusStubName;
     appSpec = await updateAppDeployments(appSpec, name,
       {
-        oauth2: {
-          enabled: true
+        ingress: {
+          rewriteTarget: null
         },
         container: {
           image: imageName(appSpec.name, name),

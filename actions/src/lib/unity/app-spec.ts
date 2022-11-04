@@ -8,6 +8,13 @@ export interface ApiVersioned {
 
 export interface AppDeployment {
   replicas?: number;
+  oauth2?: {
+    enabled: boolean
+  };
+  ingress?: {
+    rewriteTarget?: string | null
+    path?: string | null
+  };
   container?: {
     image: string
     tag: string

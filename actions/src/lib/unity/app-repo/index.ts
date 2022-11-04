@@ -134,9 +134,6 @@ export const createRepository = async (
             enabled: true
           },
         },
-        ingress: {
-          rewriteTarget: null
-        },
         container: {
           image: imageName(appSpec.name, name),
           tag: 'latest',

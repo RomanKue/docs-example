@@ -69,7 +69,7 @@ jobs:
           echo "
           FROM nginxinc/nginx-unprivileged:alpine-slim
           LABEL org.opencontainers.image.source ${{"{{"}} github.event.repository.html_url {{"}}"}}
-          COPY dist/${{"{{"}} env.DEPLOYMENT {{"}}"}}/ /usr/share/nginx/html
+          COPY dist/${{"{{"}} env.DEPLOYMENT {{"}}"}}/ /usr/share/nginx/html/{{ .Env.APP_NAME }}/${{"{{"}} env.DEPLOYMENT {{"}}"}}
           " > Dockerfile
           docker build -t ${{"{{"}} env.IMAGE {{"}}"}} .
       - name: push image

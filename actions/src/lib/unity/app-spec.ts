@@ -8,8 +8,11 @@ export interface ApiVersioned {
 
 export interface AppDeployment {
   replicas?: number;
-  oauth2?: {
-    enabled: boolean
+  auth?: {
+    enabled?: boolean
+    oauth2?: {
+      enabled: boolean
+    };
   };
   ingress?: {
     rewriteTarget?: string | null

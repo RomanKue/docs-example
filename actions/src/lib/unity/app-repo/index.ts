@@ -102,8 +102,10 @@ export const createRepository = async (
     const name = angularStubName;
     appSpec = await updateAppDeployments(appSpec, name,
       {
-        oauth2: {
-          enabled: true
+        auth: {
+          oauth2: {
+            enabled: true
+          },
         },
         container: {
           image: imageName(appSpec.name, name),
@@ -127,6 +129,11 @@ export const createRepository = async (
     const name = quarkusStubName;
     appSpec = await updateAppDeployments(appSpec, name,
       {
+        auth: {
+          oauth2: {
+            enabled: true
+          },
+        },
         ingress: {
           rewriteTarget: null
         },

@@ -47,17 +47,16 @@ podman run \
   --log-level debug
 ```
 
-Now, open the admin console in the local browser: [http://localhost:8003](http://localhost:8003).
+Now, open the admin console in the local browser: [http://localhost:8001](http://localhost:8001).
 Or try with curl:
 
 ```bash
-curl http://localhost:8004/auth -i
+curl http://localhost:8002/oauth2-proxy/ping
 ```
 
-If [authz](https://atc-github.azure.cloud.bmw/UNITY/authz) is running locally, this should respond with:
+This should respond with `OK`.
 
-```text
-HTTP/1.1 302 Found
-Location: https://unity-test.bmwgroup.net/oauth2-proxy/oauth2/start?rd=https%3A%2F%2Flocalhost%3A8001%2F
-content-length: 0
-```
+Note that with this config it is not possible to use envoy to proxy to a locally running app or the
+[authz](https://atc-github.azure.cloud.bmw/UNITY/authz) service. This would require to map the localhost ports into
+the container, which is not trivial.
+

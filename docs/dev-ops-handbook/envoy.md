@@ -81,7 +81,7 @@ deployments:
         enabled: true
       roles:
         b2x:
-          requiresAny:
+          any:
             - PMD
             - UNITY
 ```

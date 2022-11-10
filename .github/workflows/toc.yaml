@@ -1,0 +1,32 @@
+name: Updat TOCs
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  update-tocs:
+    runs-on: atc-ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pmd/setup-git@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+        with:
+          setup-actor-user: false
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - run: npm install --global doctoc
+      - working-directory: ./docs
+        run: doctoc --github .
+      - name: Commit Changes
+        run: |
+          git config --global user.name 'qqunit1'
+          git config --global user.email 'unity-bot@list.bmw.com'
+          if git commit --all --message 'update "table of contents" (toc)'; then
+            echo 'toc changed, pushing changes'
+            git push
+          else
+            echo 'no changes, all is nice and clean'
+          fi

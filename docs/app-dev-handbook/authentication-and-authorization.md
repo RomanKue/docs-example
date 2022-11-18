@@ -33,7 +33,7 @@ auth:
         - B2B_I
 ```
 
-Details on each attribute can be found in the [unity-app schema](./unity-app-schema.md).
+Details on each attribute can be found in the [unity-app schema](./unity-app-yaml.md).
 
 ## Authentication
 

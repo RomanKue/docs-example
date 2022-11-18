@@ -20,3 +20,5 @@ The app developers are responsible for
  * building their UNITY app
  * configuring their UNITY app inside UNITY
  * patching vulnerabilities inside their UNITY app
+
+Please note that the database solution currently provided by the UNITY team does not guarantee the long term data integrity and should not be used for productive applications

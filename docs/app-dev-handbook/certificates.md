@@ -73,6 +73,7 @@ example on how to do this in a Quarkus app:
 quarkus.rest-client.services.url=http://localhost:8008/services/api
 ```
 
+`DevModelRangeSearch.java`
 ```java
 @RegisterRestClient(configKey = "services")
 @Consumes({MediaType.APPLICATION_JSON})

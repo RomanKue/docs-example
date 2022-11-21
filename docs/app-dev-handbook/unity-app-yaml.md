@@ -43,3 +43,7 @@ Enable JSON schema validation and autocompletion following the steps below:
   <source src="../assets/schema-autocompletion.mov" type="video/mp4">
 Your browser does not support the video tag.
 </video>
+
+The final config looks as follows.
+
+![](../assets/JSON-Schema-Mappings.png)

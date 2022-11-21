@@ -1,4 +1,4 @@
-name: Updat TOCs
+name: Update TOCs
 on:
   push:
     branches:

@@ -3,11 +3,12 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Architecture](#architecture)
-- [TLS](#tls)
-- [How to Inspect Certificates](#how-to-inspect-certificates)
-- [Client to Ingress Controller](#client-to-ingress-controller)
-- [Ingress Controller to Pod](#ingress-controller-to-pod)
+- [Certs](#certs)
+  - [Architecture](#architecture)
+  - [TLS](#tls)
+  - [How to Inspect Certificates](#how-to-inspect-certificates)
+  - [Client to Ingress Controller](#client-to-ingress-controller)
+  - [Ingress Controller to Pod](#ingress-controller-to-pod)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

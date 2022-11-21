@@ -3,8 +3,8 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Overview](#overview)
-- [IntelliJ and Other JetBrains IDEs](#intellij-and-other-jetbrains-ides)
+- [Unity App Yaml](#unity-app-yaml)
+  - [IntelliJ and Other JetBrains IDEs](#intellij-and-other-jetbrains-ides)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

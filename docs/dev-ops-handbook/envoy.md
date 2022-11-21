@@ -9,11 +9,12 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Architecture](#architecture)
-  - [Authorization](#authorization)
-  - [Content Encoding](#content-encoding)
-  - [TLS Termination](#tls-termination)
-- [Testing Locally](#testing-locally)
+- [Envoy](#envoy)
+  - [Architecture](#architecture)
+    - [Authorization](#authorization)
+    - [Content Encoding](#content-encoding)
+    - [TLS Termination](#tls-termination)
+  - [Testing Locally](#testing-locally)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

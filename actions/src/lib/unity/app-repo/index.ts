@@ -140,7 +140,15 @@ export const createRepository = async (
           image: imageName(appSpec.name, name),
           tag: 'latest',
           tmpDirs: ['/tmp'],
-          capabilities: ['DAC_OVERRIDE']
+          capabilities: ['DAC_OVERRIDE'],
+          resources: {
+            requests: {
+              memoryMiB: 128
+            },
+            limits: {
+              memoryMiB: 256
+            }
+          }
         }
       },);
     await actions.createAWorkflowDispatchEvent({

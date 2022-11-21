@@ -24,6 +24,16 @@ export interface AppDeployment {
     tmpDirs?: string[]
     capabilities?: string[]
     runAsUser?: number
+    resources?: {
+      requests?: {
+        cpuMillis?: number
+        memoryMiB?: number
+      }
+      limits?: {
+        cpuMillis?: number
+        memoryMiB?: number
+      }
+    }
   };
 }
 

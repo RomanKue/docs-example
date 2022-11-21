@@ -1,24 +1,23 @@
-# Certificates
 <!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
 <!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
 <!-- for latest version, check: https://unpkg.com/mermaid-->
 <script type="text/javascript" src="https://unpkg.com/mermaid"></script>
 <script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
 
-## Table of Contents
+# Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Overview](#overview)
-- [Ingress](#ingress)
-- [Egress](#egress)
-  - [UNITY App Services](#unity-app-services)
-  - [Other Services](#other-services)
+- [Certificates](#certificates)
+  - [Ingress](#ingress)
+  - [Egress](#egress)
+    - [UNITY App Services](#unity-app-services)
+    - [Other Services](#other-services)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Overview
+# Certificates
 
 Good news, UNITY handles all certificates for you!
 This section clarifies how UNITY does that.
@@ -65,7 +64,7 @@ store. The app itself does not need to handle any trust stores or certificates.
 
 ### UNITY App Services
 
-Unity integrates some services on port `8008`. This means, unity managed services can be called on that port. Here is an
+Unity integrates some services on port `8008`. This means, UNITY managed services can be called on that port. Here is an
 example on how to do this in a Quarkus app:
 
 `application.properties`

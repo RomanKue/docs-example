@@ -1,6 +1,4 @@
-# Unity App Yaml
-
-## Table of Contents
+# Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -10,9 +8,9 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Overview
+# Unity App Yaml
 
-The `unity-app.yaml` files is the central point of interaction of a unity app and the platform.
+The `unity-app.yaml` files is the central point of interaction of a UNITY app and the platform.
 Several files, one for each environment, specify the configuration of an app.
 
 Bv default this is:
@@ -41,4 +39,7 @@ Enable JSON schema validation and autocompletion following the steps below:
 * click on the **+** below and set: FIle path pattern: **unity-app\*\*.yaml**
 * Open e.g. the **unity-app.int.yaml** and hit Ctrl + Space to get autocompletion.
 
-![](../assets/schema-autocompletion.gif)
+<video autoplay width=801>
+  <source src="../assets/schema-autocompletion.mov" type="video/mp4">
+Your browser does not support the video tag.
+</video>

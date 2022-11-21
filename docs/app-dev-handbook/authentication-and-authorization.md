@@ -1,21 +1,19 @@
-# Authentication and Authorization
-
-## Table of Contents
+# Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Overview](#overview)
-- [Authentication](#authentication)
-  - [OAuth2](#oauth2)
-  - [Minimum Authentication Level](#minimum-authentication-level)
-- [Authorization](#authorization)
-  - [B2X Roles](#b2x-roles)
-- [User Information](#user-information)
+- [Authentication and Authorization](#authentication-and-authorization)
+  - [Authentication](#authentication)
+    - [OAuth2](#oauth2)
+    - [Minimum Authentication Level](#minimum-authentication-level)
+  - [Authorization](#authorization)
+    - [B2X Roles](#b2x-roles)
+  - [User Information](#user-information)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Overview
+# Authentication and Authorization
 
 Every UNITY app is protected by strong authentication (two-factor authentication with YubiKey) by default.
 

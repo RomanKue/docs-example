@@ -1,15 +1,8 @@
-# [Envoy](https://www.envoyproxy.io)
 <!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
 <!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
 <!-- for latest version, check: https://unpkg.com/mermaid-->
 <script type="text/javascript" src="https://unpkg.com/mermaid"></script>
 <script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
-
-Envoy proxy is used in unity to proxy all traffic going in and out of the app's main container by following the service
-mesh pattern.
-
-The config for envoy is part of
-the [unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) helm chart.
 
 ## Table of Contents
 
@@ -23,6 +16,14 @@ the [unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/
 - [Testing Locally](#testing-locally)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Envoy
+
+[Envoy proxy](https://www.envoyproxy.io) is used in UNITY to proxy all traffic going in and out of the app's main
+container by following the service mesh pattern.
+
+The config for envoy is part of
+the [unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart.
 
 ## Architecture
 
@@ -56,7 +57,7 @@ All traffic to a pod is handled by the envoy proxy. This is enforced via
 a [`NetworkPolicy`](https://kubernetes.io/docs/concepts/services-networking/network-policies/).
 
 The network policy makes is part of the
-[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) helm chart
+[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart
 and makes sure that only one port can receive traffic:
 
 ```yaml
@@ -84,9 +85,9 @@ Since the envoy proxy is listening to the exposed port, it can safely handle aut
 feature. Basically, envoy calls a webservice for every request to determine if a request is authorized.
 Only if the external authorization service is authorizing the request, it passed on upstream to the main container.
 
-In a unity app, the authorization service is implemented in the [authz](https://atc-github.azure.cloud.bmw/UNITY/authz)
+In a UNITY app, the authorization service is implemented in the [authz](https://atc-github.azure.cloud.bmw/UNITY/authz)
 service, which runs as a second sidecar container.
-This sidecar can be configured for each unity app, individually.
+This sidecar can be configured for each UNITY app, individually.
 
 For example, an OAuth2 flow to WebEAM may be initiated for unauthorized requests or certain roles should be checked by
 the sidecar. Here is an example configuration:
@@ -126,7 +127,7 @@ In addition, the app's main container does not need to maintain a trust store to
 way when calling services through the envoy proxy.
 
 All this is configured in the
-[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) helm chart.
+[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart.
 
 Read more about it in [Securing Envoy](https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/securing.html).
 

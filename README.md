@@ -19,9 +19,9 @@ and wait for approval. As soon as the issue is approved, you will receive furthe
 The following use cases are supported via self-service
 
 * [New App][New App]
-  Create a new unity app.
+  Create a new UNITY app.
 * [Decommission App][Decommission App]
-  Decommission your unity app, if you don't need it anymore.
+  Decommission your UNITY app, if you don't need it anymore.
 
 [lint-badge]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/lint.yaml/badge.svg
 

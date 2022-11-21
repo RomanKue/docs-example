@@ -1,20 +1,21 @@
-# Certs
-
-Unity does all certificate handling for an app. This means an app developer may develop an entire back-end without
-ever needing to touch a certificate or trust store.
-
-## Table of Contents
+# Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Architecture](#architecture)
-- [TLS](#tls)
-- [How to Inspect Certificates](#how-to-inspect-certificates)
-- [Client to Ingress Controller](#client-to-ingress-controller)
-- [Ingress Controller to Pod](#ingress-controller-to-pod)
+- [Certs](#certs)
+  - [Architecture](#architecture)
+  - [TLS](#tls)
+  - [How to Inspect Certificates](#how-to-inspect-certificates)
+  - [Client to Ingress Controller](#client-to-ingress-controller)
+  - [Ingress Controller to Pod](#ingress-controller-to-pod)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Certs
+
+Unity does all certificate handling for an app. This means an app developer may develop an entire back-end without
+ever needing to touch a certificate or trust store.
 
 ## Architecture
 
@@ -27,12 +28,12 @@ The sections below outline the details.
 
 ## TLS
 
-When an end-user opens a unity app's UI in the web browser, they call an URL like `https://unity.bmwgroup.net/foo/ui`.
+When an end-user opens a UNITY app's UI in the web browser, they call an URL like `https://unity.bmwgroup.net/foo/ui`.
 The request is handled by the ingress controller of the Kubernetes cluster, which also terminates TLS.
 
 The ingress controller is configured via
 an [`Ingress`](https://kubernetes.io/docs/concepts/services-networking/ingress/) object, configured via the
-[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) helm chart.
+[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart.
 
 The [nginx ingress controller](https://github.com/kubernetes/ingress-nginx) can be configured
 via [annotations](https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md)
@@ -71,11 +72,11 @@ This is as secure as any other certificate, since the certificate is never used 
 is required to trust the self-signed certificate.
 
 The self-signed certificate is generated via the
-[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) helm chart.
+[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart.
 
 In the pod, TLS is terminated by an [envoy proxy](https://www.envoyproxy.io).
 Configuration of the envoy proxy is part of the
-[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) helm chart as well.
+[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart as well.
 Finally, the envoy proxy passes traffic on to the app's main container within the pod without encryption via http.
 By terminating TLS on the envoy, the app's main container does not need to handle any certificates or secrets.
 

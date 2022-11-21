@@ -1,10 +1,4 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Terms of Service](#terms-of-service)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DOCTOC SKIP -->
 
 # Terms of Service
 
@@ -21,4 +15,8 @@ The app developers are responsible for
  * configuring their UNITY app inside UNITY
  * patching vulnerabilities inside their UNITY app
 
-Please note that the database solution currently provided by the UNITY team does not guarantee the long term data integrity and should not be used for productive applications
+Databases of type PostgreSQL are experimental and may be used for prototyping only.
+
+ * PostgreSQL databases must not be used in production.
+ * PostgreSQL databases are not backed up
+ * PostgreSQL databases cannot be restored

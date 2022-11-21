@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       repository:
-        description: name of the app repo inside the unity org
+        description: name of the app repo inside the UNITY org
         required: true
       type:
         required: true

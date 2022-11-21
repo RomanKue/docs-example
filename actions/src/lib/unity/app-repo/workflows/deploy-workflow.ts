@@ -33,6 +33,7 @@ concurrency:
   group: ${deployAppWorkflowName}
 jobs:
   ${deployAppWorkflowName}:
+    if: github.actor != 'dependabot[bot]'
     permissions:
       contents: read
       id-token: write

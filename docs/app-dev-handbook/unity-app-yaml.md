@@ -39,7 +39,7 @@ Enable JSON schema validation and autocompletion following the steps below:
 * click on the **+** below and set: FIle path pattern: **unity-app\*\*.yaml**
 * Open e.g. the **unity-app.int.yaml** and hit Ctrl + Space to get autocompletion.
 
-<video autoplay width=801>
+<video autoplay loop width=801>
   <source src="../assets/schema-autocompletion.mov" type="video/mp4">
 Your browser does not support the video tag.
 </video>

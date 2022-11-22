@@ -20,9 +20,9 @@ In addition, workflows that build and push docker images to the GitHub container
 chose to create an Angular and or Quarkus stub in the "New App" issue template.
 These default workflows are just a starting point and may be customized later on.
 After the first images are build from the source code, they are automatically deployed, based on the configuration
-inside the [unity-app.yaml files](./unity-app-yaml.md).
+inside the [`unity-app.*.yaml` files](./unity-app-yaml.md).
 
-Any change to the source code or `unity-app.yaml` files in the `main` branch of the repository will be rolled out
+Any change to the source code or `unity-app.*.yaml` files in the `main` branch of the repository will be rolled out
 automatically.
 The diagrams below give a short overview.
 
@@ -31,7 +31,7 @@ below shows a workflow for the `api` deployment.
 
 ![](../assets/ci-api.png)
 
-Changes to an `unity-app.yaml` file are handled by the `config-change` workflow. If there are only changes to
+Changes to an `unity-app.*.yaml` file are handled by the `config-change` workflow. If there are only changes to
 the `unity-app.int.yaml` file, only the first workflow would be executed.
 
 ![](../assets/config-change.png)

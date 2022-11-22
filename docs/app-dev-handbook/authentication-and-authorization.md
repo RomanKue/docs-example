@@ -17,7 +17,7 @@
 
 Every UNITY app is protected by strong authentication (two-factor authentication with YubiKey) by default.
 
-The way, authentication is working can be configured in the `unity-app.yaml` files like shown below:
+The way, authentication is working can be configured in the `unity-app.*.yaml` files like shown below:
 
 ```yaml
 auth:
@@ -128,7 +128,7 @@ Read more about auth levels in the [WebEAM documentation](https://atc.bmwgroup.n
 
 ## Authorization
 
-Simple role requirements can be configured in the unity-app.yaml.
+Simple role requirements can be configured in the `unity-app.*.yaml` files.
 
 ### B2X Roles
 

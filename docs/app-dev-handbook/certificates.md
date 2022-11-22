@@ -88,7 +88,7 @@ public interface DevModelRangeSearch {
 
 ### Other Services
 
-To integrate other external services, the `unity-app.yaml` files need to be adjusted like shown below:
+To integrate other external services, the `unity-app.*.yaml` files need to be adjusted like shown below:
 
 ```yaml
 deployments:

@@ -9,12 +9,8 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Envoy](#envoy)
-  - [Architecture](#architecture)
-    - [Authorization](#authorization)
-    - [Content Encoding](#content-encoding)
-    - [TLS Termination](#tls-termination)
-  - [Testing Locally](#testing-locally)
+- [Kubernetes](#kubernetes)
+  - [Labels](#labels)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

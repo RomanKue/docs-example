@@ -9,4 +9,5 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 * [Getting Started](getting-started.md)
 * [UNITY App Yaml](unity-app-yaml.md)
 * [Authentication and Authorization](authentication-and-authorization.md)
+* [Resources](resources.md)
 * [Certificates](certificates.md)

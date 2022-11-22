@@ -10,7 +10,7 @@
 
 # Unity App Yaml
 
-The `unity-app.yaml` files is the central point of interaction of a UNITY app and the platform.
+The `unity-app.*.yaml` files is the central point of interaction of a UNITY app and the platform.
 Several files, one for each environment, specify the configuration of an app.
 
 Bv default this is:
@@ -23,7 +23,7 @@ here: [https://unity.bmwgroup.net/unity/unity-app.schema.json](https://unity.bmw
 
 The schema does not only allow validation of the configuration, but also contains documentation of each property.
 
-It is recommended to map the schema to the `unity-app.yaml` files in an IDE, as this will enable autocompletion and
+It is recommended to map the schema to the `unity-app.*.yaml` files in an IDE, as this will enable autocompletion and
 inline documentation.
 
 ## IntelliJ and Other [JetBrains](https://www.jetbrains.com) IDEs

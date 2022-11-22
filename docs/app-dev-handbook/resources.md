@@ -3,11 +3,7 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Certificates](#certificates)
-  - [Ingress](#ingress)
-  - [Egress](#egress)
-    - [UNITY App Services](#unity-app-services)
-    - [Other Services](#other-services)
+- [Resources](#resources)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

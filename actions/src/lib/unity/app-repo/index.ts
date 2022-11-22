@@ -86,6 +86,8 @@ export const createRepository = async (
   const appRepository = await createAnOrganizationRepository({
     name: newAppRepoName,
     visibility: 'private',
+    allow_auto_merge: true,
+    delete_branch_on_merge: true
   });
 
   const topic = await replaceAllRepositoryTopics({

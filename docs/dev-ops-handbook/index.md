@@ -6,6 +6,7 @@ platform. It is open source, though, so everybody may read it to get a deeper un
 
 ## Table of Contents
 
+* [Kubernetes](kubernetes.md)
 * [Envoy](envoy.md)
 * [Certs](certs.md)
 * [Technical Accounts](technical-accounts.md)

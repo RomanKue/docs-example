@@ -36,6 +36,7 @@ import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
 import * as core from '@actions/core';
 import {configChangeWorkflowFileName, createConfigChangeWorkflow} from './workflows/config-change-workflow.js';
 import {createJsonSchemas} from './idea.js';
+import {createDependabot} from './dependabot.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -101,10 +102,15 @@ export const createRepository = async (
   });
 
   let commit: FileCommit;
+  const userLogin = issue.user?.login;
+  if (!userLogin) {
+    throw new Error(`user ${JSON.stringify(issue.user, null, 2)} has no login.`);
+  }
   commit = await repositoriesUtils.addFile(appRepository.name, '.gitignore', createGitignore());
   commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(newAppIssue));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.int), yaml.dump(appSpec));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.prod), yaml.dump(appSpec));
+  commit = await repositoriesUtils.addFile(appRepository.name, '.github/dependabot.yaml', createDependabot(newAppIssue, userLogin));
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/jsonSchemas.xml', createJsonSchemas());
 
   if (newAppIssue.generateAngularStub) {

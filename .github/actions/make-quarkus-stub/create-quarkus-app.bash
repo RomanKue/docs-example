@@ -18,7 +18,7 @@ ls -lah
 npm install --location=global gomplate
 
 # based on https://quarkus.io/guides/getting-started
-mvn io.quarkus.platform:quarkus-maven-plugin:2.12.3.Final:create \
+mvn io.quarkus.platform:quarkus-maven-plugin:2.14.1.Final:create \
 -DprojectGroupId=net.bmwgroup.unity."$REPO"."$NAME" \
 -DprojectArtifactId="$NAME" \
 -Dextensions="resteasy-reactive"

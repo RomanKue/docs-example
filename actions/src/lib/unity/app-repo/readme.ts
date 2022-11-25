@@ -17,7 +17,9 @@ The [ci-${quarkusStubName}](${repoUrl(newAppIssue.appSpec?.name)}/actions/workfl
 Here are the URLs for the environments:
 
 * [https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/](https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/)
+  * [Swagger UI](https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/swagger-ui/)
 * [https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/](https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/)
+  * [Swagger UI](https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/swagger-ui/)
 `;
 
 const createAngularReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
@@ -34,8 +36,8 @@ The [ci-${angularStubName}](${repoUrl(newAppIssue.appSpec?.name)}/actions/workfl
 
 Here are the URLs for the environments:
 
-* [https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/](https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/)
-* [https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/](https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${quarkusStubName}/)
+* [https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${angularStubName}/](https://unity-int.bmwgroup.net/${newAppIssue.appSpec?.name}/${angularStubName}/)
+* [https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${angularStubName}/](https://unity.bmwgroup.net/${newAppIssue.appSpec?.name}/${angularStubName}/)
 `;
 
 

@@ -26,6 +26,11 @@ This section clarifies how UNITY does that.
 
 The following diagram illustrates TLS termination for ingress traffic:
 
+<!--
+If you want to read this documentation, but see only HTML code below, consider to go to
+https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
+to edit, copy the graph to the mermaid live editor: https://mermaid.live
+-->
 <div class="mermaid">
 graph TB
 subgraph UNITY
@@ -46,6 +51,11 @@ certificate key to encrypt traffic.
 
 The following diagram illustrates TLS termination for egress traffic:
 
+<!--
+If you want to read this documentation, but see only HTML code below, consider to go to
+https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
+to edit, copy the graph to the mermaid live editor: https://mermaid.live
+-->
 <div class="mermaid">
 graph TB
 subgraph UNITY
@@ -59,7 +69,7 @@ envoy-- HTTPS request -->service
 </div>
 
 In this diagram, the app acts a client and calls the external service through envoy. Envoy has a trust store configured,
-which contains all current certificate trusted in the BMW organisation. Certificates are validated using this trust
+which contains all current certificate trusted in the BMW organization. Certificates are validated using this trust
 store. The app itself does not need to handle any trust stores or certificates.
 
 ### UNITY App Services
@@ -101,4 +111,4 @@ deployments:
     replicas: 1
 ```
 
-This proxy port config will allow to call `https://example.com` on `http://localhost:9000` from the app's container.
+This proxy port config will allow calling `https://example.com` on `http://localhost:9000` from the app's container.

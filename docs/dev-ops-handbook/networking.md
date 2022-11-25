@@ -145,7 +145,8 @@ OK
 
 If the response is `OK`, everything looks good.
 
-Next, change the CNAME record to point to the new cluster via a change to `ntwk-dns-dhcp-sup:global`.
+Next, change the CNAME record to point to the new cluster via a change to `ntwk-dns-dhcp-sup:global`, see
+INC000040799101 for an example.
 This will route all traffic to the new cluster without any downtime.
 
 Note that it will take the old CNAME record's [TTL](https://www.cloudflare.com/learning/cdn/glossary/time-to-live-ttl/)

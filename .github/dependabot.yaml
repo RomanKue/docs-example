@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/actions"
+    assignees:
+      - "q453358"
+    reviewers:
+      - "q453358"
+    pull-request-branch-name:
+      separator: "-"
+    open-pull-requests-limit: 10

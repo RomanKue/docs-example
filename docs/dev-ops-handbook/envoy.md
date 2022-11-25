@@ -4,7 +4,7 @@
 <script type="text/javascript" src="https://unpkg.com/mermaid"></script>
 <script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
 
-## Table of Contents
+# Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -28,10 +28,15 @@ the [unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/
 
 ## Architecture
 
-The basic idea of a service mesh is to offload some logic from the applications container to a sidecar. Typically,
+The basic idea of a service mesh is to offload some logic from the application's container to a sidecar. Typically,
 authorization, TLS, content encoding, metrics and other things are handled by a sidecar.
 In UNITY, an app is deployed with some sidecars, one of them being an envoy proxy as shown in the diagram below:
 
+<!--
+If you want to read this documentation, but see only HTML code below, consider to go to
+https://pages.atc-github.azure.cloud.bmw/UNITY/unity/dev-ops-handbook/envoy.md
+to edit, copy the graph to the mermaid live editor: https://mermaid.live
+-->
 <div class="mermaid">
 graph TB
 subgraph UNITY
@@ -114,7 +119,7 @@ deployments:
 
 ### Content Encoding
 
-For large request payloads it makes sense to
+For large request payloads, it makes sense to
 enable [content-encoding](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Encoding), e.g. based on
 gzip. Instead of handling this in the application containers, the envoy proxy
 [compresses and decompresses](https://www.envoyproxy.io/docs/envoy/latest/start/sandboxes/gzip.html) payloads.
@@ -182,7 +187,7 @@ curl http://localhost:8002/oauth2-proxy/ping
 
 This should respond with `OK`.
 
-Note that with this config it is not possible to use envoy to proxy to a locally running app or the
+Note that with this config, it is not possible to use envoy to proxy to a locally running app or the
 [authz](https://atc-github.azure.cloud.bmw/UNITY/authz) service. This would require to map the localhost ports into
 the container, which is not trivial.
 

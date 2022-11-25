@@ -19,7 +19,7 @@ ever needing to touch a certificate or trust store.
 
 ## Architecture
 
-In UNITY all HTTP traffic is encrypted via TLS. Encryption is handled by different certificates as outlined below:
+In UNITY all HTTP traffic is encrypted via TLS. Encryption is handled by different certificates, as outlined below:
 
 * Client to ingress controller
 * Ingress controller to Pod
@@ -62,9 +62,9 @@ documentation.
 Upstream traffic from the ingress controller to the pod is handled by a self-signed certificate.
 
 This simplifies the setup w.r.t certificate rotation. Since the cert manager may generate a new certificate at a certain
-point in time, it must be made sure that the new key is handled correctly bv the pods mounting the key.
+point in time, it must be made sure that the new key is handled correctly by the pods mounting the key.
 The ingress controller can pick up new certificates keys automatically. As soon as a new certificate key is present in
-the secret it will serve traffic using the new certificate key.
+the secret, it will serve traffic using the new certificate key.
 
 On the other hand, a pod serving traffic may not be capable to handle a new certificate at runtime. Hence, a self-signed
 certificate with almost infinite validity (100 years) is used to encrypt traffic from the ingress controller to the pod.
@@ -77,7 +77,7 @@ The self-signed certificate is generated via the
 In the pod, TLS is terminated by an [envoy proxy](https://www.envoyproxy.io).
 Configuration of the envoy proxy is part of the
 [unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart as well.
-Finally, the envoy proxy passes traffic on to the app's main container within the pod without encryption via http.
+Finally, the envoy proxy passes traffic on to the app's main container within the pod without encryption via HTTP.
 By terminating TLS on the envoy, the app's main container does not need to handle any certificates or secrets.
 
 ## How to Inspect Certificates
@@ -85,7 +85,7 @@ By terminating TLS on the envoy, the app's main container does not need to handl
 When something breaks, it is important to know, how to inspect the various certificates.
 
 When the ingress controller stops to serve traffic, one reason can be in issue with the certificate configuration.
-The first step for troubleshooting should be inspecting the logs in grafana Loki:
+The first step for troubleshooting should be inspecting the logs in Grafana Loki:
 
 ![](../assets/Loki-SSL-certificate-veryfy-error-Screenshot.png)
 
@@ -166,7 +166,7 @@ SNI=$(kubectl get ingress app-$NAME-$DEPLOYMENT -ojson | jq -r '.metadata.annota
 cat svc-tls.crt | openssl x509 -noout -text -certopt no_header,no_version,no_serial,no_signame,no_issuer,no_pubkey,no_sigdump,no_aux | grep $SNI
 ```
 
-Finally, it need to be made sure that the pod is serving traffic with the certificate from the secret (and not using an
+It needs to be made sure that the pod is serving traffic with the certificate from the secret (and not using an
 outdated certificate).
 This can be done by mapping the port of the service to localhost
 
@@ -187,7 +187,7 @@ grep -A 1000 'BEGIN CERTIFICATE' |
 grep -B 1000 'END CERTIFICATE' > tls.crt
 ```
 
-Finally, make sure the served certificate is that same as the one from secret:
+Make sure the served certificate is that same as the one from secret:
 
 ```bash
 diff --ignore-blank-lines tls.crt svc-tls.crt

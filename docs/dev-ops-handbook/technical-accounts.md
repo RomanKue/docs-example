@@ -1,14 +1,15 @@
-# Technical Accounts
-
-## Table of Contents
+# Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [QQ-Users](#qq-users)
-- [QD-Users](#qd-users)
+- [Technical Accounts](#technical-accounts)
+  - [QQ-Users](#qq-users)
+  - [QD-Users](#qd-users)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Technical Accounts
 
 ## QQ-Users
 

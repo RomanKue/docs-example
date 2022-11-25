@@ -43,10 +43,15 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const updateAppDeployments = async (
   appSpec: ReadonlyDeep<AppSpec>,
-  name: string, deployment: AppDeployment
+  name: string,
+  deployment: AppDeployment,
+  redirect?: string,
 ) => {
   if (isV1Beta1(appSpec)) {
     appSpec = produce(appSpec, draft => {
+      if (redirect) {
+        draft.redirect = redirect;
+      }
       const deployments = draft.deployments ?? {};
       deployments[name] = {
         replicas: 2,
@@ -117,6 +122,7 @@ export const createRepository = async (
           tmpDirs: ['/tmp']
         }
       },
+      'ui/',
     );
     await actions.createAWorkflowDispatchEvent({
       ref: 'main',

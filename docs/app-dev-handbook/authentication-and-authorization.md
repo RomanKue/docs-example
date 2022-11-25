@@ -109,7 +109,7 @@ lower value.
 A typical use case would be to serve only data with a low protection need on auth level 1000 (single factor
 authentication) and all data on authentication level 7000.
 
-The current user's auth level is passed as custom header `Unity-AuthLevel` to the upstream backend,
+The current user's auth level is passed a as custom header `Unity-AuthLevel` to the upstream backend,
 which can be evaluated in a Quarkus back-end like shown below.
 
 ```java
@@ -146,7 +146,7 @@ auth:
 This will reject any request with [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403), if the
 user does not have either the `PMD` or the `B2B_I` role.
 
-More advance role checks must be performed in the applications back-end. Roles are passed as custom
+More advance role checks must be performed in the application's back-end. Roles are passed as custom
 headers: `Unity-B2XRole`. Note that this header is repeated, if multiple roles are requested.
 Also note that only roles from the `auth.roles.b2x.any` list are passed in that header.
 

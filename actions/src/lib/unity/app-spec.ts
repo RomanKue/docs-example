@@ -40,6 +40,7 @@ export interface AppDeployment {
 export interface AppSpecV1Beta1 extends ApiVersioned {
   /** field defining the API version, following the K8s concept of API versioning */
   apiVersion: 'v1beta1';
+  redirect?: string;
   name: string;
   deployments?: Record<string, AppDeployment>;
 }
@@ -53,6 +54,7 @@ export const isV1Beta1 = (appSpec: ReadonlyDeep<AppSpec>): appSpec is AppSpecV1B
 
 export interface AppSpecV1 extends ApiVersioned {
   apiVersion: 'v1';
+  redirect?: string;
   name: string;
   deployments: string[];
 }

@@ -11,4 +11,5 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 * [Authentication and Authorization](authentication-and-authorization.md)
 * [Resources](resources.md)
 * [Configuration](configuration.md)
+* [URLs](urls.md)
 * [Certificates](certificates.md)

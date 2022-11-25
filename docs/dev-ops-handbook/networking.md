@@ -9,12 +9,9 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Envoy](#envoy)
-  - [Architecture](#architecture)
-    - [Authorization](#authorization)
-    - [Content Encoding](#content-encoding)
-    - [TLS Termination](#tls-termination)
-  - [Testing Locally](#testing-locally)
+- [Networking](#networking)
+  - [DNS](#dns)
+  - [Migrating to a New Cluster](#migrating-to-a-new-cluster)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

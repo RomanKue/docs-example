@@ -3,9 +3,11 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Networking](#networking)
-  - [DNS](#dns)
-  - [Migrating to a New Cluster](#migrating-to-a-new-cluster)
+- [Regular Activities](#regular-activities)
+  - [Update Quarkus Version](#update-quarkus-version)
+  - [Update Angular Version](#update-angular-version)
+  - [Enable Dependabot on All Repos](#enable-dependabot-on-all-repos)
+  - [Certificates](#certificates)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

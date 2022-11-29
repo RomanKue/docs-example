@@ -13,3 +13,4 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 * [Configuration](configuration.md)
 * [URLs](urls.md)
 * [Certificates](certificates.md)
+* [Security](security.md)

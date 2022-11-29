@@ -51,7 +51,7 @@ export const createEncodings = () => `
     <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>
-`.trim();
+`.trimStart();
 
 export const createModules = (newAppIssue: ReadonlyDeep<NewAppIssue>) => trimEmptyLines(`
 <?xml version="1.0" encoding="UTF-8"?>
@@ -64,9 +64,24 @@ export const createModules = (newAppIssue: ReadonlyDeep<NewAppIssue>) => trimEmp
     </modules>
   </component>
 </project>
-`.trim());
+`.trimStart());
 
-export const createAngularModule = () => trimEmptyLines(`
+
+export const createRootModule = (newAppIssue: ReadonlyDeep<NewAppIssue>) => trimEmptyLines(`
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="Go" enabled="true" />
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>
+`.trimStart());
+
+export const createAngularModule = (newAppIssue: ReadonlyDeep<NewAppIssue>) => trimEmptyLines(`
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager" inherit-compiler-output="true">
@@ -79,12 +94,12 @@ export const createAngularModule = () => trimEmptyLines(`
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
-`.trim());
+`.trimStart());
 
-export const createQuarkusModule = () => trimEmptyLines(`
+export const createQuarkusModule = (newAppIssue: ReadonlyDeep<NewAppIssue>, javaVersion: number) => trimEmptyLines(`
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_17">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_${javaVersion}">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -97,4 +112,74 @@ export const createQuarkusModule = () => trimEmptyLines(`
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
-`.trim());
+`.trimStart());
+
+export const createMisc = (javaVersion: number) => trimEmptyLines(`
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_${javaVersion}" project-jdk-name="graalvm-ce-${javaVersion}" project-jdk-type="JavaSDK" />
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
+</project>
+`);
+
+export const createQuarkusDevRunConfig = () => trimEmptyLines(`
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="api" type="QuarkusRunConfigurationType" factoryName="Quarkus">
+    <module name="${quarkusStubName}" />
+    <QsMavenRunConfiguration>
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="quarkus:dev" />
+              </list>
+            </option>
+            <option name="pomFileName" value="pom.xml" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$/${quarkusStubName}" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <targetMavenLocalRepo />
+    </QsMavenRunConfiguration>
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
+`);
+
+export const createNpmInstallRunConfig = () => trimEmptyLines(`
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="install" type="js.build_tools.npm" nameIsGenerated="true">
+    <package-json value="$PROJECT_DIR$/${angularStubName}/package.json" />
+    <command value="install" />
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>
+`).trimStart();
+
+export const createNpmStartRunConfig = () => trimEmptyLines(`
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="start" type="js.build_tools.npm" nameIsGenerated="true">
+    <package-json value="$PROJECT_DIR$/${angularStubName}/package.json" />
+    <command value="start" />
+    <node-interpreter value="project" />
+    <envs />
+    <method v="2" />
+  </configuration>
+</component>
+`).trimStart();

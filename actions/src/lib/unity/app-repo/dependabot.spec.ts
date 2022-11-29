@@ -41,6 +41,10 @@ updates:
     pull-request-branch-name:
     separator: "-"
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "@angular/*"
+        update-types:
+          - "version-update:semver-major"
       `.trim()
       );
     });

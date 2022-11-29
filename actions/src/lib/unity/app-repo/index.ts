@@ -39,8 +39,13 @@ import {
   createAngularModule,
   createEncodings,
   createJsonSchemas,
+  createMisc,
   createModules,
+  createNpmInstallRunConfig,
+  createNpmStartRunConfig,
+  createQuarkusDevRunConfig,
   createQuarkusModule,
+  createRootModule,
   createVcs
 } from './idea.js';
 import {createDependabot} from './dependabot.js';
@@ -122,10 +127,13 @@ export const createRepository = async (
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/vcs.xml', createVcs());
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/encodings.xml', createEncodings());
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/modules.xml', createModules(newAppIssue));
+  commit = await repositoriesUtils.addFile(appRepository.name, `.idea/${repoName(newAppIssue.appSpec?.name)}.iml`, createRootModule(newAppIssue));
 
   if (newAppIssue.generateAngularStub) {
     const name = angularStubName;
-    commit = await repositoriesUtils.addFile(appRepository.name, `.idea/${name}.xml`, createAngularModule());
+    commit = await repositoriesUtils.addFile(appRepository.name, `${name}/${name}.iml`, createAngularModule(newAppIssue));
+    commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/install.xml`, createNpmInstallRunConfig());
+    commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/start.xml`, createNpmStartRunConfig());
     appSpec = await updateAppDeployments(appSpec, name,
       {
         auth: {
@@ -154,7 +162,10 @@ export const createRepository = async (
 
   if (newAppIssue.generateQuarkusStub) {
     const name = quarkusStubName;
-    commit = await repositoriesUtils.addFile(appRepository.name, `.idea/${name}.xml`, createQuarkusModule());
+    const javaVersion = 17;
+    commit = await repositoriesUtils.addFile(appRepository.name, `${name}/${name}.iml`, createQuarkusModule(newAppIssue, javaVersion));
+    commit = await repositoriesUtils.addFile(appRepository.name, `.idea/misc.xml`, createMisc(javaVersion));
+    commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/${name}.xml`, createQuarkusDevRunConfig());
     appSpec = await updateAppDeployments(appSpec, name,
       {
         auth: {

@@ -33,7 +33,7 @@ export const createJsonSchemas = () => `
     </state>
   </component>
 </project>
-`.trim();
+`.trimStart();
 
 export const createVcs = () => `
 <?xml version="1.0" encoding="UTF-8"?>
@@ -42,7 +42,7 @@ export const createVcs = () => `
     <mapping directory="" vcs="Git" />
   </component>
 </project>
-`.trim();
+`.trimStart();
 
 export const createEncodings = () => `
 <?xml version="1.0" encoding="UTF-8"?>
@@ -117,12 +117,19 @@ export const createQuarkusModule = (newAppIssue: ReadonlyDeep<NewAppIssue>, java
 export const createMisc = (javaVersion: number) => trimEmptyLines(`
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/api/pom.xml" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_${javaVersion}" project-jdk-name="graalvm-ce-${javaVersion}" project-jdk-type="JavaSDK" />
   <component name="ProjectType">
     <option name="id" value="jpab" />
   </component>
 </project>
-`);
+`.trimStart());
 
 export const createQuarkusDevRunConfig = () => trimEmptyLines(`
 <component name="ProjectRunConfigurationManager">
@@ -158,7 +165,7 @@ export const createQuarkusDevRunConfig = () => trimEmptyLines(`
     </method>
   </configuration>
 </component>
-`);
+`.trimStart());
 
 export const createNpmInstallRunConfig = () => trimEmptyLines(`
 <component name="ProjectRunConfigurationManager">
@@ -170,7 +177,7 @@ export const createNpmInstallRunConfig = () => trimEmptyLines(`
     <method v="2" />
   </configuration>
 </component>
-`).trimStart();
+`.trimStart());
 
 export const createNpmStartRunConfig = () => trimEmptyLines(`
 <component name="ProjectRunConfigurationManager">
@@ -182,4 +189,4 @@ export const createNpmStartRunConfig = () => trimEmptyLines(`
     <method v="2" />
   </configuration>
 </component>
-`).trimStart();
+`.trimStart());

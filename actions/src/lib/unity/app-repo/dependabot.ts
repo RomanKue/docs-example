@@ -1,9 +1,8 @@
 import {ReadonlyDeep} from 'type-fest';
 import {angularStubName, quarkusStubName} from '../config.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
+import {trimEmptyLines} from '../../strings/whitespace.js';
 
-const trimEmptyLines = (str: string) =>
-  str.replace(/^\s*\n/gm, '');
 
 const createForMaven = (userLogin: string) => trimEmptyLines(`
   - package-ecosystem: "maven"

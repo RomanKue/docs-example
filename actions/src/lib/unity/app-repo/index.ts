@@ -35,7 +35,14 @@ import {addSimpleComment} from '../../github/api/issues/issues-utils.js';
 import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
 import * as core from '@actions/core';
 import {configChangeWorkflowFileName, createConfigChangeWorkflow} from './workflows/config-change-workflow.js';
-import {createJsonSchemas} from './idea.js';
+import {
+  createAngularModule,
+  createEncodings,
+  createJsonSchemas,
+  createModules,
+  createQuarkusModule,
+  createVcs
+} from './idea.js';
 import {createDependabot} from './dependabot.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
@@ -112,9 +119,13 @@ export const createRepository = async (
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.prod), yaml.dump(appSpec));
   commit = await repositoriesUtils.addFile(appRepository.name, '.github/dependabot.yaml', createDependabot(newAppIssue, userLogin));
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/jsonSchemas.xml', createJsonSchemas());
+  commit = await repositoriesUtils.addFile(appRepository.name, '.idea/vcs.xml', createVcs());
+  commit = await repositoriesUtils.addFile(appRepository.name, '.idea/encodings.xml', createEncodings());
+  commit = await repositoriesUtils.addFile(appRepository.name, '.idea/modules.xml', createModules(newAppIssue));
 
   if (newAppIssue.generateAngularStub) {
     const name = angularStubName;
+    commit = await repositoriesUtils.addFile(appRepository.name, `.idea/${name}.xml`, createAngularModule());
     appSpec = await updateAppDeployments(appSpec, name,
       {
         auth: {
@@ -143,6 +154,7 @@ export const createRepository = async (
 
   if (newAppIssue.generateQuarkusStub) {
     const name = quarkusStubName;
+    commit = await repositoriesUtils.addFile(appRepository.name, `.idea/${name}.xml`, createQuarkusModule());
     appSpec = await updateAppDeployments(appSpec, name,
       {
         auth: {

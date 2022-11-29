@@ -92,6 +92,7 @@ export const createRepository = async (
   newAppIssue: ReadonlyDeep<NewAppIssue>,
   appSpec: ReadonlyDeep<AppSpec>
 ): Promise<{ appSpec: ReadonlyDeep<AppSpec>; appRepository: ReadonlyDeep<Repository> }> => {
+  const javaVersion = 17;
   const newAppRepoName = repoName(appSpec.name);
   if (await repositoriesUtils.isRepoExistent(appSpec.name)) {
     throw new Error(`the repository ${newAppRepoName} already exists`);
@@ -131,7 +132,6 @@ export const createRepository = async (
 
   if (newAppIssue.generateAngularStub) {
     const name = angularStubName;
-    commit = await repositoriesUtils.addFile(appRepository.name, `${name}/${name}.iml`, createAngularModule(newAppIssue));
     commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/install.xml`, createNpmInstallRunConfig());
     commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/start.xml`, createNpmStartRunConfig());
     appSpec = await updateAppDeployments(appSpec, name,
@@ -162,8 +162,6 @@ export const createRepository = async (
 
   if (newAppIssue.generateQuarkusStub) {
     const name = quarkusStubName;
-    const javaVersion = 17;
-    commit = await repositoriesUtils.addFile(appRepository.name, `${name}/${name}.iml`, createQuarkusModule(newAppIssue, javaVersion));
     commit = await repositoriesUtils.addFile(appRepository.name, `.idea/misc.xml`, createMisc(javaVersion));
     commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/${name}.xml`, createQuarkusDevRunConfig());
     appSpec = await updateAppDeployments(appSpec, name,
@@ -250,6 +248,7 @@ export const createRepository = async (
       core.debug(`waiting...`);
       await sleep(1_000);
     }
+    commit = await repositoriesUtils.addFile(appRepository.name, `${angularStubName}/${angularStubName}.iml`, createAngularModule(newAppIssue));
   }
   if (newAppIssue.generateQuarkusStub) {
     core.debug(`waiting for quarkus stub to be generated`);
@@ -266,6 +265,7 @@ export const createRepository = async (
       core.debug(`waiting...`);
       await sleep(5_000);
     }
+    commit = await repositoriesUtils.addFile(appRepository.name, `${quarkusStubName}/${quarkusStubName}.iml`, createQuarkusModule(newAppIssue, javaVersion));
   }
 
   let appMembers = issue.user ? [issue.user] : [];

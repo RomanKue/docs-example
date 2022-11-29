@@ -9,6 +9,7 @@
     - [Minimum Authentication Level](#minimum-authentication-level)
   - [Authorization](#authorization)
     - [B2X Roles](#b2x-roles)
+    - [Other Role Providers (RightNow, RoMa, Active Directory, ...)](#other-role-providers-rightnow-roma-active-directory-)
   - [User Information](#user-information)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -35,7 +36,7 @@ Details on each attribute can be found in the [unity-app schema](./unity-app-yam
 
 ## Authentication
 
-As previously stated, each app is protected by with authentication by default.
+As previously stated, each app is protected with authentication by default.
 In rare cases, this protection can be disabled by setting the `auth.enabled` flag to `false`. Note, that this will
 expose all endpoints publicly to the entire BMW intranet!
 Disabling authentication is recommended only, if the content is public, or if authentication and authorization is
@@ -106,10 +107,20 @@ authenticate with a YubiKey as second factor to get the level 7000 authenticatio
 If the application accepts request with lower auth levels as well, it may reduce the default `auth.minAuthLevel` to a
 lower value.
 
+Note that the user will still be redirected to a login-page which requests authenticating with a YubiKey.
+To redirect to a different login page, the OAuth2 flow must be initiated on the application level, as this is not
+supported by UNITY out of the box. This means,
+
+```yaml
+auth:
+  enabled: false
+```
+must be set for the UI and the SPA needs to handle the OAuth2 flow.
+
 A typical use case would be to serve only data with a low protection need on auth level 1000 (single factor
 authentication) and all data on authentication level 7000.
 
-The current user's auth level is passed a as custom header `Unity-AuthLevel` to the upstream backend,
+The current user's auth level is passed as a custom header `Unity-AuthLevel` to the upstream backend,
 which can be evaluated in a Quarkus back-end like shown below.
 
 ```java
@@ -163,6 +174,21 @@ public class RolesResource {
     }
 }
 ```
+
+### Other Role Providers (RightNow, RoMa, Active Directory, ...)
+
+If the app requires to use a role provider, which is not integrated into UNITY, it must be handled on application level.
+This means, the `unity-app.*.yaml` file should contain a configuration, which only requests authentication:
+
+```yaml
+auth:
+  oauth:
+    enabled: true
+```
+
+This will make sure, all requests passed to the application have a `Authorization: Bearer xyz...` header with a valid
+WebEAM Bearer token.
+With that token, any role provider can be used, either employing a custom implementation, or an extension.
 
 ## User Information
 

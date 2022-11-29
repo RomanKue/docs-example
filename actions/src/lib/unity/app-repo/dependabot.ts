@@ -27,6 +27,10 @@ const createForNpm = (userLogin: string) => trimEmptyLines(`
     pull-request-branch-name:
     separator: "-"
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "@angular/*"
+        update-types:
+          - "version-update:semver-major"
     `).trimEnd();
 
 export const createDependabot = (newAppIssue: ReadonlyDeep<NewAppIssue>, userLogin: string) => `

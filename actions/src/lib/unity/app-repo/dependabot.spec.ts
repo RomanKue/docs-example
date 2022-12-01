@@ -24,7 +24,7 @@ updates:
 version: 2
 updates:
   - package-ecosystem: "maven"
-    directory: "/ui"
+    directory: "/api"
     assignees:
       - "q1234567"
     reviewers:
@@ -33,7 +33,7 @@ updates:
     separator: "-"
     open-pull-requests-limit: 10
   - package-ecosystem: "npm"
-    directory: "/api"
+    directory: "/ui"
     assignees:
       - "q1234567"
     reviewers:

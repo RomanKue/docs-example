@@ -45,6 +45,9 @@ updates:
       - dependency-name: "@angular/*"
         update-types:
           - "version-update:semver-major"
+      - dependency-name: "@angular-devkit/*"
+        update-types:
+          - "version-update:semver-major"
       `.trim()
       );
     });

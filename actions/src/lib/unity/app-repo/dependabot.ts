@@ -30,6 +30,9 @@ const createForNpm = (userLogin: string) => trimEmptyLines(`
       - dependency-name: "@angular/*"
         update-types:
           - "version-update:semver-major"
+      - dependency-name: "@angular-devkit/*"
+        update-types:
+          - "version-update:semver-major"
     `).trimEnd();
 
 export const createDependabot = (newAppIssue: ReadonlyDeep<NewAppIssue>, userLogin: string) => `

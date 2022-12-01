@@ -15,7 +15,7 @@ describe('new-issue', () => {
     it('should parse when loading template file', () => {
       const md = fs.readFileSync('../.github/ISSUE_TEMPLATE/new-app.md', 'utf8');
       const newAppIssue = parseIssueBody(md);
-      expect(newAppIssue.appSpec?.apiVersion).toEqual('v1beta1');
+      expect(newAppIssue.appSpec?.apiVersion).toEqual('v1');
       expect(newAppIssue.appSpec?.name).toEqual('<my-app-name>');
       expect(newAppIssue.generateAngularStub).toBe(true);
       expect(newAppIssue.generateQuarkusStub).toBe(true);

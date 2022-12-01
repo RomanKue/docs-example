@@ -107,6 +107,11 @@ authenticate with a YubiKey as second factor to get the level 7000 authenticatio
 If the application accepts request with lower auth levels as well, it may reduce the default `auth.minAuthLevel` to a
 lower value.
 
+```yaml
+auth:
+  minAuthLevel: 4000
+```
+
 Note that the user will still be redirected to a login-page which requests authenticating with a YubiKey.
 To redirect to a different login page, the OAuth2 flow must be initiated on the application level, as this is not
 supported by UNITY out of the box. This means,

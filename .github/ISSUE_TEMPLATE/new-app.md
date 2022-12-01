@@ -10,7 +10,7 @@ assignees: ''
 I wish to run my app in UNITY. Here is the configuration I would like to start with:
 
 ```yaml
-apiVersion: v1beta1
+apiVersion: v1
 name: <my-app-name>
 ```
 

@@ -56,13 +56,13 @@ export interface AppSpecV1 extends ApiVersioned {
   apiVersion: 'v1';
   redirect?: string;
   name: string;
-  deployments: string[];
+  deployments?: Record<string, AppDeployment>;
 }
 
 /**
  * type guard for {@link AppSpecV1}
  */
-export const isV1 = (appSpec: AppSpec): appSpec is AppSpecV1 => {
+export const isV1 = (appSpec: ReadonlyDeep<AppSpec>): appSpec is AppSpecV1 => {
   return (appSpec as AppSpecV1).apiVersion === 'v1';
 };
 

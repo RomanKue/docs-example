@@ -1,4 +1,4 @@
-import {AppDeployment, AppSpec, imageName, isV1Beta1, repoName} from '../app-spec.js';
+import {AppDeployment, AppSpec, imageName, isV1, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {
@@ -60,7 +60,7 @@ const updateAppDeployments = async (
   deployment: AppDeployment,
   redirect?: string,
 ) => {
-  if (isV1Beta1(appSpec)) {
+  if (isV1Beta1(appSpec) || isV1(appSpec)) {
     appSpec = produce(appSpec, draft => {
       if (redirect) {
         draft.redirect = redirect;

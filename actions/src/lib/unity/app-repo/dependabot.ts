@@ -6,7 +6,7 @@ import {trimEmptyLines} from '../../strings/whitespace.js';
 
 const createForMaven = (userLogin: string) => trimEmptyLines(`
   - package-ecosystem: "maven"
-    directory: "/${angularStubName}"
+    directory: "/${quarkusStubName}"
     assignees:
       - "${userLogin}"
     reviewers:
@@ -18,7 +18,7 @@ const createForMaven = (userLogin: string) => trimEmptyLines(`
 
 const createForNpm = (userLogin: string) => trimEmptyLines(`
   - package-ecosystem: "npm"
-    directory: "/${quarkusStubName}"
+    directory: "/${angularStubName}"
     assignees:
       - "${userLogin}"
     reviewers:

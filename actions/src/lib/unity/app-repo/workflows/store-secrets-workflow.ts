@@ -23,7 +23,7 @@ jobs:
         shell: bash
         env:
           KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
-        run: echo "\${{ format('KUBERNETES_TOKEN{0} \$KUBERNETES_TOKEN', ':') }}" >> secrets.yaml
+        run: echo "\${{ format('KUBERNETES_TOKEN{0} $KUBERNETES_TOKEN', ':') }}" >> secrets.yaml
       - name: upload secrets
         uses: actions/upload-artifact@v3
         with:

@@ -50,5 +50,8 @@ deployments:
           value: crypt.v1[atAkljasdjs/0==]
 ```
 
+In order to develop locally, you may need the application service account token. To export the service account token stored in GitHub, you can run
+manually the `store-secrets` workflow.
+
 There is currently no convenient way to encrypt information from the developer perspective. Contact the UNITY team if
 you need this feature.

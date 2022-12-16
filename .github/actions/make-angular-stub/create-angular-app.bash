@@ -39,8 +39,7 @@ ng new "$NAME" --defaults --style=scss --skip-git
 
   < "$SCRIPT_PATH/templates/app.module.ts" gomplate > "src/app/app.module.ts"
 
-  cd src/app
-  mkdir -p .core/interceptors
+  mkdir -p .src/app/core/interceptors
 
   < "$SCRIPT_PATH/templates/authentication-error-interceptor.ts" gomplate > "src/app/core/interceptors/authentication-error-interceptor.ts"
 

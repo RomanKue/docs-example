@@ -4,7 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app.component';
 import {DsButtonModule,} from '@bmw-ds/components';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {AuthenticationErrorInterceptor} from './authentication-error-interceptor';
+import {AuthenticationErrorInterceptor} from './interceptors/authentication-error-interceptor';
 
 @NgModule({
   declarations: [

@@ -9,7 +9,9 @@ export class AuthenticationErrorInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       catchError((error: unknown) => {
         if (error instanceof HttpErrorResponse) {
+          // unauthorized (cookie expired or not existent)
           if (error.status === 401) {
+            // trigger page reload to initiate new login
             location.reload();
           }
         }

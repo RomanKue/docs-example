@@ -31,6 +31,8 @@ updates:
       - "q1234567"
     pull-request-branch-name:
     separator: "-"
+    schedule:
+      interval: "daily"
     open-pull-requests-limit: 10
   - package-ecosystem: "npm"
     directory: "/ui"
@@ -40,6 +42,8 @@ updates:
       - "q1234567"
     pull-request-branch-name:
     separator: "-"
+    schedule:
+      interval: "daily"
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: "@angular/*"

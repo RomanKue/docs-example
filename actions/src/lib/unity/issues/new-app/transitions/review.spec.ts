@@ -166,9 +166,11 @@ apiVersion: v1beta1
 name: my-app-name
 \`\`\`
 
+*The app's name should be URL compatible, so prefer \`my-app\` over ~~\`MyApp\` or ~~\`my app\`~~.*
+
 **Application Components**
 
- * [x] please generate a front-end [Angular](http://angular.io) stub from a template for me.
+ * [x] please generate a front-end [Angular](https://angular.io) stub from a template for me.
  * [x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.
 
 **The Way We Work Together**

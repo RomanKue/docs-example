@@ -84,6 +84,7 @@ quarkus.rest-client.services.url=http://localhost:8008/services/api
 ```
 
 `DevModelRangeSearch.java`
+
 ```java
 @RegisterRestClient(configKey = "services")
 @Consumes({MediaType.APPLICATION_JSON})
@@ -112,3 +113,23 @@ deployments:
 ```
 
 This proxy port config will allow calling `https://example.com` on `http://localhost:9000` from the app's container.
+
+More detailed, TLS will be terminated by the envoy proxy and exposed as http endpoint without TLS inside the pod.
+One caveat may be a redirect response from the external service pointing to another host. If the app's client is
+configured such that it follows redirects, it may fail to connect the host from the `Location` header.
+
+Here is a specific example.
+
+The app calls `https://example.com` via `http://localhost:9000`
+
+```http
+GET http://localhost:9000/foo/bar
+
+< Location: https://another-example.com/foo/bar
+```
+
+This will most likely fails, since `https://another-example.com` is not trusted. It is recommended to no follow
+redirects from within the app's client and configure the correct host in the app.
+If this cannot be done, the app must manage the trust store itself by adding relevant certificates to the app image
+trust store and the `proxyPorts` feature cannot be used.
+

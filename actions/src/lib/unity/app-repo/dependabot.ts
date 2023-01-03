@@ -13,6 +13,8 @@ const createForMaven = (userLogin: string) => trimEmptyLines(`
       - "${userLogin}"
     pull-request-branch-name:
     separator: "-"
+    schedule:
+      interval: "daily"
     open-pull-requests-limit: 10
   `).trimEnd();
 
@@ -25,6 +27,8 @@ const createForNpm = (userLogin: string) => trimEmptyLines(`
       - "${userLogin}"
     pull-request-branch-name:
     separator: "-"
+    schedule:
+      interval: "daily"
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: "@angular/*"

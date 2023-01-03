@@ -41,7 +41,7 @@ ng new "$NAME" --defaults --style=scss --skip-git
 
   mkdir -p src/app/core/interceptors
 
-  < "$SCRIPT_PATH/templates/authentication-error-interceptor.ts" gomplate > "src/app/core/interceptors/authentication-error-interceptor.ts"
+  < "$SCRIPT_PATH/templates/authentication-error-interceptor.ts" gomplate > "src/app/interceptors/authentication-error-interceptor.ts"
 
   # list what has been created
   ls -lah

@@ -18,11 +18,11 @@ address the UNITY development team to configure the application accordingly.
 
 After this has been done, it will be possible to do a port-forwarding to the configured open port:
 
-```console
-$ kubectl port-forward app-services-api-799696f469-p9wcm 10500:10500 -n int
+```bash
+kubectl port-forward app-services-api-799696f469-p9wcm 10500:10500 -n int
 ```
 
 For profiling the application, different profilers can be used. An example which comes together with the JDK is Visual VM,
 which can be started by running the command jvisualvm (provided that the JDK is in the Path).
 
-A remote debugger in IntelliJ and connect to localhost:10500.
+A remote debugger in IntelliJ can be used with a connection to localhost:10500.

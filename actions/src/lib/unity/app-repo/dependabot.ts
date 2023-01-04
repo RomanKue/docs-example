@@ -12,7 +12,7 @@ const createForMaven = (userLogin: string) => trimEmptyLines(`
     reviewers:
       - "${userLogin}"
     pull-request-branch-name:
-    separator: "-"
+      separator: "-"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
@@ -26,7 +26,7 @@ const createForNpm = (userLogin: string) => trimEmptyLines(`
     reviewers:
       - "${userLogin}"
     pull-request-branch-name:
-    separator: "-"
+      separator: "-"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10

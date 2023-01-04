@@ -218,6 +218,6 @@ Some user's attributes are passed as custom headers. The list below shows, what 
 * `Unity-Email` e.g. `user@example.com`
 * `Unity-B2XRole` e.g. `B2B_I`
 * `Unity-AuthLevel` e.g. `7000`
-* `Unity-UserName` e.g. `Charly Brown`
+* `Unity-UserName` e.g. `Charlie Brown`
 * `Unity-UserSub` e.g. `q12345`
 * `Unity-Department` e.g. `FG-123`

@@ -5,13 +5,13 @@
 
 - [Authentication and Authorization](#authentication-and-authorization)
   - [Authentication](#authentication)
+  - [Excluded Paths](#excluded-paths)
     - [OAuth2](#oauth2)
     - [Minimum Authentication Level](#minimum-authentication-level)
   - [Authorization](#authorization)
     - [B2X Roles](#b2x-roles)
     - [Other Role Providers (RightNow, RoMa, Active Directory, ...)](#other-role-providers-rightnow-roma-active-directory-)
   - [User Information](#user-information)
-  - [Excluded Paths](#excluded-paths)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

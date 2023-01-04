@@ -30,7 +30,7 @@ updates:
     reviewers:
       - "q1234567"
     pull-request-branch-name:
-    separator: "-"
+      separator: "-"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
@@ -41,7 +41,7 @@ updates:
     reviewers:
       - "q1234567"
     pull-request-branch-name:
-    separator: "-"
+      separator: "-"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10

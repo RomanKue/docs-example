@@ -7,8 +7,10 @@ runs:
     - name: debug info
       if: ${{ runner.debug }}
       shell: bash
+      env:
+        GITHUB_JSON: ${{ toJSON(github) }}
       run: |
-        echo '${{ toJson(github) }}' | jq .
+        echo "$GITHUB_JSON" | jq .
         git config --list
     - uses: actions/setup-node@v3
       with:

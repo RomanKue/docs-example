@@ -41,7 +41,7 @@ registered, which points to Kubernetes clusters DNS.
 
 Here is an example on how to resolve the record.
 
-```txt
+```console
 $ nslookup unity-int.bmwgroup.net
 Server:		160.50.252.20
 Address:	160.50.252.20#53
@@ -56,7 +56,7 @@ This shows, that the CNAME is `int.apps.pdm-unity-int.azure.cloud.bmw`.
 For the CNAME, an additional [A record](https://www.cloudflare.com/learning/dns/dns-records/dns-a-record/) resolves to
 the IP of the ingress controller.
 
-```text
+```console
 $ nslookup int.apps.pdm-unity-int.azure.cloud.bmw
 Server:		160.50.250.20
 Address:	160.50.250.20#53
@@ -75,7 +75,7 @@ Assume, the new cluster can be reached under `int.apps.new-cluster.azure.cloud.b
 Before changing the CNAME record, the new cluster can be tested. For example, to test that routing and certificates
 work as expected for the oauth2-proxy, resolve the ip of the new cluster:
 
-```bash
+```console
 $ nslookup int.apps.new-cluster.azure.cloud.bmw
 Server:         160.50.250.20
 Address:        160.50.250.20#53
@@ -94,7 +94,7 @@ curl -v --resolve unity-int.bmwgroup.net:443:10.11.112.213 https://unity-int.bmw
 Note that certificate validation (`-k`) MUST NOT be used, to check that certificates are set up correctly.
 The output of the curl command should also show the certificates `subjectAltName`:
 
-```bash
+```console
 $ curl -v --resolve unity-int.bmwgroup.net:443:10.11.112.213 https://unity-int.bmwgroup.net/oauth2-proxy/ping
 * Added unity-int.bmwgroup.net:443:10.11.112.213 to DNS cache
 *   Trying 10.11.112.213:443...
@@ -150,7 +150,7 @@ Note that it will take the old CNAME record's [TTL](https://www.cloudflare.com/l
 until all traffic is safely routed to the new cluster.
 Check the TTL with `nslookup` to know how long to wait with the decommissioning of the old cluster:
 
-```bash
+```console
 $ nslookup -debug unity-int.bmwgroup.net
 Server:         160.50.250.20
 Address:        160.50.250.20#53

@@ -5,7 +5,7 @@
 
 - [Authentication and Authorization](#authentication-and-authorization)
   - [Authentication](#authentication)
-  - [Excluded Paths](#excluded-paths)
+    - [Excluded Paths](#excluded-paths)
     - [OAuth2](#oauth2)
     - [Minimum Authentication Level](#minimum-authentication-level)
   - [Authorization](#authorization)

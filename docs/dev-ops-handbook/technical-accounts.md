@@ -20,5 +20,5 @@ To run the UNITY platform, some technical accounts are required:
 
 ## QD-Users
 
-* [Charly Brown](https://atc-github.azure.cloud.bmw/qdunit0) aka qqunit0 is a test persona which can be employed to test
+* [Charlie Brown](https://atc-github.azure.cloud.bmw/qdunit0) aka qqunit0 is a test persona which can be employed to test
   UNITY app development workflows.

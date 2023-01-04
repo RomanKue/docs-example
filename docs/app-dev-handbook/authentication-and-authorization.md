@@ -44,6 +44,21 @@ Disabling authentication is recommended only, if the content is public, or if au
 implemented on the
 application level. That means, the app development team is responsible for handling all traffic in a secure way.
 
+## Excluded Paths
+
+It is possible that the application defines some paths for which the authentication and authorization is not checked. This
+is useful for example for endpoints used in the authentication process (for example token retrieval endpoints).
+
+In order to define some excluded paths, the following property should be set in the `unity-app.*.yaml` file:
+
+```yaml
+auth:
+  excludedPaths:
+    - /app/api/wen/access-token
+    - /app/api/wen/introspect
+    - /app/api/wen/refresh
+```
+
 ### OAuth2
 
 If the flag `auth.oauth.enabled` is set to `true`, an unauthenticated request will initiate a redirect to the WebEAM
@@ -206,18 +221,3 @@ Some user's attributes are passed as custom headers. The list below shows, what 
 * `Unity-UserName` e.g. `Charly Brown`
 * `Unity-UserSub` e.g. `q12345`
 * `Unity-Department` e.g. `FG-123`
-
-## Excluded Paths
-
-It is possible that the application defines some paths for which the authentication and authorization is not checked. This
-is useful for example for endpoints used in the authentication process (for example token retrieval endpoints).
-
-In order to define some excluded paths, the following property should be set in the `unity-app.*.yaml` file:
-
-```yaml
-auth:
-  excludedPaths:
-    - /app/api/wen/access-token
-    - /app/api/wen/introspect
-    - /app/api/wen/refresh
-```

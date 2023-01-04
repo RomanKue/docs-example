@@ -166,7 +166,7 @@ apiVersion: v1beta1
 name: my-app-name
 \`\`\`
 
-*The app's name should be URL compatible, so prefer \`my-app\` over ~~\`MyApp\` or ~~\`my app\`~~.*
+*The app's name should be URL compatible, so prefer \`my-app\` over ~~\`MyApp\`~~ or ~~\`my app\`~~.*
 
 **Application Components**
 

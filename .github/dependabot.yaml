@@ -8,4 +8,6 @@ updates:
       - "q453358"
     pull-request-branch-name:
       separator: "-"
+    schedule:
+      interval: "daily"
     open-pull-requests-limit: 10

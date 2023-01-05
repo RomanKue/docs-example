@@ -4,8 +4,10 @@ updates:
     directory: "/actions"
     assignees:
       - "q453358"
+      - "qxv2156"
     reviewers:
       - "q453358"
+      - "qxv2156"
     pull-request-branch-name:
       separator: "-"
     schedule:

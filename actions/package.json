@@ -9,7 +9,7 @@
     "@types/marked": "4.0.8",
     "@types/node": "16.11.56",
     "@typescript-eslint/eslint-plugin": "5.36.1",
-    "@typescript-eslint/parser": "5.36.1",
+    "@typescript-eslint/parser": "5.48.0",
     "eslint": "8.22.0",
     "immer": "^9.0.17",
     "js-yaml": "4.1.0",

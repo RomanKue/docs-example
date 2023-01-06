@@ -37,14 +37,14 @@ which can be started by running the command jvisualvm (provided that the JDK is 
 It is possible to perform remote debugging on an application running in the UNITY cluster:
 
 ```bash
-helm upgrade app-services oci://containers.atc-github.azure.cloud.bmw/unity/unity-app --version <chart-version> --set global.main.remoteDebug.enabled=true,global.main.remoteDebug.port=10500 -n int --reuse-values
+helm upgrade app-services oci://containers.atc-github.azure.cloud.bmw/unity/unity-app --version <chart-version> --set global.main.remoteDebug.enabled=true,global.main.remoteDebug.port=5005 -n int --reuse-values
 ```
-If not specified, the default port will be 10500.
+If not specified, the default port will be 5005.
 
-After the application started, it is possible to do a port-forwarding on port 10500:
+After the application started, it is possible to do a port-forwarding on port 5005:
 
 ```bash
-kubectl port-forward app-services-api-799696f469-p9wcm 10500:10500 -n int
+kubectl port-forward app-services-api-799696f469-p9wcm 5005:5005 -n int
 ```
 
-Afterwards it is possible to start a remote debugger in IntelliJ and connect to localhost:10500.
+Afterwards it is possible to start a remote debugger in IntelliJ and connect to localhost:5005.

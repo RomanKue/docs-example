@@ -8,6 +8,7 @@
     - [Excluded Paths](#excluded-paths)
     - [OAuth2](#oauth2)
     - [Minimum Authentication Level](#minimum-authentication-level)
+    - [K8s](#k8s)
   - [Authorization](#authorization)
     - [B2X Roles](#b2x-roles)
     - [Other Role Providers (RightNow, RoMa, Active Directory, ...)](#other-role-providers-rightnow-roma-active-directory-)
@@ -31,6 +32,8 @@ auth:
     b2x:
       any:
         - B2B_I
+  k8s:
+    enabled: false
 ```
 
 Details on each attribute can be found in the [unity-app schema](./unity-app-yaml.md).
@@ -157,6 +160,14 @@ public class AuthLevelResource {
 ```
 
 Read more about auth levels in the [WebEAM documentation](https://atc.bmwgroup.net/confluence/x/14S3KQ).
+
+### K8s
+
+If the flag `auth.k8s.enabled` is set to true, the application will be able to handle kubernetes `ServiceAccount` tokens.
+
+In order to connect to an application using the service account token you must set the `Authorization` header to `Bearer <myAppsSaToken>`.
+Additionally, the custom header `Unity-Authorization-Type` must be set to `Kubernetes-Service-Account`
+to differentiate these requests from the ones using WEN token.
 
 ## Authorization
 

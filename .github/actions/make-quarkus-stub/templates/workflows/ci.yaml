@@ -35,7 +35,7 @@ jobs:
           cache: maven
       - name: setup maven
         if: ${{"{{"}} steps.cache.outputs.cache-hit != 'true' {{"}}"}}
-        uses: pmd/setup-maven@v1
+        uses: unity/setup-maven@v1
       - name: build
         if: ${{"{{"}} steps.cache.outputs.cache-hit != 'true' {{"}}"}}
         working-directory: ${{"{{"}} env.DEPLOYMENT {{"}}"}}

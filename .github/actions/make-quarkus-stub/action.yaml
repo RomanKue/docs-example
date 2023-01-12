@@ -12,7 +12,7 @@ runs:
         distribution: ${{ env.JAVA_DISTRIBUTION }}
         java-version: ${{ env.JAVA_VERSION }}
     - name: setup maven
-      uses: pmd/setup-maven@v1
+      uses: unity/setup-maven@v1
     - name: create
       working-directory: ${{ env.WORKING_DIRECTORY }}
       shell: bash

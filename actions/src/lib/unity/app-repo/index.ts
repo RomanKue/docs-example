@@ -49,7 +49,11 @@ import {
   createVcs
 } from './idea.js';
 import {createDependabot} from './dependabot.js';
-import {storeSecretsWorkflowFileName, createStoreSecretsWorkflow} from './workflows/store-secrets-workflow.js';
+import {createStoreSecretsWorkflow, storeSecretsWorkflowFileName} from './workflows/store-secrets-workflow.js';
+import {
+  createDependabotAutoMergeWorkflow,
+  dependabotAutoMergeWorkflowFileName
+} from './workflows/dependabot-auto-merge-workflow.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -210,6 +214,10 @@ export const createRepository = async (
     appRepository.name,
     `.github/workflows/${storeSecretsWorkflowFileName}`,
     createStoreSecretsWorkflow());
+  commit = await repositoriesUtils.addFile(
+    appRepository.name,
+    `.github/workflows/${dependabotAutoMergeWorkflowFileName}`,
+    createDependabotAutoMergeWorkflow());
 
   for (const env of Object.values(environments)) {
     core.debug(`creating environment "${env}"`);

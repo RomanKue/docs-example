@@ -30,8 +30,11 @@ jobs:
       - name: debug info
         if: ${{ runner.debug }}
         shell: bash
+        env:
+          GITHUB_JSON: ${{ toJSON(github) }}
         run: |
-          echo '${{ toJson(github) }}' | jq .
+          echo "$GITHUB_JSON" | jq .
+          git config --list
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.UNITY_BOT_TOKEN }}

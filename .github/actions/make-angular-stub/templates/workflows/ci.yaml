@@ -42,7 +42,9 @@ jobs:
         run: npx ng build -c production
       - name: install chromium
         if: ${{"{{"}} steps.cache.outputs.cache-hit != 'true' {{"}}"}}
-        run: sudo apt install chromium-browser
+        run: |
+          sudo apt-get update
+          sudo apt install chromium-browser
       - name: test
         if: ${{"{{"}} steps.cache.outputs.cache-hit != 'true' {{"}}"}}
         working-directory: ${{"{{"}} env.DEPLOYMENT {{"}}"}}

@@ -219,9 +219,8 @@ export const createRepository = async (
     required_pull_request_reviews: null,
     required_status_checks: {
       strict: false,
-      contexts: [],
       checks: checks
-    },
+    } as never,
     restrictions: {users: [unityBot], teams: []}
   });
 

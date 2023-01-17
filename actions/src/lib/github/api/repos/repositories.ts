@@ -151,7 +151,7 @@ interface RequiredStatusChecks {
   /**
    * @deprecated
    */
-  contexts: string[],
+  contexts?: string[] | undefined,
   checks: { context: string, app_id?: number }[]
 }
 

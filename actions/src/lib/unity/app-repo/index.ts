@@ -8,6 +8,7 @@ import {
   makeStubWorkflowId,
   quarkusStubName,
   secretKeys,
+  unityBot,
   unityRepositoryRoles
 } from '../config.js';
 import {createGitignore} from './gitignore.js';
@@ -17,7 +18,8 @@ import {
   addARepositoryCollaborator,
   createAnOrganizationRepository,
   createOrUpdateAnEnvironment,
-  replaceAllRepositoryTopics
+  replaceAllRepositoryTopics,
+  updateBranchProtection
 } from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
 import {createDeployWorkflow, deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
@@ -201,6 +203,28 @@ export const createRepository = async (
       }
     });
   }
+
+  // enable branch protection
+  const checks = [];
+  if (newAppIssue.generateAngularStub) {
+    checks.push({context: `ci-${angularStubName}`});
+  }
+  if (newAppIssue.generateQuarkusStub) {
+    checks.push({context: `ci-${quarkusStubName}`});
+  }
+  await updateBranchProtection({
+    repo: appRepository.name,
+    branch: 'main',
+    enforce_admins: false,
+    required_pull_request_reviews: null,
+    required_status_checks: {
+      strict: false,
+      contexts: [],
+      checks: checks
+    },
+    restrictions: {users: [unityBot], teams: []}
+  });
+
 
   commit = await repositoriesUtils.addFile(
     appRepository.name,

@@ -21,6 +21,7 @@ import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
 import {jest} from '@jest/globals';
 import issues from '../../github/api/issues/index.js';
 import {IssueComment} from '../../github/api/issues/response/issue-comment.js';
+import {ProtectedBranch} from '../../github/api/repos/response/protected-branch.js';
 
 
 describe('index', () => {
@@ -37,6 +38,7 @@ describe('index', () => {
     jest.spyOn(repositoris, 'addARepositoryCollaborator').mockResolvedValue(partialMock<RepositoryInvitation>());
     jest.spyOn(repositoris, 'replaceAllRepositoryTopics').mockResolvedValue(partialMock<Topic>());
     jest.spyOn(repositoris, 'createOrUpdateAnEnvironment').mockResolvedValue(partialMock<Environment>());
+    jest.spyOn(repositoris, 'updateBranchProtection').mockResolvedValue(partialMock<ProtectedBranch>());
     jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
     jest.spyOn(repositoriesUtils, 'createEnvironmentSecret').mockResolvedValue();
     jest.spyOn(git, 'createAReference').mockResolvedValue(partialMock<GitReference>());
@@ -55,6 +57,7 @@ describe('index', () => {
       expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledTimes(1);
       expect(repositoris.createOrUpdateAnEnvironment).toHaveBeenCalledTimes(2);
       expect(repositoris.replaceAllRepositoryTopics).toHaveBeenCalledTimes(1);
+      expect(repositoris.updateBranchProtection).toHaveBeenCalledTimes(1);
 
       expect(k8s.createK8sObjects).toHaveBeenCalledTimes(2);
 

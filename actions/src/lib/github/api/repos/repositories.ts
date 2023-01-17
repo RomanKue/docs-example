@@ -9,6 +9,7 @@ import {FileCommit} from './response/file-commit.js';
 import {Topic} from './response/topic.js';
 import {Content} from './response/content.js';
 import {Environment} from './response/environment.js';
+import {ProtectedBranch} from './response/protected-branch.js';
 
 export type ReposApi = RestApi['repos'];
 
@@ -128,4 +129,48 @@ export const createOrUpdateAnEnvironment = async (
     ...options
   });
   return response.data as Environment;
+};
+
+interface UserTeamsApps {
+  users: string[],
+  teams: string[],
+  apps?: string[]
+}
+
+interface RequiredPullRequestReviews {
+  dismissal_restrictions: UserTeamsApps,
+  dismiss_stale_reviews: boolean,
+  require_code_owner_reviews: boolean,
+  required_approving_review_count: number,
+  require_last_push_approval: boolean,
+  bypass_pull_request_allowances: UserTeamsApps
+}
+
+interface RequiredStatusChecks {
+  strict: boolean,
+  /**
+   * @deprecated
+   */
+  contexts: string[],
+  checks: { context: string, app_id?: number }[]
+}
+
+/**
+ * https://docs.github.com/en/rest/branches/branch-protection#update-branch-protection
+ */
+export const updateBranchProtection = async (
+  options: {
+    branch: string,
+    required_status_checks: RequiredStatusChecks | null,
+    enforce_admins: boolean | null,
+    required_pull_request_reviews: RequiredPullRequestReviews | null,
+    restrictions: UserTeamsApps | null,
+  } & Partial<Parameters<ReposApi['updateBranchProtection']>[0]>
+): Promise<ProtectedBranch> => {
+  const response = await getOctokitApi().rest.repos.updateBranchProtection({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  });
+  return response.data as ProtectedBranch;
 };

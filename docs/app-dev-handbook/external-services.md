@@ -3,6 +3,9 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+- [External interfaces](#external-interfaces)
+- [Calling external interfaces over direct link](#calling-external-interfaces-over-direct-link)
+- [Developing locally applications which call the external services](#developing-locally-applications-which-call-the-external-services)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

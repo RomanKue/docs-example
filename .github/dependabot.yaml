@@ -13,3 +13,16 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
+  - package-ecosystem: "maven"
+    directory: "/.github/actions/make-quarkus-stub"
+    schedule:
+      interval: "daily"
+    assignees:
+      - "qxv2156"
+      - "q453358"
+    reviewers:
+      - "UNITY/unity-devops"
+    pull-request-branch-name:
+      separator: "-"
+    open-pull-requests-limit: 2
+

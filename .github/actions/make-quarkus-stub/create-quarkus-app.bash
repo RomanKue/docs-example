@@ -17,11 +17,13 @@ ls -lah
 
 npm install --location=global gomplate
 
+QUARKUS_VERSION=$(cat "$SCRIPT_PATH/pom.xml" | grep "<quarkus.platform.version>" | cut -d ">" -f 2 | cut -d "<" -f 1)
+
 # based on https://quarkus.io/guides/getting-started
-mvn io.quarkus.platform:quarkus-maven-plugin:2.15.1.Final:create \
--DprojectGroupId=net.bmwgroup.unity."$REPO"."$NAME" \
--DprojectArtifactId="$NAME" \
--Dextensions="resteasy-reactive"
+mvn "io.quarkus.platform:quarkus-maven-plugin:$QUARKUS_VERSION:create" \
+"-DprojectGroupId=net.bmwgroup.unity.$REPO.$NAME" \
+"-DprojectArtifactId=$NAME" \
+-Dextensions='resteasy-reactive'
 
 (
   cd "$NAME"

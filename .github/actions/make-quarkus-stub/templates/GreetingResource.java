@@ -1,5 +1,7 @@
 {{ .Env.PACKAGE }}
 
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.Path;
@@ -11,7 +13,7 @@ public class GreetingResource {
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    public String hello(@HeaderParam("Unity-UserName") final String userName) {
+    public String hello(@Parameter(hidden=true) @HeaderParam("Unity-UserName") final String userName) {
         return "Hello " + userName + ", this is UNITY 🚀";
     }
 }

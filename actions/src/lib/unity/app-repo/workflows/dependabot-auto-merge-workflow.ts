@@ -1,6 +1,6 @@
-export const dependabotAutoMergeWorkflowFileName = 'dependabot-auto-merge.yaml';
-export const createDependabotAutoMergeWorkflow = () => `
-name: dependabot-auto-merge
+export const dependabotAutoApproveWorkflowFileName = 'dependabot-auto-approve.yaml';
+export const createDependabotAutoApproveWorkflow = () => `
+name: dependabot-auto-approve
 on: pull_request
 
 permissions:
@@ -23,16 +23,10 @@ jobs:
         shell: bash
         run: >
           echo '\${{ secrets.GITHUB_TOKEN }}' | gh auth login --hostname atc-github.azure.cloud.bmw --with-token
-      - name: Approve patch version updates
-        if: \${{ steps.metadata.outputs.update-type == 'version-update:semver-patch' }}
+      - name: Approve non-major version updates
+        if: \${{ steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor' }}
         run: gh pr review --approve "$PR_URL"
         env:
           PR_URL: \${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: \${{secrets.GITHUB_TOKEN}}
-      - name: Enable auto merge
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: \${{ github.event.pull_request.html_url }}
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
     `.trim();
 

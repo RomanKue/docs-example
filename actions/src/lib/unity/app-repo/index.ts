@@ -175,7 +175,7 @@ export const createRepository = async (
       {
         auth: {
           oauth2: {
-            enabled: true
+            enabled: false
           },
         },
         container: {

@@ -9,42 +9,69 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# External interfaces
+# External Services
 
-UNITY allows the connection to a number of services over REST calls. In this case, UNITY acts as a proxy for the external services.
-The authentication and authorization is done by the UNITY platform.
-
-An example on how to call external services from a pod running inside the cluster is the following:
+UNITY integrates some services from the PMD domain. By providing a reverse proxy integration of these services,
+UNITY can handle authentication and authorization, which means calling a service from a container is as simple as
 
 ```bash
 curl http://localhost:8008/services/api/pip-vehicle/dev-model-ranges/v2:search -d '{}'
 ```
-The base URL is http://localhost:8008/services/api. The next segment of the URL is the service which needs to be called (in this example, pip-vehicle).
-The rest of the URL is the exact path on the external service.
-The body of the request will be forwarded to the external service. No Authorization header is necessary to be set in this situation.
 
-For a list of all supported services, please address to the UNITY team.
+The base URL is http://localhost:8008/services/api. The next segment of the URL is the service which needs to be
+called (in this example, pip-vehicle).
+The rest of the URL is the exact path on the external service. The request body is sent to the external service as is.
 
-# Calling external interfaces over direct link
+Here is a list of available services
 
-External services can be called via a direct link provided by UNITY:
+* `http://localhost:8008/services/api/pip-vehicle` PIP Vehicle
+* `http://localhost:8008/services/api/logic-services`
+  [Logic Services (Logikdienste)](https://pmd.bmwgroup.net/lexicon/app/term/LGCS)
+* `http://localhost:8008/services/api/pdm-core`
+* `http://localhost:8008/services/api/puk`
+  [Check and Configuration Service (Prüf- und Konfigurationsdienst, PUK)](https://pmd.bmwgroup.net/lexicon/app/term/PUK)
+* `http://localhost:8008/services/api/hsa`
+  [HSA (100% Sonderausstattung)](https://pmd.bmwgroup.net/lexicon/app/term/HSA)
+
+## Developing Locally
+
+## Calling External Services
+
+External services can be called via a direct link provided by UNITY as shown in the example below:
 
 ```bash
 curl https://unity-int.bmwgroup.net/services/api/pip-vehicle/dev-model-ranges/v2:search -d '{}' -H 'Authorization: Bearer <token>'
 ```
-The base URL should be in this case https://unity-int.bmwgroup.net/services/api.
-The next segment of the URL is the service which needs to be called (in this example, pip-vehicle).
-The rest of the URL is the exact path on the external service. The request body will be forwarded also in this case to the external service.
 
-However, in this case a valid Authorization header needs to be set. This can be either a WEN token where the user has the necessary roles,
-or a service account token, which can be obtained via the store-secrets workflow which is generated together with the application.
+The base URL (on int) is `https://unity-int.bmwgroup.net/services/api/`.
+The next segment of the URL is the service which needs to be called (in this example, `pip-vehicle`).
+The rest of the URL is the exact path on the external service. The request body is sent to the external service as is.
 
-# Developing locally applications which call the external services
+However, in this case a valid `Authorization` header needs to be set (for example a WEN token where the user has the
+necessary roles if the service uses WEN). If the header is set, it will be directly passed to the service,
+without UNITY making any changes to the header.
 
-It would be useful to be able to call the external services when developing applications. In order to do that, the service account token is
-needed which can be obtained via the store-secrets workflow. If the application is running on Quarkus, the following changes need to be done:
+Alternatively, a service account token can be used for authentication, which can be obtained via the store-secrets
+workflow which is generated together with the application.
+In addition, the custom header `Unity-Authorization-Type: Kubernetes-Service-Account` must be set as shown below.
 
-- create a headers factory which sets the Authorization header:
+```bash
+curl https://unity-int.bmwgroup.net/services/api/pip-vehicle/dev-model-ranges/v2:search -d '{}' -H 'Authorization: Bearer <sa-token>' -H 'Unity-Authorization-Type: Kubernetes-Service-Account'
+```
+
+In this case, UNITY checks that the service account token is valid and will change the `Authorization` header to call
+the external service. This is the most conveninet way to call an external service.
+
+## Quarkus
+
+When developing a Quarkus application, it would be useful to be able to call the external services when developing
+applications. In order to do that, the service account token is
+needed which can be obtained via the store-secrets workflow.
+
+The following steps are required to develop locally:
+
+- create a headers factory which sets the `Authorization` and `Unity-Authorization-Type` header:
+
 ```java
 @ApplicationScoped
 @IfBuildProfile("dev")
@@ -63,6 +90,7 @@ public class DevK8sSaAuthorizationHeaderFactory implements ClientHeadersFactory 
 ```
 
 - this headers factory needs to be used in the REST client:
+
 ```java
 @RegisterRestClient(configKey="puk")
 @RegisterClientHeaders(DevK8sSaAuthorizationHeaderFactory.class)
@@ -79,9 +107,11 @@ public interface PukService {
 ```
 
 - service configuration for dev:
+
 ```properties
 %dev.quarkus.rest-client.puk.url=https://unity-int.bmwgroup.net/services/api/puk
 ```
 
-In this case, when starting Quarkus the SA_TOKEN environment variable needs to be initialized with the value of the service account token.
+In this case, when starting Quarkus the `SA_TOKEN` environment variable needs to be initialized with the value of the
+service account token.
 

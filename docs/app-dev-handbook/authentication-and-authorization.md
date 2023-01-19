@@ -49,17 +49,15 @@ application level. That means, the app development team is responsible for handl
 
 ### Excluded Paths
 
-It is possible that the application defines some paths for which the authentication and authorization is not checked. This
-is useful for example for endpoints used in the authentication process (for example token retrieval endpoints).
+It is possible to exclude some paths from being access protected by authentication and authorization.
 
-In order to define some excluded paths, the following property should be set in the `unity-app.*.yaml` file:
+For example, the OpenAPI endpoint or the SwaggerUI page could be made public by excluding it from authorization as shown blow.
 
 ```yaml
 auth:
   excludedPaths:
-    - /app/api/wen/access-token
-    - /app/api/wen/introspect
-    - /app/api/wen/refresh
+    - /my-app/api/open-api/swagger-ui
+    - /my-app/api/openapi
 ```
 
 ### OAuth2

@@ -133,3 +133,22 @@ redirects from within the app's client and configure the correct host in the app
 If this cannot be done, the app must manage the trust store itself by adding relevant certificates to the app image
 trust store and the `proxyPorts` feature cannot be used.
 
+The default protocol for `proxyPorts` is HTTP. However, other protocols are also supported. This is specified by the type
+property.
+
+```yaml
+deployments:
+  api:
+    # ...
+    proxyPorts:
+      9000:
+        host:
+          groupdir.bmwgroup.net
+        port: 636
+        type: TCP
+    replicas: 1
+```
+
+In this example, the application can connect (via JNDI, for example) to LDAP. The connection will be secure in this case,
+UNITY will handle all SSL certificate handling.
+

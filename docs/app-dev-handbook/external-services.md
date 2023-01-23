@@ -113,6 +113,11 @@ public interface PukService {
 %dev.quarkus.rest-client.puk.url=https://unity-int.bmwgroup.net/services/api/puk
 ```
 
+For local development it is safe to disable SSL, in order to avoid any certificate errors:
+```properties
+%dev.quarkus.tls.trust-all=true
+```
+
 In this case, when starting Quarkus the `SA_TOKEN` environment variable needs to be initialized with the value of the
 service account token.
 

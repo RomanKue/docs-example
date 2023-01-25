@@ -7,6 +7,10 @@
   - [Developing Locally](#developing-locally)
   - [Calling External Services](#calling-external-services)
   - [Quarkus](#quarkus)
+    - [REST Client](#rest-client)
+    - [REST Resource](#rest-resource)
+    - [Testing Locally](#testing-locally)
+    - [Deploying to Int](#deploying-to-int)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

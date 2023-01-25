@@ -28,5 +28,31 @@ Databases of type PostgreSQL are experimental and may be used for prototyping on
 UNITY is built for small, lean apps. That means, only apps with resource requirements within the following limits may
 run on UNITY.
 
- * CPU ≤ 1000 milli cores per container
- * Memory ≤ 1024MiB per container
+* CPU ≤ 1000 milli cores per container
+* Memory ≤ 1024MiB per container
+
+## Information Protection
+
+An app developer is granted access to secrets (tokens, passwords) and confidential information (model types, SOP,
+EOP, ...).
+The app developer is responsible for protecting that information according to the
+[corporate security](https://contenthub-de.bmwgroup.net/web/corporatesecurity/informationsschutz-informationssicherheit)
+guidelines.
+
+Specifically, tokens, passwords or other secrets must not be sent to the end user at any time.
+Data, sent to the end user, must be limited according to the need to know principle.
+
+For data precessed in the app, the Information Classification (ICL), Information Objects (IOBs) and Privacy Impact
+Assessment (PIA)  must be maintained by the app developers.
+
+Data, classified "strictly confidential" must not be processed in a UNITY app, as the UNITY platform is not approved
+for apps requiring the information security class "highest protection".
+
+## IT Security
+
+The app developer is responsible for maintaining the IT security documentation for the UNITY app.
+This includes application clearing and managing IT risks.
+
+Furthermore, Common Vulnerabilities and Exposures (CVEs) found in the app by automatic security scanning solutions
+provided by the UNITY platform must be fixed by the app developers.
+

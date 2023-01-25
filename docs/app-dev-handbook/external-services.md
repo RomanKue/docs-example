@@ -82,10 +82,12 @@ public class DevK8sSaAuthorizationHeaderFactory implements ClientHeadersFactory 
   String saToken;
 
   @Override
-  public MultivaluedMap<String, String> update(MultivaluedMap<String, String> downstreamHeaders, MultivaluedMap<String, String> upstreamHeaders) {
-    upstreamHeaders.put("Authorization", List.of("Bearer " + saToken));
-    upstreamHeaders.put("Unity-Authorization-Type", List.of("Kubernetes-Service-Account"));
-    return upstreamHeaders;
+  public MultivaluedMap<String, String> update(
+      final MultivaluedMap<String, String> incomingHeaders,
+      final MultivaluedMap<String, String> clientOutgoingHeaders) {
+      clientOutgoingHeaders.put(AUTHORIZATION, List.of("Bearer " + saToken));
+      clientOutgoingHeaders.put("Unity-Authorization-Type", List.of("Kubernetes-Service-Account"));
+      return clientOutgoingHeaders;
   }
 }
 ```
@@ -114,6 +116,7 @@ public interface PukService {
 ```
 
 For local development it is safe to disable SSL, in order to avoid any certificate errors:
+
 ```properties
 %dev.quarkus.tls.trust-all=true
 ```

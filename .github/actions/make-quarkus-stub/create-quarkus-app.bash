@@ -29,7 +29,9 @@ mvn "io.quarkus.platform:quarkus-maven-plugin:$QUARKUS_VERSION:create" \
   cd "$NAME"
 
   # see https://quarkus.io/guides/container-image#docker
-  ./mvnw quarkus:add-extension -Dextensions="container-image-docker,quarkus-smallrye-openapi"
+  # see https://quarkus.io/guides/openapi-swaggerui
+  # see https://quarkus.io/guides/logging
+  ./mvnw quarkus:add-extension -Dextensions="container-image-docker,quarkus-smallrye-openapi,quarkus-logging-json"
 
   # patch docker file
   echo 'RUN \

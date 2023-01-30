@@ -4,6 +4,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [URLs](#urls)
+  - [IP Ranges](#ip-ranges)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -13,7 +14,7 @@ UNITY apps are exposed on the unity domains:
 
 * [unity-test.bmwgroup.net](https://unity.bmwgroup) (for UNITY platform development only)
 * [unity-int.bmwgroup.net](https://unity.bmwgroup) (for UNITY app testing and integration)
-* [unity.bmwgroup.net](https://unity.bmwgroup) (production use)
+* [unity.bmwgroup.net](https://unity.bmwgroup) (for UNITY app production use)
 
 The deployments of a UNITY app are exposed on a path as follows:
 [unity-test.bmwgroup.net/foo/ui/](https://unity.bmwgroup/foo/ui)
@@ -58,3 +59,9 @@ deployments:
     # ...
 ```
 
+## IP Ranges
+
+In order to configure firewall rules to access UNITY the following IP ranges are used to expose UNITY:
+
+* [unity-int.bmwgroup.net](https://unity.bmwgroup): Network CIDR: `10.11.114.128/25`
+* [unity.bmwgroup.net](https://unity.bmwgroup): Network CIDR: `10.6.181.224/27`

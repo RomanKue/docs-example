@@ -85,6 +85,20 @@ Here are a few examples to start with:
   ```
   sum (up{app="app-test"}) by (component)
   ```
+* Show absolute memory usage in MB
+  ```
+  avg(container_memory_working_set_bytes{pod=~"app-test-api-.*", container=~"main"}) by (pod, container) / 1e6
+  ```
+* Show memory usage relative to limits
+  ```
+  avg(container_memory_working_set_bytes{pod=~"app-test-api-.*", container=~"main"}) by (pod, container)
+  / avg(kube_pod_container_resource_limits{pod=~"app-test-api-.*", container=~"main", resource="memory"} > 0) by (pod, container)
+  ```
+* Show memory usage relative to requests
+  ```
+  avg(container_memory_working_set_bytes{pod=~"app-test-api-.*", container=~"main"}) by (pod, container)
+  / avg(kube_pod_container_resource_requests{pod=~"app-test-api-.*", container=~"main", resource="memory"} > 0) by (pod, container)
+  ```
 
 ## Tracing
 

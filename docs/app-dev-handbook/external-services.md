@@ -16,8 +16,8 @@
 
 # External Services
 
-UNITY integrates some services from the PMD domain. By providing a reverse proxy integration of these services,
-UNITY can handle authentication and authorization, which means calling a service from a container is as simple as
+UNITY integrates some services from the PDM domain. By providing a reverse proxy integration of these services,
+UNITY can handle authentication and authorization, which means calling a service from within a container is as simple as
 
 ```bash
 curl http://localhost:8008/services/api/pip-vehicle/dev-model-ranges/v2:search -d '{}'
@@ -40,7 +40,9 @@ Here is a list of available services
 
 ## Developing Locally
 
-## Calling External Services
+The following sections detail, how one can call external services when developing locally.
+
+## Curl
 
 External services can be called via a direct link provided by UNITY as shown in the example below:
 

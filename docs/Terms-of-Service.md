@@ -28,8 +28,8 @@ Databases of type PostgreSQL are experimental and may be used for prototyping on
 UNITY is built for small, lean apps. That means, only apps with resource requirements within the following limits may
 run on UNITY.
 
-* CPU ≤ 1000 milli cores per container
-* Memory ≤ 1024MiB per container
+* CPU limit ≤ 1000 milli cores (request ≤ 500 milli cores) per container
+* Memory limit ≤ 2048 MiB (request ≤ 1024 MiB) per container
 
 ## Information Protection
 

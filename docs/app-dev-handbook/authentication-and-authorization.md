@@ -207,6 +207,29 @@ public class RolesResource {
 }
 ```
 
+### M2M Authorization
+
+It is possible to authorize WEN M2M client ids to access the applications. For each of the authorized client ids, roles
+can be defined which will be afterwards passed to the application via the `Unity-B2XRole` header.
+
+The M2M authorization can be enabled via the `unity-app.*.yaml` files:
+
+```yaml
+auth:
+  realm:
+    machine2machine:
+      client-id-1:
+        roles:
+          b2x:
+            - PMD
+            - B2B_I
+```
+
+If the client id is not allowed to access the application with any of the configured roles (defined in the `auth.roles` section),
+then the answer will be [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403)
+
+Instead of the user information headers, in this case the `Unity-ClientId` header will be set to the M2M client id.
+
 ### Other Role Providers (RightNow, RoMa, Active Directory, ...)
 
 If the app requires to use a role provider, which is not integrated into UNITY, it must be handled on application level.

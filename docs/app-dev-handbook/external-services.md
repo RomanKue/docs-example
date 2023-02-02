@@ -66,7 +66,7 @@ https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificat
 to edit, copy the graph to the mermaid live editor: https://mermaid.live
 -->
 <div class="mermaid">
-graph BT
+graph LR
 subgraph UNITY
         my-app-api<---->unity-services
 end
@@ -74,6 +74,8 @@ subgraph Client
 my-app-ui<---->my-app-api
 end
 </div>
+
+The two subsections below detail two alternatives to handle authentication and information protection.
 
 ### Machine to Machine Authentication (preferred)
 
@@ -83,7 +85,7 @@ https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificat
 to edit, copy the graph to the mermaid live editor: https://mermaid.live
 -->
 <div class="mermaid">
-graph BT
+graph LR
 subgraph UNITY
         my-app-api<-- machine to machine token -->unity-services
 end
@@ -105,7 +107,7 @@ https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificat
 to edit, copy the graph to the mermaid live editor: https://mermaid.live
 -->
 <div class="mermaid">
-graph BT
+graph LR
 subgraph UNITY
         my-app-api<--user token-->unity-services
 end
@@ -130,14 +132,13 @@ https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificat
 to edit, copy the graph to the mermaid live editor: https://mermaid.live
 -->
 <div class="mermaid">
-graph BT
+graph LR
 subgraph UNITY
         my-app-api
         unity-services
 end
 subgraph Client
 my-app-ui<--user token-->unity-services
-end
 end
 </div>
 
@@ -151,7 +152,7 @@ may fail with `401 Unauthorized` or `403 Forbidden` when passing on a users toke
 
 # Developing Locally
 
-The following sections detail, how one can call external services when developing locally.
+The following sections detail, how one can call external services when developing locally using different technologies.
 
 ## Curl
 
@@ -186,7 +187,8 @@ When developing a Quarkus application, it would be useful to be able to call the
 applications. In order to do that, the service account token is needed which can be obtained via the store-secrets
 workflow.
 
-The following section contains a ste«p-by-step guide to implement a service integration using PIP Vehicle as example.
+The following section contains a step-by-step guide to implement a service integration using PIP Vehicle as example
+following the [machine to machine authentication](#machine-to-machine-authentication--preferred-) approach.
 
 ### REST Client
 

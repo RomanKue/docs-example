@@ -26,7 +26,24 @@ deployments:
 ```
 
 An ideal config would set `requests` to as many resources as the app needs when being idle (e.g. a night) and
-`limit` to as many resources as needed under full load. Setting resource correctly is non-trivial and the UNITY team may
-provide additional tools in the future to get these numbers right.
+`limit` to as many resources as needed under full load. Setting resource correctly is non-trivial.
+
+Consult the metrics dashboards in Grafana:
+
+* [Container Resources (int)](https://unity-int.bmwgroup.net/grafana/d/container-resources/container-resources)
+* [Container Resources (prod)](https://unity.bmwgroup.net/grafana/d/container-resources/container-resources)
+
+There are three dashboards showing the absolute and relative consumption for each app and component.
+After selecting e.g. the last 24h time range, make sure the memory and CPU usage is within the request and limit range.
+
+![](../assets/memory-usage.png)
+
+The example above shows that the memory consumption is always below 100% of the configured limit but is most of the time
+between 70% and 80% of the requested memory. This give the best compromise of cost efficiency and stability.
+
+The same rules apply for CPU usage, which may look like in the following example:
+
+![](../assets/cpu-usage.png)
+
 Always keep in mind that high resource configuration will directly result in higher costs. So just setting everything to
 the maximum may raise some questions.

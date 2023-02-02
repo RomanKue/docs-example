@@ -2,6 +2,7 @@ import {ReadonlyDeep} from 'type-fest';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {angularStubName, quarkusStubName, repoUrl} from '../config.js';
 import {deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
+import {repoName} from '../app-spec.js';
 
 const createQuarkusReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 ## ${quarkusStubName.toUpperCase()}
@@ -61,6 +62,15 @@ A UNITY app is configured via one [YAML](https://yaml.org) file per environment.
  * [unity-app.prod.yaml](./unity-app.prod.yaml) is the configuration that should be deployed on the prod stage.
 
 Usually, these configurations differ in the image tags of your app versions.
+
+Logs (and Metrics) can be found in Grafana:
+ * [Grafana (int)](https://unity-int.bmwgroup.net/grafana/explore?left=%7B%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bapp%3D%5C%22${repoName(newAppIssue.appSpec?.name)}%5C%22%7D%22%7D%5D%7D)
+ * [Grafana (prod)](https://unity.bmwgroup.net/grafana/explore?left=%7B%22queries%22%3A%5B%7B%22refId%22%3A%22A%22%2C%22expr%22%3A%22%7Bapp%3D%5C%22${repoName(newAppIssue.appSpec?.name)}%5C%22%7D%22%7D%5D%7D)
+
+Read more about it in the
+[Telemetry](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/telemetry.html)
+section of the AppDev Handbook.
+
 
 ${newAppIssue.generateQuarkusStub ? createQuarkusReadmeSection(newAppIssue) : ''}
 ${newAppIssue.generateAngularStub ? createAngularReadmeSection(newAppIssue) : ''}

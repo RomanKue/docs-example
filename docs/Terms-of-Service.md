@@ -1,4 +1,16 @@
-<!-- DOCTOC SKIP -->
+# Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+- [Terms of Service](#terms-of-service)
+  - [Resources](#resources)
+  - [Information Protection](#information-protection)
+  - [IT Security](#it-security)
+  - [App Architecture](#app-architecture)
+  - [Databases](#databases)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Terms of Service
 

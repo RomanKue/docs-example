@@ -1,11 +1,22 @@
+<!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
+<!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
+<!-- for latest version, check: https://unpkg.com/mermaid-->
+<script type="text/javascript" src="https://unpkg.com/mermaid"></script>
+<script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
+
 # Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [External Services](#external-services)
-  - [Developing Locally](#developing-locally)
-  - [Calling External Services](#calling-external-services)
+- [Architecture](#architecture)
+  - [Back-End Proxy (preferred)](#back-end-proxy-preferred)
+    - [Machine to Machine Authentication (preferred)](#machine-to-machine-authentication-preferred)
+    - [User Token Authentication](#user-token-authentication)
+  - [Direct UI integration](#direct-ui-integration)
+- [Developing Locally](#developing-locally)
+  - [Curl](#curl)
   - [Quarkus](#quarkus)
     - [REST Client](#rest-client)
     - [REST Resource](#rest-resource)
@@ -38,7 +49,107 @@ Here is a list of available services
 * `http://localhost:8008/services/api/hsa`
   [HSA (100% Sonderausstattung)](https://pmd.bmwgroup.net/lexicon/app/term/HSA)
 
-## Developing Locally
+# Architecture
+
+When integrating your app with an external service, there are several options detailed below.
+Make sure you understand the implication of these two architectures, as they have a huge impact on information
+protection and user role requirements.
+
+## Back-End Proxy (preferred)
+
+The preferred way of using app in your `my-app-ui` is to call your own back-end: `my-app-api`. This back-end then calls
+the `unity-services` endpoint.
+
+<!--
+If you want to read this documentation, but see only HTML code below, consider to go to
+https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
+to edit, copy the graph to the mermaid live editor: https://mermaid.live
+-->
+<div class="mermaid">
+graph BT
+subgraph UNITY
+        my-app-api<---->unity-services
+end
+subgraph Client
+my-app-ui<---->my-app-api
+end
+</div>
+
+### Machine to Machine Authentication (preferred)
+
+<!--
+If you want to read this documentation, but see only HTML code below, consider to go to
+https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
+to edit, copy the graph to the mermaid live editor: https://mermaid.live
+-->
+<div class="mermaid">
+graph BT
+subgraph UNITY
+        my-app-api<-- machine to machine token -->unity-services
+end
+subgraph Client
+my-app-ui<--user token-->my-app-api
+end
+</div>
+
+By default, UNITY will make sure that your back-end is authenticated and has some default privileges on the API call.
+This means you can call any external service without the need for creating authorization tokens.
+The response, received from any service, is sent as is to your back-end. You are responsible for filtering that data
+according to the information protection needs before sending data toe `my-app-ui` and presenting it to the user.
+
+### User Token Authentication
+
+<!--
+If you want to read this documentation, but see only HTML code below, consider to go to
+https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
+to edit, copy the graph to the mermaid live editor: https://mermaid.live
+-->
+<div class="mermaid">
+graph BT
+subgraph UNITY
+        my-app-api<--user token-->unity-services
+end
+subgraph Client
+my-app-ui<--user token-->my-app-api
+end
+</div>
+
+Instead of letting UNITY inject some machine to machine tokens, you can also pass the users token to a UNITY service.
+In this case, the user's token is passed through to the external system.
+Note that the external system must be able to accept end user tokens and must be able to evaluate the user's roles.
+The up-side of this approach is, that data received from the external system may already filter according to the users
+permissions if supported by the external services.
+On the other hand, it can be hard to track down issues with missing roles on the user's end. Always expect that a call
+may fail with `401 Unauthorized` or `403 Forbidden` when passing on a user's token.
+
+## Direct UI integration
+
+<!--
+If you want to read this documentation, but see only HTML code below, consider to go to
+https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
+to edit, copy the graph to the mermaid live editor: https://mermaid.live
+-->
+<div class="mermaid">
+graph BT
+subgraph UNITY
+        my-app-api
+        unity-services
+end
+subgraph Client
+my-app-ui<--user token-->unity-services
+end
+end
+</div>
+
+In this approach, the `unity-servivces` are called directly from `my-app-ui` on the user's machine.
+The user's token will be passed directly to the external service.
+Note that the external system must be able to accept end user tokens and must be able to evaluate the user's roles.
+Data received from the external system may already filter according to the user's permissions if supported by the
+external services. Otherwise, this approach will not work.
+However, it can be hard to track down issues with missing roles on the users end. Always expect that a call
+may fail with `401 Unauthorized` or `403 Forbidden` when passing on a users token.
+
+# Developing Locally
 
 The following sections detail, how one can call external services when developing locally.
 
@@ -218,6 +329,8 @@ section.
 Copy the token from the `secrets.yaml` to the `KUBERNETES_TOKEN` environment variable.
 
 ⚠️ Never add the token to your source code, this is confidential information, which should not be shared in plain text.
+⚠️ The token may be updated by the UNITY platform at any time. So if the token is not valid anymore after some time,
+just download a new one.
 
 After the environment was configured correctly, start Quarkus and call the endpoint:
 

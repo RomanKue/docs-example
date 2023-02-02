@@ -15,14 +15,6 @@ The app developers are responsible for
 * configuring their UNITY app inside UNITY
 * patching vulnerabilities inside their UNITY app
 
-## Databases
-
-Databases of type PostgreSQL are experimental and may be used for prototyping only.
-
-* PostgreSQL databases must not be used in production.
-* PostgreSQL databases are not backed up
-* PostgreSQL databases cannot be restored
-
 ## Resources
 
 UNITY is built for small, lean apps. That means, only apps with resource requirements within the following limits may
@@ -55,4 +47,24 @@ This includes application clearing and managing IT risks.
 
 Furthermore, Common Vulnerabilities and Exposures (CVEs) found in the app by automatic security scanning solutions
 provided by the UNITY platform must be fixed by the app developers.
+
+## App Architecture
+
+UNITY apps are required to be built in a cloud native way. This means, deployable must be stateless and re-deployable at
+any time.
+
+Here are some aspects to keep in mind:
+
+* Data on the filesystem is lost after each container restart or deployment and may be used as temporary storage only.
+* A container may be restarted automatically at any time (e.g. to move it to another virtual machine).
+  This is especially important when designing batch processing.
+* Traffic is load balanced between replicas of the deployment.
+
+## Databases
+
+Databases of type PostgreSQL are experimental and may be used for prototyping only.
+
+* PostgreSQL databases must not be used in production.
+* PostgreSQL databases are not backed up
+* PostgreSQL databases cannot be restored
 

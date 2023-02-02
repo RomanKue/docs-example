@@ -11,6 +11,7 @@
     - [K8s](#k8s)
   - [Authorization](#authorization)
     - [B2X Roles](#b2x-roles)
+    - [M2M Authorization](#m2m-authorization)
     - [Other Role Providers (RightNow, RoMa, Active Directory, ...)](#other-role-providers-rightnow-roma-active-directory-)
   - [User Information](#user-information)
 

@@ -1,4 +1,19 @@
 title: UNITY
-
+description: UNITY Docs
 theme: just-the-docs
 
+url: https://pages.atc-github.azure.cloud.bmw/UNITY/unity/
+
+aux_links:
+  Int: https://unity-int.bmwgroup.net
+  Prod: https://unity.bmwgroup.net
+
+color_scheme: unity
+
+mermaid:
+  # Version of mermaid library
+  # Pick an available version from https://cdn.jsdelivr.net/npm/mermaid/
+  version: "9.3.0"
+
+
+enable_copy_code_button: true

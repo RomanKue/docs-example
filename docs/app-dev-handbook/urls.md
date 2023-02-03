@@ -1,3 +1,10 @@
+---
+layout: default
+title: URLs
+parent: AppDev Handbook
+nav_order: 5
+---
+
 # Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

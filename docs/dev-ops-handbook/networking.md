@@ -1,3 +1,9 @@
+---
+layout: default
+title: Networking
+parent: DevOps Handbook
+---
+
 <!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
 <!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
 <!-- for latest version, check: https://unpkg.com/mermaid-->

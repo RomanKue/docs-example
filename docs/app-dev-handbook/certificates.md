@@ -1,8 +1,9 @@
-<!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
-<!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
-<!-- for latest version, check: https://unpkg.com/mermaid-->
-<script type="text/javascript" src="https://unpkg.com/mermaid"></script>
-<script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
+---
+layout: default
+title: Certificates
+parent: AppDev Handbook
+nav_order: 6
+---
 
 # Table of Contents
 
@@ -26,12 +27,7 @@ This section clarifies how UNITY does that.
 
 The following diagram illustrates TLS termination for ingress traffic:
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph TB
 subgraph UNITY
     subgraph pod
@@ -41,7 +37,7 @@ subgraph UNITY
 end
 client-- HTTPS request -->envoy
 envoy-- HTTPS response -->client
-</div>
+```
 
 In this diagram, envoy terminates TLS traffic from the client and encrypts traffic with a certificate and key, provided
 by UNITY. Traffic inside the pod can then be handled via plain HTTP. The application does not need to handle a
@@ -51,12 +47,7 @@ certificate key to encrypt traffic.
 
 The following diagram illustrates TLS termination for egress traffic:
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph TB
 subgraph UNITY
     subgraph pod
@@ -66,7 +57,7 @@ subgraph UNITY
 end
 service-- HTTPS response -->envoy
 envoy-- HTTPS request -->service
-</div>
+```
 
 In this diagram, the app acts a client and calls the external service through envoy. Envoy has a trust store configured,
 which contains all current certificate trusted in the BMW organization. Certificates are validated using this trust
@@ -93,7 +84,8 @@ quarkus.rest-client.services.url=http://localhost:8008/services/api
 public interface DevModelRangeSearch {
 
     @POST
-    CompletionStage<PipSearchResultDO<DevModelRangeDO>> searchAsync(DevModelRangeSearchDO devModelRangeSearchDO);
+    CompletionStage<PipSearchResultDO<DevModelRangeDO>>
+    searchAsync(DevModelRangeSearchDO devModelRangeSearchDO);
 }
 ```
 

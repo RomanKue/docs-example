@@ -1,3 +1,10 @@
+---
+layout: default
+title: Security
+parent: AppDev Handbook
+nav_order: 7
+---
+
 # Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

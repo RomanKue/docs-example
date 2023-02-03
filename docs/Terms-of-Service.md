@@ -1,3 +1,9 @@
+---
+title: Terms of Service
+layout: default
+nav_order: 1
+---
+
 # Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

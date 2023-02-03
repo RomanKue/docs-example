@@ -1,3 +1,10 @@
+---
+layout: default
+title: Authentication and Authorization
+parent: AppDev Handbook
+nav_order: 2
+---
+
 # Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

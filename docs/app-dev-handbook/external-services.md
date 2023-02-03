@@ -1,8 +1,9 @@
-<!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
-<!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
-<!-- for latest version, check: https://unpkg.com/mermaid-->
-<script type="text/javascript" src="https://unpkg.com/mermaid"></script>
-<script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
+---
+layout: default
+title: External Services
+parent: AppDev Handbook
+nav_order: 9
+---
 
 # Table of Contents
 
@@ -60,12 +61,7 @@ protection and user role requirements.
 The preferred way of using app in your `my-app-ui` is to call your own back-end: `my-app-api`. This back-end then calls
 the `unity-services` endpoint.
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph LR
 subgraph UNITY
         my-app-api<---->unity-services
@@ -73,18 +69,13 @@ end
 subgraph Client
 my-app-ui<---->my-app-api
 end
-</div>
+```
 
 The two subsections below detail two alternatives to handle authentication and information protection.
 
 ### Machine to Machine Authentication (preferred)
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph LR
 subgraph UNITY
         my-app-api<-- machine to machine token -->unity-services
@@ -92,7 +83,7 @@ end
 subgraph Client
 my-app-ui<--user token-->my-app-api
 end
-</div>
+```
 
 By default, UNITY will make sure that your back-end is authenticated and has some default privileges on the API call.
 This means you can call any external service without the need for creating authorization tokens.
@@ -101,12 +92,7 @@ according to the information protection needs before sending data toe `my-app-ui
 
 ### User Token Authentication
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph LR
 subgraph UNITY
         my-app-api<--user token-->unity-services
@@ -114,7 +100,7 @@ end
 subgraph Client
 my-app-ui<--user token-->my-app-api
 end
-</div>
+```
 
 Instead of letting UNITY inject some machine to machine tokens, you can also pass the users token to a UNITY service.
 In this case, the user's token is passed through to the external system.
@@ -126,12 +112,7 @@ may fail with `401 Unauthorized` or `403 Forbidden` when passing on a user's tok
 
 ## Direct UI integration
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/certificates.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph LR
 subgraph UNITY
         my-app-api
@@ -140,7 +121,7 @@ end
 subgraph Client
 my-app-ui<--user token-->unity-services
 end
-</div>
+```
 
 In this approach, the `unity-servivces` are called directly from `my-app-ui` on the user's machine.
 The user's token will be passed directly to the external service.

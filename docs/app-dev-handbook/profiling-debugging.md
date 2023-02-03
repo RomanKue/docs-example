@@ -1,8 +1,9 @@
-<!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
-<!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
-<!-- for latest version, check: https://unpkg.com/mermaid-->
-<script type="text/javascript" src="https://unpkg.com/mermaid"></script>
-<script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
+---
+layout: default
+title: Profiling and Debugging
+parent: AppDev Handbook
+nav_order: 10
+---
 
 # Table of Contents
 
@@ -12,6 +13,8 @@
 - [Profiling and Debugging](#profiling-debugging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Profiling and Debugging
 
 In order to start remote profiling and/or remote debugging for an application running on the UNITY cluster, you need to
 address the UNITY development team to configure the application accordingly.

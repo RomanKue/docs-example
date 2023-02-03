@@ -155,6 +155,12 @@ export const readSecret = async (kc: KubeConfig, name: string) => {
   return await coreV1API.readNamespacedSecret(name, namespace);
 };
 
+export const readServiceAccountToken = async (environment: ReadonlyDeep<Environment>, repoName: string) => {
+  const kc = getKubeConfig(environment);
+  const secret = await readSecret(kc, `${repoName}-service-account-token`);
+  return secret.body.data?.token;
+};
+
 export const createK8sObjects = async (
   environment: ReadonlyDeep<Environment>,
   repoName: string

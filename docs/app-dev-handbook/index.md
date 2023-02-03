@@ -17,3 +17,4 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 * [Telemetry](telemetry.md) data such as logs, metrics and tracing of UNITY applications.
 * [Profiling and Debugging](profiling-debugging.md) of UNITY applications running on the cluster
 * [External services](external-services.md) called from UNITY applications
+* [HTTP Headers](http-headers.md) customization for a UNITY app

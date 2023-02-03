@@ -2,15 +2,10 @@
 layout: default
 title: Networking
 parent: DevOps Handbook
+nav_order: 0
 ---
 
-<!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
-<!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
-<!-- for latest version, check: https://unpkg.com/mermaid-->
-<script type="text/javascript" src="https://unpkg.com/mermaid"></script>
-<script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
-
-# Table of Contents
+**Table of Contents**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -31,16 +26,11 @@ UNITY exposes all apps and infrastructure under one domain (per environment).
 
 ## DNS
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/dev-ops-handbook/urls.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph LR
     unity-int.bmwgroup.net-- CNAME -->int.apps.pdm-unity-int.azure.cloud.bmw
     int.apps.pdm-unity-int.azure.cloud.bmw-- A -->ip[10.11.114.229]
-</div>
+```
 
 For each domain, a DNS [CNAME record](https://www.cloudflare.com/learning/dns/dns-records/dns-cname-record/) is
 registered, which points to Kubernetes clusters DNS.
@@ -183,15 +173,10 @@ Address: 10.11.114.229
 The output above indicates a TTL for 2392 seconds the CNAME and 381 seconds for the A record.
 These numbers will change when the lookup is repeated, as they indicate when to refresh the cached DNS entry.
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/dev-ops-handbook/urls.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph LR
     unity-int.bmwgroup.net-.->int.apps.pdm-unity-int.azure.cloud.bmw
     unity-int.bmwgroup.net-- CNAME -->int.apps.new-cluster.azure.cloud.bmw
     int.apps.pdm-unity-int.azure.cloud.bmw-- A -->ip[10.11.114.229]
     int.apps.new-cluster.azure.cloud.bmw-- A -->new-ip[10.11.112.213]
-</div>
+```

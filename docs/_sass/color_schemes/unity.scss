@@ -1,8 +1,25 @@
 @import "./color_schemes/dark";
 
-$link-color: #00AEDE;
 
+$body-background-color: #1b222d;
+$sidebar-color: $body-background-color;
+//$border-color: $grey-dk-200;
+$body-text-color: rgb(230, 230, 230);
+//$body-heading-color: $grey-lt-000;
+$nav-child-link-color: rgb(186, 186, 186);
+$search-result-preview-color: $nav-child-link-color;
+$link-color: rgb(9, 129, 189);
+//$btn-primary-color: $blue-200;
+//$base-button-color: $grey-dk-250;
+$search-background-color: $body-background-color;
+//$table-background-color: $grey-dk-250;
+$feedback-color: $sidebar-color;
+$code-background-color: rgb(34, 39, 48);
 
-footer.site-footer{
+.highlight, pre.highlight {
+  background: $code-background-color;
+}
+
+footer.site-footer {
   display: none;
 }

@@ -12,8 +12,6 @@ permalink: /app-dev-handbook/
 
 The AppDev Handbook is for the app developer to support implementing an app on the UNITY platform.
 
-## Table of Contents
-
 * [Getting Started](getting-started.html) with an app
 * [UNITY App Yaml](unity-app-yaml.html) to configure UNITY features specifically for a UNITY app
 * [Authentication and Authorization](authentication-and-authorization.html) to secure access to a UNITY app

@@ -2,9 +2,10 @@
 layout: default
 title: Certs
 parent: DevOps Handbook
+nav_order: 3
 ---
 
-# Table of Contents
+**Table of Contents**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

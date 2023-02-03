@@ -2,6 +2,7 @@
 layout: default
 title: JMX Profiling
 parent: DevOps Handbook
+nav_order: 7
 ---
 
 <!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
@@ -10,7 +11,7 @@ parent: DevOps Handbook
 <script type="text/javascript" src="https://unpkg.com/mermaid"></script>
 <script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
 
-# Table of Contents
+**Table of Contents**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->

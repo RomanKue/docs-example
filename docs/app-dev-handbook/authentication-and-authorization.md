@@ -248,7 +248,7 @@ With that token, any role provider can be used, either employing a custom implem
 
 ## User Information
 
-Some user's attributes are passed as custom headers. The list below shows, what can be evaluated by the back-end:
+Some user (or M2M client id)'s attributes are passed as custom headers. The list below shows, what can be evaluated by the back-end:
 
 * `Unity-Email` e.g. `user@example.com`
 * `Unity-B2XRole` e.g. `B2B_I`
@@ -256,3 +256,7 @@ Some user's attributes are passed as custom headers. The list below shows, what 
 * `Unity-UserName` e.g. `Charlie Brown`
 * `Unity-UserSub` e.g. `q12345`
 * `Unity-Department` e.g. `FG-123`
+* `Unity-ClientId` e.g. `m2m-client-id1`
+
+In case the user is actually a M2M client id, only the following headers will be present: `Unity-B2XRole` and `Unity-ClientId`.
+In case the user is not a M2M client id, the `Unity-ClientId` header will not be set.

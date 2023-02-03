@@ -114,7 +114,7 @@ Here is a specific example.
 
 The app calls `https://example.com` via `http://localhost:9000`
 
-```http
+```
 GET http://localhost:9000/foo/bar
 
 < Location: https://another-example.com/foo/bar

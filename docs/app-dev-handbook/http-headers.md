@@ -22,7 +22,7 @@ nav_order: 11
 
 The following HTTP response headers will be set by default by the UNITY platform:
 
-```http
+```
 X-XSS-Protection: '1; mode=block'
 X-Content-Type-Options: 'nosniff'
 Strict-Transport-Security: 'max-age=31536000; includeSubDomains'
@@ -45,7 +45,7 @@ deployments:
     headers:
       response:
         add:
-          "Custom-Header-Name": "custom-header-value"
-          "Default-Header-To-Unset": null
+          Custom-Header-Name: "custom-header-value"
+          Default-Header-To-Unset: null
 ```
 

@@ -89,23 +89,25 @@ reload, which will initiate the OAuth2 flow for the user.
 Here is a simple angular HTTP interceptor, which triggers the page reload.
 
 ```ts
-import {Injectable} from "@angular/core";
-import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
-import {catchError, Observable, throwError} from "rxjs";
+import {Injectable} from '@angular/core';
+import {
+    HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
+} from '@angular/common/http';
+import {catchError, Observable, throwError} from 'rxjs';
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return next.handle(req).pipe(
-      catchError((error: unknown) => {
-        if (error instanceof HttpErrorResponse) {
-          if (error.status === 401) {
-            location.reload();
-          }
-        }
-        return throwError(() => error);
-      }));
-  }
+    intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+        return next.handle(req).pipe(
+            catchError((error: unknown) => {
+                if (error instanceof HttpErrorResponse) {
+                    if (error.status === 401) {
+                        location.reload();
+                    }
+                }
+                return throwError(() => error);
+            }));
+    }
 }
 ```
 
@@ -263,7 +265,7 @@ Some user (or M2M client id)'s attributes are passed as custom headers. The list
 * `Unity-UserName` e.g. `Charlie Brown`
 * `Unity-UserSub` e.g. `q12345`
 * `Unity-Department` e.g. `FG-123`
-* `Unity-ClientId` e.g. `m2m-client-id1`
+* `Unity-ClientId` e.g. `8eeb5128-87ad-48f3-a30b-631db0fb11e9`
 
 In case the user is actually a M2M client id, only the following headers will be present: `Unity-B2XRole` and `Unity-ClientId`.
 In case the user is not a M2M client id, the `Unity-ClientId` header will not be set.

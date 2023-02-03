@@ -10,7 +10,7 @@ nav_order: 10
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Profiling and Debugging](#profiling-debugging)
+- [Profiling and Debugging](#profiling-and-debugging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

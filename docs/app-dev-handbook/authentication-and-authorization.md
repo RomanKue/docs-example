@@ -28,7 +28,8 @@ nav_order: 2
 
 Every UNITY app is protected by strong authentication (two-factor authentication with YubiKey) by default.
 
-🚨 Note that the YubiKey needs to be enabled on http://strong-int.bmwgroup.net by every user, to be able to use it on the integration environment.
+🚨 Note that the YubiKey needs to be enabled on http://strong-int.bmwgroup.net by every user, to be able to use it on the
+integration environment.
 
 The way, authentication is working can be configured in the `unity-app.*.yaml` files like shown below:
 
@@ -61,7 +62,8 @@ application level. That means, the app development team is responsible for handl
 
 It is possible to exclude some paths from being access protected by authentication and authorization.
 
-For example, the OpenAPI endpoint or the SwaggerUI page could be made public by excluding it from authorization as shown blow.
+For example, the OpenAPI endpoint or the SwaggerUI page could be made public by excluding it from authorization as shown
+blow.
 
 ```yaml
 auth:
@@ -91,23 +93,23 @@ Here is a simple angular HTTP interceptor, which triggers the page reload.
 ```ts
 import {Injectable} from '@angular/core';
 import {
-    HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
+  HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 } from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
 
 @Injectable()
 export class UnauthorizedInterceptor implements HttpInterceptor {
-    intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-        return next.handle(req).pipe(
-            catchError((error: unknown) => {
-                if (error instanceof HttpErrorResponse) {
-                    if (error.status === 401) {
-                        location.reload();
-                    }
-                }
-                return throwError(() => error);
-            }));
-    }
+  intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    return next.handle(req).pipe(
+      catchError((error: unknown) => {
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 401) {
+            location.reload();
+          }
+        }
+        return throwError(() => error);
+      }));
+  }
 }
 ```
 
@@ -149,6 +151,7 @@ supported by UNITY out of the box. This means,
 auth:
   enabled: false
 ```
+
 must be set for the UI and the SPA needs to handle the OAuth2 flow.
 
 A typical use case would be to serve only data with a low protection need on auth level 1000 (single factor
@@ -173,9 +176,11 @@ Read more about auth levels in the [WebEAM documentation](https://atc.bmwgroup.n
 
 ### K8s
 
-If the flag `auth.k8s.enabled` is set to true, the application will be able to handle kubernetes `ServiceAccount` tokens.
+If the flag `auth.k8s.enabled` is set to true, the application will be able to handle kubernetes `ServiceAccount`
+tokens.
 
-In order to connect to an application using the service account token you must set the `Authorization` header to `Bearer <myAppsSaToken>`.
+In order to connect to an application using the service account token you must set the `Authorization` header
+to `Bearer <myAppsSaToken>`.
 Additionally, the custom header `Unity-Authorization-Type` must be set to `Kubernetes-Service-Account`
 to differentiate these requests from the ones using WEN token.
 
@@ -217,10 +222,11 @@ public class RolesResource {
 }
 ```
 
-### M2M Authorization
+### Machine-to-Machine (M2M)
 
-It is possible to authorize WEN M2M client ids to access the applications. For each of the authorized client ids, roles
-can be defined which will be afterwards passed to the application via the `Unity-B2XRole` header.
+It is possible to authorize [WebEAM M2M](https://atc.bmwgroup.net/confluence/x/ZYS3KQ) client ids to access the
+applications. Optionally, for each of the authorized client ids, roles
+may be defined which will be afterwards passed to the application via the `Unity-B2XRole` header.
 
 The M2M authorization can be enabled via the `unity-app.*.yaml` files:
 
@@ -235,8 +241,8 @@ auth:
             - B2B_I
 ```
 
-If the client id is not allowed to access the application with any of the configured roles (defined in the `auth.roles` section),
-then the answer will be [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403)
+If the client id is not allowed to access the application with any of the configured roles (defined in the `auth.roles`
+section), then response will be [403 Forbidden](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/403).
 
 Instead of the user information headers, in this case the `Unity-ClientId` header will be set to the M2M client id.
 
@@ -257,7 +263,8 @@ With that token, any role provider can be used, either employing a custom implem
 
 ## User Information
 
-Some user (or M2M client id)'s attributes are passed as custom headers. The list below shows, what can be evaluated by the back-end:
+Some user (or M2M client id)'s attributes are passed as custom headers. The list below shows, what can be evaluated by
+the back-end:
 
 * `Unity-Email` e.g. `user@example.com`
 * `Unity-B2XRole` e.g. `B2B_I`
@@ -265,7 +272,7 @@ Some user (or M2M client id)'s attributes are passed as custom headers. The list
 * `Unity-UserName` e.g. `Charlie Brown`
 * `Unity-UserSub` e.g. `q12345`
 * `Unity-Department` e.g. `FG-123`
-* `Unity-ClientId` e.g. `8eeb5128-87ad-48f3-a30b-631db0fb11e9`
+* `Unity-ClientId` e.g. `8eeb5128-87ad-48f3-a30b-631db0fb11e9` (header is not set for human users)
 
-In case the user is actually a M2M client id, only the following headers will be present: `Unity-B2XRole` and `Unity-ClientId`.
-In case the user is not a M2M client id, the `Unity-ClientId` header will not be set.
+For [M2M](#machine-to-machine--m2m-) clients, only the following headers will be present: `Unity-B2XRole`
+and `Unity-ClientId`.

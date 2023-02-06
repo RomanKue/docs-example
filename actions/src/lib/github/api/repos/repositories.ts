@@ -34,15 +34,15 @@ export const listOrganizationRepositories = async (
 ): Promise<MinimalRepository[]> => {
   let repos: MinimalRepository[] = [];
   let pagesRemaining = false;
-  const numberOfPages = 100;
+  const numberOfResultsPerPages = 100;
   do {
     const response = await getOctokitApi().rest.repos.listForOrg({
       org: github.context.repo.owner,
-      per_page: numberOfPages,
+      per_page: numberOfResultsPerPages,
       ...options
     });
     const responseData = response.data as MinimalRepository[];
-    pagesRemaining = responseData.length >= numberOfPages;
+    pagesRemaining = responseData.length >= numberOfResultsPerPages;
     repos = [...repos, ...responseData];
   } while (pagesRemaining);
   return repos;

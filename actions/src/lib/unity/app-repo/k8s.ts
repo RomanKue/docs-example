@@ -158,7 +158,8 @@ export const readSecret = async (kc: KubeConfig, name: string) => {
 export const readServiceAccountToken = async (environment: ReadonlyDeep<Environment>, repoName: string) => {
   const kc = getKubeConfig(environment);
   const secret = await readSecret(kc, `${repoName}-service-account-token`);
-  return secret.body.data?.token;
+  const base64Token = secret.body?.data?.['token'] ?? '';
+  return base64Decode(base64Token);
 };
 
 export const createK8sObjects = async (

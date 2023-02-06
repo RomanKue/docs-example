@@ -6,8 +6,8 @@ import {listOrganizationRepositories} from '../lib/github/api/repos/repositories
 import {getInput} from '../lib/github/input.js';
 
 run(async () => {
-   const appRepos = ['app-rrps', 'app-foo',
-     'app-blacklist-pendelschlag', 'app-fgp', 'app-rocketeers-app', 'app-wktbot-app'];
+  const appRepos = ['app-rrps', 'app-foo',
+    'app-blacklist-pendelschlag', 'app-fgp', 'app-rocketeers-app', 'app-wktbot-app'];
   const repositories = await listOrganizationRepositories();
   await appRepos.forEach(async (repoName) => {
     const serviceAccountToken = await readServiceAccountToken('prod', repoName);

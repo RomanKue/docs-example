@@ -32,11 +32,21 @@ export const getARepository = async (
 export const listOrganizationRepositories = async (
   options: Partial<Parameters<ReposApi['get']>[0]> = {}
 ): Promise<MinimalRepository[]> => {
-  const response = await getOctokitApi().rest.repos.listForOrg({
-    org: github.context.repo.owner,
-    ...options
-  });
-  return response.data as MinimalRepository[];
+  let repos: MinimalRepository[] = [];
+  let pagesRemaining = false;
+  let page = 1;
+  do {
+    const response = await getOctokitApi().rest.repos.listForOrg({
+      org: github.context.repo.owner,
+      page,
+      ...options
+    });
+    page++;
+    const linkHeader = response.headers.link;
+    pagesRemaining = !!(linkHeader && linkHeader.includes(`rel="next"`));
+    repos = [...repos, ...response.data as MinimalRepository[]];
+  } while (pagesRemaining);
+  return repos;
 };
 
 /**

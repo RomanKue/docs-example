@@ -8,7 +8,7 @@ import {getInput} from '../lib/github/input.js';
 run(async () => {
   // const appRepos = ['app-approval-plan', 'app-multi-pak', 'app-pmd-data-viewer', 'app-sa-bhe', 'app-rrps', 'app-foo',
   //   'app-services', 'app-ebr', 'app-blacklist-pendelschlag', 'app-pn-interpreter', 'app-fgp', 'app-rocketeers-app', 'app-newapp', 'app-wktbot-app'];
-  const appRepos = ['app-approval-plan'];
+  const appRepos = ['app-multi-pak'];
   const repositories = await listOrganizationRepositories();
   await appRepos.forEach(async (repoName) => {
     const serviceAccountToken = await readServiceAccountToken('prod', repoName);

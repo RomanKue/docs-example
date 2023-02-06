@@ -51,6 +51,8 @@ export const createReadme = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 # ${newAppIssue.appSpec?.name}
 
 ${createBadge(newAppIssue.appSpec?.name, deployAppWorkflowFileName)}
+${createBadge(newAppIssue.appSpec?.name, `dependabot-security-updates`)}
+${createBadge(newAppIssue.appSpec?.name, `dependabot-version-updates`)}
 ${newAppIssue.generateQuarkusStub ? createBadge(newAppIssue.appSpec?.name, `ci-${quarkusStubName}.yaml`) : ''}
 ${newAppIssue.generateAngularStub ? createBadge(newAppIssue.appSpec?.name, `ci-${angularStubName}.yaml`) : ''}
 

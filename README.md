@@ -2,6 +2,9 @@
 
 [![Lint][lint-badge]][lint-workflow]
 [![Test][test-actions-badge]][test-actions-workflow]
+[![Deploy Jekyll site to Pages][gh-pages-badge]][gh-pages-workflow]
+[![Dependabot Version Updates][dependabot-version-updates-badge]][dependabot-version-updates-workflow]
+[![Dependabot Security Updates][dependabot-security-updates-badge]][dependabot-security-updates-workflow]
 
 ## Want to unite with us?
 
@@ -27,9 +30,21 @@ The following use cases are supported via self-service
 
 [test-actions-badge]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/test-actions.yaml/badge.svg
 
+[gh-pages-badge]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/gh-pages.yaml/badge.svg
+
+[dependabot-security-updates-badge]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/dependabot/dependabot-security-updates/badge.svg
+
+[dependabot-version-updates-badge]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/dependabot/dependabot-version-updates/badge.svg
+
 [lint-workflow]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/lint.yaml
 
 [test-actions-workflow]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/test-actions.yaml
+
+[gh-pages-workflow]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/gh-pages.yaml
+
+[dependabot-security-updates-workflow]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/dependabot/dependabot-security-updates
+
+[dependabot-version-updates-workflow]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/dependabot/dependabot-version-updates
 
 [gh-pages]: https://pages.atc-github.azure.cloud.bmw/UNITY/unity/
 

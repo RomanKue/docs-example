@@ -39,12 +39,7 @@ The basic idea of a service mesh is to offload some logic from the application's
 authorization, TLS, content encoding, metrics and other things are handled by a sidecar.
 In UNITY, an app is deployed with some sidecars, one of them being an envoy proxy as shown in the diagram below:
 
-<!--
-If you want to read this documentation, but see only HTML code below, consider to go to
-https://pages.atc-github.azure.cloud.bmw/UNITY/unity/dev-ops-handbook/envoy.md
-to edit, copy the graph to the mermaid live editor: https://mermaid.live
--->
-<div class="mermaid">
+```mermaid
 graph TB
 subgraph UNITY
     subgraph pod
@@ -60,7 +55,7 @@ authz-- authorization -->WebEAM
 oauth2-- authentication -->WebEAM
 client-- HTTPS request -->envoy
 envoy-- HTTPS response -->client
-</div>
+```
 
 The subsections below detail some aspects the envoy proxy is handling.
 

@@ -42,18 +42,18 @@ The rest of the URL is the exact path on the external service. The request body 
 Here is a list of available services
 
 * `http://localhost:8008/services/api/pip-vehicle` PIP Vehicle. For detailed information about the interface, please
-   refer to the [Swagger] (https://pmd-api-int.bmwgroup.net/pip-vehicle/query/wen/)
+   refer to the [Swagger](https://pmd-api-int.bmwgroup.net/pip-vehicle/query/wen/)
 * `http://localhost:8008/services/api/logic-services`
   [Logic Services (Logikdienste)](https://pmd.bmwgroup.net/lexicon/app/term/LGCS). For detailed information about the
-   interface, please refer to the [Swagger] (https://pmd-api-int.bmwgroup.net/logic-services/wen/logic-services-business/swagger/)
+   interface, please refer to the [Swagger](https://pmd-api-int.bmwgroup.net/logic-services/wen/logic-services-business/swagger/)
 * `http://localhost:8008/services/api/pdm-core`. For more information about the interface, please refer to the
-   [offical documentation] (https://atc.bmwgroup.net/confluence/x/jTZobQ)
+   [offical documentation](https://atc.bmwgroup.net/confluence/x/jTZobQ)
 * `http://localhost:8008/services/api/puk`
   [Check and Configuration Service (Prüf- und Konfigurationsdienst, PUK)](https://pmd.bmwgroup.net/lexicon/app/term/PUK).
-  For detailed information about the interface, please refer to the [Swagger] (https://pmd-api-int.bmwgroup.net/puknext/puk-webapp/swagger/#/default)
+  For detailed information about the interface, please refer to the [Swagger](https://pmd-api-int.bmwgroup.net/puknext/puk-webapp/swagger/#/default)
 * `http://localhost:8008/services/api/hsa`
   [HSA (100% Sonderausstattung)](https://pmd.bmwgroup.net/lexicon/app/term/HSA). For detailed information about the
-  interface, please refer to the [Swagger] (https://pmd-api-int.bmwgroup.net/hsa/hsa-check/#/)
+  interface, please refer to the [Swagger](https://pmd-api-int.bmwgroup.net/hsa/hsa-check/#/)
 
 # Architecture
 

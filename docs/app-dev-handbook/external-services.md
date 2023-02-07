@@ -273,7 +273,9 @@ public class CustomAuthorizationHeaderFactory implements ClientHeadersFactory {
     final MultivaluedMap<String, String> incomingHeaders,
     final MultivaluedMap<String, String> clientOutgoingHeaders) {
     if (ConfigUtils.isProfileActive("dev")) {
-      clientOutgoingHeaders.put(AUTHORIZATION, List.of("Bearer " + saToken.orElse(null)));
+      clientOutgoingHeaders.put(AUTHORIZATION, List.of("Bearer " + saToken.orElseThrow(
+        () -> new MissingResourceException("Kubernetes service account token was not found",
+          String.class.getName(), "kubernetes-token"))));
       clientOutgoingHeaders.put("Unity-Authorization-Type", List.of("Kubernetes-Service-Account"));
     }
     return clientOutgoingHeaders;

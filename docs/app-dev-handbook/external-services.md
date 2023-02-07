@@ -259,32 +259,34 @@ public class PipResource {
 
 ### Testing Locally
 
-In order to test the service integration locally, a client headers factory needs to be created.
+In order to test the service integration locally, a custom client headers factory needs to be created.
 
 ```java
 @ApplicationScoped
-@IfBuildProfile("dev")
-public class DevAuthorizationHeaderFactory implements ClientHeadersFactory {
+public class CustomAuthorizationHeaderFactory implements ClientHeadersFactory {
 
   @ConfigProperty(name = "kubernetes-token")
-  String saToken;
+  Optional<String> saToken;
 
   @Override
   public MultivaluedMap<String, String> update(
-      final MultivaluedMap<String, String> incomingHeaders,
-      final MultivaluedMap<String, String> clientOutgoingHeaders) {
-      clientOutgoingHeaders.put(AUTHORIZATION, List.of("Bearer " + saToken));
+    final MultivaluedMap<String, String> incomingHeaders,
+    final MultivaluedMap<String, String> clientOutgoingHeaders) {
+    if (ConfigUtils.isProfileActive("dev")) {
+      clientOutgoingHeaders.put(AUTHORIZATION, List.of("Bearer " + saToken.orElse(null)));
       clientOutgoingHeaders.put("Unity-Authorization-Type", List.of("Kubernetes-Service-Account"));
-      return clientOutgoingHeaders;
+    }
+    return clientOutgoingHeaders;
   }
 }
 ```
 
-This factory sets the `Authorization` and `Unity-Authorization-Type` headers on every request.
+This factory sets the `Authorization` and `Unity-Authorization-Type` headers on every request, if the `dev` Quarkus
+profile is active.
 To use the factory in the REST client, annotate it with:
 
 ```java
-@RegisterClientHeaders(DevAuthorizationHeaderFactory.class)
+@RegisterClientHeaders(CustomAuthorizationHeaderFactory.class)
 @RegisterRestClient(configKey = "unity-services")
 @Consumes({MediaType.APPLICATION_JSON})
 @Produces({MediaType.APPLICATION_JSON})

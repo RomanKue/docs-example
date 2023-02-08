@@ -182,7 +182,6 @@ Add the maven dependencies for the rest client to the `pom.xml`, as also describ
 in [USING THE REST CLIENT](https://quarkus.io/guides/rest-client).
 
 ```xml
-
 <dependencies>
   <dependency>
     <groupId>io.quarkus</groupId>
@@ -224,7 +223,7 @@ public interface PipVehicle {
 
 The `application.properties` should be extended by a few properties for local development
 
-```properties
+```
 quarkus.rest-client.unity-services.url=http://localhost:8008/services/api
 %dev.quarkus.rest-client.unity-services.url=https://unity-int.bmwgroup.net/services/api
 %dev.quarkus.tls.trust-all=true
@@ -346,7 +345,6 @@ If the response is not properly JSON formatted, make sure the following dependen
 care of mapping the response `record` to JSON.
 
 ```xml
-
 <dependency>
   <groupId>io.quarkus</groupId>
   <artifactId>quarkus-resteasy-reactive-jackson</artifactId>

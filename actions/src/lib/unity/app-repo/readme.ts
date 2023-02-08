@@ -42,8 +42,8 @@ Here are the URLs for the environments:
 `;
 
 
-const createBadge = (appName: string | undefined, workflowName: string) => {
-  const url = `${repoUrl(appName)}/actions/workflows/${workflowName}`;
+const createBadge = (appName: string | undefined, workflowName: string, workflowPath = 'actions/workflows/') => {
+  const url = `${repoUrl(appName)}/${workflowPath}${workflowName}`;
   return `[![${workflowName}](${url}/badge.svg)](${url})`;
 };
 
@@ -51,8 +51,7 @@ export const createReadme = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 # ${newAppIssue.appSpec?.name}
 
 ${createBadge(newAppIssue.appSpec?.name, deployAppWorkflowFileName)}
-${createBadge(newAppIssue.appSpec?.name, `dependabot-security-updates`)}
-${createBadge(newAppIssue.appSpec?.name, `dependabot-version-updates`)}
+${createBadge(newAppIssue.appSpec?.name, `dependabot-version-updates`, 'actions/workflows/dependabot/')}
 ${newAppIssue.generateQuarkusStub ? createBadge(newAppIssue.appSpec?.name, `ci-${quarkusStubName}.yaml`) : ''}
 ${newAppIssue.generateAngularStub ? createBadge(newAppIssue.appSpec?.name, `ci-${angularStubName}.yaml`) : ''}
 

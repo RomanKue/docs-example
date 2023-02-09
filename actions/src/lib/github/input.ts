@@ -3,6 +3,8 @@ import * as core from '@actions/core';
 export const getInput = (
   input:
     'working-directory' |
+    'repository-regex' |
+    'environment' |
     'GITHUB_TOKEN' |
     'INT_KUBERNETES_TOKEN' |
     'INT_KUBERNETES_HOST' |

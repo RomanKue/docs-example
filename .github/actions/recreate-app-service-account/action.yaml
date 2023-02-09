@@ -1,0 +1,29 @@
+name: 'recreate-app-service-account'
+description: |
+  Upsert all k8s objects of the namespace and apps matching the regex and upsert the service account token of
+  the selected apps in GHE.
+inputs:
+  GITHUB_TOKEN:
+    description: the GITHUB_TOKEN to authenticate to the API
+    required: true
+  INT_KUBERNETES_TOKEN:
+    description: token to authenticate to a K8s cluster
+  INT_KUBERNETES_HOST:
+    description: host of the K8s cluster
+  INT_KUBERNETES_NAMESPACE:
+    description: namespace of the K8s cluster
+  PROD_KUBERNETES_TOKEN:
+    description: token to authenticate to a K8s cluster
+  PROD_KUBERNETES_HOST:
+    description: host of the K8s cluster
+  PROD_KUBERNETES_NAMESPACE:
+    description: namespace of the K8s cluster
+  environment:
+    description: environment to update the secrets for
+    required: true
+  repository-regex:
+    description: regex to match the name of the app repo inside the UNITY org
+    required: true
+runs:
+  using: 'node16'
+  main: '../../../actions/dist/actions/update-k8s-objects.js'

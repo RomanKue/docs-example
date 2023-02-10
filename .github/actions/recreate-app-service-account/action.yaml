@@ -22,8 +22,8 @@ inputs:
     description: environment to update the secrets for
     required: true
   repository-regex:
-    description: regex to match the name of the app repo inside the UNITY org
+    description: repos matching against this regex will be updated
     required: true
 runs:
   using: 'node16'
-  main: '../../../actions/dist/actions/update-k8s-objects.js'
+  main: '../../../actions/dist/actions/recreate-app-service-account.ts'

@@ -11,9 +11,9 @@ export const getInput = (
     'PROD_KUBERNETES_HOST' |
     'PROD_KUBERNETES_NAMESPACE'
 ): string => {
-  const githubToken = core.getInput(input);
-  if (!githubToken) {
+  const inputValue = core.getInput(input);
+  if (!inputValue) {
     throw new Error(`${input} is not defined`);
   }
-  return githubToken;
+  return inputValue;
 };

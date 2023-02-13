@@ -30,8 +30,8 @@ import actions from '../../github/api/actions/index.js';
 import {Issue} from '../../github/api/issues/response/issue.js';
 import {ReadonlyDeep} from 'type-fest';
 import {SimpleUser} from '../../github/api/teams/response/simple-user.js';
-import {getInput} from '../../github/input.js';
-import {createK8sObjects} from './k8s.js';
+import {getInput, IssueUpdatedInputs} from '../../github/input.js';
+import {createK8sObjects, getEnvironmentKubeConfig} from './k8s.js';
 import {assertUnreachable} from '../../run.js';
 import {addSimpleComment} from '../../github/api/issues/issues-utils.js';
 import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
@@ -56,6 +56,7 @@ import {
   createDependabotAutoApproveWorkflow,
   dependabotAutoApproveWorkflowFileName
 } from './workflows/dependabot-auto-merge-workflow.js';
+import {CharacterEncoding} from 'crypto';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -250,18 +251,18 @@ export const createRepository = async (
     });
 
     core.debug(`generating token "${env}"`);
-    const token = await createK8sObjects(env, appRepository.name);
+    const token = await createK8sObjects(env, appRepository.name, getEnvironmentKubeConfig(env));
     await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesToken, token);
 
     switch (env) {
     case 'int':
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesHost, getInput('INT_KUBERNETES_HOST'));
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesNamespace, getInput('INT_KUBERNETES_NAMESPACE'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE'));
       break;
     case 'prod':
       // skip for now...
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesHost, getInput('PROD_KUBERNETES_HOST'));
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesNamespace, getInput('PROD_KUBERNETES_NAMESPACE'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE'));
       break;
     default:
       assertUnreachable(env);

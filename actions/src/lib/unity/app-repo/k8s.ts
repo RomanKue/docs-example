@@ -2,7 +2,7 @@ import * as k8s from '@kubernetes/client-node';
 import {CoreV1Api, HttpError, KubeConfig, RbacAuthorizationV1Api} from '@kubernetes/client-node';
 import {base64Decode} from '../../strings/encoding.js';
 import {ReadonlyDeep} from 'type-fest';
-import {getInput} from '../../github/input.js';
+import {getInput, IssueUpdatedInputs} from '../../github/input.js';
 import {assertUnreachable} from '../../run.js';
 import {environments} from '../config.js';
 import {constants} from 'http2';
@@ -118,19 +118,19 @@ export const getKubeConfig = (environment: Environment, host: string, namespace:
   return kc;
 }
 
-const getEnvironmentKubeConfig = (environment: Environment): KubeConfig => {
+export const getEnvironmentKubeConfig = (environment: Environment): KubeConfig => {
   core.debug(`creating kubeconfig for environment "${environment}"`);
   switch (environment) {
   case 'int': {
-    const host = getInput('INT_KUBERNETES_HOST');
-    const namespace = getInput('INT_KUBERNETES_NAMESPACE');
-    const token = getInput('INT_KUBERNETES_TOKEN');
+    const host = getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST');
+    const namespace = getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE');
+    const token = getInput<IssueUpdatedInputs>('INT_KUBERNETES_TOKEN');
     return getKubeConfig(environment, host, namespace, token);
   }
   case 'prod': {
-    const host = getInput('PROD_KUBERNETES_HOST');
-    const namespace = getInput('PROD_KUBERNETES_NAMESPACE');
-    const token = getInput('PROD_KUBERNETES_TOKEN');
+    const host = getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST');
+    const namespace = getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE');
+    const token = getInput<IssueUpdatedInputs>('PROD_KUBERNETES_TOKEN');
     return getKubeConfig(environment, host, namespace, token);
   }
   default:
@@ -155,11 +155,8 @@ export const readServiceAccountToken = async (environment: ReadonlyDeep<Environm
 export const createK8sObjects = async (
   environment: ReadonlyDeep<Environment>,
   repoName: string,
-  kubeConfig?: KubeConfig
+  kubeConfig: KubeConfig
 ): Promise<string> => {
-  if (!kubeConfig) {
-    kubeConfig = getEnvironmentKubeConfig(environment);
-  }
   await upsertSecret(kubeConfig, {
     apiVersion: 'v1',
     kind: 'Secret',

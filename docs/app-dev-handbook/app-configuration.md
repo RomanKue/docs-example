@@ -58,9 +58,11 @@ deployments:
 ```
 
 In order to develop locally, you may need the application service account token. To export the service account token
-stored in GitHub, you can run
-manually the `store-secrets` workflow.
+stored in GitHub, you can run manually the `store-secrets` workflow.
+
+🚨 Note that the token may be rolled (new token is generated) by UNITY from time to time. Extracting the service account
+token is meant for development purposes and must not be used for external service interaction.
 
 There is currently no convenient way to encrypt information from the developer perspective. Contact the UNITY team if
 you need this feature. In scope of [UNITYAPPS-42](https://atc.bmwgroup.net/jira/browse/UNITYAPPS-42) there will be an
-action to encrypt secrets in a conventient way in the future.
+action to encrypt secrets in a convenient way in the future.

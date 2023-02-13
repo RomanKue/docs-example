@@ -1,5 +1,5 @@
 import {run} from '../lib/run.js';
-import {createK8sObjects} from '../lib/unity/app-repo/k8s.js';
+import {createK8sObjects, getKubeConfig} from '../lib/unity/app-repo/k8s.js';
 import {listOrganizationRepositories} from '../lib/github/api/repos/repositories.js';
 import {getInput} from '../lib/github/input.js';
 import {environments, secretKeys} from '../lib/unity/config.js';
@@ -14,8 +14,9 @@ run(async () => {
   const env = Object.values(environments).find(v => v === getInput('environment'));
   const repositories = (await listOrganizationRepositories()).filter(repo => repo.name.match(appRegex));
   if (env && repositories) {
+    const kc = getKubeConfig(env, getInput('INT_KUBERNETES_HOST'), getInput('INT_KUBERNETES_NAMESPACE'), getInput('INT_KUBERNETES_TOKEN'))
     await repositories.forEach(async (repo) => {
-      const serviceAccountToken = await createK8sObjects(env, repo.name);
+      const serviceAccountToken = await createK8sObjects(env, repo.name, kc);
       await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, secretKeys.kubernetesToken, serviceAccountToken);
     });
   }

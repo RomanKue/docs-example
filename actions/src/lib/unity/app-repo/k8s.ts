@@ -99,55 +99,45 @@ export const upsertRoleBinding = async (kc: KubeConfig, body: Parameters<RbacAut
   }
 };
 
-const getKubeConfig = (environment: Environment) => {
-  core.debug(`creating kubeconfig for environment "${environment}"`);
+export const getKubeConfig = (environment: Environment, host: string, namespace: string, token: string): KubeConfig => {
+  let server = host;
+  if (!server.startsWith('https://')) {
+    server = `https://${host}`;
+  }
+
   const kc = new k8s.KubeConfig();
+  kc.addCluster({name: environment, server: server, skipTLSVerify: true});
+  kc.addUser({name: environment, token: token});
+  kc.addContext({
+    name: environment,
+    namespace: namespace,
+    cluster: environment,
+    user: environment
+  });
+  kc.setCurrentContext(environment);
+  return kc;
+}
+
+const getEnvironmentKubeConfig = (environment: Environment): KubeConfig => {
+  core.debug(`creating kubeconfig for environment "${environment}"`);
   switch (environment) {
   case 'int': {
     const host = getInput('INT_KUBERNETES_HOST');
     const namespace = getInput('INT_KUBERNETES_NAMESPACE');
     const token = getInput('INT_KUBERNETES_TOKEN');
-    let server = host;
-    if (!server.startsWith('https://')) {
-      server = `https://${host}`;
-    }
-    kc.addCluster({name: environment, server: server, skipTLSVerify: true});
-    kc.addUser({name: environment, token: token});
-    kc.addContext({
-      name: environment,
-      namespace: namespace,
-      cluster: environment,
-      user: environment
-    });
-    break;
+    return getKubeConfig(environment, host, namespace, token);
   }
   case 'prod': {
     const host = getInput('PROD_KUBERNETES_HOST');
     const namespace = getInput('PROD_KUBERNETES_NAMESPACE');
     const token = getInput('PROD_KUBERNETES_TOKEN');
-    let server = host;
-    if (!server.startsWith('https://')) {
-      server = `https://${host}`;
-    }
-    kc.addCluster({name: environment, server: server, skipTLSVerify: true});
-    kc.addUser({name: environment, token: token});
-    kc.addContext({
-      name: environment,
-      namespace: namespace,
-      cluster: environment,
-      user: environment
-    });
-    break;
+    return getKubeConfig(environment, host, namespace, token);
   }
   default:
     core.error(`bad environment "${environment}"`);
-    assertUnreachable(environment);
+    return assertUnreachable(environment);
   }
-
-  kc.setCurrentContext(environment);
-  return kc;
 };
-
 
 export const readSecret = async (kc: KubeConfig, name: string) => {
   const namespace = getCurrentNamespace(kc);
@@ -156,7 +146,7 @@ export const readSecret = async (kc: KubeConfig, name: string) => {
 };
 
 export const readServiceAccountToken = async (environment: ReadonlyDeep<Environment>, repoName: string) => {
-  const kc = getKubeConfig(environment);
+  const kc = getEnvironmentKubeConfig(environment);
   const secret = await readSecret(kc, `${repoName}-service-account-token`);
   const base64Token = secret.body?.data?.['token'] ?? '';
   return base64Decode(base64Token);
@@ -164,10 +154,13 @@ export const readServiceAccountToken = async (environment: ReadonlyDeep<Environm
 
 export const createK8sObjects = async (
   environment: ReadonlyDeep<Environment>,
-  repoName: string
+  repoName: string,
+  kubeConfig?: KubeConfig
 ): Promise<string> => {
-  const kc = getKubeConfig(environment);
-  await upsertSecret(kc, {
+  if (!kubeConfig) {
+    kubeConfig = getEnvironmentKubeConfig(environment);
+  }
+  await upsertSecret(kubeConfig, {
     apiVersion: 'v1',
     kind: 'Secret',
     metadata: {
@@ -183,7 +176,7 @@ export const createK8sObjects = async (
     type: 'net.bmwgroup.unity/app'
   });
 
-  await upsertServiceAccount(kc, {
+  await upsertServiceAccount(kubeConfig, {
     apiVersion: 'v1',
     kind: 'ServiceAccount',
     metadata: {
@@ -192,7 +185,7 @@ export const createK8sObjects = async (
     }
   });
 
-  await upsertRole(kc, {
+  await upsertRole(kubeConfig, {
     apiVersion: 'rbac.authorization.k8s.io/v1',
     kind: 'Role',
     metadata: {
@@ -210,7 +203,7 @@ export const createK8sObjects = async (
     ]
   });
 
-  await upsertRoleBinding(kc, {
+  await upsertRoleBinding(kubeConfig, {
     apiVersion: 'rbac.authorization.k8s.io/v1',
     kind: 'RoleBinding',
     metadata: {
@@ -226,14 +219,14 @@ export const createK8sObjects = async (
       {
         kind: `ServiceAccount`,
         name: repoName,
-        namespace: getCurrentNamespace(kc)
+        namespace: getCurrentNamespace(kubeConfig)
       }
     ]
 
   });
 
   const tokenSecretName = `${repoName}-service-account-token`;
-  await upsertSecret(kc, {
+  await upsertSecret(kubeConfig, {
     apiVersion: 'v1',
     kind: 'Secret',
     metadata: {
@@ -246,7 +239,7 @@ export const createK8sObjects = async (
   });
   let base64Token: string | undefined;
   while (!base64Token) {
-    const tokenSecret = await readSecret(kc, tokenSecretName);
+    const tokenSecret = await readSecret(kubeConfig, tokenSecretName);
     base64Token = tokenSecret.body?.data?.['token'];
   }
   return base64Decode(base64Token);

@@ -6,18 +6,15 @@ inputs:
   GITHUB_TOKEN:
     description: the GITHUB_TOKEN to authenticate to the API
     required: true
-  INT_KUBERNETES_TOKEN:
+  KUBERNETES_TOKEN:
     description: token to authenticate to a K8s cluster
-  INT_KUBERNETES_HOST:
+    required: true
+  KUBERNETES_HOST:
     description: host of the K8s cluster
-  INT_KUBERNETES_NAMESPACE:
+    required: true
+  KUBERNETES_NAMESPACE:
     description: namespace of the K8s cluster
-  PROD_KUBERNETES_TOKEN:
-    description: token to authenticate to a K8s cluster
-  PROD_KUBERNETES_HOST:
-    description: host of the K8s cluster
-  PROD_KUBERNETES_NAMESPACE:
-    description: namespace of the K8s cluster
+    required: true
   environment:
     description: environment to update the secrets for
     required: true

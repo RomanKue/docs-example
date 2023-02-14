@@ -73,10 +73,10 @@ const setWorkingDirectory = () => {
   try {
     workingDirectory = getInput<GeneralInputs>('working-directory');
   } catch (e) {
-    core.debug("Working directory is not set");
+    core.debug('Working directory is not set');
   }
   if (workingDirectory) {
     core.debug(`changing to: ${workingDirectory}`);
     process.chdir(workingDirectory);
   }
-}
+};

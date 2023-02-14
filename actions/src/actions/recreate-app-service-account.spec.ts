@@ -55,24 +55,22 @@ describe('recreate-app-service-account', () => {
 
 const createMockRepos = (names: string[]) => {
   return names.map((name, index) => partialMock<MinimalRepository>({name: name, id: index}));
-}
+};
 
 const createMockInputs = (repoRegex: string, env?: string) => {
   return (input: Inputs) => {
     switch (input) {
-      case 'repository-regex':
-        return repoRegex;
-      case 'environment':
-        return env ? env : 'int';
-      case 'KUBERNETES_HOST':
-        return 'host';
-      case 'KUBERNETES_NAMESPACE':
-        return 'namespace';
-      case 'KUBERNETES_TOKEN':
-        return 'k8s-token';
+    case 'repository-regex':
+      return repoRegex;
+    case 'environment':
+      return env ? env : 'int';
+    case 'KUBERNETES_HOST':
+      return 'host';
+    case 'KUBERNETES_NAMESPACE':
+      return 'namespace';
+    case 'KUBERNETES_TOKEN':
+      return 'k8s-token';
     }
     return '';
   };
-}
-
-
+};

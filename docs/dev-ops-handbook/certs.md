@@ -79,7 +79,7 @@ This is as secure as any other certificate, since the certificate is never used 
 is required to trust the self-signed certificate.
 
 The self-signed certificate is generated via the
-[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart.
+[unity-chart](https://atc-github.azure.cloud.bmw/UNITY/unity-chart/blob/pdm-unity-int/test/templates/certificate.yaml) Helm chart.
 
 In the pod, TLS is terminated by an [envoy proxy](https://www.envoyproxy.io).
 Configuration of the envoy proxy is part of the
@@ -108,13 +108,13 @@ DEPLOYMENT=<name of the deployment, e.g. api>
 ```
 
 ```bash
-kubectl get certificate -oyaml app-$NAME
+kubectl get certificate -oyaml unity-certificate
 ```
 
 The certificates can be dumped from the secret where the cert manager places them as follows.
 
 ```bash
-SECRET_NAME=$(kubectl get certificate -ojson app-$NAME | jq -r '.spec.secretName')
+SECRET_NAME=$(kubectl get certificate -ojson unity-certificate | jq -r '.spec.secretName')
 echo $SECRET_NAME
 kubectl get secret $SECRET_NAME -ojson | jq -r '.data["tls.key"] | @base64d'  > ingress-tls.key
 kubectl get secret $SECRET_NAME -ojson | jq -r '.data["tls.crt"] | @base64d'  > ingress-tls.crt

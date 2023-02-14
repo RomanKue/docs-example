@@ -56,7 +56,6 @@ import {
   createDependabotAutoApproveWorkflow,
   dependabotAutoApproveWorkflowFileName
 } from './workflows/dependabot-auto-merge-workflow.js';
-import {CharacterEncoding} from 'crypto';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 

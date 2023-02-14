@@ -116,7 +116,7 @@ export const getKubeConfig = (environment: Environment, host: string, namespace:
   });
   kc.setCurrentContext(environment);
   return kc;
-}
+};
 
 export const getEnvironmentKubeConfig = (environment: Environment): KubeConfig => {
   core.debug(`creating kubeconfig for environment "${environment}"`);

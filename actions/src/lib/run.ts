@@ -9,11 +9,8 @@ import {GeneralInputs, getInput} from './github/input.js';
  * wrapper for main functions with error handling and global debug logging
  */
 export const run = (callback: () => Promise<void>) => {
-  const workingDirectory = getInput<GeneralInputs>('working-directory');
-  if (workingDirectory) {
-    core.debug(`changing to: ${workingDirectory}`);
-    process.chdir(workingDirectory);
-  }
+  setWorkingDirectory();
+
   core.info(`cwd: ${process.cwd()}`);
   core.debug(`context: ${JSON.stringify(github.context, null, 2)}`);
   callback().catch(e => {
@@ -70,3 +67,16 @@ export const handleWorkflowEvent = async (eventHandler: EventHandlers) => {
     throw new Error(`unexpected eventName: ${eventName}`);
   }
 };
+
+const setWorkingDirectory = () => {
+  let workingDirectory;
+  try {
+    workingDirectory = getInput<GeneralInputs>('working-directory');
+  } catch (e) {
+    core.debug("Working directory is not set");
+  }
+  if (workingDirectory) {
+    core.debug(`changing to: ${workingDirectory}`);
+    process.chdir(workingDirectory);
+  }
+}

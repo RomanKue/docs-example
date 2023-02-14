@@ -20,7 +20,9 @@ export type RecreateAppServiceAccountInputs =
   'repository-regex' |
   'environment';
 
-export const getInput = <T extends GeneralInputs | IssueUpdatedInputs | RecreateAppServiceAccountInputs> (
+export type Inputs = GeneralInputs | IssueUpdatedInputs | RecreateAppServiceAccountInputs;
+
+export const getInput = <T extends Inputs> (
   input: T
 ): string => {
   const inputValue = core.getInput(input);

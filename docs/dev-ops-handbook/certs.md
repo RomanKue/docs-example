@@ -100,7 +100,7 @@ Next, the certificates can be inspected locally as follows.
 
 ## Client to Ingress Controller
 
-To inspect the client to ingress controller certificates, one would need to run the following scripts:
+To inspect the client to ingress controller certificate, one would need to run the following scripts:
 
 ```bash
 kubectl get certificate -oyaml unity-certificate

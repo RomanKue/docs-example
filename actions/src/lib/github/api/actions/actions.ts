@@ -3,6 +3,7 @@ import * as github from '@actions/github';
 import {getOctokitApi} from '../../octokit.js';
 import {ActionsPublicKey} from './response/actions-public-key.js';
 import {WorkflowRuns} from './response/workflow-runs.js';
+import {ActionsSecret} from './response/actions-secret.js';
 
 type ActionsApi = RestApi['actions'];
 
@@ -69,3 +70,19 @@ export const getAnEnvironmentPublicKey = async (
   });
   return response.data as ActionsPublicKey;
 };
+
+/**
+ * https://docs.github.com/en/rest/actions/secrets#get-an-environment-secret
+ */
+export const getAnEnvironmentSecret = async (
+  options: {
+    repository_id: number,
+    environment_name: string,
+    secret_name: string,
+  } & Partial<Parameters<ActionsApi['getEnvironmentSecret']>[0]>
+): Promise<ActionsSecret> => {
+  const response = await getOctokitApi().rest.actions.getEnvironmentSecret({
+    ...options
+  });
+  return response.data as ActionsSecret;
+}

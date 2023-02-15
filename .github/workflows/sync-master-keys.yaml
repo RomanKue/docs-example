@@ -1,0 +1,52 @@
+name: Sync Master Keys From K8s to GHE
+on:
+  workflow_dispatch:
+    inputs:
+      repositoryRegex:
+        description: Regex to match the name of the app repo inside the UNITY org
+        required: true
+        default: app-test
+        type: string
+      overwrite:
+        description: Flag to indicate if an existing GHE secret should be overwritten
+        required: true
+        default: false
+        type: boolean
+      environment:
+        description: Environment to update the secrets for
+        required: true
+        type: choice
+        options:
+          - int
+          - prod
+jobs:
+  sync-master-keys-from-K8s-to-GHE:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 30
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+      - name: build-actions
+        uses: ./.github/actions/build-actions
+      - name: sync-master-keys-int
+        if: ${{ inputs.environment == 'int' }}
+        uses: ./.github/actions/sync-master-keys
+        with:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+          KUBERNETES_TOKEN: ${{ secrets.INT_KUBERNETES_TOKEN }}
+          KUBERNETES_HOST: ${{ secrets.INT_KUBERNETES_HOST }}
+          KUBERNETES_NAMESPACE: ${{ secrets.INT_KUBERNETES_NAMESPACE }}
+          environment: ${{ inputs.environment }}
+          repository-regex: ${{ inputs.repositoryRegex }}
+          overwrite: ${{ inputs.overwrite }}
+      - name: sync-master-keys-prod
+        if: ${{ inputs.environment == 'prod' }}
+        uses: ./.github/actions/sync-master-keys
+        with:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+          KUBERNETES_TOKEN: ${{ secrets.PROD_KUBERNETES_TOKEN }}
+          KUBERNETES_HOST: ${{ secrets.PROD_KUBERNETES_HOST }}
+          KUBERNETES_NAMESPACE: ${{ secrets.PROD_KUBERNETES_NAMESPACE }}
+          environment: ${{ inputs.environment }}
+          repository-regex: ${{ inputs.repositoryRegex }}
+          overwrite: ${{ inputs.overwrite }}

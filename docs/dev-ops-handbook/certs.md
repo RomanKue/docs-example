@@ -100,21 +100,16 @@ Next, the certificates can be inspected locally as follows.
 
 ## Client to Ingress Controller
 
-To inspect the setup of an app, set the config of an app to analyze by defining the following env variables
+To inspect the client to ingress controller certificate, one would need to run the following scripts:
 
 ```bash
-NAME=<name of the app, e.g. services>
-DEPLOYMENT=<name of the deployment, e.g. api>
-```
-
-```bash
-kubectl get certificate -oyaml app-$NAME
+kubectl get certificate -oyaml unity-certificate
 ```
 
 The certificates can be dumped from the secret where the cert manager places them as follows.
 
 ```bash
-SECRET_NAME=$(kubectl get certificate -ojson app-$NAME | jq -r '.spec.secretName')
+SECRET_NAME=$(kubectl get certificate -ojson unity-certificate | jq -r '.spec.secretName')
 echo $SECRET_NAME
 kubectl get secret $SECRET_NAME -ojson | jq -r '.data["tls.key"] | @base64d'  > ingress-tls.key
 kubectl get secret $SECRET_NAME -ojson | jq -r '.data["tls.crt"] | @base64d'  > ingress-tls.crt
@@ -138,6 +133,13 @@ diff <(echo "$CRT_MD5") <(echo "$KEY_MD5")
 ```
 
 ## Ingress Controller to Pod
+
+To inspect the setup of an app, set the config of an app to analyze by defining the following env variables
+
+```bash
+NAME=<name of the app, e.g. services>
+DEPLOYMENT=<name of the deployment, e.g. api>
+```
 
 TLS from the ingress controller to the service (pod) is handled by a different certificate, which can be dumped as
 follows.

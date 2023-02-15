@@ -1,0 +1,26 @@
+name: 'recreate-app-service-account'
+description: |
+  Upsert all k8s objects of the namespace and apps matching the regex and upsert the service account token of
+  the selected apps in GHE.
+inputs:
+  GITHUB_TOKEN:
+    description: the GITHUB_TOKEN to authenticate to the API
+    required: true
+  KUBERNETES_TOKEN:
+    description: token to authenticate to a K8s cluster
+    required: true
+  KUBERNETES_HOST:
+    description: host of the K8s cluster
+    required: true
+  KUBERNETES_NAMESPACE:
+    description: namespace of the K8s cluster
+    required: true
+  environment:
+    description: environment to update the secrets for
+    required: true
+  repository-regex:
+    description: repos matching against this regex will be updated
+    required: true
+runs:
+  using: 'node16'
+  main: '../../../actions/dist/actions/recreate-app-service-account.ts'

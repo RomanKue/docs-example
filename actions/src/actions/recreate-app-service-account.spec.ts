@@ -9,7 +9,7 @@ import {repositoriesUtils} from '../lib/github/api/repos';
 import {KubeConfig} from '@kubernetes/client-node';
 import {jest} from '@jest/globals';
 import {partialMock} from '../lib/mock/partial-mock';
-import {secretKeys} from '../lib/unity/config';
+import {githubSecretKeys} from '../lib/unity/config';
 
 describe('recreate-app-service-account', () => {
   const kc = new KubeConfig();
@@ -48,8 +48,8 @@ describe('recreate-app-service-account', () => {
     expect(k8s.createK8sObjects).toHaveBeenCalledWith('int', 'app-foo', kc);
 
     expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(2);
-    expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledWith({id: 0}, 'int', secretKeys.kubernetesToken, 'new-sa-token');
-    expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledWith({id: 2}, 'int', secretKeys.kubernetesToken, 'new-sa-token');
+    expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledWith({id: 0}, 'int', githubSecretKeys.kubernetesToken, 'new-sa-token');
+    expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledWith({id: 2}, 'int', githubSecretKeys.kubernetesToken, 'new-sa-token');
   });
 });
 

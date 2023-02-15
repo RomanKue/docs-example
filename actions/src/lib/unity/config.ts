@@ -63,10 +63,11 @@ export const environments = {
   prod: 'prod',
 } as const;
 
-export const secretKeys = {
+export const githubSecretKeys = {
   kubernetesToken: 'KUBERNETES_TOKEN',
   kubernetesHost: 'KUBERNETES_HOST',
   kubernetesNamespace: 'KUBERNETES_NAMESPACE',
+  cryptMasterKey: 'CRYPT_MASTER_KEY',
 } as const;
 
 export const defaultTopics = {
@@ -77,6 +78,10 @@ export const magicComments = {
   review: 'review',
   lgtm: 'LGTM',
 } as const;
+
+export const k8sSecretKeys = {
+  cryptMasterKey: 'helm-crypt-master-key.v1'
+}
 
 export const isMagicComment = (
   comment: IssueComment,

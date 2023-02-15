@@ -1,0 +1,32 @@
+import {run} from '../lib/run.js';
+import {getInput, SyncMasterKeysInputs} from '../lib/github/input.js';
+import {environments, githubSecretKeys, k8sSecretKeys} from '../lib/unity/config.js';
+import {repositoriesUtils} from '../lib/github/api/repos/index.js';
+import {searchRepositories} from '../lib/github/api/search/search.js';
+import {getAnEnvironmentSecret} from '../lib/github/api/actions/actions.js';
+import {getKubeConfig, readSecretForEnvironment} from '../lib/unity/app-repo/k8s.js';
+
+/**
+ *  Set the master key (CRYPT_MASTER_KEY) of every app matching the regex and selected namespace if it doesn't exist.
+ *  If overwrite is true, update the existing ones too.
+ */
+run(async () => {
+  const appRegex = getInput<SyncMasterKeysInputs>('repository-regex');
+  const env = Object.values(environments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
+  const repositories = (await searchRepositories({q: 'topic:unity-app org:UNITY fork:true'}))
+    .filter(repo => repo.name.match(appRegex));
+  if (env && repositories) {
+    const overwrite = getInput<SyncMasterKeysInputs>('overwrite') == 'true';
+    await repositories.forEach(async (repo) => {
+      const currentMasterKey = await getAnEnvironmentSecret({repository_id: repo.id, environment_name: env, secret_name: githubSecretKeys.cryptMasterKey});
+      if (overwrite || !currentMasterKey) {
+        const kc = getKubeConfig(env,
+          getInput<SyncMasterKeysInputs>('KUBERNETES_HOST'),
+          getInput<SyncMasterKeysInputs>('KUBERNETES_NAMESPACE'),
+          getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
+        const k8sMasterKey = await readSecretForEnvironment(kc, k8sSecretKeys.cryptMasterKey);
+        await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sMasterKey);
+      }
+    });
+  }
+});

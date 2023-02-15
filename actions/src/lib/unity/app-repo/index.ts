@@ -7,7 +7,7 @@ import {
   environments,
   makeStubWorkflowId,
   quarkusStubName,
-  secretKeys,
+  githubSecretKeys,
   unityBot,
   unityRepositoryRoles
 } from '../config.js';
@@ -251,17 +251,17 @@ export const createRepository = async (
 
     core.debug(`generating token "${env}"`);
     const token = await createK8sObjects(env, appRepository.name, getEnvironmentKubeConfig(env));
-    await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesToken, token);
+    await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesToken, token);
 
     switch (env) {
     case 'int':
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST'));
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE'));
       break;
     case 'prod':
       // skip for now...
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST'));
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, secretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE'));
       break;
     default:
       assertUnreachable(env);

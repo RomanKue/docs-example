@@ -23,4 +23,4 @@ inputs:
     required: true
 runs:
   using: 'node16'
-  main: '../../../actions/dist/actions/recreate-app-service-account.ts'
+  main: '../../../actions/dist/actions/recreate-app-service-account.js'

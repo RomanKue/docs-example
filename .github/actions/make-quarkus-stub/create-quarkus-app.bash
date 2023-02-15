@@ -23,6 +23,7 @@ QUARKUS_VERSION=$(cat "$SCRIPT_PATH/pom.xml" | grep "<quarkus.platform.version>"
 mvn "io.quarkus.platform:quarkus-maven-plugin:$QUARKUS_VERSION:create" \
 "-DprojectGroupId=net.bmwgroup.unity.$REPO.$NAME" \
 "-DprojectArtifactId=$NAME" \
+"-DjavaVersion=19" \
 -Dextensions='resteasy-reactive'
 
 (

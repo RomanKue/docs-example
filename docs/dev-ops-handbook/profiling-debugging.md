@@ -5,12 +5,6 @@ parent: DevOps Handbook
 nav_order: 7
 ---
 
-<!-- mermaid is currently not directly supported, see: https://pages.github.com/versions/ -->
-<!-- as workaround use: https://jojozhuang.github.io/tutorial/jekyll-diagram-with-mermaid/-->
-<!-- for latest version, check: https://unpkg.com/mermaid-->
-<script type="text/javascript" src="https://unpkg.com/mermaid"></script>
-<script>$(document).ready(function() { mermaid.initialize({ theme: 'neutral'}); });</script>
-
 **Table of Contents**
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->

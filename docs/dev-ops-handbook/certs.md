@@ -31,6 +31,24 @@ In UNITY all HTTP traffic is encrypted via TLS. Encryption is handled by differe
 * Client to ingress controller
 * Ingress controller to Pod
 
+```mermaid
+graph LR
+    client-- "unity.bmwgroup.net (BMW root signed)" -->ingress-controller
+
+    subgraph K8s
+      ingress-controller-. "encrypt with tls.key" .->unity-tls
+      ingress-controller-. "ca.crt" .->app-foo-api-tls
+      unity-certificate-. "cert manager generates (BMW root signed)" .->unity-tls
+      ingress-controller-- "random cert (self signed)" -->envoy
+
+      subgraph pod
+          envoy-- "http (in memory)" -->main
+      end
+
+      envoy-. "encrypt with tls.key" .->app-foo-api-tls
+    end
+```
+
 The sections below outline the details.
 
 ## TLS

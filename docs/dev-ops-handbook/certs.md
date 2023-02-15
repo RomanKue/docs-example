@@ -79,7 +79,7 @@ This is as secure as any other certificate, since the certificate is never used 
 is required to trust the self-signed certificate.
 
 The self-signed certificate is generated via the
-[unity-chart](https://atc-github.azure.cloud.bmw/UNITY/unity-chart/blob/pdm-unity-int/test/templates/certificate.yaml) Helm chart.
+[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart.
 
 In the pod, TLS is terminated by an [envoy proxy](https://www.envoyproxy.io).
 Configuration of the envoy proxy is part of the
@@ -100,12 +100,7 @@ Next, the certificates can be inspected locally as follows.
 
 ## Client to Ingress Controller
 
-To inspect the setup of an app, set the config of an app to analyze by defining the following env variables
-
-```bash
-NAME=<name of the app, e.g. services>
-DEPLOYMENT=<name of the deployment, e.g. api>
-```
+To inspect the client to ingress controller certificates, one would need to run the following scripts:
 
 ```bash
 kubectl get certificate -oyaml unity-certificate
@@ -138,6 +133,13 @@ diff <(echo "$CRT_MD5") <(echo "$KEY_MD5")
 ```
 
 ## Ingress Controller to Pod
+
+To inspect the setup of an app, set the config of an app to analyze by defining the following env variables
+
+```bash
+NAME=<name of the app, e.g. services>
+DEPLOYMENT=<name of the deployment, e.g. api>
+```
 
 TLS from the ingress controller to the service (pod) is handled by a different certificate, which can be dumped as
 follows.

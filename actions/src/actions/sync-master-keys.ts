@@ -5,6 +5,7 @@ import {repositoriesUtils} from '../lib/github/api/repos/index.js';
 import {searchRepositories} from '../lib/github/api/search/search.js';
 import {getAnEnvironmentSecret} from '../lib/github/api/actions/actions.js';
 import {getKubeConfig, readSecretForEnvironment} from '../lib/unity/app-repo/k8s.js';
+import * as core from '@actions/core';
 
 /**
  *  Set the master key (CRYPT_MASTER_KEY) of every app matching the regex and selected namespace if it doesn't exist.
@@ -18,6 +19,7 @@ run(async () => {
   if (env && repositories) {
     const overwrite = getInput<SyncMasterKeysInputs>('overwrite') == 'true';
     await repositories.forEach(async (repo) => {
+      core.debug(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
       const currentMasterKey = await getAnEnvironmentSecret({repository_id: repo.id, environment_name: env, secret_name: githubSecretKeys.cryptMasterKey});
       if (overwrite || !currentMasterKey) {
         const kc = getKubeConfig(env,
@@ -26,6 +28,9 @@ run(async () => {
           getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
         const k8sMasterKey = await readSecretForEnvironment(kc, k8sSecretKeys.cryptMasterKey);
         await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sMasterKey);
+        core.debug(`Master key for repo ${repo.name} was updated`);
+      } else {
+        core.debug(`Master key for repo ${repo.name} is already set and overwrite is false. Did nothing`);
       }
     });
   }

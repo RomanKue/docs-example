@@ -1,0 +1,20 @@
+name: Publish Markdown to Confluence
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  md-to-confluence:
+    runs-on: atc-ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.UNITY_BOT_TOKEN }}
+      - uses: unity/md-to-confluence@v1
+        env:
+          CONFLUENCE_USER: qqunit1
+          CONFLUENCE_PASSWORD: ${{ secrets.QQUNIT1_PASSWORD }}
+        with:
+          path: docs

@@ -43,7 +43,7 @@ Enable JSON schema validation and autocompletion following the steps below:
   * Name: **unit-app**
   * Schema File or URL: https://unity.bmwgroup.net/unity/unity-app.schema.json
   * Schema version: JSON Schema version 7
-* click on the **+** below and set: FIle path pattern: **unity-app\*\*.yaml**
+* click on the **+** below and set: File path pattern: **unity-app\*\*.yaml**
 * Open e.g. the **unity-app.int.yaml** and hit Ctrl + Space to get autocompletion.
 
 <video autoplay loop width=801>

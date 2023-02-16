@@ -144,6 +144,15 @@ export const getEnvironmentKubeConfig = (environment: Environment): KubeConfig =
   }
 };
 
+export const readSecretForEnvironment = async (kubeConfig: KubeConfig, name: string) => {
+  const tokenSecret = await readSecret(kubeConfig, name);
+  const base64Token = tokenSecret.body?.data?.['token'];
+  if (!base64Token) {
+    throw new Error(`Secret ${name} is not set in environment ${getCurrentNamespace(kubeConfig)}.`);
+  }
+  return base64Decode(base64Token);
+};
+
 export const readSecret = async (kc: KubeConfig, name: string) => {
   const namespace = getCurrentNamespace(kc);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);

@@ -4,6 +4,8 @@ layout: default
 nav_order: 1
 ---
 
+<!-- START md-to-confluence page-id=3120980865 -->
+
 # Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -19,8 +21,6 @@ nav_order: 1
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Terms of Service
-
-<!-- START md-to-confluence page-id=3120980865 -->
 
 The UNITY platform offers services in a shared responsibility model.
 

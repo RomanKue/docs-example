@@ -12,6 +12,7 @@ nav_order: 6
 
 - [Incident Recovery](#incident-recovery)
   - [Fix Broken Service Account Token](#fix-broken-service-account-token)
+  - [Fix Missing or Broken Master Key](#fix-missing-or-broken-master-key)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -25,3 +26,11 @@ It may happen that the service account token stored in GHE secrets gets invalid 
 
 This can be fixed by running the `recreate-app-service-account` workflow, which recreates the token on the k8s cluster
 and stores it in the GHE secrets for the selected environment and repos matching the specified regular expression.
+
+## Fix Missing or Broken Master Key
+
+To encrypt the secrets in an automated way, the master key must be stored in GHE.
+
+This (or fixing a broken master key) can be achieved by running the `sync-master-keys` workflow, which stores the master
+key in GHE for the selected environment and repos matching the specified regular expression as `CRYPT_MASTER_KEY`
+(or updates the existing one if overwrite is set to true).

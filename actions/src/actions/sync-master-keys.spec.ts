@@ -51,8 +51,8 @@ describe('sync-master-keys', () => {
     expect(k8s.getKubeConfig).toHaveBeenCalledWith('int', 'host', 'namespace', 'k8s-token');
 
     expect(k8s.readSecretForEnvironment).toHaveBeenCalledTimes(2);
-    expect(k8s.readSecretForEnvironment).toHaveBeenCalledWith(kc, 'app-test' + k8sSecretKeyConstants.masterKeySuffix);
-    expect(k8s.readSecretForEnvironment).toHaveBeenCalledWith(kc, 'app-foo' + k8sSecretKeyConstants.masterKeySuffix);
+    expect(k8s.readSecretForEnvironment).toHaveBeenCalledWith(kc, `app-test${k8sSecretKeyConstants.masterKeySuffix}`);
+    expect(k8s.readSecretForEnvironment).toHaveBeenCalledWith(kc, `app-foo${k8sSecretKeyConstants.masterKeySuffix}`);
 
     expect(actionsUtils.isSecretExistent).toHaveBeenCalledTimes(2);
     expect(actionsUtils.isSecretExistent).toHaveBeenCalledWith({

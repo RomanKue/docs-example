@@ -30,7 +30,7 @@ export const syncMasterKeys = async () => {
         secret_name: githubSecretKeys.cryptMasterKey
       });
       if (overwrite || !currentMasterKey) {
-        const k8sAppMasterKey = await readSecretForEnvironment(kc, repo.name + k8sSecretKeyConstants.masterKeySuffix);
+        const k8sAppMasterKey = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretKeyConstants.masterKeySuffix}`);
         await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sAppMasterKey);
         core.debug(`Master key for repo ${repo.name} was updated`);
       } else {

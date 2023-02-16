@@ -79,7 +79,7 @@ describe('sync-master-keys', () => {
   });
   it('should set if secret does not exist even if overwrite is false', async () => {
     jest.spyOn(input, 'getInput').mockImplementation(createMockInputs('^app-test$', 'false'));
-    jest.spyOn(actions, 'getAnEnvironmentSecret').mockResolvedValue(null as ActionsSecret);
+    jest.spyOn(actions, 'getAnEnvironmentSecret').mockImplementation(() => null);
     await syncMasterKeys();
 
     expect(actions.getAnEnvironmentSecret).toHaveBeenCalledTimes(1);

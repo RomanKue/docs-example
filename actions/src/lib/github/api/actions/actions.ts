@@ -85,4 +85,4 @@ export const getAnEnvironmentSecret = async (
     ...options
   });
   return response.data as ActionsSecret;
-}
+};

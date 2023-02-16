@@ -79,7 +79,7 @@ describe('sync-master-keys', () => {
   });
   it('should set if secret does not exist even if overwrite is false', async () => {
     jest.spyOn(input, 'getInput').mockImplementation(createMockInputs('^app-test$', 'false'));
-    jest.spyOn(actions, 'getAnEnvironmentSecret').mockResolvedValue(null);
+    jest.spyOn(actions, 'getAnEnvironmentSecret').mockResolvedValue(null as ActionsSecret);
     await syncMasterKeys();
 
     expect(actions.getAnEnvironmentSecret).toHaveBeenCalledTimes(1);
@@ -95,18 +95,18 @@ const createMockRepos = (names: string[]) => {
 const createMockInputs = (repoRegex: string, overwrite: string, env?: string) => {
   return (input: Inputs) => {
     switch (input) {
-      case 'repository-regex':
-        return repoRegex;
-      case 'environment':
-        return env ? env : 'int';
-      case 'KUBERNETES_HOST':
-        return 'host';
-      case 'KUBERNETES_NAMESPACE':
-        return 'namespace';
-      case 'KUBERNETES_TOKEN':
-        return 'k8s-token';
-      case 'overwrite':
-        return overwrite;
+    case 'repository-regex':
+      return repoRegex;
+    case 'environment':
+      return env ? env : 'int';
+    case 'KUBERNETES_HOST':
+      return 'host';
+    case 'KUBERNETES_NAMESPACE':
+      return 'namespace';
+    case 'KUBERNETES_TOKEN':
+      return 'k8s-token';
+    case 'overwrite':
+      return overwrite;
     }
     return '';
   };

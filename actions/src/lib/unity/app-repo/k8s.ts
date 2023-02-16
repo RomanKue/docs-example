@@ -146,7 +146,7 @@ export const readSecretForEnvironment = async (kubeConfig: KubeConfig, name: str
     throw new Error(`Secret ${name} is not set in environment ${getCurrentNamespace(kubeConfig)}.`);
   }
   return base64Decode(base64Token);
-}
+};
 
 export const readSecret = async (kc: KubeConfig, name: string) => {
   const namespace = getCurrentNamespace(kc);

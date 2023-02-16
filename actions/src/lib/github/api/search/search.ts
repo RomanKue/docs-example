@@ -1,6 +1,6 @@
-import {getOctokitApi} from "../../octokit.js";
-import {RestApi} from "../rest.js";
-import {RepoSearchResultItem} from "./response/repo-search-result-item.js";
+import {getOctokitApi} from '../../octokit.js';
+import {RestApi} from '../rest.js';
+import {RepoSearchResultItem} from './response/repo-search-result-item.js';
 
 type SearchApi = RestApi['search'];
 

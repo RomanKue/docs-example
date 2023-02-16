@@ -81,7 +81,7 @@ export const magicComments = {
 
 export const k8sSecretKeys = {
   cryptMasterKey: 'helm-crypt-master-key.v1'
-}
+} as const;
 
 export const isMagicComment = (
   comment: IssueComment,

@@ -60,13 +60,18 @@ export const upsertServiceAccount = async (kc: KubeConfig, body: Parameters<Core
   }
 };
 
-export const upsertSecret = async (kc: KubeConfig, body: Parameters<CoreV1Api['createNamespacedSecret']>[1]) => {
+export const upsertSecret = async (kc: KubeConfig, body: Parameters<CoreV1Api['createNamespacedSecret']>[1], recreate = false) => {
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);
   if (await notFound(async () => await coreV1API.readNamespacedSecret(name, namespace))) {
     core.info(`replacing secret "${name}"`);
-    await coreV1API.replaceNamespacedSecret(name, namespace, body);
+    if (recreate) {
+      await coreV1API.deleteNamespacedSecret(name, namespace);
+      await coreV1API.createNamespacedSecret(namespace, body);
+    } else {
+      await coreV1API.replaceNamespacedSecret(name, namespace, body);
+    }
   } else {
     core.info(`creating secret "${name}"`);
     await coreV1API.createNamespacedSecret(namespace, body);
@@ -233,7 +238,7 @@ export const createK8sObjects = async (
         {'kubernetes.io/service-account.name': repoName}
     },
     type: 'kubernetes.io/service-account-token'
-  });
+  }, true);
   let base64Token: string | undefined;
   while (!base64Token) {
     const tokenSecret = await readSecret(kubeConfig, tokenSecretName);

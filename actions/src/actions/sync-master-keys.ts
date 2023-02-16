@@ -16,6 +16,7 @@ export const syncMasterKeys = async () => {
   const env = Object.values(environments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
   const repositories = (await searchRepositories({q: 'topic:unity-app org:UNITY fork:true'}))
     .filter(repo => repo.name.match(appRegex));
+  core.debug(`${repositories.length} repos were found matching the search and regex criteria`);
   if (env && repositories?.length > 0) {
     const overwrite = getInput<SyncMasterKeysInputs>('overwrite') == 'true';
     const kc = getKubeConfig(env,

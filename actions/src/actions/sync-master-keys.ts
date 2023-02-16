@@ -1,6 +1,6 @@
 import {run} from '../lib/run.js';
 import {getInput, SyncMasterKeysInputs} from '../lib/github/input.js';
-import {environments, githubSecretKeys, k8sSecretKeys} from '../lib/unity/config.js';
+import {environments, githubSecretKeys, k8sSecretKeyConstants} from '../lib/unity/config.js';
 import {repositoriesUtils} from '../lib/github/api/repos/index.js';
 import {searchRepositories} from '../lib/github/api/search/search.js';
 import {getKubeConfig, readSecretForEnvironment} from '../lib/unity/app-repo/k8s.js';
@@ -22,7 +22,6 @@ export const syncMasterKeys = async () => {
       getInput<SyncMasterKeysInputs>('KUBERNETES_HOST'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_NAMESPACE'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
-    const k8sMasterKey = await readSecretForEnvironment(kc, k8sSecretKeys.cryptMasterKey);
     await repositories.forEach(async (repo) => {
       core.debug(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
       const currentMasterKey = await isSecretExistent({
@@ -31,7 +30,8 @@ export const syncMasterKeys = async () => {
         secret_name: githubSecretKeys.cryptMasterKey
       });
       if (overwrite || !currentMasterKey) {
-        await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sMasterKey);
+        const k8sAppMasterKey = await readSecretForEnvironment(kc, repo.name + k8sSecretKeyConstants.masterKeySuffix);
+        await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sAppMasterKey);
         core.debug(`Master key for repo ${repo.name} was updated`);
       } else {
         core.debug(`Master key for repo ${repo.name} is already set and overwrite is false. Did nothing`);

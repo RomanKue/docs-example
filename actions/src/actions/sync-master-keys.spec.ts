@@ -9,9 +9,8 @@ import {repositoriesUtils} from '../lib/github/api/repos';
 import {KubeConfig} from '@kubernetes/client-node';
 import {jest} from '@jest/globals';
 import {partialMock} from '../lib/mock/partial-mock';
-import {githubSecretKeys, k8sSecretKeys} from '../lib/unity/config';
+import {githubSecretKeys, k8sSecretKeyConstants} from '../lib/unity/config';
 import {RepoSearchResultItem} from '../lib/github/api/search/response/repo-search-result-item';
-import {ActionsSecret} from '../lib/github/api/actions/response/actions-secret';
 
 describe('sync-master-keys', () => {
   const kc = new KubeConfig();
@@ -51,8 +50,9 @@ describe('sync-master-keys', () => {
     expect(k8s.getKubeConfig).toHaveBeenCalledTimes(1);
     expect(k8s.getKubeConfig).toHaveBeenCalledWith('int', 'host', 'namespace', 'k8s-token');
 
-    expect(k8s.readSecretForEnvironment).toHaveBeenCalledTimes(1);
-    expect(k8s.readSecretForEnvironment).toHaveBeenCalledWith(kc, k8sSecretKeys.cryptMasterKey);
+    expect(k8s.readSecretForEnvironment).toHaveBeenCalledTimes(2);
+    expect(k8s.readSecretForEnvironment).toHaveBeenCalledWith(kc, 'app-test' + k8sSecretKeyConstants.masterKeySuffix);
+    expect(k8s.readSecretForEnvironment).toHaveBeenCalledWith(kc, 'app-foo' + k8sSecretKeyConstants.masterKeySuffix);
 
     expect(actionsUtils.isSecretExistent).toHaveBeenCalledTimes(2);
     expect(actionsUtils.isSecretExistent).toHaveBeenCalledWith({

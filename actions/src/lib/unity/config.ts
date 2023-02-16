@@ -79,8 +79,8 @@ export const magicComments = {
   lgtm: 'LGTM',
 } as const;
 
-export const k8sSecretKeys = {
-  cryptMasterKey: 'helm-crypt-master-key.v1'
+export const k8sSecretKeyConstants = {
+  masterKeySuffix: '-master-key.v1'
 } as const;
 
 export const isMagicComment = (

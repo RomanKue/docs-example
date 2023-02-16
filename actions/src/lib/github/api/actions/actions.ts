@@ -5,7 +5,7 @@ import {ActionsPublicKey} from './response/actions-public-key.js';
 import {WorkflowRuns} from './response/workflow-runs.js';
 import {ActionsSecret} from './response/actions-secret.js';
 
-type ActionsApi = RestApi['actions'];
+export type ActionsApi = RestApi['actions'];
 
 /**
  * see https://docs.github.com/en/rest/actions/workflows#create-a-workflow-dispatch-event

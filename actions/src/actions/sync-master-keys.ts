@@ -3,9 +3,9 @@ import {getInput, SyncMasterKeysInputs} from '../lib/github/input.js';
 import {environments, githubSecretKeys, k8sSecretKeys} from '../lib/unity/config.js';
 import {repositoriesUtils} from '../lib/github/api/repos/index.js';
 import {searchRepositories} from '../lib/github/api/search/search.js';
-import {getAnEnvironmentSecret} from '../lib/github/api/actions/actions.js';
 import {getKubeConfig, readSecretForEnvironment} from '../lib/unity/app-repo/k8s.js';
 import * as core from '@actions/core';
+import {isSecretExistent} from '../lib/github/api/actions/actions-utils.js';
 
 /**
  *  Set the master key (CRYPT_MASTER_KEY) of every app matching the regex and selected namespace if it doesn't exist.
@@ -25,7 +25,7 @@ export const syncMasterKeys = async () => {
     const k8sMasterKey = await readSecretForEnvironment(kc, k8sSecretKeys.cryptMasterKey);
     await repositories.forEach(async (repo) => {
       core.debug(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
-      const currentMasterKey = await getAnEnvironmentSecret({
+      const currentMasterKey = await isSecretExistent({
         repository_id: repo.id,
         environment_name: env,
         secret_name: githubSecretKeys.cryptMasterKey

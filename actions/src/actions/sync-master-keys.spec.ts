@@ -4,7 +4,7 @@ import * as k8s from '../lib/unity/app-repo/k8s.js';
 import * as input from '../lib/github/input.js';
 import {Inputs} from '../lib/github/input.js';
 import * as search from '../lib/github/api/search/search.js';
-import * as actions from '../lib/github/api/actions/actions.js';
+import * as actionsUtils from '../lib/github/api/actions/actions-utils.js';
 import {repositoriesUtils} from '../lib/github/api/repos';
 import {KubeConfig} from '@kubernetes/client-node';
 import {jest} from '@jest/globals';
@@ -23,14 +23,14 @@ describe('sync-master-keys', () => {
     );
     jest.spyOn(k8s, 'getKubeConfig').mockImplementation(() => kc);
     jest.spyOn(k8s, 'readSecretForEnvironment').mockResolvedValue(k8MasterKey);
-    jest.spyOn(actions, 'getAnEnvironmentSecret').mockResolvedValue(partialMock<ActionsSecret>({name: currentMasterKey}));
+    jest.spyOn(actionsUtils, 'isSecretExistent').mockResolvedValue(true);
     jest.spyOn(repositoriesUtils, 'createEnvironmentSecret').mockResolvedValue();
   });
   it('should not do anything when env is not valid', async () => {
     jest.spyOn(input, 'getInput').mockImplementation(createMockInputs('app-test', 'true', 'foo'));
     await syncMasterKeys();
 
-    expect(actions.getAnEnvironmentSecret).not.toHaveBeenCalled();
+    expect(actionsUtils.isSecretExistent).not.toHaveBeenCalled();
     expect(k8s.getKubeConfig).not.toHaveBeenCalled();
     expect(k8s.readSecretForEnvironment).not.toHaveBeenCalled();
     expect(repositoriesUtils.createEnvironmentSecret).not.toHaveBeenCalled();
@@ -39,7 +39,7 @@ describe('sync-master-keys', () => {
     jest.spyOn(input, 'getInput').mockImplementation(createMockInputs('bar', 'true'));
     await syncMasterKeys();
 
-    expect(actions.getAnEnvironmentSecret).not.toHaveBeenCalled();
+    expect(actionsUtils.isSecretExistent).not.toHaveBeenCalled();
     expect(k8s.getKubeConfig).not.toHaveBeenCalled();
     expect(k8s.readSecretForEnvironment).not.toHaveBeenCalled();
     expect(repositoriesUtils.createEnvironmentSecret).not.toHaveBeenCalled();
@@ -54,13 +54,13 @@ describe('sync-master-keys', () => {
     expect(k8s.readSecretForEnvironment).toHaveBeenCalledTimes(1);
     expect(k8s.readSecretForEnvironment).toHaveBeenCalledWith(kc, k8sSecretKeys.cryptMasterKey);
 
-    expect(actions.getAnEnvironmentSecret).toHaveBeenCalledTimes(2);
-    expect(actions.getAnEnvironmentSecret).toHaveBeenCalledWith({
+    expect(actionsUtils.isSecretExistent).toHaveBeenCalledTimes(2);
+    expect(actionsUtils.isSecretExistent).toHaveBeenCalledWith({
       repository_id: 0,
       environment_name: 'int',
       secret_name: githubSecretKeys.cryptMasterKey
     });
-    expect(actions.getAnEnvironmentSecret).toHaveBeenCalledWith({
+    expect(actionsUtils.isSecretExistent).toHaveBeenCalledWith({
       repository_id: 2,
       environment_name: 'int',
       secret_name: githubSecretKeys.cryptMasterKey
@@ -74,15 +74,15 @@ describe('sync-master-keys', () => {
     jest.spyOn(input, 'getInput').mockImplementation(createMockInputs('^app-test$', 'false'));
     await syncMasterKeys();
 
-    expect(actions.getAnEnvironmentSecret).toHaveBeenCalledTimes(1);
+    expect(actionsUtils.isSecretExistent).toHaveBeenCalledTimes(1);
     expect(repositoriesUtils.createEnvironmentSecret).not.toHaveBeenCalled();
   });
   it('should set if secret does not exist even if overwrite is false', async () => {
     jest.spyOn(input, 'getInput').mockImplementation(createMockInputs('^app-test$', 'false'));
-    jest.spyOn(actions, 'getAnEnvironmentSecret').mockImplementation(() => null);
+    jest.spyOn(actionsUtils, 'isSecretExistent').mockResolvedValue(false);
     await syncMasterKeys();
 
-    expect(actions.getAnEnvironmentSecret).toHaveBeenCalledTimes(1);
+    expect(actionsUtils.isSecretExistent).toHaveBeenCalledTimes(1);
     expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(1);
     expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledWith({id: 0}, 'int', githubSecretKeys.cryptMasterKey, k8MasterKey);
   });

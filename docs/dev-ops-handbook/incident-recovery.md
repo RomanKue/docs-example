@@ -24,13 +24,16 @@ The sections below describe certain incidents and how to recover from them.
 
 It may happen that the service account token stored in GHE secrets gets invalid or the user deletes it by accident.
 
-This can be fixed by running the `recreate-app-service-account` workflow, which recreates the token on the k8s cluster
-and stores it in the GHE secrets for the selected environment and repos matching the specified regular expression.
+This can be fixed by running the
+[`recreate-app-service-account`](https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/recreate-app-service-account.yaml)
+workflow, which recreates the token on the k8s cluster and stores it in the GHE secrets for the selected environment
+and repos matching the specified regular expression.
 
 ## Fix Missing or Broken Master Key
 
 To encrypt the secrets in an automated way, the master key must be stored in GHE.
 
-This (or fixing a broken master key) can be achieved by running the `sync-master-keys` workflow, which stores the master
-key in GHE for the selected environment and repos matching the specified regular expression as `CRYPT_MASTER_KEY`
-(or updates the existing one if overwrite is set to true).
+This (or fixing a broken master key) can be achieved by running the
+[`sync-master-keys`](https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/sync-master-keys.yaml)
+workflow, which stores the master key in GHE for the selected environment and repos matching the specified regular
+expression as `CRYPT_MASTER_KEY` (or updates the existing one if overwrite is set to true).

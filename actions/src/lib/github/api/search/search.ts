@@ -19,7 +19,6 @@ export const searchRepositories = async (
   let pagesRemaining = false;
   const numberOfResultsPerPages = 100;
   let page = 1;
-  options.q = encodeURIComponent(options.q);
   do {
     const response = await getOctokitApi().rest.search.repos({
       per_page: numberOfResultsPerPages,

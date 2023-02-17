@@ -9,4 +9,4 @@ export const issueUpdated = async () => {
     issues: handleIssueChange,
     issue_comment: handleMagicComments,
   });
-}
+};

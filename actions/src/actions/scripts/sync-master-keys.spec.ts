@@ -1,21 +1,20 @@
 import {syncMasterKeys} from './sync-master-keys.js';
 
-import * as k8s from '../lib/unity/app-repo/k8s.js';
-import * as input from '../lib/github/input.js';
-import {Inputs} from '../lib/github/input.js';
-import * as search from '../lib/github/api/search/search.js';
-import * as actionsUtils from '../lib/github/api/actions/actions-utils.js';
-import {repositoriesUtils} from '../lib/github/api/repos';
+import * as k8s from '../../lib/unity/app-repo/k8s';
+import * as input from '../../lib/github/input';
+import {Inputs} from '../../lib/github/input';
+import * as search from '../../lib/github/api/search/search';
+import * as actionsUtils from '../../lib/github/api/actions/actions-utils';
+import {repositoriesUtils} from '../../lib/github/api/repos';
 import {KubeConfig} from '@kubernetes/client-node';
 import {jest} from '@jest/globals';
-import {partialMock} from '../lib/mock/partial-mock';
-import {githubSecretKeys, k8sSecretConstants} from '../lib/unity/config';
-import {RepoSearchResultItem} from '../lib/github/api/search/response/repo-search-result-item';
+import {partialMock} from '../../lib/mock/partial-mock';
+import {githubSecretKeys, k8sSecretConstants} from '../../lib/unity/config';
+import {RepoSearchResultItem} from '../../lib/github/api/search/response/repo-search-result-item';
 
 describe('sync-master-keys', () => {
   const kc = new KubeConfig();
   const k8MasterKey = 'k8-master-key';
-  const currentMasterKey = 'current-master-key';
   beforeEach(() => {
     jest.spyOn(search, 'searchRepositories').mockResolvedValue(
       createMockRepos(['app-test', 'not-an-app', 'app-foo'])

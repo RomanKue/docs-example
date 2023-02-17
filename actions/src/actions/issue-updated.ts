@@ -1,9 +1,4 @@
-import {handleWorkflowEvent, run} from '../lib/run.js';
-import {handleIssueChange, handleMagicComments} from '../lib/unity/issues/index.js';
+import {run} from '../lib/run.js';
+import {issueUpdated} from './scripts/issue-updated.js';
 
-run(async () => {
-  await handleWorkflowEvent({
-    issues: handleIssueChange,
-    issue_comment: handleMagicComments,
-  });
-});
+run(issueUpdated);

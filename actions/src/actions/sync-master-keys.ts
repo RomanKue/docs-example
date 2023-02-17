@@ -1,6 +1,6 @@
 import {run} from '../lib/run.js';
 import {getInput, SyncMasterKeysInputs} from '../lib/github/input.js';
-import {environments, githubSecretKeys, k8sSecretKeyConstants} from '../lib/unity/config.js';
+import {environments, githubSecretKeys, k8sSecretConstants} from '../lib/unity/config.js';
 import {repositoriesUtils} from '../lib/github/api/repos/index.js';
 import {searchRepositories} from '../lib/github/api/search/search.js';
 import {getKubeConfig, readSecretForEnvironment} from '../lib/unity/app-repo/k8s.js';
@@ -31,7 +31,7 @@ export const syncMasterKeys = async () => {
         secret_name: githubSecretKeys.cryptMasterKey
       });
       if (overwrite || !currentMasterKey) {
-        const k8sAppMasterKey = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretKeyConstants.masterKeySuffix}`);
+        const k8sAppMasterKey = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretConstants.masterKeySuffix}`, k8sSecretConstants.masterKey);
         await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sAppMasterKey);
         core.debug(`Master key for repo ${repo.name} was updated`);
       } else {

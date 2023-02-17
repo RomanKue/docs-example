@@ -79,8 +79,9 @@ export const magicComments = {
   lgtm: 'LGTM',
 } as const;
 
-export const k8sSecretKeyConstants = {
-  masterKeySuffix: '-master-key.v1'
+export const k8sSecretConstants = {
+  masterKeySuffix: '-master-key.v1',
+  masterKey: 'master-key'
 } as const;
 
 export const isMagicComment = (

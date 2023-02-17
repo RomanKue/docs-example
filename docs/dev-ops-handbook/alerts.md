@@ -16,7 +16,7 @@ nav_order: 8
 
 # Setup Monitoring Contract
 
-Setting up a monitoring contract can be done in the following self-service portal: http://systemsmgmt-portal.bmwgroup.net.
+Setting up a monitoring contract can be done in the following self-service portal: [Application Monitoring Database](http://systemsmgmt-portal.bmwgroup.net).
 Only application operations managers are able to create monitoring contracts. An example request for creating a monitoring
 contract can be seen in the following screenshot:
 ![monitoringContract.png](monitoringContract.png)

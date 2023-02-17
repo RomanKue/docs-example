@@ -149,7 +149,7 @@ export const readSecretForEnvironment = async (kubeConfig: KubeConfig, secretNam
   const base64Token = tokenSecret.body?.data?.[secretKey];
   if (!base64Token) {
     throw new Error(`Secret key ${secretKey} in secret ${secretName} is not set in environment
-     ${getCurrentNamespace(kubeConfig)}.`);
+      ${getCurrentNamespace(kubeConfig)}.`);
   }
   return base64Decode(base64Token);
 };

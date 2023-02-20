@@ -1,15 +1,15 @@
-import {recreateAppServiceAccount} from './recreate-app-service-account.js';
+import {recreateAppServiceAccount} from './recreate-app-service-account';
 
-import * as k8s from '../lib/unity/app-repo/k8s.js';
-import * as input from '../lib/github/input.js';
-import {Inputs} from '../lib/github/input.js';
-import * as repositories from '../lib/github/api/repos/repositories.js';
-import {MinimalRepository} from '../lib/github/api/repos/response/minimal-repository.js';
-import {repositoriesUtils} from '../lib/github/api/repos';
+import * as k8s from '../../lib/unity/app-repo/k8s';
+import * as input from '../../lib/github/input';
+import {Inputs} from '../../lib/github/input';
+import * as repositories from '../../lib/github/api/repos/repositories';
+import {MinimalRepository} from '../../lib/github/api/repos/response/minimal-repository';
+import {repositoriesUtils} from '../../lib/github/api/repos';
 import {KubeConfig} from '@kubernetes/client-node';
 import {jest} from '@jest/globals';
-import {partialMock} from '../lib/mock/partial-mock';
-import {githubSecretKeys} from '../lib/unity/config';
+import {partialMock} from '../../lib/mock/partial-mock';
+import {githubSecretKeys} from '../../lib/unity/config';
 
 describe('recreate-app-service-account', () => {
   const kc = new KubeConfig();

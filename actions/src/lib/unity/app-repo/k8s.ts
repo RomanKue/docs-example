@@ -141,7 +141,7 @@ export const getEnvironmentKubeConfig = (environment: Environment): KubeConfig =
 
 export const readSecretForEnvironment = async (kubeConfig: KubeConfig, secretName: string, secretKey: string) => {
   const tokenSecret = await readSecret(kubeConfig, secretName);
-  const base64Token = tokenSecret.body?.data?.[secretKey];
+  const base64Token = tokenSecret?.body?.data?.[secretKey];
   if (!base64Token) {
     throw new Error(`Secret key ${secretKey} in secret ${secretName} is not set in environment
       ${getCurrentNamespace(kubeConfig)}.`);
@@ -152,13 +152,21 @@ export const readSecretForEnvironment = async (kubeConfig: KubeConfig, secretNam
 export const readSecret = async (kc: KubeConfig, name: string) => {
   const namespace = getCurrentNamespace(kc);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);
-  return await coreV1API.readNamespacedSecret(name, namespace);
+  try {
+    return await coreV1API.readNamespacedSecret(name, namespace);
+  } catch (e) {
+    if (e instanceof HttpError && e.statusCode == 404) {
+      core.warning(`Secret ${name} is not set in environment ${namespace}`);
+      return null;
+    }
+    throw e;
+  }
 };
 
 export const readServiceAccountToken = async (environment: ReadonlyDeep<Environment>, repoName: string) => {
   const kc = getEnvironmentKubeConfig(environment);
   const secret = await readSecret(kc, `${repoName}-service-account-token`);
-  const base64Token = secret.body?.data?.['token'] ?? '';
+  const base64Token = secret?.body?.data?.['token'] ?? '';
   return base64Decode(base64Token);
 };
 
@@ -247,7 +255,7 @@ export const createK8sObjects = async (
   let base64Token: string | undefined;
   while (!base64Token) {
     const tokenSecret = await readSecret(kubeConfig, tokenSecretName);
-    base64Token = tokenSecret.body?.data?.['token'];
+    base64Token = tokenSecret?.body?.data?.['token'];
   }
   return base64Decode(base64Token);
 };

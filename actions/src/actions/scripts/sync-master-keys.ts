@@ -24,12 +24,12 @@ export const syncMasterKeys = async () => {
       getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
     for (const repo of repositories) {
       core.debug(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
-      const currentMasterKey = await isSecretExistent({
+      const isMasterKeyExistent = await isSecretExistent({
         repository_id: repo.id,
         environment_name: env,
         secret_name: githubSecretKeys.cryptMasterKey
       });
-      if (overwrite || !currentMasterKey) {
+      if (overwrite || !isMasterKeyExistent) {
         const k8sAppMasterKey = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretConstants.masterKeySuffix}`, k8sSecretConstants.masterKey);
         await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sAppMasterKey);
         core.debug(`Master key for repo ${repo.name} was updated`);

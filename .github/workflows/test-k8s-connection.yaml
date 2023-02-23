@@ -14,11 +14,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: build-actions
         uses: ./.github/actions/build-actions
-      - name: test-connection
-        uses: ./.github/actions/test-k8s-connection
       - run: |
           ls -lah /etc/ssl
           ls -lah /etc/ssl/certs
+      - name: test-connection
+        uses: ./.github/actions/test-k8s-connection
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
           INT_KUBERNETES_TOKEN: ${{ secrets.INT_KUBERNETES_TOKEN }}

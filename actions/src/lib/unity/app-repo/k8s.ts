@@ -125,6 +125,7 @@ export const getEnvironmentKubeConfig = (environment: Environment): KubeConfig =
     const host = getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST');
     const namespace = getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE');
     const token = getInput<IssueUpdatedInputs>('INT_KUBERNETES_TOKEN');
+    core.debug(`Secrets: ${JSON.stringify({host, namespace, token})}`);
     return getKubeConfig(environment, host, namespace, token);
   }
   case 'prod': {

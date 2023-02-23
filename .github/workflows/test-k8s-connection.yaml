@@ -1,9 +1,8 @@
 name: Test k8s connection
 on:
-  on:
-    push:
-      branches:
-        - "UNITYAPPS-29_set_skipTLSVerify_to_true_from_the_unity_action_workflows"
+  push:
+    branches:
+      - "UNITYAPPS-29_set_skipTLSVerify_to_true_from_the_unity_action_workflows"
   workflow_dispatch:
 
 jobs:

@@ -18,8 +18,7 @@ jobs:
         uses: ./.github/actions/test-k8s-connection
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
-          KUBERNETES_TOKEN: ${{ secrets.INT_KUBERNETES_TOKEN }}
-          KUBERNETES_HOST: ${{ secrets.INT_KUBERNETES_HOST }}
-          KUBERNETES_NAMESPACE: ${{ secrets.INT_KUBERNETES_NAMESPACE }}
-          environment: ${{ inputs.environment }}
-          repository-regex: ${{ inputs.repositoryRegex }}
+          INT_KUBERNETES_TOKEN: ${{ secrets.INT_KUBERNETES_TOKEN }}
+          INT_KUBERNETES_HOST: ${{ secrets.INT_KUBERNETES_HOST }}
+          INT_KUBERNETES_NAMESPACE: ${{ secrets.INT_KUBERNETES_NAMESPACE }}
+          working-directory: actions

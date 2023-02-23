@@ -10,7 +10,7 @@ import * as core from '@actions/core';
 
 type Environment = typeof environments[keyof typeof environments];
 
-const getCurrentNamespace = (kc: KubeConfig) => {
+export const getCurrentNamespace = (kc: KubeConfig) => {
   const namespace = kc.getContextObject(kc.getCurrentContext())?.namespace;
   if (!namespace) {
     throw new Error(`namespace not set`);
@@ -106,7 +106,7 @@ export const getKubeConfig = (environment: Environment, host: string, namespace:
   }
 
   const kc = new k8s.KubeConfig();
-  kc.addCluster({name: environment, server: server, skipTLSVerify: true});
+  kc.addCluster({name: environment, server: server, skipTLSVerify: false});
   kc.addUser({name: environment, token: token});
   kc.addContext({
     name: environment,

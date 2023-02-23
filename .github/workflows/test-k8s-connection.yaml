@@ -1,0 +1,26 @@
+name: Test k8s connection
+on:
+  on:
+    push:
+      branches:
+        - "UNITYAPPS-29_set_skipTLSVerify_to_true_from_the_unity_action_workflows"
+  workflow_dispatch:
+
+jobs:
+  test-k8s-connection:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 30
+    permissions: write-all
+    steps:
+      - uses: actions/checkout@v3
+      - name: build-actions
+        uses: ./.github/actions/build-actions
+      - name: test-connection
+        uses: ./.github/actions/test-k8s-connection
+        with:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+          KUBERNETES_TOKEN: ${{ secrets.INT_KUBERNETES_TOKEN }}
+          KUBERNETES_HOST: ${{ secrets.INT_KUBERNETES_HOST }}
+          KUBERNETES_NAMESPACE: ${{ secrets.INT_KUBERNETES_NAMESPACE }}
+          environment: ${{ inputs.environment }}
+          repository-regex: ${{ inputs.repositoryRegex }}

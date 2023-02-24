@@ -106,8 +106,21 @@ export const getKubeConfig = (environment: Environment, host: string, namespace:
   }
 
   const kc = new k8s.KubeConfig();
-  kc.addCluster({name: environment, server: server, skipTLSVerify: false});
-  kc.addUser({name: environment, token: token});
+  kc.addCluster({
+    name: environment,
+    server: server,
+    skipTLSVerify: false,
+    caFile: '/etc/ssl/certs/ca-certificates.crt',
+  });
+  kc.addUser({
+    name: environment,
+    token: token,
+    //certFile: '',
+    //keyFile: ''
+  });
+  kc.applytoHTTPSOptions({
+
+  });
   kc.addContext({
     name: environment,
     namespace: namespace,
@@ -125,7 +138,6 @@ export const getEnvironmentKubeConfig = (environment: Environment): KubeConfig =
     const host = getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST');
     const namespace = getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE');
     const token = getInput<IssueUpdatedInputs>('INT_KUBERNETES_TOKEN');
-    core.debug(`Secrets: ${JSON.stringify({host, namespace, token})}`);
     return getKubeConfig(environment, host, namespace, token);
   }
   case 'prod': {

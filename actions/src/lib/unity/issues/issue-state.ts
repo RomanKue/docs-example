@@ -1,12 +1,8 @@
-import {hasLabel, labels} from '../../config.js';
-import {Issue} from '../../../github/api/issues/response/issue.js';
-import {setLabelsForAnIssue} from '../../../github/api/issues/issues.js';
+import { hasLabel, labels } from '../config.js';
+import { Issue } from '../../github/api/issues/response/issue.js';
 import * as core from '@actions/core';
-
-export const issueType = {
-  newApp: labels.newApp,
-  decommissionApp: labels.decommissionApp,
-} as const;
+import { setLabelsForAnIssue } from '../../github/api/issues/issues.js';
+import { getIssueType } from './issue-type.js';
 
 export const issueState = {
   waitingForReview: labels.waitingForReview,
@@ -15,15 +11,11 @@ export const issueState = {
   delivered: labels.delivered,
 } as const;
 
-export const isNewAppIssue = (
-  issue: Readonly<Pick<Issue, 'labels'>>
-): boolean => hasLabel(issue, labels.newApp);
+export type IssueState = typeof issueState[keyof typeof issueState];
 
-export const getIssueState = (
-  issue: Readonly<Pick<Issue, 'closed_at' | 'labels'>>
-): typeof issueState[keyof typeof issueState] | null => {
-  let state: typeof issueState[keyof typeof issueState] | null;
-  if (issue.closed_at || !isNewAppIssue(issue)) {
+export const getIssueState = (issue: Issue): IssueState | null => {
+  let state: IssueState | null;
+  if (issue.closed_at || !getIssueType(issue)) {
     state = null;
   } else if (hasLabel(issue, labels.waitingForReview)) {
     state = issueState.waitingForReview;
@@ -43,12 +35,13 @@ export const getIssueState = (
 /**
  * set labels on an issue to reflect a certain status
  */
-export const setIssueState = async (
-  issue: Readonly<Pick<Issue, 'number'>>,
-  state: typeof issueState[keyof typeof issueState]) => {
+export const setIssueState = async (issue: Issue, state: IssueState) => {
+  const issueType = getIssueType(issue);
+  if (!issueType) {
+    throw new Error(`could not determine issue type of ${issue}`);
+  }
   return await setLabelsForAnIssue({
     issue_number: issue.number,
-    labels: [labels.newApp, state]
+    labels: [issueType, state]
   });
 };
-

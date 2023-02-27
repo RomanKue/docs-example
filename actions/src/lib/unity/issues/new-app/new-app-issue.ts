@@ -3,9 +3,7 @@ import {marked} from 'marked';
 
 import * as yaml from 'js-yaml';
 import {AppSpec, parseYaml} from '../../app-spec.js';
-import {unityTeams} from '../../config.js';
 import * as core from '@actions/core';
-import {listMembersInOrg} from '../../../github/api/teams/teams.js';
 import {ReadonlyDeep} from 'type-fest';
 import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
 import {Content, ContentFile} from '../../../github/api/repos/response/content.js';
@@ -80,9 +78,4 @@ export const loadSchema = async (): Promise<Record<string, unknown>> => {
     return yaml.load(str) as Record<string, unknown>;
   }
   throw new Error(`could not load schema, got ${JSON.stringify(content)} instead`);
-};
-
-export const getApprovers = async () => {
-  const unityAppApproversTeam = await listMembersInOrg({team_slug: unityTeams.unityAppApproversSlug});
-  return unityAppApproversTeam.map(user => user.login);
 };

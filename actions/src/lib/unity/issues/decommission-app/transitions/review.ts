@@ -1,15 +1,22 @@
 import * as core from '@actions/core';
-import {issuesUtils} from '../../../../github/api/issues/index.js';
-import {Issue} from '../../../../github/api/issues/response/issue.js';
-import {getIssueState, issueState} from '../state.js';
+import { Issue } from '../../../../github/api/issues/response/issue.js';
+import { getIssueState, issueState } from '../../issue-state.js';
+import { DecommissionAppIssue, parseIssueBody } from '../decommission-app-issue.js';
+import { validateDecommissionAppIssue } from '../validation.js';
+import { deliver } from './deliver.js';
 
-export const reviewIssue = async (issue: Issue) => {
+export const reviewDecommissionAppIssue = async (issue: Issue) => {
   if (getIssueState(issue) !== issueState.waitingForReview) {
     return;
   }
   core.info(`reviewing issue: ${issue.html_url}`);
-  await issuesUtils.addSimpleComment(issue, user =>
-    `😱 @${user} you found a feature, which was not implemented yet, please reach out to the UNITY team.`
-  );
+
+  const decommissionAppIssue: DecommissionAppIssue = parseIssueBody(issue.body ?? '');
+  const isValid = await validateDecommissionAppIssue(decommissionAppIssue, issue);
+  if (!isValid) {
+    return;
+  }
+
+  await deliver(issue, decommissionAppIssue);
 };
 

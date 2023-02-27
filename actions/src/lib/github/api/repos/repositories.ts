@@ -4,12 +4,15 @@ import {getOctokitApi} from '../../octokit.js';
 import {Repository} from './response/repository.js';
 import {FullRepository} from './response/full-repository.js';
 import {MinimalRepository} from './response/minimal-repository.js';
-import {RepositoryInvitation} from './response/repository-invitation.js';
+import { RepositoryInvitation } from './response/repository-invitation.js';
 import {FileCommit} from './response/file-commit.js';
 import {Topic} from './response/topic.js';
 import {Content} from './response/content.js';
 import {Environment} from './response/environment.js';
 import {ProtectedBranch} from './response/protected-branch.js';
+import {
+  RepositoryCollaboratorPermission
+} from './response/repository-collaborator-permission.js';
 
 export type ReposApi = RestApi['repos'];
 
@@ -22,6 +25,26 @@ export const getARepository = async (
   const response = await getOctokitApi().rest.repos.get({
     owner: github.context.repo.owner,
     ...options
+  });
+  return response.data as FullRepository;
+};
+
+/**
+ * This is a patch update
+ *
+ * @see https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#update-a-repository
+ *
+ * @param repositoryName
+ * @param update
+ */
+export const updateARepository = async (
+  repositoryName: string,
+  update: Partial<FullRepository> & Partial<Parameters<ReposApi['update']>[0]>
+): Promise<FullRepository> => {
+  const response = await getOctokitApi().rest.repos.update({
+    owner: github.context.repo.owner,
+    repo: repositoryName,
+    ...update
   });
   return response.data as FullRepository;
 };
@@ -79,6 +102,17 @@ export const replaceAllRepositoryTopics = async (
 };
 
 /**
+ * see https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#get-all-repository-topics
+ */
+export const getAllRepositoryTopics = async (): Promise<Topic> => {
+  const response = await getOctokitApi().rest.repos.getAllTopics({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo
+  });
+  return response.data as Topic;
+};
+
+/**
  * see https://docs.github.com/en/rest/collaborators/collaborators#add-a-repository-collaborator
  */
 export const addARepositoryCollaborator = async (
@@ -90,6 +124,20 @@ export const addARepositoryCollaborator = async (
     ...options
   });
   return response.data as RepositoryInvitation;
+};
+
+/**
+ * see https://docs.github.com/en/rest/collaborators/collaborators#get-repository-permissions-for-a-user
+ */
+export const getRepositoryPermissionForAUser = async (
+  options: { username: string } & Partial<Parameters<ReposApi['getCollaboratorPermissionLevel']>[0]>
+): Promise<RepositoryCollaboratorPermission> => {
+  const response = await getOctokitApi().rest.repos.getCollaboratorPermissionLevel({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    username: options.username
+  });
+  return response.data as RepositoryCollaboratorPermission;
 };
 
 

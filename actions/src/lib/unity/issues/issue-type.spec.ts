@@ -1,11 +1,10 @@
-import {getIssueType} from './index.js';
 import {Issue} from '../../github/api/issues/response/issue.js';
 import {partialMock} from '../../mock/partial-mock.js';
 import {Label} from '../../github/api/issues/response/label.js';
 import {labels} from '../config.js';
-import {issueType} from './new-app/index.js';
+import { getIssueType, issueType } from './issue-type.js';
 
-describe('index.ts', () => {
+describe('issue-type.ts', () => {
   describe('getIssueType', () => {
     it('should be null when label is not set', () => {
       const issue = partialMock<Issue>({

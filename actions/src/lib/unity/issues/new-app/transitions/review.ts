@@ -6,7 +6,7 @@ import {requestApproval} from './request-approval.js';
 import {removeApprovalRequest} from './remove-approval-request.js';
 import {issuesUtils} from '../../../../github/api/issues/index.js';
 import {repositoriesUtils} from '../../../../github/api/repos/index.js';
-import {getIssueState, issueState} from '../state.js';
+import {getIssueState, issueState} from '../../issue-state.js';
 
 export const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app name: ${newAppIssue.appSpec?.name}`);

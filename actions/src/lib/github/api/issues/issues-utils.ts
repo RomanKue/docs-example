@@ -7,10 +7,16 @@ export const isClosed = (issue: Readonly<Issue>): boolean => {
 };
 
 export const addSimpleComment = async (issue: ReadonlyDeep<Issue>, callback: (reporterName: string) => string) => {
+  const userLogin = getIssueUserLogin(issue);
+  await commentOnIssue({issue_number: issue.number, body: callback(userLogin)});
+};
+
+export const getIssueUserLogin = (issue: ReadonlyDeep<Issue>): string => {
   const userLogin = issue.user?.login;
   if (!userLogin) {
     throw new Error(`user ${JSON.stringify(issue.user, null, 2)} has no login.`);
   }
-  await commentOnIssue({issue_number: issue.number, body: callback(userLogin)});
+
+  return userLogin;
 };
 

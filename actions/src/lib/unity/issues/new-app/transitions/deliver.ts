@@ -1,5 +1,4 @@
 import {Issue} from '../../../../github/api/issues/response/issue.js';
-import {getIssueState, issueState, setIssueState} from '../state.js';
 import * as core from '@actions/core';
 import {parseIssueBody} from '../new-app-issue.js';
 import {lockAnIssue, updateAnIssue} from '../../../../github/api/issues/issues.js';
@@ -8,6 +7,7 @@ import {Repository} from '../../../../github/api/repos/response/repository.js';
 import {addSimpleComment} from '../../../../github/api/issues/issues-utils.js';
 import {ReadonlyDeep} from 'type-fest';
 import {unityTeams} from '../../../config.js';
+import { issueState, setIssueState, getIssueState } from '../../issue-state.js';
 
 export const closeWithComment = async (issue: Issue, appRepository: ReadonlyDeep<Repository>) => {
   await addSimpleComment(issue, user =>

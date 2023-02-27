@@ -57,6 +57,21 @@ export const createOrUpdateAnEnvironmentSecret = async (
 };
 
 /**
+ * @see https://docs.github.com/en/rest/actions/secrets?apiVersion=2022-11-28#delete-an-environment-secret
+ */
+export const deleteAnEnvironmentSecret = async (
+  options: {
+    repository_id: number,
+    environment_name: string,
+    secret_name: string,
+  } & Partial<Parameters<ActionsApi['deleteEnvironmentSecret']>[0]>
+): Promise<void> => {
+  await getOctokitApi().rest.actions.deleteEnvironmentSecret({
+    ...options
+  });
+};
+
+/**
  * https://docs.github.com/en/rest/actions/secrets#get-an-environment-public-key
  */
 export const getAnEnvironmentPublicKey = async (

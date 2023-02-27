@@ -1,15 +1,15 @@
-import {Issue} from '../../../../github/api/issues/response/issue.js';
-import {partialMock} from '../../../../mock/partial-mock.js';
+import {Issue} from '../../../../github/api/issues/response/issue';
+import {partialMock} from '../../../../mock/partial-mock';
 import {freeze, produce} from 'immer';
-import {removeApprovalRequest} from './remove-approval-request.js';
-import {Label} from '../../../../github/api/issues/response/label.js';
-import {issueState} from '../state.js';
-import issues from '../../../../github/api/issues/index.js';
-import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
-import {labels} from '../../../config.js';
+import {removeApprovalRequest} from './remove-approval-request';
+import {Label} from '../../../../github/api/issues/response/label';
+import issues from '../../../../github/api/issues';
+import {IssueComment} from '../../../../github/api/issues/response/issue-comment';
+import {labels} from '../../../config';
 import {jest} from '@jest/globals';
-import teams from '../../../../github/api/teams/index.js';
-import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
+import teams from '../../../../github/api/teams';
+import {SimpleUser} from '../../../../github/api/teams/response/simple-user';
+import { issueState } from '../../issue-state';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {

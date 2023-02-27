@@ -33,10 +33,14 @@ const getLabels = (name: string) => {
   };
 };
 
+const getLabelsAsFilterString = (name: string): string => {
+  return Object.entries(getLabels(name)).map(entry => entry.join('=')).join(',');
+};
+
 /**
  * check for not found HTTP response
  */
-const notFound = async <T>(cb: () => Promise<T>) => {
+const exists = async <T>(cb: () => Promise<T>) => {
   try {
     return await cb();
   } catch (e) {
@@ -51,7 +55,7 @@ export const upsertServiceAccount = async (kc: KubeConfig, body: Parameters<Core
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);
-  if (await notFound(async () => await coreV1API.readNamespacedServiceAccount(name, namespace))) {
+  if (await exists(async () => await coreV1API.readNamespacedServiceAccount(name, namespace))) {
     core.info(`replacing serviceaccount "${name}"`);
     await coreV1API.replaceNamespacedServiceAccount(name, namespace, body);
   } else {
@@ -64,7 +68,7 @@ export const upsertSecret = async (kc: KubeConfig, body: Parameters<CoreV1Api['c
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const coreV1API = kc.makeApiClient(k8s.CoreV1Api);
-  if (await notFound(async () => await coreV1API.readNamespacedSecret(name, namespace))) {
+  if (await exists(async () => await coreV1API.readNamespacedSecret(name, namespace))) {
     core.info(`replacing secret "${name}"`);
     await coreV1API.replaceNamespacedSecret(name, namespace, body);
   } else {
@@ -77,7 +81,7 @@ export const upsertRole = async (kc: KubeConfig, body: Parameters<RbacAuthorizat
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const rbacAuthorizationV1Api = kc.makeApiClient(k8s.RbacAuthorizationV1Api);
-  if (await notFound(async () => await rbacAuthorizationV1Api.readNamespacedRole(name, namespace))) {
+  if (await exists(async () => await rbacAuthorizationV1Api.readNamespacedRole(name, namespace))) {
     core.info(`replacing role "${name}"`);
     await rbacAuthorizationV1Api.replaceNamespacedRole(name, namespace, body);
   } else {
@@ -90,7 +94,7 @@ export const upsertRoleBinding = async (kc: KubeConfig, body: Parameters<RbacAut
   const namespace = getCurrentNamespace(kc);
   const name = getName(body);
   const rbacAuthorizationV1Api = kc.makeApiClient(k8s.RbacAuthorizationV1Api);
-  if (await notFound(async () => await rbacAuthorizationV1Api.readNamespacedRoleBinding(name, namespace))) {
+  if (await exists(async () => await rbacAuthorizationV1Api.readNamespacedRoleBinding(name, namespace))) {
     core.info(`replacing rolebinding "${name}"`);
     await rbacAuthorizationV1Api.replaceNamespacedRoleBinding(name, namespace, body);
   } else {
@@ -245,7 +249,7 @@ export const createK8sObjects = async (
 
   });
 
-  const tokenSecretName = `${repoName}-service-account-token`;
+  const tokenSecretName = getTokenSecretName(repoName);
   await upsertSecret(kubeConfig, {
     apiVersion: 'v1',
     kind: 'Secret',
@@ -263,4 +267,37 @@ export const createK8sObjects = async (
     base64Token = tokenSecret?.body?.data?.['token'];
   }
   return base64Decode(base64Token);
+};
+
+export const deleteK8sObjects = async (
+  environment: keyof typeof environments,
+  repoName: string
+): Promise<void> => {
+  const kubeConfig = getEnvironmentKubeConfig(environment);
+  core.info(`Deleting k8s objects from ${repoName} ${kubeConfig.getCurrentContext()} environment`);
+
+  const namespace = getCurrentNamespace(kubeConfig);
+  const coreV1API = kubeConfig.makeApiClient(k8s.CoreV1Api);
+  const rbacAuthorizationV1Api = kubeConfig.makeApiClient(k8s.RbacAuthorizationV1Api);
+
+  type DeleteParametersType = [string, string | undefined, string | undefined, string | undefined, string | undefined, number | undefined, string];
+
+  const deleteParameters: DeleteParametersType = [
+    namespace, // namespace
+    undefined, // pretty
+    undefined, // _continue
+    undefined, // dryRun
+    undefined, // fieldSelector
+    undefined, // gracePeriodSeconds
+    getLabelsAsFilterString(repoName) // labelSelector
+  ];
+
+  await coreV1API.deleteCollectionNamespacedSecret(...deleteParameters);
+  await rbacAuthorizationV1Api.deleteCollectionNamespacedRoleBinding(...deleteParameters);
+  await rbacAuthorizationV1Api.deleteCollectionNamespacedRole(...deleteParameters);
+  await coreV1API.deleteCollectionNamespacedServiceAccount(...deleteParameters);
+};
+
+export const getTokenSecretName = (repoName: string): string => {
+  return `${repoName}-service-account-token`;
 };

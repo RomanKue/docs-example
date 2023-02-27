@@ -4,13 +4,14 @@ import issues from '../../../../github/api/issues/index.js';
 import {lockAnIssue, setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
 import {Label} from '../../../../github/api/issues/response/label.js';
 import {labels} from '../../../config.js';
-import {getIssueState, issueState} from '../state.js';
+import { getIssueState, issueState } from '../../issue-state';
 import {freeze, produce} from 'immer';
 import {partialMock} from '../../../../mock/partial-mock.js';
 import * as repositories from '../../../../github/api/repos/repositories.js';
 import * as deliverModule from './deliver.js';
 import {closeWithComment, createNewApp, deliver} from './deliver.js';
 import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
+import { issueType } from '../../issue-type';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {
@@ -69,8 +70,11 @@ name: my-app-name
     });
     it('should do nothing when issue is in different state ', async () => {
       issue = addLabel(issue, labels.newApp, issueState.waitingForReview);
+      jest.spyOn(deliverModule, 'createNewApp').mockResolvedValue(partialMock<Repository>());
+
       await deliver(issue);
 
+      expect(deliverModule.createNewApp).not.toHaveBeenCalled();
       expect(getIssueState(issue)).toEqual(issueState.waitingForReview);
     });
     it('should deliver when issue is approved', async () => {
@@ -89,11 +93,15 @@ name: my-app-name
     beforeEach(() => {
       repository = freeze(partialMock<Repository>({
         name: 'foo',
-        html_url: 'https://foo'
+        html_url: 'https://foo',
       }));
     });
     it('should close with comment when called', async () => {
-      await closeWithComment(issue, repository);
+      const approvedIssue = {...issue, labels: [
+        partialMock<Label>({name: issueType.newApp}),
+        partialMock<Label>({name: issueState.approved})
+      ]};
+      await closeWithComment(approvedIssue, repository);
       expect(issues.commentOnIssue).toHaveBeenCalledWith(expect.objectContaining({
         body: expect.stringContaining(
           `Checkout your [foo](https://foo) repository.`
@@ -102,7 +110,7 @@ name: my-app-name
       expect(issues.lockAnIssue).toHaveBeenCalledWith(expect.objectContaining({lock_reason: 'resolved'}));
       expect(issues.updateAnIssue).toHaveBeenCalledWith(expect.objectContaining({state: 'closed'}));
       expect(issues.setLabelsForAnIssue).toHaveBeenCalledWith(
-        expect.objectContaining({labels: [labels.newApp, labels.delivered]})
+        expect.objectContaining({labels: [issueType.newApp, issueState.delivered]})
       );
     });
   });

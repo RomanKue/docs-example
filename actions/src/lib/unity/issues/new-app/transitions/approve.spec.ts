@@ -1,16 +1,16 @@
-import {approveIssue} from './approve.js';
-import {Issue} from '../../../../github/api/issues/response/issue.js';
-import {IssueComment} from '../../../../github/api/issues/response/issue-comment.js';
-import issues from '../../../../github/api/issues/index.js';
-import teams from '../../../../github/api/teams/index.js';
-import {setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
-import {Label} from '../../../../github/api/issues/response/label.js';
-import {labels, magicComments, unityBot, unityTeams} from '../../../config.js';
+import {approveIssue} from './approve';
+import {Issue} from '../../../../github/api/issues/response/issue';
+import {IssueComment} from '../../../../github/api/issues/response/issue-comment';
+import issues from '../../../../github/api/issues';
+import teams from '../../../../github/api/teams';
+import {setLabelsForAnIssue} from '../../../../github/api/issues/issues';
+import {Label} from '../../../../github/api/issues/response/label';
+import {labels, magicComments, unityBot, unityTeams} from '../../../config';
 import {expect, jest} from '@jest/globals';
-import {getIssueState, issueState} from '../state.js';
 import {freeze, produce} from 'immer';
-import {partialMock} from '../../../../mock/partial-mock.js';
-import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
+import {partialMock} from '../../../../mock/partial-mock';
+import {SimpleUser} from '../../../../github/api/teams/response/simple-user';
+import { getIssueState, issueState } from '../../issue-state';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {

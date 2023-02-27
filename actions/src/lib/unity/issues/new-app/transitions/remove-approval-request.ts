@@ -1,8 +1,8 @@
 import {Issue} from '../../../../github/api/issues/response/issue.js';
-import {getApprovers} from '../new-app-issue.js';
 import * as core from '@actions/core';
-import {getIssueState, issueState, setIssueState} from '../state.js';
+import {getIssueState, issueState, setIssueState} from '../../issue-state.js';
 import issues, {issuesUtils} from '../../../../github/api/issues/index.js';
+import { getApprovers } from '../../utils.js';
 
 export const removeApprovalRequest = async (issue: Issue) => {
   if (getIssueState(issue) !== issueState.waitingForApproval) {

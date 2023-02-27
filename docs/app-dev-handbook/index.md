@@ -24,3 +24,4 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 * [External services](external-services.html) called from UNITY applications
 * [Profiling and Debugging](profiling-debugging.html) of UNITY applications running on the cluster
 * [HTTP Headers](http-headers.html) configure HTTP headers.
+* [Decommission App](decommission-app.html) decommission UNITY application

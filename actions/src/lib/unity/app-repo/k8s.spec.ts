@@ -1,11 +1,13 @@
 import * as k8s from './k8s.js';
-import {createK8sObjects, getEnvironmentKubeConfig} from './k8s.js';
-import {environments} from '../config.js';
+import { createK8sObjects, deleteK8sObjects, getEnvironmentKubeConfig } from './k8s.js';
+import { environments } from '../config.js';
 import * as input from '../../github/input.js';
-import {partialMock} from '../../mock/partial-mock.js';
-import {V1Secret} from '@kubernetes/client-node';
-import {IncomingMessage} from 'http';
-import {base64} from '../../strings/encoding.js';
+import { partialMock } from '../../mock/partial-mock.js';
+import { ApiType, CoreV1Api, V1Secret } from '@kubernetes/client-node';
+import { IncomingMessage } from 'http';
+import { base64 } from '../../strings/encoding.js';
+import { expect, jest } from '@jest/globals';
+import { RbacAuthorizationV1Api } from '@kubernetes/client-node/dist/gen/api/rbacAuthorizationV1Api';
 
 describe('k8s.ts', () => {
   beforeEach(() => {
@@ -20,12 +22,14 @@ describe('k8s.ts', () => {
       }
       return '';
     });
-    jest.spyOn(k8s, 'upsertRole').mockResolvedValue();
-    jest.spyOn(k8s, 'upsertRoleBinding').mockResolvedValue();
-    jest.spyOn(k8s, 'upsertSecret').mockResolvedValue();
-    jest.spyOn(k8s, 'upsertServiceAccount').mockResolvedValue();
   });
-  describe('createServiceAccount', () => {
+  describe('createK8sObjects', () => {
+    beforeEach(() => {
+      jest.spyOn(k8s, 'upsertRole').mockResolvedValue();
+      jest.spyOn(k8s, 'upsertRoleBinding').mockResolvedValue();
+      jest.spyOn(k8s, 'upsertSecret').mockResolvedValue();
+      jest.spyOn(k8s, 'upsertServiceAccount').mockResolvedValue();
+    });
     it('should create token when called', async () => {
       const v1Secret = partialMock<V1Secret>({data: {token: base64('foo-token')}});
       jest.spyOn(k8s, 'readSecret').mockResolvedValue(partialMock<{ response: IncomingMessage, body: V1Secret }>({
@@ -38,6 +42,52 @@ describe('k8s.ts', () => {
       expect(k8s.upsertRole).toBeCalledTimes(1);
       expect(k8s.upsertSecret).toBeCalledTimes(2);
       expect(k8s.upsertRoleBinding).toBeCalledTimes(1);
+    });
+  });
+
+  describe('deleteK8sObjects', () => {
+    it('should delete all K8s objects', async () => {
+      const coreV1APIMock = {
+        deleteCollectionNamespacedSecret: jest.fn(),
+        deleteCollectionNamespacedServiceAccount: jest.fn()
+      };
+      const rbacAuthorizationV1ApiMock = {
+        deleteCollectionNamespacedRoleBinding: jest.fn(),
+        deleteCollectionNamespacedRole: jest.fn()
+      };
+      type ApiConstructor<T extends ApiType> = new (server: string) => T;
+      const makeApiClientMock = (instanceType: ApiConstructor<ApiType>) => {
+        const instance = new instanceType('');
+        if (instance instanceof CoreV1Api) {
+          return coreV1APIMock;
+        }
+        if (instance instanceof RbacAuthorizationV1Api) {
+          return rbacAuthorizationV1ApiMock;
+        }
+
+        return null;
+      };
+      jest.spyOn(k8s, 'getEnvironmentKubeConfig').mockReturnValue({
+        makeApiClient: makeApiClientMock,
+        getCurrentContext: () => '',
+        getContextObject: () => {return {namespace: environments.int};},
+      } as never);
+      const repoName = 'foo';
+      await deleteK8sObjects(environments.int, repoName);
+
+      expect(coreV1APIMock.deleteCollectionNamespacedSecret).toBeCalledTimes(1);
+      expect(coreV1APIMock.deleteCollectionNamespacedSecret).toBeCalledWith(
+        environments.int,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        `app.kubernetes.io/managed-by=unity,app.kubernetes.io/name=${repoName}`
+      );
+      expect(rbacAuthorizationV1ApiMock.deleteCollectionNamespacedRoleBinding).toBeCalledTimes(1);
+      expect(rbacAuthorizationV1ApiMock.deleteCollectionNamespacedRole).toBeCalledTimes(1);
+      expect(coreV1APIMock.deleteCollectionNamespacedServiceAccount).toBeCalledTimes(1);
     });
   });
 });

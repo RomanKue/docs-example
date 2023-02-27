@@ -6,7 +6,6 @@ import { getIssueType, issueType } from '../issue-type.js';
 import { commentOnIssue } from '../../../github/api/issues/issues.js';
 import { getIssueState, issueState } from '../issue-state.js';
 import { reviewIssue } from './transitions/review.js';
-import { reviewDecommissionAppIssue } from '../decommission-app/transitions/review.js';
 import { approveIssue } from './transitions/approve.js';
 
 export const handleNewAppMagicComments = async (issue: Issue, comment: IssueComment) => {
@@ -29,7 +28,8 @@ export const handleNewAppMagicComments = async (issue: Issue, comment: IssueComm
   }
 
   if (isMagicComment(comment, magicComments.lgtm)) {
-    await handleLgtmMagikComment(issue, commenter, comment);
+    await handleLgtmMagicComment(issue, commenter, comment);
+    return;
   }
 
   if (comment.body ?? ''.includes(`@${unityBot}`)) {
@@ -57,17 +57,11 @@ const handleReviewMagicComment = async (issue: Issue, commenter: string | undefi
     body:
       `@${commenter} I understood that you want me to review your issue again, I will start with that right away... `
   });
-  switch (currentIssueType) {
-  case issueType.newApp:
-    await reviewIssue(issue);
-    break;
-  case issueType.decommissionApp:
-    await reviewDecommissionAppIssue(issue);
-    break;
-  }
+
+  await reviewIssue(issue);
 };
 
-const handleLgtmMagikComment = async (issue: Issue, commenter: string | undefined, comment: IssueComment): Promise<void> => {
+const handleLgtmMagicComment = async (issue: Issue, commenter: string | undefined, comment: IssueComment): Promise<void> => {
   if (getIssueState(issue) === issueState.waitingForApproval) {
     await commentOnIssue({
       body:

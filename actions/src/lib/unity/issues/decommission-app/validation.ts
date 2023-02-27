@@ -8,6 +8,7 @@ import { updateAnIssue } from '../../../github/api/issues/issues.js';
 import { DecommissionAppIssue } from './decommission-app-issue.js';
 import { Issue } from '../../../github/api/issues/response/issue.js';
 import { ReadonlyDeep } from 'type-fest';
+import * as core from '@actions/core';
 
 export const validateDecommissionAppIssue = async (decommissionApp: DecommissionAppIssue, githubIssue: Issue): Promise<boolean> => {
   const appSpec = decommissionApp.appSpec;
@@ -49,6 +50,7 @@ const validateRepositoryExists = async (appSpec: ReadonlyDeep<AppSpec>, githubIs
 
 const validateHasUnityAppTopic = async (repositoryName: string, githubIssue: Issue): Promise<boolean> => {
   const topic = await getAllRepositoryTopics();
+  core.info(`Found topics on repository: ${JSON.stringify(topic)}`);
   if (!topic.names.includes(defaultTopics.unityApp)) {
     await issuesUtils.addSimpleComment(githubIssue, user =>
       `@${user} I could not find the topic ${defaultTopics.unityApp} on the the repository ${repositoryName}, please update your issue with the correct topic.`

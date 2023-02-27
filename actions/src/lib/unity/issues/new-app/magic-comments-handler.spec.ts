@@ -108,6 +108,7 @@ describe('magic-comments-handler.ts', () => {
       });
       comment = partialMock<IssueComment>({user: user, body: `@${unityBot} ${magicComments.lgtm}`});
       await handleNewAppMagicComments(issue, comment);
+      expect(issues.commentOnIssue).toHaveBeenCalledTimes(1);
       expect(issues.commentOnIssue).toHaveBeenCalledWith(
         expect.objectContaining({
           body: expect.stringContaining('@q123456 I understood that you want me to approve the issue.')

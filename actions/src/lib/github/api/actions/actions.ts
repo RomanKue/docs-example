@@ -86,3 +86,18 @@ export const getAnEnvironmentSecret = async (
   });
   return response.data as ActionsSecret;
 };
+
+/**
+ * https://docs.github.com/en/rest/actions/secrets#list-environment-secrets
+ */
+export const listEnvironmentSecrets = async (
+  options: {
+    repository_id: number,
+    environment_name: string,
+  } & Partial<Parameters<ActionsApi['getEnvironmentSecret']>[0]>
+): Promise<ActionsSecret[]> => {
+  const response = await getOctokitApi().rest.actions.listEnvironmentSecrets({
+    ...options
+  });
+  return response.data.secrets as ActionsSecret[];
+};

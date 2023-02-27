@@ -22,7 +22,7 @@ export const syncMasterKeys = async () => {
       getInput<SyncMasterKeysInputs>('KUBERNETES_HOST'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_NAMESPACE'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
-    for (const repo of repositories) {
+    await repositories.forEach(async (repo) => {
       core.debug(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
       const isMasterKeyExistent = await isSecretExistent({
         repository_id: repo.id,
@@ -36,6 +36,6 @@ export const syncMasterKeys = async () => {
       } else {
         core.debug(`Master key for repo ${repo.name} is already set and overwrite is false. Did nothing`);
       }
-    }
+    });
   }
 };

@@ -6,7 +6,7 @@ import { SimpleUser } from '../../../github/api/teams/response/simple-user';
 import { Label } from '../../../github/api/issues/response/label';
 import { issueState } from '../issue-state';
 import { issueType } from '../issue-type';
-import { AppSpec } from '../../app-spec';
+import { AppSpec, repoName } from '../../app-spec';
 import { repositoriesUtils } from '../../../github/api/repos';
 import { issuesUtils } from '../../../github/api/issues';
 import * as repositories from '../../../github/api/repos/repositories.js';
@@ -47,13 +47,14 @@ describe('validation', () => {
       const topic: Topic = { names: [] };
       jest.spyOn(repositories, 'getAllRepositoryTopics').mockResolvedValue(topic as never);
       jest.spyOn(repositories, 'getRepositoryPermissionForAUser').mockResolvedValue({} as never);
-
-      const response = await validateDecommissionAppIssue(getDecommissionAppMock(), getValidIssueMock());
+      const decommissionAppMock = getDecommissionAppMock();
+      const repositoryName = repoName(decommissionAppMock?.appSpec?.name as string);
+      const response = await validateDecommissionAppIssue(decommissionAppMock, getValidIssueMock());
 
       expect(response).toBe(false);
       expect(repositoriesUtils.isRepoExistent).toHaveBeenCalled();
       expect(issuesUtils.addSimpleComment).toHaveBeenCalled();
-      expect(repositories.getAllRepositoryTopics).toHaveBeenCalled();
+      expect(repositories.getAllRepositoryTopics).toHaveBeenCalledWith(repositoryName);
       expect(repositories.getRepositoryPermissionForAUser).not.toHaveBeenCalled();
     });
 
@@ -65,13 +66,19 @@ describe('validation', () => {
       jest.spyOn(repositories, 'getRepositoryPermissionForAUser').mockResolvedValue({} as never);
       jest.spyOn(issues, 'updateAnIssue').mockResolvedValue(undefined as never);
 
-      const response = await validateDecommissionAppIssue(getDecommissionAppMock(), getValidIssueMock());
+      const decommissionAppMock = getDecommissionAppMock();
+      const repositoryName = repoName(decommissionAppMock?.appSpec?.name as string);
+      const validGithubIssue = getValidIssueMock();
+      const response = await validateDecommissionAppIssue(decommissionAppMock, validGithubIssue);
 
       expect(response).toBe(false);
       expect(repositoriesUtils.isRepoExistent).toHaveBeenCalled();
       expect(issuesUtils.addSimpleComment).toHaveBeenCalled();
-      expect(repositories.getAllRepositoryTopics).toHaveBeenCalled();
-      expect(repositories.getRepositoryPermissionForAUser).toHaveBeenCalled();
+      expect(repositories.getAllRepositoryTopics).toHaveBeenCalledWith(repositoryName);
+      expect(repositories.getRepositoryPermissionForAUser).toHaveBeenCalledWith({
+        repositoryName,
+        username: validGithubIssue?.user?.login as string
+      });
       expect(issues.updateAnIssue).toHaveBeenCalledWith({
         state: 'closed',
       });

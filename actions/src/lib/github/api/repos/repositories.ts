@@ -104,10 +104,10 @@ export const replaceAllRepositoryTopics = async (
 /**
  * see https://docs.github.com/en/rest/repos/repos?apiVersion=2022-11-28#get-all-repository-topics
  */
-export const getAllRepositoryTopics = async (): Promise<Topic> => {
+export const getAllRepositoryTopics = async (repositoryName: string): Promise<Topic> => {
   const response = await getOctokitApi().rest.repos.getAllTopics({
     owner: github.context.repo.owner,
-    repo: github.context.repo.repo
+    repo: repositoryName
   });
   return response.data as Topic;
 };
@@ -130,11 +130,11 @@ export const addARepositoryCollaborator = async (
  * see https://docs.github.com/en/rest/collaborators/collaborators#get-repository-permissions-for-a-user
  */
 export const getRepositoryPermissionForAUser = async (
-  options: { username: string } & Partial<Parameters<ReposApi['getCollaboratorPermissionLevel']>[0]>
+  options: { username: string, repositoryName: string } & Partial<Parameters<ReposApi['getCollaboratorPermissionLevel']>[0]>
 ): Promise<RepositoryCollaboratorPermission> => {
   const response = await getOctokitApi().rest.repos.getCollaboratorPermissionLevel({
     owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
+    repo: options.repositoryName,
     username: options.username
   });
   return response.data as RepositoryCollaboratorPermission;

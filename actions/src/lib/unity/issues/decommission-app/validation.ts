@@ -49,8 +49,7 @@ const validateRepositoryExists = async (appSpec: ReadonlyDeep<AppSpec>, githubIs
 };
 
 const validateHasUnityAppTopic = async (repositoryName: string, githubIssue: Issue): Promise<boolean> => {
-  const topic = await getAllRepositoryTopics();
-  core.info(`Found topics on repository: ${JSON.stringify(topic)}`);
+  const topic = await getAllRepositoryTopics(repositoryName);
   if (!topic.names.includes(defaultTopics.unityApp)) {
     await issuesUtils.addSimpleComment(githubIssue, user =>
       `@${user} I could not find the topic ${defaultTopics.unityApp} on the the repository ${repositoryName}, please update your issue with the correct topic.`
@@ -64,7 +63,8 @@ const validateHasUnityAppTopic = async (repositoryName: string, githubIssue: Iss
 const validateIssueUserHasPermission = async (repositoryName: string, githubIssue: Issue): Promise<boolean> => {
   const issueUser = getIssueUserLogin(githubIssue);
   const repositoryPermission = await getRepositoryPermissionForAUser({
-    username: issueUser
+    username: issueUser,
+    repositoryName: repositoryName
   });
   if (repositoryPermission.role_name !== unityRepositoryRoles && repositoryPermission.permission !== adminPermission) {
     await issuesUtils.addSimpleComment(githubIssue, user =>

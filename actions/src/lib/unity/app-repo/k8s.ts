@@ -106,7 +106,12 @@ export const getKubeConfig = (environment: Environment, host: string, namespace:
   }
 
   const kc = new k8s.KubeConfig();
-  kc.addCluster({name: environment, server: server, skipTLSVerify: true});
+  kc.addCluster({
+    name: environment,
+    server: server,
+    skipTLSVerify: false,
+    caFile: '/etc/ssl/certs/ca-certificates.crt',
+  });
   kc.addUser({name: environment, token: token});
   kc.addContext({
     name: environment,

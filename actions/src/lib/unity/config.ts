@@ -81,7 +81,8 @@ export const magicComments = {
 } as const;
 
 export const k8sSecretConstants = {
-  masterKeySuffix: '-master-key.v1',
+  masterKeyV1Suffix: '-master-key.v1',
+  masterKeyV2Suffix: '-master-key.v2',
   masterKey: 'master-key'
 } as const;
 

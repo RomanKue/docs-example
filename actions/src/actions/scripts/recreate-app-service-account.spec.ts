@@ -1,15 +1,14 @@
-import {recreateAppServiceAccount} from './recreate-app-service-account';
+import {recreateAppServiceAccount} from './recreate-app-service-account.js';
 
-import * as k8s from '../../lib/unity/app-repo/k8s';
-import * as input from '../../lib/github/input';
-import {Inputs} from '../../lib/github/input';
-import * as repositories from '../../lib/github/api/repos/repositories';
-import {MinimalRepository} from '../../lib/github/api/repos/response/minimal-repository';
-import {repositoriesUtils} from '../../lib/github/api/repos';
+import * as k8s from '../../lib/unity/app-repo/k8s.js';
+import * as input from '../../lib/github/input.js';
+import {Inputs} from '../../lib/github/input.js';
+import * as repositories from '../../lib/github/api/repos/repositories.js';
+import {MinimalRepository} from '../../lib/github/api/repos/response/minimal-repository.js';
+import {partialMock} from '../../lib/mock/partial-mock.js';
+import {githubSecretKeys} from '../../lib/unity/config.js';
 import {KubeConfig} from '@kubernetes/client-node';
-import {jest} from '@jest/globals';
-import {partialMock} from '../../lib/mock/partial-mock';
-import {githubSecretKeys} from '../../lib/unity/config';
+import {repositoriesUtils} from '../../lib/github/api/repos/index.js';
 
 describe('recreate-app-service-account', () => {
   const kc = new KubeConfig();
@@ -44,8 +43,8 @@ describe('recreate-app-service-account', () => {
     expect(k8s.getKubeConfig).toHaveBeenCalledWith('int', 'host', 'namespace', 'k8s-token');
 
     expect(k8s.createK8sObjects).toHaveBeenCalledTimes(2);
-    expect(k8s.createK8sObjects).toHaveBeenCalledWith('int', 'app-test', kc);
-    expect(k8s.createK8sObjects).toHaveBeenCalledWith('int', 'app-foo', kc);
+    expect(k8s.createK8sObjects).toHaveBeenCalledWith('int', 'app-test', kc, undefined);
+    expect(k8s.createK8sObjects).toHaveBeenCalledWith('int', 'app-foo', kc, undefined);
 
     expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(2);
     expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledWith({id: 0}, 'int', githubSecretKeys.kubernetesToken, 'new-sa-token');

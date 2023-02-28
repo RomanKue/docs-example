@@ -1,4 +1,4 @@
-name: Sync Master Keys From K8s to GHE
+name: Sync Master Keys From V1 to V2
 on:
   workflow_dispatch:
     inputs:
@@ -20,7 +20,7 @@ on:
           - int
           - prod
 jobs:
-  sync-master-keys-from-K8s-to-GHE:
+  sync-master-keys-from-v1-to-v2:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 30
     permissions: write-all
@@ -28,9 +28,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: build-actions
         uses: ./.github/actions/build-actions
-      - name: sync-master-keys-int
+      - name: sync-master-keys-from-v1-to-v2-int
         if: ${{ inputs.environment == 'int' }}
-        uses: ./.github/actions/sync-master-keys
+        uses: ./.github/actions/sync-master-keys-from-v1-to-v2
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
           KUBERNETES_TOKEN: ${{ secrets.INT_KUBERNETES_TOKEN }}
@@ -39,9 +39,9 @@ jobs:
           environment: ${{ inputs.environment }}
           repository-regex: ${{ inputs.repositoryRegex }}
           overwrite: ${{ inputs.overwrite }}
-      - name: sync-master-keys-prod
+      - name: sync-master-keys-from-v1-to-v2-prod
         if: ${{ inputs.environment == 'prod' }}
-        uses: ./.github/actions/sync-master-keys
+        uses: ./.github/actions/sync-master-keys-from-v1-to-v2
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
           KUBERNETES_TOKEN: ${{ secrets.PROD_KUBERNETES_TOKEN }}

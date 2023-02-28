@@ -17,9 +17,9 @@ export const recreateAppServiceAccount = async () => {
       getInput<RecreateAppServiceAccountInputs>('KUBERNETES_HOST'),
       getInput<RecreateAppServiceAccountInputs>('KUBERNETES_NAMESPACE'),
       getInput<RecreateAppServiceAccountInputs>('KUBERNETES_TOKEN'));
-    await repositories.forEach(async (repo) => {
-      const serviceAccountToken = await createK8sObjects(env, repo.name, kc);
+    for (const repo of repositories) {
+      const serviceAccountToken = await createK8sObjects(env, repo.name, kc, undefined);
       await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.kubernetesToken, serviceAccountToken);
-    });
+    }
   }
 };

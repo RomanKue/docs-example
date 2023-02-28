@@ -10,7 +10,7 @@ import {repositoriesUtils} from '../../lib/github/api/repos/index.js';
  *  Set the master key (CRYPT_MASTER_KEY) of every app matching the regex and selected namespace if it doesn't exist.
  *  If overwrite is true, update the existing ones too.
  */
-export const syncMasterKeys = async () => {
+export const syncMasterKeysFromK8sToGh = async () => {
   const appRegex = getInput<SyncMasterKeysInputs>('repository-regex');
   const env = Object.values(environments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
   const repositories = (await searchRepositories({q: 'topic:unity-app org:UNITY fork:true'}))
@@ -22,7 +22,7 @@ export const syncMasterKeys = async () => {
       getInput<SyncMasterKeysInputs>('KUBERNETES_HOST'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_NAMESPACE'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
-    await repositories.forEach(async (repo) => {
+    for (const repo of repositories) {
       core.debug(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
       const isMasterKeyExistent = await isSecretExistent({
         repository_id: repo.id,
@@ -30,12 +30,12 @@ export const syncMasterKeys = async () => {
         secret_name: githubSecretKeys.cryptMasterKey
       });
       if (overwrite || !isMasterKeyExistent) {
-        const k8sAppMasterKey = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretConstants.masterKeySuffix}`, k8sSecretConstants.masterKey);
+        const k8sAppMasterKey = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretConstants.masterKeyV1Suffix}`, k8sSecretConstants.masterKey);
         await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sAppMasterKey);
         core.debug(`Master key for repo ${repo.name} was updated`);
       } else {
         core.debug(`Master key for repo ${repo.name} is already set and overwrite is false. Did nothing`);
       }
-    });
+    }
   }
 };

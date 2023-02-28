@@ -1,14 +1,13 @@
-import { AppSpec, repoName } from '../../app-spec.js';
-import { repositoriesUtils } from '../../../github/api/repos/index.js';
-import { issuesUtils } from '../../../github/api/issues/index.js';
-import { getRepositoryPermissionForAUser, getAllRepositoryTopics } from '../../../github/api/repos/repositories.js';
-import { adminPermission, defaultTopics, unityRepositoryRoles } from '../../config.js';
-import { getIssueUserLogin } from '../../../github/api/issues/issues-utils.js';
-import { updateAnIssue } from '../../../github/api/issues/issues.js';
-import { DecommissionAppIssue } from './decommission-app-issue.js';
-import { Issue } from '../../../github/api/issues/response/issue.js';
-import { ReadonlyDeep } from 'type-fest';
-import * as core from '@actions/core';
+import {AppSpec, repoName} from '../../app-spec.js';
+import {repositoriesUtils} from '../../../github/api/repos/index.js';
+import {issuesUtils} from '../../../github/api/issues/index.js';
+import {getAllRepositoryTopics, getRepositoryPermissionForAUser} from '../../../github/api/repos/repositories.js';
+import {adminPermission, defaultTopics, unityRepositoryRoles} from '../../config.js';
+import {getIssueUserLogin} from '../../../github/api/issues/issues-utils.js';
+import {updateAnIssue} from '../../../github/api/issues/issues.js';
+import {DecommissionAppIssue} from './decommission-app-issue.js';
+import {Issue} from '../../../github/api/issues/response/issue.js';
+import {ReadonlyDeep} from 'type-fest';
 
 export const validateDecommissionAppIssue = async (decommissionApp: DecommissionAppIssue, githubIssue: Issue): Promise<boolean> => {
   const appSpec = decommissionApp.appSpec;
@@ -40,7 +39,7 @@ const validateRepositoryExists = async (appSpec: ReadonlyDeep<AppSpec>, githubIs
   const isRepoExistent = await repositoriesUtils.isRepoExistent(appSpec.name);
   if (!isRepoExistent) {
     await issuesUtils.addSimpleComment(githubIssue, user =>
-      `@${user} I could not find the repository ${repositoryName}, please update your issue with the correct repository name. `
+      `@${user} I could not find the repository "${repositoryName}", please update your issue with the correct repository name. `
     );
     return false;
   }
@@ -52,7 +51,7 @@ const validateHasUnityAppTopic = async (repositoryName: string, githubIssue: Iss
   const topic = await getAllRepositoryTopics(repositoryName);
   if (!topic.names.includes(defaultTopics.unityApp)) {
     await issuesUtils.addSimpleComment(githubIssue, user =>
-      `@${user} I could not find the topic ${defaultTopics.unityApp} on the the repository ${repositoryName}, please update your issue with the correct topic.`
+      `@${user} I could not find the topic ${defaultTopics.unityApp} on the the repository "${repositoryName}", please update your issue with the correct topic.`
     );
     return false;
   }
@@ -69,7 +68,7 @@ const validateIssueUserHasPermission = async (repositoryName: string, githubIssu
   if (repositoryPermission.role_name !== unityRepositoryRoles && repositoryPermission.permission !== adminPermission) {
     await issuesUtils.addSimpleComment(githubIssue, user =>
       `@${user} unfortunately, I cannot fulfil your request, since you don't have permission to decommission this app.
-      Please make sure you have the ${unityRepositoryRoles} role or ${adminPermission} permission on the repository [${repositoryName}].`
+      Please make sure you have the "${unityRepositoryRoles}" role or "${adminPermission}" permission on the repository "${repositoryName}".`
     );
     await updateAnIssue({
       state: 'closed',

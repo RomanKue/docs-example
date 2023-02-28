@@ -57,6 +57,7 @@ import {
   dependabotAutoApproveWorkflowFileName
 } from './workflows/dependabot-auto-merge-workflow.js';
 import {createEncryptWorkflow, encryptWorkflowFileName} from './workflows/encrypt-workflow.js';
+import {randomCryptoString} from '../../strings/random.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -255,8 +256,10 @@ export const createRepository = async (
     });
 
     core.debug(`generating token "${env}"`);
-    const token = await createK8sObjects(env, appRepository.name, getEnvironmentKubeConfig(env));
+    const masterKey = randomCryptoString(32);
+    const token = await createK8sObjects(env, appRepository.name, getEnvironmentKubeConfig(env), masterKey);
     await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesToken, token);
+    await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.cryptMasterKey, masterKey);
 
     switch (env) {
     case 'int':
@@ -264,7 +267,6 @@ export const createRepository = async (
       await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE'));
       break;
     case 'prod':
-      // skip for now...
       await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST'));
       await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE'));
       break;

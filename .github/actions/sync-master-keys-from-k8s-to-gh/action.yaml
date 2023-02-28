@@ -1,4 +1,4 @@
-name: 'sync-master-keys'
+name: 'sync-master-keys-from-k8s-to-gh'
 description: |
   Set the master key (CRYPT_MASTER_KEY) of every app matching the regex and selected namespace if it doesn't exist.
   If overwrite is true, update the existing ones too.
@@ -26,4 +26,4 @@ inputs:
     required: true
 runs:
   using: 'node16'
-  main: '../../../actions/dist/actions/sync-master-keys.js'
+  main: '../../../actions/dist/actions/sync-master-keys-from-k8s-to-gh.js'

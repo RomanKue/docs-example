@@ -4,14 +4,14 @@ import issues from '../../../../github/api/issues/index.js';
 import {lockAnIssue, setLabelsForAnIssue} from '../../../../github/api/issues/issues.js';
 import {Label} from '../../../../github/api/issues/response/label.js';
 import {labels} from '../../../config.js';
-import { getIssueState, issueState } from '../../issue-state';
+import {getIssueState, issueState} from '../../issue-state.js';
 import {freeze, produce} from 'immer';
 import {partialMock} from '../../../../mock/partial-mock.js';
 import * as repositories from '../../../../github/api/repos/repositories.js';
 import * as deliverModule from './deliver.js';
 import {closeWithComment, createNewApp, deliver} from './deliver.js';
 import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
-import { issueType } from '../../issue-type';
+import {issueType} from '../../issue-type.js';
 
 const addLabel = (issue: Issue, ...labels: string[]) => {
   return produce(issue, draft => {

@@ -61,7 +61,7 @@ describe('index', () => {
 
       expect(k8s.createK8sObjects).toHaveBeenCalledTimes(2);
 
-      expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(6);
+      expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(8);
 
       expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledWith(expect.objectContaining({visibility: 'private'}));
     });

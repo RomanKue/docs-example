@@ -4,7 +4,7 @@ import {base64Decode} from '../../strings/encoding.js';
 import {ReadonlyDeep} from 'type-fest';
 import {getInput, IssueUpdatedInputs} from '../../github/input.js';
 import {assertUnreachable} from '../../run.js';
-import {environments} from '../config.js';
+import {environments, k8sSecretConstants} from '../config.js';
 import {constants} from 'http2';
 import * as core from '@actions/core';
 
@@ -179,11 +179,37 @@ export const readServiceAccountToken = async (environment: ReadonlyDeep<Environm
   return base64Decode(base64Token);
 };
 
+export const upsertMasterKeySecretV2 = async (kubeConfig: KubeConfig, repoName: string, masterKey: string) => {
+  await upsertSecret(kubeConfig, {
+    apiVersion: 'v1',
+    kind: 'Secret',
+    metadata: {
+      name: `${repoName}${k8sSecretConstants.masterKeyV2Suffix}`,
+      labels: {
+        ...getLabels(repoName),
+      },
+      annotations: {
+        // see https://atc-github.azure.cloud.bmw/UNITY/unity-operator
+        'unity-operator.unity.bmwgroup.net/disabled': 'true'
+      }
+    },
+    type: 'Opaque',
+    stringData: {
+      'master-key': masterKey
+    }
+  });
+};
+
 export const createK8sObjects = async (
   environment: ReadonlyDeep<Environment>,
   repoName: string,
-  kubeConfig: KubeConfig
+  kubeConfig: KubeConfig,
+  masterKey: string | undefined
 ): Promise<string> => {
+  if (masterKey) {
+    await upsertMasterKeySecretV2(kubeConfig, repoName, masterKey);
+  }
+
   await upsertSecret(kubeConfig, {
     apiVersion: 'v1',
     kind: 'Secret',
@@ -222,7 +248,11 @@ export const createK8sObjects = async (
         resources: ['secrets'],
         // cannot allow to create secret, see https://github.com/kubernetes/kubernetes/issues/80295
         verbs: ['get', 'patch', 'update', 'watch'],
-        resourceNames: [repoName]
+        resourceNames: [
+          repoName,
+          `${repoName}${k8sSecretConstants.masterKeyV1Suffix}`,
+          `${repoName}${k8sSecretConstants.masterKeyV2Suffix}`,
+        ]
       }
     ]
   });

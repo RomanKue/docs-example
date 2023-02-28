@@ -33,8 +33,6 @@ After finishing, you will be informed by a comment on the issue and the issue wi
 
 # Restore Decommissioned App
 
-If you followed the steps from [Decommission App](#decommission-app) and you want to restore it back again run the following steps:
-1. Unarchive app repository
-2. Open a change request for the UNITY team (service: pdm-unity:global, service group: pdm-unity:devops:2nd) to recreate the cloud artifacts.
+If you followed the steps from [Decommission App](#decommission-app) and you want to restore it back, open a change request for the UNITY team (service: pdm-unity:global, service group: pdm-unity:devops:2nd) to recreate the cloud artifacts.
 
 [Decommission App]: https://atc-github.azure.cloud.bmw/UNITY/unity/issues/new?assignees=&labels=decommission+app%2C+waiting+for+review&template=decommission-app.md&title=Decommission+UNITY+App

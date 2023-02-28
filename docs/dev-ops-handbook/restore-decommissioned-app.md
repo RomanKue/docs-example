@@ -16,7 +16,9 @@ nav_order: 9
 
 # Restore Decommissioned App
 
-After the app admin or admin has unarchived the app repository and then requests to restore the decommissioned app, run [Recreate App Service Account][Recreate App Service Account] workflow for each environment of the app you want to restore.
+If you want to restore a decommissioned app you need to:
+1. Unarchive app repository (only an admin can do this)
+2. Run [Recreate App Service Account][Recreate App Service Account] workflow for each environment of the app you want to restore.
 This will recreate not only the service account but also the secretes, roles and role bindings in k8s cluster for the selected environment.
 
 [Recreate App Service Account]: https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/recreate-app-service-account.yaml

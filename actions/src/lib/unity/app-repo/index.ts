@@ -5,9 +5,9 @@ import {
   angularStubName,
   defaultTopics,
   environments,
+  githubSecretKeys,
   makeStubWorkflowId,
   quarkusStubName,
-  githubSecretKeys,
   unityBot,
   unityRepositoryRoles
 } from '../config.js';
@@ -56,6 +56,7 @@ import {
   createDependabotAutoApproveWorkflow,
   dependabotAutoApproveWorkflowFileName
 } from './workflows/dependabot-auto-merge-workflow.js';
+import {createEncryptWorkflow, encryptWorkflowFileName} from './workflows/encrypt-workflow.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -241,6 +242,10 @@ export const createRepository = async (
     appRepository.name,
     `.github/workflows/${dependabotAutoApproveWorkflowFileName}`,
     createDependabotAutoApproveWorkflow());
+  commit = await repositoriesUtils.addFile(
+    appRepository.name,
+    `.github/workflows/${encryptWorkflowFileName}`,
+    createEncryptWorkflow(newAppIssue));
 
   for (const env of Object.values(environments)) {
     core.debug(`creating environment "${env}"`);

@@ -57,3 +57,20 @@ That means, if you set the custom header `Foo: Bar` in the app's container and
 Foo: bar
 Foo: Baz
 ```
+
+This can be fixed by removing the header first. The following snippet added to the `unity-app.*.yaml` file will remove
+the `Header-To-Remove` and will overwrite the value of `Header-To-Overwrite`:
+
+```yaml
+deployments:
+  ui:
+    headers:
+      response:
+        remove:
+          - Header-To-Remove
+          - Header-To-Overwrite
+        add:
+          Header-To-Overwrite: new-value
+```
+
+Note that manipulating the headers is case-sensitive (the headers `Foo` and `foo` will be treated as two different ones).

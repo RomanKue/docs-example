@@ -11,7 +11,7 @@ import {createK8sObjects, getKubeConfig, readSecret, readSecretForEnvironment} f
 export const syncMasterKeysFromV1ToV2 = async () => {
   const appRegex = getInput<SyncMasterKeysInputs>('repository-regex');
   const env = Object.values(environments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
-  const repositories = (await searchRepositories({q: 'topic:unity-app org:UNITY fork:true'}))
+  const repositories = (await searchRepositories({q: 'topic:unity-app org:UNITY fork:true archived:false'}))
     .filter(repo => repo.name.match(appRegex));
   core.debug(`${repositories.length} repos were found matching the search and regex criteria`);
   if (env && repositories?.length > 0) {

@@ -52,6 +52,7 @@ jobs:
     with:
       environment: int
     secrets:
+      CRYPT_MASTER_KEY: \${{ secrets.CRYPT_MASTER_KEY }}
       KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
       KUBERNETES_HOST: \${{ secrets.KUBERNETES_HOST }}
       KUBERNETES_NAMESPACE: \${{ secrets.KUBERNETES_NAMESPACE }}
@@ -63,6 +64,7 @@ jobs:
     with:
       environment: prod
     secrets:
+      CRYPT_MASTER_KEY: \${{ secrets.CRYPT_MASTER_KEY }}
       KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
       KUBERNETES_HOST: \${{ secrets.KUBERNETES_HOST }}
       KUBERNETES_NAMESPACE: \${{ secrets.KUBERNETES_NAMESPACE }}

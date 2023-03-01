@@ -44,6 +44,12 @@ ng new "$NAME" --defaults --style=scss --skip-git
 
   < "$SCRIPT_PATH/templates/authentication-error-interceptor.ts" gomplate > "src/app/interceptors/authentication-error-interceptor.ts"
 
+  # bootstrap density after instantiating the templates
+  npx ng add @bmw-ds/components --defaults
+
+  # fix broken generated density tests, remove when https://atc.bmwgroup.net/jira/browse/DESY-3043 is fixed
+  < "$SCRIPT_PATH/templates/app.component.spec.ts" gomplate > "src/app/app.component.spec.ts"
+
   # list what has been created
   ls -lah
 )

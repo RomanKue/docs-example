@@ -27,8 +27,8 @@ There are some tasks, which must be executed by the UNITY team on a regular basi
 The [create-quarkus-app.bash](https://atc-github.azure.cloud.bmw/UNITY/unity/blob/main/.github/actions/make-quarkus-stub/create-quarkus-app.bash)
 contains instructions
 from [Bootstrapping the project](https://quarkus.io/guides/getting-started#bootstrapping-the-project)
-The version that script should always reflect the current version from that website.
-![](../assets/Bootstrapping-the-project.png)
+The version will be bumped by dependabot when a new version is available. The pull requests from dependabot need to be
+reviewed, merged and the workflow should be tested afterwards.
 
 ## Update Angular Version
 

@@ -159,7 +159,7 @@ export const createRepository = async (
           response: {
             add: {
               // configure a cookie on non-prod to show which environment we are on
-              'Set-Cookie': `${newAppRepoName}-${name}}-environment=int; Secure; SameSite=Strict; Path=/${appSpec.name}/${name}}`
+              'Set-Cookie': `${newAppRepoName}-${name}-environment=int; Secure; SameSite=Strict; Path=/${appSpec.name}/${name}`
             },
           },
         },

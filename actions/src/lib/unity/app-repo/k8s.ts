@@ -189,10 +189,6 @@ export const upsertMasterKeySecretV2 = async (kubeConfig: KubeConfig, repoName: 
       labels: {
         ...getLabels(repoName),
       },
-      annotations: {
-        // see https://atc-github.azure.cloud.bmw/UNITY/unity-operator
-        'unity-operator.unity.bmwgroup.net/disabled': 'true'
-      }
     },
     type: 'Opaque',
     stringData: {

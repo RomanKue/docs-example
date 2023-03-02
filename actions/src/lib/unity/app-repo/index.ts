@@ -238,6 +238,23 @@ export const createRepository = async (
   });
 
 
+  commit = await repositoriesUtils.addFile(
+    appRepository.name,
+    `.github/workflows/${deployAppWorkflowFileName}`,
+    createDeployWorkflow());
+  commit = await repositoriesUtils.addFile(
+    appRepository.name,
+    `.github/workflows/${storeSecretsWorkflowFileName}`,
+    createStoreSecretsWorkflow());
+  commit = await repositoriesUtils.addFile(
+    appRepository.name,
+    `.github/workflows/${dependabotAutoApproveWorkflowFileName}`,
+    createDependabotAutoApproveWorkflow());
+  commit = await repositoriesUtils.addFile(
+    appRepository.name,
+    `.github/workflows/${encryptWorkflowFileName}`,
+    createEncryptWorkflow(newAppIssue));
+
   for (const env of Object.values(appEnvironments)) {
     core.debug(`creating environment "${env}"`);
     await createOrUpdateAnEnvironment({
@@ -301,26 +318,11 @@ export const createRepository = async (
     commit = await repositoriesUtils.addFile(appRepository.name, `${quarkusStubName}/${quarkusStubName}.iml`, createQuarkusModule(newAppIssue, javaVersion));
   }
 
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${deployAppWorkflowFileName}`,
-    createDeployWorkflow());
+  // workflows that are triggered on push should be added last
   commit = await repositoriesUtils.addFile(
     appRepository.name,
     `.github/workflows/${configChangeWorkflowFileName}`,
     createConfigChangeWorkflow(appSpec));
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${storeSecretsWorkflowFileName}`,
-    createStoreSecretsWorkflow());
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${dependabotAutoApproveWorkflowFileName}`,
-    createDependabotAutoApproveWorkflow());
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${encryptWorkflowFileName}`,
-    createEncryptWorkflow(newAppIssue));
 
   let appMembers = issue.user ? [issue.user] : [];
   appMembers = await removeOrgMembers(appMembers);

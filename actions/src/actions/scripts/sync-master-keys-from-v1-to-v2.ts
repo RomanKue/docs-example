@@ -13,7 +13,7 @@ export const syncMasterKeysFromV1ToV2 = async () => {
   const env = Object.values(environments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
   const repositories = (await searchRepositories({q: 'topic:unity-app org:UNITY fork:true archived:false'}))
     .filter(repo => repo.name.match(appRegex));
-  core.debug(`${repositories.length} repos were found matching the search and regex criteria`);
+  core.info(`${repositories.length} repos were found matching the search and regex criteria`);
   if (env && repositories?.length > 0) {
     const overwrite = getInput<SyncMasterKeysInputs>('overwrite') == 'true';
     const kc = getKubeConfig(env,
@@ -21,7 +21,7 @@ export const syncMasterKeysFromV1ToV2 = async () => {
       getInput<SyncMasterKeysInputs>('KUBERNETES_NAMESPACE'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
     for (const repo of repositories) {
-      core.debug(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
+      core.info(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
       const isV1MasterKeyExistent = !!await readSecret(kc, `${repo.name}${k8sSecretConstants.masterKeyV1Suffix}`);
       const isV2MasterKeyExistent = !!await readSecret(kc, `${repo.name}${k8sSecretConstants.masterKeyV2Suffix}`);
       if (!isV1MasterKeyExistent){
@@ -32,9 +32,9 @@ export const syncMasterKeysFromV1ToV2 = async () => {
         const masterKeyV1 = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretConstants.masterKeyV1Suffix}`, k8sSecretConstants.masterKey);
         // role binding needs to be updated as well.
         await createK8sObjects(env, repo.name, kc, masterKeyV1);
-        core.debug(`Master key v2 for repo ${repo.name} was updated`);
+        core.info(`Master key v2 for repo ${repo.name} was updated`);
       } else {
-        core.debug(`Master key v2 for repo ${repo.name} is already set and overwrite is false. Did nothing`);
+        core.info(`Master key v2 for repo ${repo.name} is already set and overwrite is false. Did nothing`);
       }
     }
   }

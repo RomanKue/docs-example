@@ -1,15 +1,15 @@
-import { Issue } from '../../../../github/api/issues/response/issue.js';
-import { getIssueState, issueState, setIssueState } from '../../issue-state.js';
+import {Issue} from '../../../../github/api/issues/response/issue.js';
+import {getIssueState, issueState, setIssueState} from '../../issue-state.js';
 import * as core from '@actions/core';
-import { issuesUtils } from '../../../../github/api/issues/index.js';
-import { DecommissionAppIssue } from '../decommission-app-issue.js';
-import { AppSpec, repoName } from '../../../app-spec.js';
-import { getARepository, updateARepository } from '../../../../github/api/repos/repositories.js';
-import { environments, githubSecretKeys, unityTeams } from '../../../config.js';
-import { lockAnIssue, updateAnIssue } from '../../../../github/api/issues/issues.js';
-import { deleteK8sObjects } from '../../../app-repo/k8s.js';
-import { deleteAnEnvironmentSecret } from '../../../../github/api/actions/actions.js';
-import { getIssueType, issueType } from '../../issue-type.js';
+import {issuesUtils} from '../../../../github/api/issues/index.js';
+import {DecommissionAppIssue} from '../decommission-app-issue.js';
+import {AppSpec, repoName} from '../../../app-spec.js';
+import {getARepository, updateARepository} from '../../../../github/api/repos/repositories.js';
+import {appEnvironments, githubSecretKeys, unityTeams} from '../../../config.js';
+import {lockAnIssue, updateAnIssue} from '../../../../github/api/issues/issues.js';
+import {deleteK8sObjects} from '../../../app-repo/k8s.js';
+import {deleteAnEnvironmentSecret} from '../../../../github/api/actions/actions.js';
+import {getIssueType, issueType} from '../../issue-type.js';
 
 export const deliver = async (
   issue: Issue,
@@ -33,7 +33,7 @@ export const deliver = async (
     archived: true
   });
 
-  for (const env of Object.values(environments)) {
+  for (const env of Object.values(appEnvironments)) {
 
     await deleteK8sObjects(env, repositoryName);
 

@@ -1,20 +1,20 @@
-import { Issue } from '../../../../github/api/issues/response/issue.js';
-import { SimpleUser } from '../../../../github/api/teams/response/simple-user.js';
-import { partialMock } from '../../../../mock/partial-mock.js';
-import { deliver } from './deliver.js';
-import { Label } from '../../../../github/api/issues/response/label.js';
-import { issueState } from '../../issue-state.js';
-import { issueType } from '../../issue-type.js';
-import { DecommissionAppIssue } from '../decommission-app-issue.js';
-import { AppSpec, repoName } from '../../../app-spec.js';
-import { FullRepository } from '../../../../github/api/repos/response/full-repository';
+import {Issue} from '../../../../github/api/issues/response/issue.js';
+import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
+import {partialMock} from '../../../../mock/partial-mock.js';
+import {deliver} from './deliver.js';
+import {Label} from '../../../../github/api/issues/response/label.js';
+import {issueState} from '../../issue-state.js';
+import {issueType} from '../../issue-type.js';
+import {DecommissionAppIssue} from '../decommission-app-issue.js';
+import {AppSpec, repoName} from '../../../app-spec.js';
+import {FullRepository} from '../../../../github/api/repos/response/full-repository';
 import * as repositories from '../../../../github/api/repos/repositories.js';
-import { issuesUtils } from '../../../../github/api/issues/index.js';
+import {issuesUtils} from '../../../../github/api/issues/index.js';
 import * as k8s from '../../../app-repo/k8s.js';
 import * as githubActions from '../../../../github/api/actions/actions.js';
 import * as githubIssues from '../../../../github/api/issues/issues.js';
-import { environments } from '../../../config';
-import { KubeConfig } from '@kubernetes/client-node';
+import {appEnvironments} from '../../../config';
+import {KubeConfig} from '@kubernetes/client-node';
 
 describe('deliver', () => {
   it('should do nothing when issue state is not waiting for review', async () => {
@@ -57,7 +57,7 @@ describe('deliver', () => {
     expect(issuesUtils.addSimpleComment).toBeCalledTimes(2);
     expect(repositories.updateARepository).toHaveBeenCalledWith(repoName(repository.name), {archived: true});
 
-    const environmentsCount = Object.values(environments).length;
+    const environmentsCount = Object.values(appEnvironments).length;
     expect(k8s.deleteK8sObjects).toBeCalledTimes(environmentsCount);
     expect(githubActions.deleteAnEnvironmentSecret).toBeCalledTimes(environmentsCount);
 

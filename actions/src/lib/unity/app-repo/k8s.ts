@@ -4,11 +4,12 @@ import {base64Decode} from '../../strings/encoding.js';
 import {ReadonlyDeep} from 'type-fest';
 import {getInput, IssueUpdatedInputs} from '../../github/input.js';
 import {assertUnreachable} from '../../run.js';
-import {environments, k8sSecretConstants} from '../config.js';
+import {allEnvironments, appEnvironments, k8sSecretConstants} from '../config.js';
 import {constants} from 'http2';
 import * as core from '@actions/core';
 
-type Environment = typeof environments[keyof typeof environments];
+type AppEnvironment = typeof appEnvironments[keyof typeof appEnvironments];
+type Environment = typeof allEnvironments[keyof typeof allEnvironments];
 
 const getCurrentNamespace = (kc: KubeConfig) => {
   const namespace = kc.getContextObject(kc.getCurrentContext())?.namespace;
@@ -127,7 +128,7 @@ export const getKubeConfig = (environment: Environment, host: string, namespace:
   return kc;
 };
 
-export const getEnvironmentKubeConfig = (environment: Environment): KubeConfig => {
+export const getEnvironmentKubeConfig = (environment: AppEnvironment): KubeConfig => {
   core.debug(`creating kubeconfig for environment "${environment}"`);
   switch (environment) {
   case 'int': {
@@ -172,7 +173,7 @@ export const readSecret = async (kc: KubeConfig, name: string) => {
   }
 };
 
-export const readServiceAccountToken = async (environment: ReadonlyDeep<Environment>, repoName: string) => {
+export const readServiceAccountToken = async (environment: ReadonlyDeep<AppEnvironment>, repoName: string) => {
   const kc = getEnvironmentKubeConfig(environment);
   const secret = await readSecret(kc, `${repoName}-service-account-token`);
   const base64Token = secret?.body?.data?.['token'] ?? '';
@@ -300,7 +301,7 @@ export const createK8sObjects = async (
 };
 
 export const deleteK8sObjects = async (
-  environment: keyof typeof environments,
+  environment: keyof typeof appEnvironments,
   repoName: string
 ): Promise<void> => {
   const kubeConfig = getEnvironmentKubeConfig(environment);

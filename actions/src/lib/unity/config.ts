@@ -59,9 +59,18 @@ export const repos = {
 export const angularStubName = 'ui';
 export const quarkusStubName = 'api';
 
-export const environments = {
+export const allEnvironments = {
+  test: 'test',
   int: 'int',
   prod: 'prod',
+} as const;
+
+/**
+ * environments to be used by the apps
+ */
+export const appEnvironments = {
+  int: allEnvironments.int,
+  prod: allEnvironments.prod,
 } as const;
 
 export const githubSecretKeys = {

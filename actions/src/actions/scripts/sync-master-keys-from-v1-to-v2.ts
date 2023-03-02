@@ -1,5 +1,5 @@
 import {getInput, SyncMasterKeysInputs} from '../../lib/github/input.js';
-import {environments, k8sSecretConstants} from '../../lib/unity/config.js';
+import {allEnvironments, k8sSecretConstants} from '../../lib/unity/config.js';
 import {searchRepositories} from '../../lib/github/api/search/search.js';
 import * as core from '@actions/core';
 import {createK8sObjects, getKubeConfig, readSecret, readSecretForEnvironment} from '../../lib/unity/app-repo/k8s.js';
@@ -10,10 +10,11 @@ import {createK8sObjects, getKubeConfig, readSecret, readSecretForEnvironment} f
  */
 export const syncMasterKeysFromV1ToV2 = async () => {
   const appRegex = getInput<SyncMasterKeysInputs>('repository-regex');
-  const env = Object.values(environments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
+  const env = Object.values(allEnvironments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
   const repositories = (await searchRepositories({q: 'topic:unity-app org:UNITY fork:true archived:false'}))
     .filter(repo => repo.name.match(appRegex));
   core.info(`${repositories.length} repos were found matching the search and regex criteria`);
+  core.info(`updating secrets for env: ${env}`);
   if (env && repositories?.length > 0) {
     const overwrite = getInput<SyncMasterKeysInputs>('overwrite') == 'true';
     const kc = getKubeConfig(env,

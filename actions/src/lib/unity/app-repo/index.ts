@@ -3,8 +3,8 @@ import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {
   angularStubName,
+  appEnvironments,
   defaultTopics,
-  environments,
   githubSecretKeys,
   makeStubWorkflowId,
   quarkusStubName,
@@ -81,8 +81,8 @@ const updateAppDeployments = async (
       };
       draft.deployments = deployments;
     });
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(environments.int), yaml.dump(appSpec));
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(environments.prod), yaml.dump(appSpec));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump(appSpec));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump(appSpec));
   }
   return appSpec;
 };
@@ -130,8 +130,8 @@ export const createRepository = async (
   }
   commit = await repositoriesUtils.addFile(appRepository.name, '.gitignore', createGitignore());
   commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(newAppIssue));
-  commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.int), yaml.dump(appSpec));
-  commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(environments.prod), yaml.dump(appSpec));
+  commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(appEnvironments.int), yaml.dump(appSpec));
+  commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(appEnvironments.prod), yaml.dump(appSpec));
   commit = await repositoriesUtils.addFile(appRepository.name, '.github/dependabot.yaml', createDependabot(newAppIssue, userLogin));
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/jsonSchemas.xml', createJsonSchemas());
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/vcs.xml', createVcs());
@@ -251,7 +251,7 @@ export const createRepository = async (
     `.github/workflows/${encryptWorkflowFileName}`,
     createEncryptWorkflow(newAppIssue));
 
-  for (const env of Object.values(environments)) {
+  for (const env of Object.values(appEnvironments)) {
     core.debug(`creating environment "${env}"`);
     await createOrUpdateAnEnvironment({
       repo: appRepository.name,

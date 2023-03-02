@@ -1,6 +1,6 @@
 import * as k8s from './k8s.js';
 import {createK8sObjects, deleteK8sObjects, getEnvironmentKubeConfig} from './k8s.js';
-import {environments} from '../config.js';
+import {appEnvironments} from '../config.js';
 import * as input from '../../github/input.js';
 import {partialMock} from '../../mock/partial-mock.js';
 import {ApiType, CoreV1Api, V1Secret} from '@kubernetes/client-node';
@@ -35,7 +35,7 @@ describe('k8s.ts', () => {
       jest.spyOn(k8s, 'readSecret').mockResolvedValue(partialMock<{ response: IncomingMessage, body: V1Secret }>({
         body: v1Secret
       }));
-      const token = await createK8sObjects(environments.int, 'foo', getEnvironmentKubeConfig(environments.int), undefined);
+      const token = await createK8sObjects(appEnvironments.int, 'foo', getEnvironmentKubeConfig(appEnvironments.int), undefined);
       expect(token).toEqual('foo-token');
 
       expect(k8s.upsertServiceAccount).toBeCalledTimes(1);
@@ -70,14 +70,14 @@ describe('k8s.ts', () => {
       jest.spyOn(k8s, 'getEnvironmentKubeConfig').mockReturnValue({
         makeApiClient: makeApiClientMock,
         getCurrentContext: () => '',
-        getContextObject: () => {return {namespace: environments.int};},
+        getContextObject: () => {return {namespace: appEnvironments.int};},
       } as never);
       const repoName = 'foo';
-      await deleteK8sObjects(environments.int, repoName);
+      await deleteK8sObjects(appEnvironments.int, repoName);
 
       expect(coreV1APIMock.deleteCollectionNamespacedSecret).toBeCalledTimes(1);
       expect(coreV1APIMock.deleteCollectionNamespacedSecret).toBeCalledWith(
-        environments.int,
+        appEnvironments.int,
         undefined,
         undefined,
         undefined,

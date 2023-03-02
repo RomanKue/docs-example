@@ -17,12 +17,12 @@ jobs:
           PROD_KUBERNETES_HOST: ${{ secrets.PROD_KUBERNETES_HOST }}
           PROD_KUBERNETES_NAMESPACE: ${{ secrets.PROD_KUBERNETES_NAMESPACE }}
         run: |
-          echo "${{ format('TEST_KUBERNETES_HOST{0} TEST_KUBERNETES_HOST', ':') }}" >> secrets.yaml
-          echo "${{ format('TEST_KUBERNETES_NAMESPACE{0} TEST_KUBERNETES_NAMESPACE', ':') }}" >> secrets.yaml
-          echo "${{ format('INT_KUBERNETES_HOST{0} INT_KUBERNETES_HOST', ':') }}" >> secrets.yaml
-          echo "${{ format('INT_KUBERNETES_NAMESPACE{0} INT_KUBERNETES_NAMESPACE', ':') }}" >> secrets.yaml
-          echo "${{ format('PROD_KUBERNETES_HOST{0} PROD_KUBERNETES_HOST', ':') }}" >> secrets.yaml
-          echo "${{ format('PROD_KUBERNETES_NAMESPACE{0} PROD_KUBERNETES_NAMESPACE', ':') }}" >> secrets.yaml
+          echo "${{ format('TEST_KUBERNETES_HOST{0} TEST_KUBERNETES_HOST', ':') }}" >> config.yaml
+          echo "${{ format('TEST_KUBERNETES_NAMESPACE{0} TEST_KUBERNETES_NAMESPACE', ':') }}" >> config.yaml
+          echo "${{ format('INT_KUBERNETES_HOST{0} INT_KUBERNETES_HOST', ':') }}" >> config.yaml
+          echo "${{ format('INT_KUBERNETES_NAMESPACE{0} INT_KUBERNETES_NAMESPACE', ':') }}" >> config.yaml
+          echo "${{ format('PROD_KUBERNETES_HOST{0} PROD_KUBERNETES_HOST', ':') }}" >> config.yaml
+          echo "${{ format('PROD_KUBERNETES_NAMESPACE{0} PROD_KUBERNETES_NAMESPACE', ':') }}" >> config.yaml
       - name: upload config
         uses: actions/upload-artifact@v3
         with:

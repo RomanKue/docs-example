@@ -22,8 +22,12 @@ export const syncMasterKeysFromV1ToV2 = async () => {
       getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
     for (const repo of repositories) {
       core.debug(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
-      const isMasterKeyExistent = !!await readSecret(kc, `${repo.name}${k8sSecretConstants.masterKeyV2Suffix}`);
-      if (overwrite || !isMasterKeyExistent) {
+      const isV1MasterKeyExistent = !!await readSecret(kc, `${repo.name}${k8sSecretConstants.masterKeyV1Suffix}`);
+      const isV2MasterKeyExistent = !!await readSecret(kc, `${repo.name}${k8sSecretConstants.masterKeyV2Suffix}`);
+      if (!isV1MasterKeyExistent){
+        core.warning(`Master key v1 for repo ${repo.name} was not found, skipping update`);
+      }
+      if (overwrite || !isV2MasterKeyExistent) {
         const masterKeyV1 = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretConstants.masterKeyV1Suffix}`, k8sSecretConstants.masterKey);
         // role binding needs to be updated as well.
         await createK8sObjects(env, repo.name, kc, masterKeyV1);

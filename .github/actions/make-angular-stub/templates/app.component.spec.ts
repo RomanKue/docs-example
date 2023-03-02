@@ -27,10 +27,10 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title '{{ .Env.NAME }}'`, () => {
+  it(`should have as title '{{ .Env.APP_NAME }}'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('{{ .Env.NAME }}');
+    expect(app.title).toEqual('{{ .Env.APP_NAME }}');
   });
 
   it('should render text-paragraph', () => {

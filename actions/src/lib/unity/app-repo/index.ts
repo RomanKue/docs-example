@@ -137,7 +137,7 @@ export const createRepository = async (
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/vcs.xml', createVcs());
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/encodings.xml', createEncodings());
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/modules.xml', createModules(newAppIssue));
-  commit = await repositoriesUtils.addFile(appRepository.name, `.idea/${repoName(newAppIssue.appSpec?.name)}.iml`, createRootModule(newAppIssue));
+  commit = await repositoriesUtils.addFile(appRepository.name, `.idea/${newAppRepoName}.iml`, createRootModule(newAppIssue));
 
   if (newAppIssue.generateAngularStub) {
     const name = angularStubName;
@@ -154,7 +154,15 @@ export const createRepository = async (
           image: imageName(appSpec.name, name),
           tag: 'latest',
           tmpDirs: ['/tmp']
-        }
+        },
+        headers: {
+          response: {
+            add: {
+              // configure a cookie on non-prod to show which environment we are on
+              'Set-Cookie': `${newAppRepoName}-${name}}-environment=int; Secure; SameSite=Strict; Path=/${appSpec.name}/${name}}`
+            },
+          },
+        },
       },
       'ui/',
     );

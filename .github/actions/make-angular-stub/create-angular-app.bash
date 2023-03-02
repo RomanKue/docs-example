@@ -46,6 +46,7 @@ ng new "$NAME" --defaults --style=scss --skip-git
 
   # bootstrap density after instantiating the templates
   npx ng add @bmw-ds/components --defaults
+  < "$SCRIPT_PATH/templates/app.component.ts" gomplate > "src/app/app.component.ts"
 
   # fix broken generated density tests, remove when https://atc.bmwgroup.net/jira/browse/DESY-3043 is fixed
   < "$SCRIPT_PATH/templates/app.component.spec.ts" gomplate > "src/app/app.component.spec.ts"

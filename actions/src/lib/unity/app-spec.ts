@@ -34,7 +34,15 @@ export interface AppDeployment {
         memoryMiB?: number
       }
     }
-  };
+  },
+  headers?: {
+    response?: {
+      add?: {
+        [k: string]: string
+      },
+      remove?: string[],
+    },
+  },
 }
 
 export interface AppSpecV1Beta1 extends ApiVersioned {

@@ -22,7 +22,7 @@ inputs:
     description: regex to match the name of the app repo inside the UNITY org
     required: true
   overwrite:
-    description: flag to indicate if an existing GHE secret should be overwritten
+    description: Override existing K8s secret
     required: true
 runs:
   using: 'node16'

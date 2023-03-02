@@ -8,7 +8,7 @@ on:
         default: app-test
         type: string
       overwrite:
-        description: Flag to indicate if an existing GHE secret should be overwritten
+        description: Override existing K8s secret
         required: true
         default: false
         type: boolean

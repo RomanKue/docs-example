@@ -218,11 +218,14 @@ export const createRepository = async (
     repo: appRepository.name,
     branch: 'main',
     enforce_admins: false,
-    required_pull_request_reviews: null,
+    required_pull_request_reviews: {
+      required_approving_review_count: 0
+    } as never,
     required_status_checks: {
       strict: false,
       checks: checks
     } as never,
+    required_conversation_resolution: true,
     restrictions: {users: [unityBot], teams: []}
   });
 

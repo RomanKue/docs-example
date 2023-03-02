@@ -102,7 +102,7 @@ jobs:
           --reviewer \${{ github.actor }}
           --fill
       - name: enable auto merge
-        run: gh pr merge --auto --merge \${{ inputs.branch }}
+        run: gh pr merge --auto --rebase \${{ inputs.branch }}
       ${newAppIssue.generateAngularStub ? createForAngular() : ''}
       ${newAppIssue.generateQuarkusStub ? createForQuarkus() : ''}
     `.trim();

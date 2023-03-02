@@ -4,15 +4,13 @@ import {getOctokitApi} from '../../octokit.js';
 import {Repository} from './response/repository.js';
 import {FullRepository} from './response/full-repository.js';
 import {MinimalRepository} from './response/minimal-repository.js';
-import { RepositoryInvitation } from './response/repository-invitation.js';
+import {RepositoryInvitation} from './response/repository-invitation.js';
 import {FileCommit} from './response/file-commit.js';
 import {Topic} from './response/topic.js';
 import {Content} from './response/content.js';
 import {Environment} from './response/environment.js';
 import {ProtectedBranch} from './response/protected-branch.js';
-import {
-  RepositoryCollaboratorPermission
-} from './response/repository-collaborator-permission.js';
+import {RepositoryCollaboratorPermission} from './response/repository-collaborator-permission.js';
 
 export type ReposApi = RestApi['repos'];
 
@@ -224,6 +222,7 @@ export const updateBranchProtection = async (
     required_status_checks: RequiredStatusChecks | null,
     enforce_admins: boolean | null,
     required_pull_request_reviews: RequiredPullRequestReviews | null,
+    required_conversation_resolution: null | boolean
     restrictions: UserTeamsApps | null,
   } & Partial<Parameters<ReposApi['updateBranchProtection']>[0]>
 ): Promise<ProtectedBranch> => {

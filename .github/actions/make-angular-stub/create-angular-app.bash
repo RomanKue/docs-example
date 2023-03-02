@@ -25,8 +25,8 @@ ng new "$NAME" --defaults --style=scss --skip-git
   npx ng analytics off
 
   # increase budget size to be able to built with design system
-  npx ng config "projects.$NAME.architect.build.configurations.production.budgets[0].maximumWarning" 2mb
-  npx ng config "projects.$NAME.architect.build.configurations.production.budgets[0].maximumError" 2mb
+  npx ng config "projects.$NAME.architect.build.configurations.production.budgets[0].maximumWarning" 5mb
+  npx ng config "projects.$NAME.architect.build.configurations.production.budgets[0].maximumError" 5mb
 
   # set base href
   npx ng config "projects.$NAME.architect.build.options.baseHref" "/$APP_NAME/$NAME/"

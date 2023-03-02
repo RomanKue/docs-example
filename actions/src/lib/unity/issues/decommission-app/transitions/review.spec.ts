@@ -1,15 +1,15 @@
-import { Issue } from '../../../../github/api/issues/response/issue';
-import { partialMock } from '../../../../mock/partial-mock';
-import { SimpleUser } from '../../../../github/api/teams/response/simple-user';
-import { Label } from '../../../../github/api/issues/response/label';
-import { issueState } from '../../issue-state';
-import { issueType } from '../../issue-type';
-import { reviewDecommissionAppIssue } from './review';
+import {Issue} from '../../../../github/api/issues/response/issue.js';
+import {partialMock} from '../../../../mock/partial-mock.js';
+import {SimpleUser} from '../../../../github/api/teams/response/simple-user.js';
+import {Label} from '../../../../github/api/issues/response/label.js';
+import {issueState} from '../../issue-state.js';
+import {issueType} from '../../issue-type.js';
+import {reviewDecommissionAppIssue} from './review.js';
 import * as validation from '../validation.js';
 import * as decommissionAppIssue from '../decommission-app-issue.js';
-import { AppSpec } from '../../../app-spec';
-import { DecommissionAppIssue } from '../decommission-app-issue.js';
-import * as deliver from './deliver';
+import {DecommissionAppIssue} from '../decommission-app-issue.js';
+import {AppSpec} from '../../../app-spec.js';
+import * as deliver from './deliver.js';
 
 describe('review', () => {
   it('should do nothing when issue state is not waiting for review', async () => {

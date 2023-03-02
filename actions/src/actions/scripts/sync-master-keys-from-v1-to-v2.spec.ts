@@ -63,7 +63,11 @@ describe('sync-master-keys-from-v1-to-v2', () => {
   });
   it('should set if secret does not exist even if overwrite is false', async () => {
     jest.spyOn(input, 'getInput').mockImplementation(createMockInputs('^app-test$', 'false'));
-    jest.spyOn(k8s, 'readSecret').mockResolvedValue(null);
+    const v1Secret = partialMock<V1Secret>({data: {'master-key': base64('foo-token')}});
+    jest.spyOn(k8s, 'readSecret').mockResolvedValueOnce(partialMock<{ response: IncomingMessage, body: V1Secret }>({
+      body: v1Secret
+    }));
+    jest.spyOn(k8s, 'readSecret').mockResolvedValueOnce(null);
     await syncMasterKeysFromV1ToV2();
     expect(k8s.createK8sObjects).toHaveBeenCalledTimes(1);
   });

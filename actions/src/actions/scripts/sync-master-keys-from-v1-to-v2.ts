@@ -26,6 +26,7 @@ export const syncMasterKeysFromV1ToV2 = async () => {
       const isV2MasterKeyExistent = !!await readSecret(kc, `${repo.name}${k8sSecretConstants.masterKeyV2Suffix}`);
       if (!isV1MasterKeyExistent){
         core.warning(`Master key v1 for repo ${repo.name} was not found, skipping update`);
+        continue;
       }
       if (overwrite || !isV2MasterKeyExistent) {
         const masterKeyV1 = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretConstants.masterKeyV1Suffix}`, k8sSecretConstants.masterKey);

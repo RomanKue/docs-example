@@ -34,9 +34,9 @@ jobs:
         uses: ./.github/actions/sync-master-keys-from-v1-to-v2
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
-          KUBERNETES_TOKEN: ${{ secrets.INT_KUBERNETES_TOKEN }}
-          KUBERNETES_HOST: ${{ secrets.INT_KUBERNETES_HOST }}
-          KUBERNETES_NAMESPACE: ${{ secrets.INT_KUBERNETES_NAMESPACE }}
+          KUBERNETES_TOKEN: ${{ secrets.TEST_KUBERNETES_TOKEN }}
+          KUBERNETES_HOST: ${{ secrets.TEST_KUBERNETES_HOST }}
+          KUBERNETES_NAMESPACE: ${{ secrets.TEST_KUBERNETES_NAMESPACE }}
           environment: ${{ inputs.environment }}
           repository-regex: ${{ inputs.repositoryRegex }}
           overwrite: ${{ inputs.overwrite }}

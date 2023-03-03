@@ -57,12 +57,53 @@ deployments:
           value: crypt.v1[atAkljasdjs/0==]
 ```
 
-In order to develop locally, you may need the application service account token. To export the service account token
-stored in GitHub, you can run manually the `store-secrets` workflow.
+To encrypt a value, run the `encrypt` workflow in you repository:
 
-🚨 Note that the token may be rolled (new token is generated) by UNITY from time to time. Extracting the service account
-token is meant for development purposes and must not be used for external service interaction.
+![](../assets/actions-encrypt-workflow.png)
 
-There is currently no convenient way to encrypt information from the developer perspective. Contact the UNITY team if
-you need this feature. In scope of [UNITYAPPS-42](https://atc.bmwgroup.net/jira/browse/UNITYAPPS-42) there will be an
-action to encrypt secrets in a convenient way in the future.
+Specify the yaml path, e.g. `deployments.api.container.secretEnv.PASSWORD.value`, the secret value `psst` and the
+environment.
+
+![](../assets/run-encrypt-workflow.png)
+
+The workflow will take the `CRYPT_MASTER_KEY`, stored in your repository, and encrypt the secret value.
+Then a pull request will be created, which you can review, approve and merge afterwards.
+
+![](../assets/approve-password-pr.png)
+
+🚨 Never share the `CRYPT_MASTER_KEY` with anyone, this key can be used to decrypt all the secrets in your yaml file.
+
+You can rename the environment variable afterwards.
+Note, that encryption is environment specific as `CRYPT_MASTER_KEY`s are different, so you cannot copy the encrypted
+value from `int` to `prod`. Instead, run the encrypt workflow for both environments.
+
+When deploying an app, the `deploy-unity-app` action will validate that all secrets can be decrypted with the
+current `CRYPT_MASTER_KEY`. If decryption fails, the app cannot be deployed.
+
+## Headers and Cookies
+
+You can also set custom headers or cookies to provide environment specific configuration for your app.
+See [HTTP Headers](http-headers.html) for details.
+
+When using cookies, keep in mind that these mey be shared on the entire domain `unity.bmwgroup.net`.
+So it is recommended to use the following naming convention and config:
+
+```yaml
+deployments:
+  ui:
+    headers:
+      response:
+        add:
+          Set-Cookie: app-foo-ui-environment=int; Secure; SameSite=Strict; Path=/foo/ui
+```
+
+The name of the cookie `app-foo-ui-environment` should have the following segments:
+
+`app-<name>-<deployment>-<cookie-name>`
+
+* `<name>` name of your app
+* `<deployment>` name of the deployment (optional)
+* `<cookie-name>` name of the cookie value
+
+Setting `Path=/foo/ui` is also recommended.
+Check [Set-Cookie on MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie) for more details.

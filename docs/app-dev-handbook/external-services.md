@@ -45,12 +45,14 @@ Here is a list of available services
   refer to the [Swagger](https://pmd-api-int.bmwgroup.net/pip-vehicle/query/wen/)
 * `http://localhost:8008/services/api/logic-services`
   [Logic Services (Logikdienste)](https://pmd.bmwgroup.net/lexicon/app/term/LGCS). For detailed information about the
-  interface, please refer to the [Swagger](https://pmd-api-int.bmwgroup.net/logic-services/wen/logic-services-business/swagger/)
+  interface, please refer to
+  the [Swagger](https://pmd-api-int.bmwgroup.net/logic-services/wen/logic-services-business/swagger/)
 * `http://localhost:8008/services/api/pdm-core`. For more information about the interface, please refer to the
   [offical documentation](https://atc.bmwgroup.net/confluence/x/jTZobQ)
 * `http://localhost:8008/services/api/puk`
   [Check and Configuration Service (Prüf- und Konfigurationsdienst, PUK)](https://pmd.bmwgroup.net/lexicon/app/term/PUK).
-  For detailed information about the interface, please refer to the [Swagger](https://pmd-api-int.bmwgroup.net/puknext/puk-webapp/swagger/#/default)
+  For detailed information about the interface, please refer to
+  the [Swagger](https://pmd-api-int.bmwgroup.net/puknext/puk-webapp/swagger/#/default)
 * `http://localhost:8008/services/api/hsa`
   [HSA (100% Sonderausstattung)](https://pmd.bmwgroup.net/lexicon/app/term/HSA). For detailed information about the
   interface, please refer to the [Swagger](https://pmd-api-int.bmwgroup.net/hsa/hsa-check/#/)
@@ -182,6 +184,7 @@ Add the maven dependencies for the rest client to the `pom.xml`, as also describ
 in [USING THE REST CLIENT](https://quarkus.io/guides/rest-client).
 
 ```xml
+
 <dependencies>
   <dependency>
     <groupId>io.quarkus</groupId>
@@ -310,6 +313,9 @@ In IntelliJ, this can be set in the run configuration under **Runner > Environme
 
 The token can be downloaded after running the `store-secrets` action in your repository.
 
+🚨 Note that the token may be rolled (new token is generated) by UNITY from time to time. Extracting the service account
+token is meant for development purposes and must not be used for external service interaction.
+
 ![store-secrets.png](..%2Fassets%2Fstore-secrets.png)
 
 After the action has completed successfully, the `secrets.yaml` file can be downloaded from the **Summary > Artifacts**
@@ -345,6 +351,7 @@ If the response is not properly JSON formatted, make sure the following dependen
 care of mapping the response `record` to JSON.
 
 ```xml
+
 <dependency>
   <groupId>io.quarkus</groupId>
   <artifactId>quarkus-resteasy-reactive-jackson</artifactId>

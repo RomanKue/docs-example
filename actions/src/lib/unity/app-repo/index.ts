@@ -25,7 +25,6 @@ import {
   updateBranchProtection
 } from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
-import {createDeployIntWorkflow, deployIntWorkflowFileName} from './workflows/deploy-int-workflow.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {produce} from 'immer';
 import orgs from '../../github/api/orgs/index.js';
@@ -39,10 +38,6 @@ import {assertUnreachable} from '../../run.js';
 import {addSimpleComment} from '../../github/api/issues/issues-utils.js';
 import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
 import * as core from '@actions/core';
-import {
-  configChangeProdWorkflowFileName,
-  createConfigChangeProdWorkflow
-} from './workflows/config-change-prod-workflow.js';
 import {
   createAngularModule,
   createEncodings,
@@ -64,16 +59,13 @@ import {
 } from './workflows/dependabot-auto-merge-workflow.js';
 import {createEncryptWorkflow, encryptWorkflowFileName} from './workflows/encrypt-workflow.js';
 import {randomCryptoString} from '../../strings/random.js';
-import {createDeployProdWorkflow, deployProdWorkflowFileName,} from './workflows/deploy-prod-workflow.js';
 import {createRolloutToProdWorkflow, rolloutToProdWorkflowFileName} from './workflows/rollout-to-prod-workflow.js';
 import {ciUiWorkflowFileName, createCiUiWorkflow} from './workflows/ci-ui-workflow.js';
 import {ciUiNoChangeWorkflowFileName, createCiUiNoChangeWorkflow} from './workflows/ci-ui-no-change-workflow.js';
 import {ciApiWorkflowFileName, createCiApiWorkflow} from './workflows/ci-api-workflow.js';
 import {ciApiNoChangeWorkflowFileName, createCiApiNoChangeWorkflow} from './workflows/ci-api-no-change-workflow.js';
-import {
-  configChangeIntWorkflowFileName,
-  createConfigChangeIntWorkflow
-} from './workflows/config-change-int-workflow.js';
+import {createDeployWorkflow, getDeployWorkflowFileName} from './workflows/deploy-workflow.js';
+import {createConfigChangeWorkflow, getConfigChangeWorkflowFileName} from './workflows/config-change-workflow.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -260,14 +252,12 @@ export const createRepository = async (
   });
 
 
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${deployIntWorkflowFileName}`,
-    createDeployIntWorkflow(newAppIssue));
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${deployProdWorkflowFileName}`,
-    createDeployProdWorkflow(newAppIssue));
+  for (const env of Object.values(appEnvironments)) {
+    commit = await repositoriesUtils.addFile(
+      appRepository.name,
+      `.github/workflows/${getDeployWorkflowFileName(env)}`,
+      createDeployWorkflow(newAppIssue, env));
+  }
   commit = await repositoriesUtils.addFile(
     appRepository.name,
     `.github/workflows/${rolloutToProdWorkflowFileName}`,
@@ -365,14 +355,12 @@ export const createRepository = async (
   }
 
   // workflows that are triggered on push should be added last
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${configChangeIntWorkflowFileName}`,
-    createConfigChangeIntWorkflow(appSpec));
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${configChangeProdWorkflowFileName}`,
-    createConfigChangeProdWorkflow(appSpec));
+  for (const env of Object.values(appEnvironments)) {
+    commit = await repositoriesUtils.addFile(
+      appRepository.name,
+      `.github/workflows/${getConfigChangeWorkflowFileName(env)}`,
+      createConfigChangeWorkflow(appSpec, env));
+  }
 
   let appMembers = issue.user ? [issue.user] : [];
   appMembers = await removeOrgMembers(appMembers);

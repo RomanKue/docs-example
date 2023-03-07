@@ -1,18 +1,19 @@
-import {configChangeIntWorkflowName} from './config-change-int-workflow.js';
 import {ciApiWorkflowName} from './ci-api-workflow.js';
 import {ciUiWorkflowName} from './ci-ui-workflow.js';
 import {NewAppIssue} from '../../issues/new-app/new-app-issue.js';
+import {getConfigChangeWorkflowName} from './config-change-workflow.js';
 
-export const deployIntWorkflowFileName = 'deploy-int.yaml';
-export const deployAppIntWorkflowName = 'deploy-unity-app-int';
+export const getDeployWorkflowFileName = (environment: string) => `deploy-${environment}.yaml`;
+export const getDeployWorkflowName = (environment: string) => `deploy-unity-app-${environment}`;
 
-export const createDeployIntWorkflow = (newAppIssue: NewAppIssue) => `
-name: ${deployAppIntWorkflowName}
+
+export const createDeployWorkflow = (newAppIssue: NewAppIssue, environment: string) => `
+name: ${getDeployWorkflowName(environment)}
 on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - ${configChangeIntWorkflowName}
+      - ${getConfigChangeWorkflowName(environment)}
       ${newAppIssue.generateQuarkusStub ? `- ${ciApiWorkflowName}` : ''}
       ${newAppIssue.generateAngularStub ? `- ${ciUiWorkflowName}` : ''}
     types:
@@ -20,9 +21,9 @@ on:
     branches:
       - main
 concurrency:
-  group: ${deployAppIntWorkflowName}
+  group: ${getDeployWorkflowName(environment)}
 jobs:
-  ${deployAppIntWorkflowName}:
+  ${getDeployWorkflowName(environment)}:
     if: \${{ github.event.workflow_run.conclusion == 'success' && github.actor != 'dependabot[bot]' }}
     permissions:
       contents: read
@@ -34,11 +35,10 @@ jobs:
       - uses: actions/checkout@v3
         with:
           ref: \${{ inputs.ref }}
-      - uses: unity/deploy-unity-app@main
+      - uses: unity/deploy-unity-app@v1
         with:
           environment: int
           KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
           KUBERNETES_HOST: \${{ secrets.KUBERNETES_HOST }}
           KUBERNETES_NAMESPACE: \${{ secrets.KUBERNETES_NAMESPACE }}
     `.trim();
-

@@ -8,7 +8,7 @@ on:
         default: app-test
         type: string
       overwrite:
-        description: Override existing GHE secret
+        description: Overwrite existing GHE secret
         required: true
         default: false
         type: boolean

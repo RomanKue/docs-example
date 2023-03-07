@@ -24,6 +24,9 @@ inputs:
   overwrite:
     description: Override existing GHE secret
     required: true
+  master-key-secret-suffix:
+    description: name suffix of the master key to sync
+    required: true
 runs:
   using: 'node16'
   main: '../../../actions/dist/actions/sync-master-keys-from-k8s-to-gh.js'

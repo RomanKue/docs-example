@@ -13,6 +13,8 @@ nav_order: 3
 - [App Configuration](#app-configuration)
   - [Environment Variables](#environment-variables)
   - [Secrets](#secrets)
+    - [Encrypt in the Browser](#encrypt-in-the-browser)
+    - [Encrypt via `gh`](#encrypt-via-gh)
   - [Headers and Cookies](#headers-and-cookies)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

@@ -1,14 +1,13 @@
 import {ReadonlyDeep} from 'type-fest';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
-import {angularStubName, quarkusStubName, repoUrl} from '../config.js';
+import {angularStubName, appEnvironments, quarkusStubName, repoUrl} from '../config.js';
 import {repoName} from '../app-spec.js';
-import {deployProdWorkflowFileName} from './workflows/deploy-prod-workflow.js';
-import {deployIntWorkflowFileName} from './workflows/deploy-int-workflow.js';
 import {rolloutToProdWorkflowFileName} from './workflows/rollout-to-prod-workflow.js';
 import {ciApiWorkflowFileName} from './workflows/ci-api-workflow.js';
 import {ciUiWorkflowFileName} from './workflows/ci-ui-workflow.js';
 import {ciApiNoChangeWorkflowFileName} from './workflows/ci-api-no-change-workflow.js';
 import {ciUiNoChangeWorkflowFileName} from './workflows/ci-ui-no-change-workflow.js';
+import {getDeployWorkflowFileName} from "./workflows/deploy-workflow.js";
 
 const createQuarkusReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 ## ${quarkusStubName.toUpperCase()}
@@ -56,8 +55,8 @@ const createBadge = (appName: string | undefined, workflowName: string, workflow
 export const createReadme = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 # ${newAppIssue.appSpec?.name}
 
-${createBadge(newAppIssue.appSpec?.name, deployIntWorkflowFileName)}
-${createBadge(newAppIssue.appSpec?.name, deployProdWorkflowFileName)}
+${createBadge(newAppIssue.appSpec?.name, getDeployWorkflowFileName(appEnvironments.int))}
+${createBadge(newAppIssue.appSpec?.name, getDeployWorkflowFileName(appEnvironments.prod))}
 ${createBadge(newAppIssue.appSpec?.name, rolloutToProdWorkflowFileName)}
 ${createBadge(newAppIssue.appSpec?.name, `dependabot-version-updates`, 'actions/workflows/dependabot/')}
 ${newAppIssue.generateQuarkusStub ? createBadge(newAppIssue.appSpec?.name, ciApiWorkflowFileName) : ''}

@@ -58,7 +58,12 @@ deployments:
           value: crypt.v1[atAkljasdjs/0==]
 ```
 
-To encrypt a value, run the `encrypt` workflow in you repository:
+To encrypt a value, run the `encrypt` workflow in your repository.
+
+There are two ways to do this, via the browser or via [`gh`](https://cli.github.com).
+For experts, the preferred way should be using `gh`, since there is no risk of caching secret data in the browser.
+
+### Encrypt in the Browser
 
 ![](../assets/actions-encrypt-workflow.png)
 
@@ -74,12 +79,29 @@ Then a pull request will be created, which you can review, approve and merge aft
 
 🚨 Never share the `CRYPT_MASTER_KEY` with anyone, this key can be used to decrypt all the secrets in your yaml file.
 
+⚠️ One drawback of the browser based approach is, that the secret value may be cached in the browser. Make sure the
+secret information is removed from the browser after running the workflow. In Chrome this can be done by going back to
+the input, navigating down with ↓ and delete the entry with Shift + Del.
+
+![](../assets/autofill-secret.png)
+
 You can rename the environment variable afterwards.
 Note, that encryption is environment specific as `CRYPT_MASTER_KEY`s are different, so you cannot copy the encrypted
 value from `int` to `prod`. Instead, run the encrypt workflow for both environments.
 
 When deploying an app, the `deploy-unity-app` action will validate that all secrets can be decrypted with the
 current `CRYPT_MASTER_KEY`. If decryption fails, the app cannot be deployed.
+
+### Encrypt via `gh`
+
+Make sure `gh` is installed from [`cli.github.com`](https://cli.github.com)
+and follow [GitHub CLI quickstart](https://docs.github.com/en/enterprise-server/github-cli/github-cli/quickstart).
+
+Next, from your repository run:
+
+```bash
+gh workflow run encrypt -f "environment=int" -f "yaml-path=deployments.api.container.secretEnv.PASSWORD.value" -f "secret=pst"
+```
 
 ## Headers and Cookies
 

@@ -357,7 +357,7 @@ export const createRepository = async (
     commit = await repositoriesUtils.addFile(
       appRepository.name,
       `.github/workflows/${ciApiWorkflowFileName}`,
-      createCiApiWorkflow(appSpec));
+      createCiApiWorkflow());
     commit = await repositoriesUtils.addFile(
       appRepository.name,
       `.github/workflows/${ciApiNoChangeWorkflowFileName}`,

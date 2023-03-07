@@ -1,7 +1,7 @@
 import {ReadonlyDeep} from 'type-fest';
 import {AppSpec} from '../../app-spec.js';
 import {rolloutToProdWorkflowFileName} from './rollout-to-prod-workflow.js';
-import {angularStubName, nodeVersion, unityOrg} from '../../config.js';
+import {angularStubName, nodeVersion} from '../../config.js';
 
 export const ciUiWorkflowFileName = `ci-${angularStubName}.yaml`;
 export const ciUiWorkflowName = `ci-${angularStubName}`;
@@ -110,7 +110,7 @@ jobs:
     needs:
       - ${ciUiWorkflowName}
     if: \${{ github.ref == 'refs/heads/main' }}
-    uses: ${unityOrg}/${appSpec.name}/.github/workflows/rollout-to-prod.yaml@main
+    uses: ./.github/workflows/rollout-to-prod.yaml
     with:
       tag: \${{ needs.${ciUiWorkflowName}.outputs.image-tag }}
       unity-app-file: unity-app.prod.yaml

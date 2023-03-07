@@ -1,12 +1,10 @@
-import {ReadonlyDeep} from 'type-fest';
-import {AppSpec} from '../../app-spec.js';
 import {rolloutToProdWorkflowFileName} from './rollout-to-prod-workflow.js';
-import {javaDistribution, javaVersion, quarkusStubName, unityOrg} from '../../config.js';
+import {javaDistribution, javaVersion, quarkusStubName} from '../../config.js';
 
 export const ciApiWorkflowFileName = `ci-${quarkusStubName}.yaml`;
 export const ciApiWorkflowName = `ci-${quarkusStubName}`;
 
-export const createCiApiWorkflow = (appSpec: ReadonlyDeep<AppSpec>) => `
+export const createCiApiWorkflow = () => `
 name: ${ciApiWorkflowName}
 on:
   workflow_dispatch:
@@ -82,7 +80,7 @@ jobs:
     needs:
       - ${ciApiWorkflowName}
     if: \${{ github.ref == 'refs/heads/main' }}
-    uses: ${unityOrg}/${appSpec.name}/.github/workflows/rollout-to-prod.yaml@main
+    uses: ./.github/workflows/rollout-to-prod.yaml
     with:
       tag: \${{ needs.${ciApiWorkflowName}.outputs.image-tag }}
       unity-app-file: unity-app.prod.yaml

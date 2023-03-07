@@ -7,7 +7,7 @@ import {ciApiWorkflowFileName} from './workflows/ci-api-workflow.js';
 import {ciUiWorkflowFileName} from './workflows/ci-ui-workflow.js';
 import {ciApiNoChangeWorkflowFileName} from './workflows/ci-api-no-change-workflow.js';
 import {ciUiNoChangeWorkflowFileName} from './workflows/ci-ui-no-change-workflow.js';
-import {getDeployWorkflowFileName} from "./workflows/deploy-workflow.js";
+import {getDeployWorkflowFileName} from './workflows/deploy-workflow.js';
 
 const createQuarkusReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 ## ${quarkusStubName.toUpperCase()}

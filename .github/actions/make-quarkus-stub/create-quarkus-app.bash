@@ -60,7 +60,3 @@ mvn "io.quarkus.platform:quarkus-maven-plugin:$QUARKUS_VERSION:create" \
   ls -lah
 )
 
-mkdir -p .github/workflows
-
-< "$SCRIPT_PATH/templates/workflows/ci.yaml" gomplate > ".github/workflows/ci-$NAME.yaml"
-

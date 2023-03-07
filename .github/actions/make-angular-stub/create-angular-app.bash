@@ -56,7 +56,3 @@ ng new "$NAME" --defaults --style=scss --skip-git
   ls -lah
 )
 
-mkdir -p .github/workflows
-
-< "$SCRIPT_PATH/templates/workflows/ci.yaml" gomplate > ".github/workflows/ci-$NAME.yaml"
-

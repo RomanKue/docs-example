@@ -18,6 +18,15 @@ on:
       dry-run:
         required: false
         description: dry-run flag (if true, don't push results to the repo)
+      javaVersion:
+        required: true
+        description: the Java version used for generating the Quarkus stub
+      javaDistribution:
+        required: true
+        description: the Java distribution used for generating the Quarkus stub
+      nodeVersion:
+        required: true
+        description: the node version used for the application generation
 
 concurrency:
   group: make-stub-${{ github.event.inputs.repository }}
@@ -50,7 +59,7 @@ jobs:
           ORG: ${{ github.repository_owner }}
           NAME: ${{ github.event.inputs.name }}
           WORKING_DIRECTORY: ${{ github.event.inputs.repository }}
-          NODE_VERSION: '16'
+          NODE_VERSION: ${{ github.event.inputs.nodeVersion }}
           # see https://github.com/angular/angular-cli/releases
           ANGULAR_VERSION: '15'
         uses: ./unity/.github/actions/make-angular-stub
@@ -60,9 +69,9 @@ jobs:
           ORG: ${{ github.repository_owner }}
           NAME: ${{ github.event.inputs.name }}
           WORKING_DIRECTORY: ${{ github.event.inputs.repository }}
-          NODE_VERSION: '16'
-          JAVA_VERSION: '17'
-          JAVA_DISTRIBUTION: 'zulu'
+          NODE_VERSION: ${{ github.event.inputs.nodeVersion }}
+          JAVA_VERSION: ${{ github.event.inputs.javaVersion }}
+          JAVA_DISTRIBUTION: ${{ github.event.inputs.javaDistribution }}
         uses: ./unity/.github/actions/make-quarkus-stub
       - name: commit
         shell: bash

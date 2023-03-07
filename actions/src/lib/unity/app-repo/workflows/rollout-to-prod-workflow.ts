@@ -7,25 +7,25 @@ on:
   workflow_call:
     inputs:
       tag:
-        description: the tag of the new deployment
+        description: the tag of the image to deploy
         required: true
         type: string
       unity-app-file:
-        description: unity-app*.yaml file name
+        description: unity-app.*.yaml file name
         required: true
         type: string
       yaml-path:
-        description: the path to the tag in the unity-app*.yaml file (which needs to be patched)
+        description: the path to the tag in the unity-app.*.yaml file (which needs to be patched)
         required: true
         type: string
       branch:
-        description: branch to use for the prod rollout
+        description: branch which will be updated. A pull request will be created to main with the proposed changes, automatically.
         required: true
         type: string
       auto-merge:
-        description: enable auto merge for branch
+        description: enable auto merge for the pull request (makes sense if changes in the repository require approvals)
         required: true
-        type: string
+        type: boolean
 jobs:
   ${rolloutToProdWorkflowName}:
     runs-on: atc-ubuntu-latest

@@ -27,11 +27,12 @@ export type SyncMasterKeysInputs =
   'KUBERNETES_NAMESPACE' |
   'repository-regex' |
   'environment' |
-  'overwrite';
+  'overwrite' |
+  'master-key-secret-suffix';
 
 export type Inputs = GeneralInputs | IssueUpdatedInputs | RecreateAppServiceAccountInputs | SyncMasterKeysInputs;
 
-export const getInput = <T extends Inputs> (
+export const getInput = <T extends Inputs>(
   input: T
 ): string => {
   const inputValue = core.getInput(input);

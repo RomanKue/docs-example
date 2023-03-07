@@ -18,19 +18,20 @@ export const syncMasterKeysFromK8sToGh = async () => {
   core.info(`${repositories.length} repos were found matching the search and regex criteria`);
   if (env && repositories?.length > 0) {
     const overwrite = getInput<SyncMasterKeysInputs>('overwrite') == 'true';
+    const masterKeySecretSuffix = getInput<SyncMasterKeysInputs>('master-key-secret-suffix');
     const kc = getKubeConfig(env,
       getInput<SyncMasterKeysInputs>('KUBERNETES_HOST'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_NAMESPACE'),
       getInput<SyncMasterKeysInputs>('KUBERNETES_TOKEN'));
     for (const repo of repositories) {
-      core.info(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite}`);
+      core.info(`Syncing crypt master key for repo ${repo.name} with overwrite: ${overwrite} and master-key-secret-suffix: ${masterKeySecretSuffix}`);
       const isMasterKeyExistent = await isSecretExistent({
         repository_id: repo.id,
         environment_name: env,
         secret_name: githubSecretKeys.cryptMasterKey
       });
       if (overwrite || !isMasterKeyExistent) {
-        const k8sAppMasterKey = await readSecretForEnvironment(kc, `${repo.name}${k8sSecretConstants.masterKeyV1Suffix}`, k8sSecretConstants.masterKey);
+        const k8sAppMasterKey = await readSecretForEnvironment(kc, `${repo.name}${masterKeySecretSuffix}`, k8sSecretConstants.masterKey);
         await repositoriesUtils.createEnvironmentSecret({id: repo.id}, env, githubSecretKeys.cryptMasterKey, k8sAppMasterKey);
         core.info(`Master key for repo ${repo.name} was updated`);
       } else {

@@ -105,6 +105,8 @@ const createMockInputs = (repoRegex: string, overwrite: string, env?: string) =>
       return 'k8s-token';
     case 'overwrite':
       return overwrite;
+    case 'master-key-secret-suffix':
+      return k8sSecretConstants.masterKeyV1Suffix;
     }
     return '';
   };

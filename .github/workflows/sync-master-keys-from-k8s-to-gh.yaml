@@ -12,6 +12,14 @@ on:
         required: true
         default: false
         type: boolean
+      master-key-secret-suffix:
+        description: name suffix of the master key to sync
+        required: true
+        default: -master-key.v2
+        type: choice
+        options:
+          - -master-key.v1
+          - -master-key.v2
       environment:
         description: Environment to update the secrets for
         required: true
@@ -39,6 +47,7 @@ jobs:
           environment: ${{ inputs.environment }}
           repository-regex: ${{ inputs.repositoryRegex }}
           overwrite: ${{ inputs.overwrite }}
+          master-key-secret-suffix: ${{ inputs.master-key-secret-suffix }}
       - name: sync-master-keys-from-k8s-to-gh-prod
         if: ${{ inputs.environment == 'prod' }}
         uses: ./.github/actions/sync-master-keys-from-k8s-to-gh
@@ -50,3 +59,4 @@ jobs:
           environment: ${{ inputs.environment }}
           repository-regex: ${{ inputs.repositoryRegex }}
           overwrite: ${{ inputs.overwrite }}
+          master-key-secret-suffix: ${{ inputs.master-key-secret-suffix }}

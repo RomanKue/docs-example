@@ -4,11 +4,11 @@ import {angularStubName, quarkusStubName, repoUrl} from '../config.js';
 import {repoName} from '../app-spec.js';
 import {deployProdWorkflowFileName} from './workflows/deploy-prod-workflow.js';
 import {deployIntWorkflowFileName} from './workflows/deploy-int-workflow.js';
-import {rolloutToProdWorkflowFileName} from "./workflows/rollout-to-prod-workflow.js";
-import {ciApiWorkflowFileName} from "./workflows/ci-api-workflow.js";
-import {ciUiWorkflowFileName} from "./workflows/ci-ui-workflow.js";
-import {ciApiNoChangeWorkflowFileName} from "./workflows/ci-api-no-change-workflow.js";
-import {ciUiNoChangeWorkflowFileName} from "./workflows/ci-ui-no-change-workflow.js";
+import {rolloutToProdWorkflowFileName} from './workflows/rollout-to-prod-workflow.js';
+import {ciApiWorkflowFileName} from './workflows/ci-api-workflow.js';
+import {ciUiWorkflowFileName} from './workflows/ci-ui-workflow.js';
+import {ciApiNoChangeWorkflowFileName} from './workflows/ci-api-no-change-workflow.js';
+import {ciUiNoChangeWorkflowFileName} from './workflows/ci-ui-no-change-workflow.js';
 
 const createQuarkusReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
 ## ${quarkusStubName.toUpperCase()}

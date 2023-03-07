@@ -96,13 +96,16 @@ current `CRYPT_MASTER_KEY`. If decryption fails, the app cannot be deployed.
 
 ### Encrypt via `gh`
 
-Make sure `gh` is installed from [`cli.github.com`](https://cli.github.com)
+Make sure `gh` is installed from [cli.github.com](https://cli.github.com)
 and follow [GitHub CLI quickstart](https://docs.github.com/en/enterprise-server/github-cli/github-cli/quickstart).
 
 Next, from your repository run:
 
 ```bash
-gh workflow run encrypt -f "environment=int" -f "yaml-path=deployments.api.container.secretEnv.PASSWORD.value" -f "secret=pst"
+gh workflow run encrypt \
+  -f "environment=int" \
+  -f "yaml-path=deployments.api.container.secretEnv.PASSWORD.value" \
+  -f "secret=pst"
 ```
 
 ## Headers and Cookies

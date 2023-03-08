@@ -93,12 +93,14 @@ describe('review', () => {
             },
             'name': {
               '$ref': '#/definitions/nameV1'
-            }
+            },
+            'environment': String
           },
           'additionalProperties': false,
           'required': [
             'apiVersion',
-            'name'
+            'name',
+            'environment'
           ]
         },
         'v1': {
@@ -109,12 +111,14 @@ describe('review', () => {
             },
             'name': {
               '$ref': '#/definitions/nameV1'
-            }
+            },
+            'environment': String
           },
           'additionalProperties': false,
           'required': [
             'apiVersion',
-            'name'
+            'name',
+            'environment'
           ]
         },
         'DeploymentV1': {

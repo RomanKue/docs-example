@@ -82,6 +82,10 @@ describe('review', () => {
           'maxLength': 32,
           'minLength': 3
         },
+        'environmentV1': {
+          'type': 'string',
+          'description': 'environment:test, int, prod',
+        },
         'v1beta1': {
           'properties': {
             'apiVersion': {
@@ -94,8 +98,7 @@ describe('review', () => {
             'name': {
               '$ref': '#/definitions/nameV1'
             },
-            'environment': 'string',
-            'apiId': 'string'
+            'environment': '#/definitions/environmentV1'
           },
           'additionalProperties': false,
           'required': [
@@ -113,8 +116,7 @@ describe('review', () => {
             'name': {
               '$ref': '#/definitions/nameV1'
             },
-            'environment': 'string',
-            'apiId': 'string'
+            'environment': '#/definitions/environmentV1'
           },
           'additionalProperties': false,
           'required': [

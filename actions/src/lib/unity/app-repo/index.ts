@@ -267,7 +267,7 @@ export const createRepository = async (
   commit = await repositoriesUtils.addFile(
     appRepository.name,
     `.github/workflows/${rolloutToProdWorkflowFileName}`,
-    createRolloutToProdWorkflow());
+    createRolloutToProdWorkflow(newAppIssue));
   commit = await repositoriesUtils.addFile(
     appRepository.name,
     `.github/workflows/${storeSecretsWorkflowFileName}`,

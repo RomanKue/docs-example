@@ -94,7 +94,8 @@ describe('review', () => {
             'name': {
               '$ref': '#/definitions/nameV1'
             },
-            'environment': String
+            'environment': 'string',
+            'apiId': 'string'
           },
           'additionalProperties': false,
           'required': [
@@ -112,7 +113,8 @@ describe('review', () => {
             'name': {
               '$ref': '#/definitions/nameV1'
             },
-            'environment': String
+            'environment': 'string',
+            'apiId': 'string'
           },
           'additionalProperties': false,
           'required': [

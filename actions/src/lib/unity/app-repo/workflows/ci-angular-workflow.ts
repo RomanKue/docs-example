@@ -3,23 +3,23 @@ import {AppSpec} from '../../app-spec.js';
 import {rolloutToProdWorkflowFileName} from './rollout-to-prod-workflow.js';
 import {angularStubName, nodeVersion} from '../../config.js';
 
-export const ciUiWorkflowFileName = `ci-${angularStubName}.yaml`;
-export const ciUiWorkflowName = `ci-${angularStubName}`;
+export const ciAngularWorkflowFileName = `ci-${angularStubName}.yaml`;
+export const ciAngularWorkflowName = `ci-${angularStubName}`;
 
-export const createCiUiWorkflow = (appSpec: ReadonlyDeep<AppSpec>) => `
-name: ${ciUiWorkflowName}
+export const createCiAngularWorkflow = (appSpec: ReadonlyDeep<AppSpec>) => `
+name: ${ciAngularWorkflowName}
 on:
   workflow_dispatch:
   push:
     paths:
-      - .github/workflows/${ciUiWorkflowFileName}
+      - .github/workflows/${ciAngularWorkflowFileName}
       - .github/workflows/${rolloutToProdWorkflowFileName}
       - ${angularStubName}/**
     branches:
       - main
   pull_request:
     paths:
-      - .github/workflows/${ciUiWorkflowFileName}
+      - .github/workflows/${ciAngularWorkflowFileName}
       - .github/workflows/${rolloutToProdWorkflowFileName}
       - ${angularStubName}/**
 
@@ -27,7 +27,7 @@ env:
   DEPLOYMENT: ${angularStubName}
   REGISTRY: containers.atc-github.azure.cloud.bmw
 jobs:
-  ${ciUiWorkflowName}:
+  ${ciAngularWorkflowName}:
     outputs:
       image-tag: \${{ steps.image-tag.outputs.image-tag }}
     runs-on: atc-ubuntu-latest
@@ -108,11 +108,11 @@ jobs:
         run: echo "::set-output name=image-tag::\${{ env.TAG }}"
   rollout-to-prod:
     needs:
-      - ${ciUiWorkflowName}
+      - ${ciAngularWorkflowName}
     if: \${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/rollout-to-prod.yaml
     with:
-      tag: \${{ needs.${ciUiWorkflowName}.outputs.image-tag }}
+      tag: \${{ needs.${ciAngularWorkflowName}.outputs.image-tag }}
       unity-app-file: unity-app.prod.yaml
       yaml-path: .deployments.${angularStubName}.container.tag
       branch: rollout-to-prod

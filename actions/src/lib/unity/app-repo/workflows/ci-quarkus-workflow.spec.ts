@@ -1,11 +1,11 @@
 import * as yaml from 'js-yaml';
-import {createCiApiWorkflow} from './ci-api-workflow';
+import {createCiQuarkusWorkflow} from './ci-quarkus-workflow';
 
 
 describe('ci-api-workflow', () => {
-  describe('ciApiWorkflow', () => {
+  describe('ciQuarkusWorkflow', () => {
     it('should be parsable yaml when workflow is created', () => {
-      const s = createCiApiWorkflow();
+      const s = createCiQuarkusWorkflow();
       expect(yaml.load(s)).toBeTruthy();
     });
   });

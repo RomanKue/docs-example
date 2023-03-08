@@ -1,5 +1,5 @@
-import {ciApiWorkflowName} from './ci-api-workflow.js';
-import {ciUiWorkflowName} from './ci-ui-workflow.js';
+import {ciQuarkusWorkflowName} from './ci-quarkus-workflow.js';
+import {ciAngularWorkflowName} from './ci-angular-workflow.js';
 import {NewAppIssue} from '../../issues/new-app/new-app-issue.js';
 import {getConfigChangeWorkflowName} from './config-change-workflow.js';
 
@@ -14,8 +14,8 @@ on:
   workflow_run:
     workflows:
       - ${getConfigChangeWorkflowName(environment)}
-      ${newAppIssue.generateQuarkusStub ? `- ${ciApiWorkflowName}` : ''}
-      ${newAppIssue.generateAngularStub ? `- ${ciUiWorkflowName}` : ''}
+      ${newAppIssue.generateQuarkusStub ? `- ${ciQuarkusWorkflowName}` : ''}
+      ${newAppIssue.generateAngularStub ? `- ${ciAngularWorkflowName}` : ''}
     types:
       - completed
     branches:
@@ -24,7 +24,7 @@ concurrency:
   group: ${getDeployWorkflowName(environment)}
 jobs:
   ${getDeployWorkflowName(environment)}:
-    if: \${{ github.event.workflow_run.conclusion == 'success' && github.actor != 'dependabot[bot]' }}
+    if: \${{ (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success') && github.actor != 'dependabot[bot]' }}
     permissions:
       contents: read
       id-token: write

@@ -1,23 +1,23 @@
 import {rolloutToProdWorkflowFileName} from './rollout-to-prod-workflow.js';
 import {javaDistribution, javaVersion, quarkusStubName} from '../../config.js';
 
-export const ciApiWorkflowFileName = `ci-${quarkusStubName}.yaml`;
-export const ciApiWorkflowName = `ci-${quarkusStubName}`;
+export const ciQuarkusWorkflowFileName = `ci-${quarkusStubName}.yaml`;
+export const ciQuarkusWorkflowName = `ci-${quarkusStubName}`;
 
-export const createCiApiWorkflow = () => `
-name: ${ciApiWorkflowName}
+export const createCiQuarkusWorkflow = () => `
+name: ${ciQuarkusWorkflowName}
 on:
   workflow_dispatch:
   push:
     paths:
-      - .github/workflows/${ciApiWorkflowFileName}
+      - .github/workflows/${ciQuarkusWorkflowFileName}
       - .github/workflows/${rolloutToProdWorkflowFileName}
       - ${quarkusStubName}/**
     branches:
       - main
   pull_request:
     paths:
-      - .github/workflows/${ciApiWorkflowFileName}
+      - .github/workflows/${ciQuarkusWorkflowFileName}
       - .github/workflows/${rolloutToProdWorkflowFileName}
       - ${quarkusStubName}/**
 
@@ -25,7 +25,7 @@ env:
   DEPLOYMENT: ${quarkusStubName}
   REGISTRY: containers.atc-github.azure.cloud.bmw
 jobs:
-  ${ciApiWorkflowName}:
+  ${ciQuarkusWorkflowName}:
     outputs:
       image-tag: \${{ steps.image-tag.outputs.image-tag }}
     runs-on: atc-ubuntu-latest
@@ -78,11 +78,11 @@ jobs:
         run: echo "::set-output name=image-tag::\${{ env.TAG }}"
   rollout-to-prod:
     needs:
-      - ${ciApiWorkflowName}
+      - ${ciQuarkusWorkflowName}
     if: \${{ github.ref == 'refs/heads/main' }}
     uses: ./.github/workflows/rollout-to-prod.yaml
     with:
-      tag: \${{ needs.${ciApiWorkflowName}.outputs.image-tag }}
+      tag: \${{ needs.${ciQuarkusWorkflowName}.outputs.image-tag }}
       unity-app-file: unity-app.prod.yaml
       yaml-path: .deployments.${quarkusStubName}.container.tag
       branch: rollout-to-prod

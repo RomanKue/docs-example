@@ -60,10 +60,16 @@ import {
 import {createEncryptWorkflow, encryptWorkflowFileName} from './workflows/encrypt-workflow.js';
 import {randomCryptoString} from '../../strings/random.js';
 import {createRolloutToProdWorkflow, rolloutToProdWorkflowFileName} from './workflows/rollout-to-prod-workflow.js';
-import {ciUiWorkflowFileName, createCiUiWorkflow} from './workflows/ci-ui-workflow.js';
-import {ciUiNoChangeWorkflowFileName, createCiUiNoChangeWorkflow} from './workflows/ci-ui-no-change-workflow.js';
-import {ciApiWorkflowFileName, createCiApiWorkflow} from './workflows/ci-api-workflow.js';
-import {ciApiNoChangeWorkflowFileName, createCiApiNoChangeWorkflow} from './workflows/ci-api-no-change-workflow.js';
+import {ciAngularWorkflowFileName, createCiAngularWorkflow} from './workflows/ci-angular-workflow.js';
+import {
+  ciAngularNoChangeWorkflowFileName,
+  createCiAngularNoChangeWorkflow
+} from './workflows/ci-angular-no-change-workflow.js';
+import {ciQuarkusWorkflowFileName, createCiQuarkusWorkflow} from './workflows/ci-quarkus-workflow.js';
+import {
+  ciQuarkusNoChangeWorkflowFileName,
+  createCiQuarkusNoChangeWorkflow
+} from './workflows/ci-quarkus-no-change-workflow.js';
 import {createDeployWorkflow, getDeployWorkflowFileName} from './workflows/deploy-workflow.js';
 import {createConfigChangeWorkflow, getConfigChangeWorkflowFileName} from './workflows/config-change-workflow.js';
 
@@ -321,12 +327,12 @@ export const createRepository = async (
     commit = await repositoriesUtils.addFile(appRepository.name, `${angularStubName}/${angularStubName}.iml`, createAngularModule(newAppIssue));
     commit = await repositoriesUtils.addFile(
       appRepository.name,
-      `.github/workflows/${ciUiWorkflowFileName}`,
-      createCiUiWorkflow(appSpec));
+      `.github/workflows/${ciAngularWorkflowFileName}`,
+      createCiAngularWorkflow(appSpec));
     commit = await repositoriesUtils.addFile(
       appRepository.name,
-      `.github/workflows/${ciUiNoChangeWorkflowFileName}`,
-      createCiUiNoChangeWorkflow());
+      `.github/workflows/${ciAngularNoChangeWorkflowFileName}`,
+      createCiAngularNoChangeWorkflow());
   }
   if (newAppIssue.generateQuarkusStub) {
     core.debug(`waiting for quarkus stub to be generated`);
@@ -346,12 +352,12 @@ export const createRepository = async (
     commit = await repositoriesUtils.addFile(appRepository.name, `${quarkusStubName}/${quarkusStubName}.iml`, createQuarkusModule(newAppIssue, javaVersion));
     commit = await repositoriesUtils.addFile(
       appRepository.name,
-      `.github/workflows/${ciApiWorkflowFileName}`,
-      createCiApiWorkflow());
+      `.github/workflows/${ciQuarkusWorkflowFileName}`,
+      createCiQuarkusWorkflow());
     commit = await repositoriesUtils.addFile(
       appRepository.name,
-      `.github/workflows/${ciApiNoChangeWorkflowFileName}`,
-      createCiApiNoChangeWorkflow());
+      `.github/workflows/${ciQuarkusNoChangeWorkflowFileName}`,
+      createCiQuarkusNoChangeWorkflow());
   }
 
   // workflows that are triggered on push should be added last

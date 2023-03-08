@@ -1,11 +1,11 @@
 import * as yaml from 'js-yaml';
-import {createCiUiNoChangeWorkflow} from './ci-ui-no-change-workflow';
+import {createCiAngularNoChangeWorkflow} from './ci-angular-no-change-workflow';
 
 
 describe('ci-ui-no-change-workflow', () => {
-  describe('ciUiNoChangeWorkflow', () => {
+  describe('ciAngularNoChangeWorkflow', () => {
     it('should be parsable yaml when workflow is created', () => {
-      const s = createCiUiNoChangeWorkflow();
+      const s = createCiAngularNoChangeWorkflow();
       expect(yaml.load(s)).toBeTruthy();
     });
   });

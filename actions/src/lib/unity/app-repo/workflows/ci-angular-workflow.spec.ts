@@ -1,13 +1,13 @@
 import * as yaml from 'js-yaml';
 import {AppSpecV1Beta1} from '../../app-spec.js';
-import {createCiUiWorkflow} from './ci-ui-workflow';
+import {createCiAngularWorkflow} from './ci-angular-workflow';
 
 
 describe('ci-ui-workflow', () => {
   const appSpec: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo'};
-  describe('ciUiWorkflow', () => {
+  describe('ciAngularWorkflow', () => {
     it('should be parsable yaml when workflow is created', () => {
-      const s = createCiUiWorkflow(appSpec);
+      const s = createCiAngularWorkflow(appSpec);
       expect(yaml.load(s)).toBeTruthy();
     });
   });

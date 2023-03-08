@@ -3,10 +3,10 @@ import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {angularStubName, appEnvironments, quarkusStubName, repoUrl} from '../config.js';
 import {repoName} from '../app-spec.js';
 import {rolloutToProdWorkflowFileName} from './workflows/rollout-to-prod-workflow.js';
-import {ciApiWorkflowFileName} from './workflows/ci-api-workflow.js';
-import {ciUiWorkflowFileName} from './workflows/ci-ui-workflow.js';
-import {ciApiNoChangeWorkflowFileName} from './workflows/ci-api-no-change-workflow.js';
-import {ciUiNoChangeWorkflowFileName} from './workflows/ci-ui-no-change-workflow.js';
+import {ciQuarkusWorkflowFileName} from './workflows/ci-quarkus-workflow.js';
+import {ciAngularWorkflowFileName} from './workflows/ci-angular-workflow.js';
+import {ciQuarkusNoChangeWorkflowFileName} from './workflows/ci-quarkus-no-change-workflow.js';
+import {ciAngularNoChangeWorkflowFileName} from './workflows/ci-angular-no-change-workflow.js';
 import {getDeployWorkflowFileName} from './workflows/deploy-workflow.js';
 
 const createQuarkusReadmeSection = (newAppIssue: ReadonlyDeep<NewAppIssue>) => `
@@ -59,10 +59,10 @@ ${createBadge(newAppIssue.appSpec?.name, getDeployWorkflowFileName(appEnvironmen
 ${createBadge(newAppIssue.appSpec?.name, getDeployWorkflowFileName(appEnvironments.prod))}
 ${createBadge(newAppIssue.appSpec?.name, rolloutToProdWorkflowFileName)}
 ${createBadge(newAppIssue.appSpec?.name, `dependabot-version-updates`, 'actions/workflows/dependabot/')}
-${newAppIssue.generateQuarkusStub ? createBadge(newAppIssue.appSpec?.name, ciApiWorkflowFileName) : ''}
-${newAppIssue.generateQuarkusStub ? createBadge(newAppIssue.appSpec?.name, ciApiNoChangeWorkflowFileName) : ''}
-${newAppIssue.generateAngularStub ? createBadge(newAppIssue.appSpec?.name, ciUiWorkflowFileName) : ''}
-${newAppIssue.generateAngularStub ? createBadge(newAppIssue.appSpec?.name, ciUiNoChangeWorkflowFileName) : ''}
+${newAppIssue.generateQuarkusStub ? createBadge(newAppIssue.appSpec?.name, ciQuarkusWorkflowFileName) : ''}
+${newAppIssue.generateQuarkusStub ? createBadge(newAppIssue.appSpec?.name, ciQuarkusNoChangeWorkflowFileName) : ''}
+${newAppIssue.generateAngularStub ? createBadge(newAppIssue.appSpec?.name, ciAngularWorkflowFileName) : ''}
+${newAppIssue.generateAngularStub ? createBadge(newAppIssue.appSpec?.name, ciAngularNoChangeWorkflowFileName) : ''}
 
 ## Configuration
 

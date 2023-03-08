@@ -33,8 +33,6 @@ jobs:
     environment: int
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: \${{ inputs.ref }}
       - uses: unity/deploy-unity-app@v1
         with:
           environment: int

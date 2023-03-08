@@ -40,11 +40,6 @@ jobs:
       - uses: unity/setup-git@v1
         env:
           GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
-      - name: switch to main
-        shell: bash
-        run: |
-          git fetch --all
-          git switch "main" || git switch -c "main"
       - name: create branch
         shell: bash
         run: |

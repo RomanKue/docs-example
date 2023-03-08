@@ -1,7 +1,11 @@
+import {NewAppIssue} from '../../issues/new-app/new-app-issue.js';
+import {ciAngularWorkflowName} from './ci-angular-workflow.js';
+import {ciQuarkusWorkflowName} from './ci-quarkus-workflow.js';
+
 export const rolloutToProdWorkflowFileName = 'rollout-to-prod-prod.yaml';
 export const rolloutToProdWorkflowName = 'rollout-to-prod';
 
-export const createRolloutToProdWorkflow = () => `
+export const createRolloutToProdWorkflow = (newAppIssue: NewAppIssue) => `
 name: ${rolloutToProdWorkflowName}
 on:
   workflow_call:
@@ -33,7 +37,6 @@ jobs:
       contents: write
       pull-requests: write
       statuses: write
-      repository-projects: read # needed for view the PR for the slack https://github.com/cli/cli/issues/6274
     steps:
       - uses: actions/checkout@v3
       - uses: unity/setup-yq@v1
@@ -67,25 +70,24 @@ jobs:
           --head \${{ inputs.branch }}
           --assignee \${{ github.actor }}
           --reviewer \${{ github.actor }}
+          --title "Rollout to prod"
           --fill
-      - name: edit-pr
-        shell: bash
-        run: >
-          gh pr edit "\${{ inputs.branch }}" --title "change image tag to \${{ inputs.tag }}"
-      - name: ci-ui
+      ${newAppIssue.generateAngularStub ? `
+      - name: ${ciAngularWorkflowName}
         shell: bash
         run: >
           curl "\${{ github.api_url }}/repos/\${{ github.repository }}/statuses/\${{ steps.patch_yaml.outputs.GIT_SHA }}"
           -H "Authorization: token \${{ secrets.GITHUB_TOKEN }}"
           -H "Accept: application/vnd.github+json"
-          -d '{"state":"\${{ job.status == 'success' && 'success' || 'failure' }}","context":"ci-ui"}'
-      - name: ci-api
+          -d '{"state":"\${{ job.status == 'success' && 'success' || 'failure' }}","context":"${ciAngularWorkflowName}"}'` : ''}
+      ${newAppIssue.generateQuarkusStub ? `
+      - name: ${ciQuarkusWorkflowName}
         shell: bash
         run: >
           curl "\${{ github.api_url }}/repos/\${{ github.repository }}/statuses/\${{ steps.patch_yaml.outputs.GIT_SHA }}"
           -H "Authorization: token \${{ secrets.GITHUB_TOKEN }}"
           -H "Accept: application/vnd.github+json"
-          -d '{"state":"\${{ job.status == 'success' && 'success' || 'failure' }}","context":"ci-api"}'
+          -d '{"state":"\${{ job.status == 'success' && 'success' || 'failure' }}","context":"${ciQuarkusWorkflowName}"}'` : ''}
       - name: enable auto-merge
         if: \${{ inputs.auto-merge == 'true' }}
         shell: bash

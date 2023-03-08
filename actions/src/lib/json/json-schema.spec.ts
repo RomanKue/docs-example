@@ -23,7 +23,8 @@ describe('json-schema', () => {
         name: 'foo',
         deployments: {
           'ui': {container}
-        }
+        },
+        environment:'test'
       };
     });
     it('should not fail when object is valid', () => {

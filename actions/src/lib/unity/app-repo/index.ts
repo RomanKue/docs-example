@@ -74,6 +74,8 @@ const updateAppDeployments = async (
       if (redirect) {
         draft.redirect = redirect;
       }
+      draft.appId = null;
+
       const deployments = draft.deployments ?? {};
       deployments[name] = {
         replicas: 2,
@@ -81,8 +83,8 @@ const updateAppDeployments = async (
       };
       draft.deployments = deployments;
     });
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump(appSpec));
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump(appSpec));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump({...appSpec, environment: appEnvironments.int}));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump({...appSpec, environment: appEnvironments.prod}));
   }
   return appSpec;
 };

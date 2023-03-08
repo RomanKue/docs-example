@@ -4,7 +4,7 @@ import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {createDependabot} from './dependabot.js';
 
 describe('dependabot', () => {
-  const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo'};
+  const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo',environment:'test'};
   let newAppIssue: NewAppIssue;
   describe('createReadme', () => {
     it('should create empty dependabot.yaml when app config is passed', () => {

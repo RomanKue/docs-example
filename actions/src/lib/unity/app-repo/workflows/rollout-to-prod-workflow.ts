@@ -49,7 +49,6 @@ jobs:
         id: patch_yaml
         shell: bash
         run: |
-          echo "\${{ inputs.tag }}"
           yp '\${{ inputs.yaml-path }} |= "\${{ inputs.tag }}"' "\${{ inputs.unity-app-file }}"
           git add "\${{ inputs.unity-app-file }}"
           git commit -m "change image tag to \${{ inputs.tag }}"

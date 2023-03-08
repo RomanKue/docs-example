@@ -4,7 +4,7 @@ import {createReadme} from './readme.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 
 describe('readme', () => {
-  const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo'};
+  const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo', environment: 'test'};
   let newAppIssue: NewAppIssue;
   describe('createReadme', () => {
     it('should create readme when app config is passed', () => {

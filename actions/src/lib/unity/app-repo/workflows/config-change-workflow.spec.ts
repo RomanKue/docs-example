@@ -4,7 +4,7 @@ import {AppSpecV1Beta1} from '../../app-spec.js';
 
 
 describe('config-change-workflow', () => {
-  const appSpec: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo'};
+  const appSpec: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo', environment: 'test'};
   describe('createConfigChangeWorkflow', () => {
     it('should be parsable yaml when workflow is created', () => {
       const s = createConfigChangeWorkflow(appSpec);

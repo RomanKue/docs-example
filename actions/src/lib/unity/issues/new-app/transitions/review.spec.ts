@@ -237,6 +237,7 @@ name: my-app-name
       appSpec = {
         apiVersion: 'v1beta1',
         name: 'foo',
+        environment:'test'
       };
       jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
       jest.spyOn(repositories, 'getRepositoryContent').mockResolvedValue(partialMock<ContentFile>());

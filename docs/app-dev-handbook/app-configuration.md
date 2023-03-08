@@ -105,7 +105,7 @@ Next, from your repository run:
 gh workflow run encrypt \
   -f "environment=int" \
   -f "yaml-path=deployments.api.container.secretEnv.PASSWORD.value" \
-  -f "secret=pst"
+  -f "secret=psst"
 ```
 
 ## Headers and Cookies

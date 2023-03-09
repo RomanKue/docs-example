@@ -2,7 +2,7 @@ import {NewAppIssue} from '../../issues/new-app/new-app-issue.js';
 import {ciAngularWorkflowName} from './ci-angular-workflow.js';
 import {ciQuarkusWorkflowName} from './ci-quarkus-workflow.js';
 
-export const rolloutToProdWorkflowFileName = 'rollout-to-prod-prod.yaml';
+export const rolloutToProdWorkflowFileName = 'rollout-to-prod.yaml';
 export const rolloutToProdWorkflowName = 'rollout-to-prod';
 
 export const createRolloutToProdWorkflow = (newAppIssue: NewAppIssue) => `

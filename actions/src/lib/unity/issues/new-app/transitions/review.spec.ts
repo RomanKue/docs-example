@@ -82,6 +82,10 @@ describe('review', () => {
           'maxLength': 32,
           'minLength': 3
         },
+        'environmentV1': {
+          'type': 'string',
+          'description': 'environment:test, int, prod',
+        },
         'v1beta1': {
           'properties': {
             'apiVersion': {
@@ -93,12 +97,14 @@ describe('review', () => {
             },
             'name': {
               '$ref': '#/definitions/nameV1'
-            }
+            },
+            'environment': '#/definitions/environmentV1'
           },
           'additionalProperties': false,
           'required': [
             'apiVersion',
-            'name'
+            'name',
+            'environment'
           ]
         },
         'v1': {
@@ -109,12 +115,14 @@ describe('review', () => {
             },
             'name': {
               '$ref': '#/definitions/nameV1'
-            }
+            },
+            'environment': '#/definitions/environmentV1'
           },
           'additionalProperties': false,
           'required': [
             'apiVersion',
-            'name'
+            'name',
+            'environment'
           ]
         },
         'DeploymentV1': {
@@ -164,6 +172,7 @@ I wish to run my app in UNITY. Here is the configuration I would like to start w
 \`\`\`yaml
 apiVersion: v1beta1
 name: my-app-name
+environment: test
 \`\`\`
 
 *The app's name should be URL compatible, so prefer \`my-app\` over ~~\`MyApp\`~~ or ~~\`my app\`~~.*
@@ -237,6 +246,7 @@ name: my-app-name
       appSpec = {
         apiVersion: 'v1beta1',
         name: 'foo',
+        environment: 'test'
       };
       jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
       jest.spyOn(repositories, 'getRepositoryContent').mockResolvedValue(partialMock<ContentFile>());

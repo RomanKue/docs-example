@@ -3,7 +3,7 @@ import {AppSpecV1Beta1} from '../app-spec.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 
 describe('idea', () => {
-  const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo'};
+  const v1beta1: AppSpecV1Beta1 = {apiVersion: 'v1beta1', name: 'foo', environment:'test'};
   let newAppIssue: NewAppIssue;
   describe('createModules', () => {
     it('should create modules without angular and quarkus modules when no stubs are generated', () => {

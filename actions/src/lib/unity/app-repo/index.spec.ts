@@ -31,7 +31,7 @@ describe('index', () => {
   beforeEach(() => {
     user = partialMock<SimpleUser>({login: 'q123456'});
     issue = partialMock<Issue>({user: user});
-    v1beta1 = Object.freeze({apiVersion: 'v1beta1', name: 'foo', members: [{qNumber: 'q1234'}]});
+    v1beta1 = Object.freeze({apiVersion: 'v1beta1', name: 'foo', environment:'test', members: [{qNumber: 'q1234'}]});
     jest.spyOn(repositoris, 'listOrganizationRepositories').mockResolvedValue([]);
     jest.spyOn(repositoris, 'createAnOrganizationRepository').mockResolvedValue(partialMock<Repository>());
     jest.spyOn(repositoris, 'createOrUpdateFileContents').mockResolvedValue(partialMock<FileCommit>({commit: {sha: 'foo'}}));

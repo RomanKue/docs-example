@@ -6,7 +6,10 @@ import {
   appEnvironments,
   defaultTopics,
   githubSecretKeys,
+  javaDistribution,
+  javaVersion,
   makeStubWorkflowId,
+  nodeVersion,
   quarkusStubName,
   unityBot,
   unityRepositoryRoles
@@ -22,7 +25,6 @@ import {
   updateBranchProtection
 } from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
-import {createDeployWorkflow, deployAppWorkflowFileName} from './workflows/deploy-workflow.js';
 import {NewAppIssue} from '../issues/new-app/new-app-issue.js';
 import {produce} from 'immer';
 import orgs from '../../github/api/orgs/index.js';
@@ -36,7 +38,6 @@ import {assertUnreachable} from '../../run.js';
 import {addSimpleComment} from '../../github/api/issues/issues-utils.js';
 import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
 import * as core from '@actions/core';
-import {configChangeWorkflowFileName, createConfigChangeWorkflow} from './workflows/config-change-workflow.js';
 import {
   createAngularModule,
   createEncodings,
@@ -58,6 +59,19 @@ import {
 } from './workflows/dependabot-auto-merge-workflow.js';
 import {createEncryptWorkflow, encryptWorkflowFileName} from './workflows/encrypt-workflow.js';
 import {randomCryptoString} from '../../strings/random.js';
+import {createRolloutToProdWorkflow, rolloutToProdWorkflowFileName} from './workflows/rollout-to-prod-workflow.js';
+import {ciAngularWorkflowFileName, createCiAngularWorkflow} from './workflows/ci-angular-workflow.js';
+import {
+  ciAngularNoChangeWorkflowFileName,
+  createCiAngularNoChangeWorkflow
+} from './workflows/ci-angular-no-change-workflow.js';
+import {ciQuarkusWorkflowFileName, createCiQuarkusWorkflow} from './workflows/ci-quarkus-workflow.js';
+import {
+  ciQuarkusNoChangeWorkflowFileName,
+  createCiQuarkusNoChangeWorkflow
+} from './workflows/ci-quarkus-no-change-workflow.js';
+import {createDeployWorkflow, getDeployWorkflowFileName} from './workflows/deploy-workflow.js';
+import {createConfigChangeWorkflow, getConfigChangeWorkflowFileName} from './workflows/config-change-workflow.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -103,7 +117,6 @@ export const createRepository = async (
   newAppIssue: ReadonlyDeep<NewAppIssue>,
   appSpec: ReadonlyDeep<AppSpec>
 ): Promise<{ appSpec: ReadonlyDeep<AppSpec>; appRepository: ReadonlyDeep<Repository> }> => {
-  const javaVersion = 17;
   const newAppRepoName = repoName(appSpec.name);
   if (await repositoriesUtils.isRepoExistent(appSpec.name)) {
     throw new Error(`the repository ${newAppRepoName} already exists`);
@@ -175,6 +188,10 @@ export const createRepository = async (
         name,
         repository: appRepository.name,
         type: 'angular',
+        javaVersion: `${javaVersion}`,
+        javaDistribution,
+        nodeVersion,
+
       }
     });
   }
@@ -212,6 +229,9 @@ export const createRepository = async (
         name,
         repository: appRepository.name,
         type: 'quarkus',
+        javaVersion: `${javaVersion}`,
+        javaDistribution,
+        nodeVersion,
       }
     });
   }
@@ -240,10 +260,16 @@ export const createRepository = async (
   });
 
 
+  for (const env of Object.values(appEnvironments)) {
+    commit = await repositoriesUtils.addFile(
+      appRepository.name,
+      `.github/workflows/${getDeployWorkflowFileName(env)}`,
+      createDeployWorkflow(newAppIssue, env));
+  }
   commit = await repositoriesUtils.addFile(
     appRepository.name,
-    `.github/workflows/${deployAppWorkflowFileName}`,
-    createDeployWorkflow());
+    `.github/workflows/${rolloutToProdWorkflowFileName}`,
+    createRolloutToProdWorkflow(newAppIssue));
   commit = await repositoriesUtils.addFile(
     appRepository.name,
     `.github/workflows/${storeSecretsWorkflowFileName}`,
@@ -301,6 +327,14 @@ export const createRepository = async (
       await sleep(1_000);
     }
     commit = await repositoriesUtils.addFile(appRepository.name, `${angularStubName}/${angularStubName}.iml`, createAngularModule(newAppIssue));
+    commit = await repositoriesUtils.addFile(
+      appRepository.name,
+      `.github/workflows/${ciAngularWorkflowFileName}`,
+      createCiAngularWorkflow(appSpec));
+    commit = await repositoriesUtils.addFile(
+      appRepository.name,
+      `.github/workflows/${ciAngularNoChangeWorkflowFileName}`,
+      createCiAngularNoChangeWorkflow());
   }
   if (newAppIssue.generateQuarkusStub) {
     core.debug(`waiting for quarkus stub to be generated`);
@@ -318,13 +352,23 @@ export const createRepository = async (
       await sleep(5_000);
     }
     commit = await repositoriesUtils.addFile(appRepository.name, `${quarkusStubName}/${quarkusStubName}.iml`, createQuarkusModule(newAppIssue, javaVersion));
+    commit = await repositoriesUtils.addFile(
+      appRepository.name,
+      `.github/workflows/${ciQuarkusWorkflowFileName}`,
+      createCiQuarkusWorkflow());
+    commit = await repositoriesUtils.addFile(
+      appRepository.name,
+      `.github/workflows/${ciQuarkusNoChangeWorkflowFileName}`,
+      createCiQuarkusNoChangeWorkflow());
   }
 
   // workflows that are triggered on push should be added last
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${configChangeWorkflowFileName}`,
-    createConfigChangeWorkflow(appSpec));
+  for (const env of Object.values(appEnvironments)) {
+    commit = await repositoriesUtils.addFile(
+      appRepository.name,
+      `.github/workflows/${getConfigChangeWorkflowFileName(env)}`,
+      createConfigChangeWorkflow(appSpec, env));
+  }
 
   let appMembers = issue.user ? [issue.user] : [];
   appMembers = await removeOrgMembers(appMembers);

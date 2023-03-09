@@ -59,6 +59,10 @@ export const repos = {
 export const angularStubName = 'ui';
 export const quarkusStubName = 'api';
 
+export const javaVersion = 17;
+export const javaDistribution = 'zulu';
+export const nodeVersion = '16';
+
 export const allEnvironments = {
   test: 'test',
   int: 'int',

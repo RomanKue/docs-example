@@ -1,57 +1,42 @@
-export const deployAppWorkflowFileName = 'deploy.yaml';
-export const deployAppWorkflowName = 'deploy-unity-app';
+import {ciQuarkusWorkflowName} from './ci-quarkus-workflow.js';
+import {ciAngularWorkflowName} from './ci-angular-workflow.js';
+import {NewAppIssue} from '../../issues/new-app/new-app-issue.js';
+import {getConfigChangeWorkflowName} from './config-change-workflow.js';
 
-export const createDeployWorkflow = () => `
-name: ${deployAppWorkflowName}
+export const getDeployWorkflowFileName = (environment: string) => `deploy-${environment}.yaml`;
+export const getDeployWorkflowName = (environment: string) => `deploy-unity-app-${environment}`;
+
+
+export const createDeployWorkflow = (newAppIssue: NewAppIssue, environment: string) => `
+name: ${getDeployWorkflowName(environment)}
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        required: true
-        description: environment to deploy to
-        type: choice
-        options:
-          - int
-          - prod
-  workflow_call:
-    inputs:
-      environment:
-        required: true
-        description: environment to deploy to
-        type: string
-    secrets:
-      CRYPT_MASTER_KEY:
-        required: true
-        description: master key for secret encryption
-      KUBERNETES_TOKEN:
-        required: true
-        description: token to authenticate to a K8s cluster
-      KUBERNETES_HOST:
-        required: true
-        description: host of the K8s cluster
-      KUBERNETES_NAMESPACE:
-        required: true
-        description: namespace to create resources in
+  workflow_run:
+    workflows:
+      - ${getConfigChangeWorkflowName(environment)}
+      ${newAppIssue.generateQuarkusStub ? `- ${ciQuarkusWorkflowName}` : ''}
+      ${newAppIssue.generateAngularStub ? `- ${ciAngularWorkflowName}` : ''}
+    types:
+      - completed
+    branches:
+      - main
 concurrency:
-  group: ${deployAppWorkflowName}
+  group: ${getDeployWorkflowName(environment)}
 jobs:
-  ${deployAppWorkflowName}:
-    if: github.actor != 'dependabot[bot]'
+  ${getDeployWorkflowName(environment)}:
+    if: \${{ (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success') && github.actor != 'dependabot[bot]' }}
     permissions:
       contents: read
       id-token: write
     runs-on: atc-ubuntu-latest
     timeout-minutes: 30
-    environment: \${{ inputs.environment || github.event.inputs.environment }}
+    environment: int
     steps:
       - uses: actions/checkout@v3
-      - uses: unity/${deployAppWorkflowName}@v1
+      - uses: unity/deploy-unity-app@v1
         with:
-          environment: \${{ inputs.environment || github.event.inputs.environment }}
-          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
-          CRYPT_MASTER_KEY: \${{ secrets.CRYPT_MASTER_KEY }}
+          environment: int
           KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
           KUBERNETES_HOST: \${{ secrets.KUBERNETES_HOST }}
           KUBERNETES_NAMESPACE: \${{ secrets.KUBERNETES_NAMESPACE }}
     `.trim();
-

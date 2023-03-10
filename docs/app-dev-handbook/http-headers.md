@@ -40,8 +40,7 @@ It is possible to edit or unset the default response headers or to set custom re
 This can be achieved by modifying the `unity-app.*.yaml` files.
 
 Unsetting a default header can be done by setting the value for the given header to `null`.
-The following example sets the response header `Custom-Header-Name: custom-header-value` and unsets the
-`Default-Header-To-Unset`:
+The following example sets the response header `Foo` and unsets the default `X-Frame-Options` header.
 
 ```yaml
 deployments:
@@ -49,8 +48,8 @@ deployments:
     headers:
       response:
         add:
-          Custom-Header-Name: custom-header-value
-          Default-Header-To-Unset: null
+          X-Frame-Options: null
+          Foo: Bar
 ```
 
 Note that the header will be added, regardless of being set by the app's container.
@@ -58,24 +57,38 @@ That means, if you set the custom header `Foo: Bar` in the app's container and
 `Foo: Baz` in the `unity-app.*.yaml`, the response will have both values:
 
 ```
-Foo: bar
+Foo: Bar
 Foo: Baz
 ```
 
-This can be fixed by removing the header first. The following snippet added to the `unity-app.*.yaml` file will remove
-the `Header-To-Remove` and will overwrite the value of `Header-To-Overwrite`:
+This can be fixed by removing the header first, essentially replacing a header.
 
 ```yaml
 deployments:
   ui:
     headers:
       response:
-        remove:
-          - Header-To-Remove
-          - Header-To-Overwrite
         add:
-          Header-To-Overwrite: new-value
+          X-Frame-Options: null
+          Foo: Bar
+        remove:
+          - Foo
 ```
 
-Note that manipulating the headers is case-sensitive (the headers `Foo` and `foo` will be treated as two different
-ones).
+Note that header removal is case-insensitive.
+
+Default headers can be set from the application container when unset (e.g. `X-Frame-Options: null`).
+To make sure this header is never set at all, add it also to the `remove` section.
+
+```yaml
+deployments:
+  ui:
+    headers:
+      response:
+        add:
+          X-Frame-Options: null
+        remove:
+          - X-Frame-Options
+```
+
+This is not working unless [UNITYAPPS-303](https://atc.bmwgroup.net/jira/browse/UNITYAPPS-303) is implemented.

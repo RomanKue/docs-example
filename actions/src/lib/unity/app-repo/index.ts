@@ -84,25 +84,30 @@ const updateAppDeployments = async (
   redirect?: string,
 ) => {
   if (isV1Beta1(appSpec) || isV1(appSpec)) {
-    appSpec = produce(appSpec, draft => {
-      if (redirect) {
-        draft.redirect = redirect;
-      }
-      draft.appId = null;
-
-      const deployments = draft.deployments ?? {};
-      deployments[name] = {
-        replicas: 2,
-        ...deployment,
-      };
-      draft.deployments = deployments;
-    });
+    appSpec = createAppSpec(appSpec, appEnvironments.int, name, deployment, redirect);
     await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump({...appSpec, environment: appEnvironments.int}));
+    appSpec = createAppSpec(appSpec, appEnvironments.prod, name, deployment, redirect);
     await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump({...appSpec, environment: appEnvironments.prod}));
   }
   return appSpec;
 };
 
+const createAppSpec = (appSpec: ReadonlyDeep<AppSpec>, environment: string, name: string, deployment: AppDeployment, redirect?: string) => {
+  return produce(appSpec, draft => {
+    if (redirect) {
+      draft.redirect = redirect;
+    }
+    draft.environment = environment;
+    draft.appId = null;
+
+    const deployments = draft.deployments ?? {};
+    deployments[name] = {
+      replicas: 2,
+      ...deployment,
+    };
+    draft.deployments = deployments;
+  });
+};
 
 export const removeOrgMembers = async (appMembers: ReadonlyDeep<SimpleUser[]>) => {
   const orgMembers = (await orgs.listOrganizationMembers()).map(u => u.login);

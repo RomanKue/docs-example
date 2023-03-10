@@ -21,7 +21,8 @@ export const checkAppName = async (issue: Issue, newAppIssue: NewAppIssue): Prom
 
 export const checkAppSchema = async (issue: Issue, newAppIssue: NewAppIssue): Promise<boolean> => {
   core.info(`checking app yaml on issue: ${issue.html_url}`);
-  const errors = validateSchema({...newAppIssue.appSpec, environment: 'test'}, await loadSchema());
+  // only fields provided by the user are checked
+  const errors = validateSchema({...newAppIssue.appSpec, environment: 'int'}, await loadSchema());
   if (errors) {
     await issuesUtils.addSimpleComment(issue, user =>
       `❌ @${user} the app specification does not seem to fit our needs, ` +

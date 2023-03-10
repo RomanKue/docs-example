@@ -25,10 +25,14 @@ The following HTTP response headers will be set by default by the UNITY platform
 ```
 X-XSS-Protection: '1; mode=block'
 X-Content-Type-Options: 'nosniff'
-Strict-Transport-Security: 'max-age=31536000; includeSubDomains'
 X-Frame-Options: 'deny'
 Content-Security-Policy: frame-ancestors 'self'
 ```
+
+Note that some additional default headers can be set by the Nginx Ingress Controller, which can not be overwritten by
+the platform (e.g. `Strict-Transport-Security: 'max-age=15724800; includeSubDomains'`). For more information, please
+refer to the default configuration values of the
+[ingress-nginx](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#configuration-options)
 
 ## Customizing the HTTP Headers
 

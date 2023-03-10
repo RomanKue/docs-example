@@ -35,9 +35,6 @@
     },
     "transform": {
       "\\.(j|t)sx?$": ["ts-jest", {"useESM": true}]
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!variables/.*)"
-    ]
+    }
   }
 }

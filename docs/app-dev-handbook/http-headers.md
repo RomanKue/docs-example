@@ -30,8 +30,8 @@ Content-Security-Policy: frame-ancestors 'self'
 ```
 
 Note that some additional default headers can be set by the Nginx Ingress Controller, which can not be overwritten by
-the platform (e.g. `Strict-Transport-Security: 'max-age=15724800; includeSubDomains'`). For more information, please 
-refer to the default configuration values of the 
+the platform (e.g. `Strict-Transport-Security: 'max-age=15724800; includeSubDomains'`). For more information, please
+refer to the default configuration values of the
 [ingress-nginx](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#configuration-options)
 
 ## Customizing the HTTP Headers

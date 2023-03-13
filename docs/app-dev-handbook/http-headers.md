@@ -29,8 +29,8 @@ X-Frame-Options: 'deny'
 Content-Security-Policy: frame-ancestors 'self'
 ```
 
-Note that some additional default headers can be set by the Nginx Ingress Controller, which can not be overwritten by
-the platform (e.g. `Strict-Transport-Security: 'max-age=15724800; includeSubDomains'`). For more information, please
+Note that some additional default headers are set by the Nginx Ingress Controller, which can not be overwritten, e.g
+`Strict-Transport-Security: 'max-age=15724800; includeSubDomains'`). For more information, please
 refer to the default configuration values of the
 [ingress-nginx](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#configuration-options)
 
@@ -77,4 +77,5 @@ deployments:
           Header-To-Overwrite: new-value
 ```
 
-Note that manipulating the headers is case-sensitive (the headers `Foo` and `foo` will be treated as two different ones).
+Note that manipulating the headers is case-sensitive (the headers `Foo` and `foo` will be treated as two different
+ones).

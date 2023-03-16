@@ -327,7 +327,7 @@ export const createRepository = async (
     }
     commit = await repositoriesUtils.addFile(appRepository.name, `${quarkusStubName}/${quarkusStubName}.iml`, createQuarkusModule(newAppIssue, javaVersion));
   }
-  upsertWorkflows(appRepository.name, newAppIssue.generateAngularStub, newAppIssue.generateQuarkusStub);
+  upsertWorkflows(appRepository.name, newAppIssue.generateAngularStub, newAppIssue.generateQuarkusStub, newAppIssue.appSpec?.name ?? '');
 
   let appMembers = issue.user ? [issue.user] : [];
   appMembers = await removeOrgMembers(appMembers);
@@ -342,9 +342,7 @@ export const createRepository = async (
   return {appSpec, appRepository};
 };
 
-export const upsertWorkflows = async (repo: string, generateAngularStub: boolean, generateQuarkusStub: boolean, branch = 'main') => {
-  const appName = repo.replace('app-', '');
-
+export const upsertWorkflows = async (repo: string, generateAngularStub: boolean, generateQuarkusStub: boolean, appName: string, branch = 'main') => {
   let commit: FileCommit;
   for (const env of Object.values(appEnvironments)) {
     commit = await repositoriesUtils.upsertFile(
@@ -396,6 +394,6 @@ export const recreateRepoAppWorkflows = async (repo: string) => {
   const appName = repo.replace('app-', '');
   const generateAngularStub = await repositoriesUtils.isContentExistent({repo, path: angularStubName});
   const generateQuarkusStub = await repositoriesUtils.isContentExistent({repo, path: quarkusStubName});
-  await upsertWorkflows(repo, generateAngularStub, generateQuarkusStub, branch);
+  await upsertWorkflows(repo, generateAngularStub, generateQuarkusStub, appName, branch);
   await createAPullRequest(repo, {title: 'Update workflows', head: branch, base: 'main'});
 };

@@ -35,6 +35,7 @@ describe('index', () => {
     jest.spyOn(repositoris, 'listOrganizationRepositories').mockResolvedValue([]);
     jest.spyOn(repositoris, 'createAnOrganizationRepository').mockResolvedValue(partialMock<Repository>());
     jest.spyOn(repositoris, 'createOrUpdateFileContents').mockResolvedValue(partialMock<FileCommit>({commit: {sha: 'foo'}}));
+    jest.spyOn(repositoriesUtils, 'isContentExistent').mockResolvedValue(false);
     jest.spyOn(repositoris, 'addARepositoryCollaborator').mockResolvedValue(partialMock<RepositoryInvitation>());
     jest.spyOn(repositoris, 'replaceAllRepositoryTopics').mockResolvedValue(partialMock<Topic>());
     jest.spyOn(repositoris, 'createOrUpdateAnEnvironment').mockResolvedValue(partialMock<Environment>());

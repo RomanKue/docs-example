@@ -2,12 +2,13 @@ import {ciQuarkusWorkflowName} from './ci-quarkus-workflow.js';
 import {ciAngularWorkflowName} from './ci-angular-workflow.js';
 import {NewAppIssue} from '../../issues/new-app/new-app-issue.js';
 import {getConfigChangeWorkflowName} from './config-change-workflow.js';
+import {ReadonlyDeep} from 'type-fest';
 
 export const getDeployWorkflowFileName = (environment: string) => `deploy-${environment}.yaml`;
 export const getDeployWorkflowName = (environment: string) => `deploy-unity-app-${environment}`;
 
 
-export const createDeployWorkflow = (newAppIssue: NewAppIssue, environment: string) => `
+export const createDeployWorkflow = (newAppIssue: ReadonlyDeep<Pick<NewAppIssue, 'generateAngularStub' | 'generateQuarkusStub'>>, environment: string) => `
 name: ${getDeployWorkflowName(environment)}
 on:
   workflow_dispatch:

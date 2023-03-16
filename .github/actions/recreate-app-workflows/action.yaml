@@ -1,0 +1,13 @@
+name: 'recreate-app-workflows'
+description: |
+  Upsert all workflows of the apps matching the regex.
+inputs:
+  GITHUB_TOKEN:
+    description: the GITHUB_TOKEN to authenticate to the API
+    required: true
+  repository-regex:
+    description: repos matching against this regex will be updated
+    required: true
+runs:
+  using: 'node16'
+  main: '../../../actions/dist/actions/recreate-app-workflows.js'

@@ -12,6 +12,7 @@ import {createOrUpdateAnEnvironmentSecret, getAnEnvironmentPublicKey} from '../a
 
 import sodium from 'tweetsodium';
 import {RequestError} from '@octokit/request-error';
+import {repositoriesUtils} from './index.js';
 
 export const isRepoExistent = async (appName: string | null | undefined): Promise<boolean> => {
   const newAppRepoName = repoName(appName);
@@ -48,6 +49,24 @@ export const updateFile = async (repo: string, path: string, content: string, br
     content: base64(content),
     message: `update ${path.split('/').pop()}`,
   });
+};
+
+export const upsertFile = async (repo: string, path: string, content: string, branch = 'main') => {
+  if (await repositoriesUtils.isContentExistent({repo,
+    path,
+    ref: branch})) {
+    return await repositoriesUtils.updateFile(
+      repo,
+      path,
+      content,
+      branch);
+  } else {
+    return await repositoriesUtils.addFile(
+      repo,
+      path,
+      content,
+      branch);
+  }
 };
 
 /**

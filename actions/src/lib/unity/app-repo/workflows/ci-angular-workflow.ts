@@ -6,7 +6,7 @@ import {angularStubName, nodeVersion} from '../../config.js';
 export const ciAngularWorkflowFileName = `ci-${angularStubName}.yaml`;
 export const ciAngularWorkflowName = `ci-${angularStubName}`;
 
-export const createCiAngularWorkflow = (appSpec: ReadonlyDeep<AppSpec>) => `
+export const createCiAngularWorkflow = (appSpec: ReadonlyDeep<Pick<AppSpec, 'name'>>,) => `
 name: ${ciAngularWorkflowName}
 on:
   workflow_dispatch:

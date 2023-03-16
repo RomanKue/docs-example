@@ -1,0 +1,22 @@
+name: Recreate App Workflows
+on:
+  workflow_dispatch:
+    inputs:
+      repositoryRegex:
+        description: Regex to match the name of the app repo inside the UNITY org
+        required: true
+        default: app-test
+        type: string
+jobs:
+  recreate-app-workflows:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v3
+      - name: build-actions
+        uses: ./.github/actions/build-actions
+      - name: recreate-workflows
+        uses: ./.github/actions/recreate-app-workflows
+        with:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+          repository-regex: ${{ inputs.repositoryRegex }}

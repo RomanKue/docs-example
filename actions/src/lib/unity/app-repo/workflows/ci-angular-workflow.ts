@@ -98,7 +98,7 @@ jobs:
             location / {
               root   /usr/share/nginx/html;
               index  index.html index.htm;
-              try_files $uri $uri/ /index.html?$args;
+              try_files $uri $uri/ /${appSpec.name}/\${{ env.DEPLOYMENT }}/index.html?$args;
             }
 
             error_page   500 502 503 504  /50x.html;

@@ -90,9 +90,27 @@ jobs:
       - name: build image
         working-directory: \${{ env.DEPLOYMENT }}
         run: |
+          echo '
+          server {
+            listen       8080;
+            server_name  localhost;
+
+            location / {
+              root   /usr/share/nginx/html;
+              index  index.html index.htm;
+              try_files $uri $uri/ /index.html?$args;
+            }
+
+            error_page   500 502 503 504  /50x.html;
+            location = /50x.html {
+              root   /usr/share/nginx/html;
+            }
+          }
+          ' > default.conf
           echo "
           FROM nginxinc/nginx-unprivileged:alpine-slim
           LABEL org.opencontainers.image.source \${{ github.event.repository.html_url }}
+          COPY default.conf /etc/nginx/conf.d/
           COPY dist/\${{ env.DEPLOYMENT }}/ /usr/share/nginx/html/${appSpec.name}/\${{ env.DEPLOYMENT }}
           " > Dockerfile
           docker build -t \${{ env.IMAGE }} -t \${{ env.MOVING_IMAGE }} .

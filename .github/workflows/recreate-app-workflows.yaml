@@ -20,3 +20,5 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
           repository-regex: ${{ inputs.repositoryRegex }}
+          branch: ${{ inputs.branch }}
+          title: ${{ inputs.title }}

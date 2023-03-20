@@ -20,6 +20,11 @@ export type RecreateAppServiceAccountInputs =
   'repository-regex' |
   'environment';
 
+export type RecreateAppWorkflowsInputs =
+  'repository-regex' |
+  'branch' |
+  'title';
+
 export type SyncMasterKeysInputs =
   'GITHUB_TOKEN' |
   'KUBERNETES_TOKEN' |
@@ -30,7 +35,7 @@ export type SyncMasterKeysInputs =
   'overwrite' |
   'master-key-secret-suffix';
 
-export type Inputs = GeneralInputs | IssueUpdatedInputs | RecreateAppServiceAccountInputs | SyncMasterKeysInputs;
+export type Inputs = GeneralInputs | IssueUpdatedInputs | RecreateAppServiceAccountInputs | RecreateAppWorkflowsInputs | SyncMasterKeysInputs;
 
 export const getInput = <T extends Inputs>(
   input: T

@@ -1,4 +1,4 @@
-import {AppDeployment, AppSpec, imageName, isV1, isV1Beta1, repoName} from '../app-spec.js';
+import {AppDeployment, AppSpec, extractAppName, imageName, isV1, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {
@@ -36,7 +36,7 @@ import {getInput, IssueUpdatedInputs} from '../../github/input.js';
 import {createK8sObjects, getEnvironmentKubeConfig} from './k8s.js';
 import {assertUnreachable} from '../../run.js';
 import {addSimpleComment} from '../../github/api/issues/issues-utils.js';
-import {isContentExistent} from '../../github/api/repos/repositories-utils.js';
+import {isContentExistent, upsertFile} from '../../github/api/repos/repositories-utils.js';
 import * as core from '@actions/core';
 import {
   createAngularModule,
@@ -72,6 +72,7 @@ import {
 } from './workflows/ci-quarkus-no-change-workflow.js';
 import {createDeployWorkflow, getDeployWorkflowFileName} from './workflows/deploy-workflow.js';
 import {createConfigChangeWorkflow, getConfigChangeWorkflowFileName} from './workflows/config-change-workflow.js';
+import {createAPullRequest} from '../../github/api/pulls/pulls.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -264,30 +265,6 @@ export const createRepository = async (
     restrictions: {users: [unityBot], teams: []}
   });
 
-
-  for (const env of Object.values(appEnvironments)) {
-    commit = await repositoriesUtils.addFile(
-      appRepository.name,
-      `.github/workflows/${getDeployWorkflowFileName(env)}`,
-      createDeployWorkflow(newAppIssue, env));
-  }
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${rolloutToProdWorkflowFileName}`,
-    createRolloutToProdWorkflow(newAppIssue));
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${storeSecretsWorkflowFileName}`,
-    createStoreSecretsWorkflow());
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${dependabotAutoApproveWorkflowFileName}`,
-    createDependabotAutoApproveWorkflow());
-  commit = await repositoriesUtils.addFile(
-    appRepository.name,
-    `.github/workflows/${encryptWorkflowFileName}`,
-    createEncryptWorkflow(newAppIssue));
-
   for (const env of Object.values(appEnvironments)) {
     core.debug(`creating environment "${env}"`);
     await createOrUpdateAnEnvironment({
@@ -332,14 +309,6 @@ export const createRepository = async (
       await sleep(1_000);
     }
     commit = await repositoriesUtils.addFile(appRepository.name, `${angularStubName}/${angularStubName}.iml`, createAngularModule(newAppIssue));
-    commit = await repositoriesUtils.addFile(
-      appRepository.name,
-      `.github/workflows/${ciAngularWorkflowFileName}`,
-      createCiAngularWorkflow(appSpec));
-    commit = await repositoriesUtils.addFile(
-      appRepository.name,
-      `.github/workflows/${ciAngularNoChangeWorkflowFileName}`,
-      createCiAngularNoChangeWorkflow());
   }
   if (newAppIssue.generateQuarkusStub) {
     core.debug(`waiting for quarkus stub to be generated`);
@@ -357,23 +326,8 @@ export const createRepository = async (
       await sleep(5_000);
     }
     commit = await repositoriesUtils.addFile(appRepository.name, `${quarkusStubName}/${quarkusStubName}.iml`, createQuarkusModule(newAppIssue, javaVersion));
-    commit = await repositoriesUtils.addFile(
-      appRepository.name,
-      `.github/workflows/${ciQuarkusWorkflowFileName}`,
-      createCiQuarkusWorkflow());
-    commit = await repositoriesUtils.addFile(
-      appRepository.name,
-      `.github/workflows/${ciQuarkusNoChangeWorkflowFileName}`,
-      createCiQuarkusNoChangeWorkflow());
   }
-
-  // workflows that are triggered on push should be added last
-  for (const env of Object.values(appEnvironments)) {
-    commit = await repositoriesUtils.addFile(
-      appRepository.name,
-      `.github/workflows/${getConfigChangeWorkflowFileName(env)}`,
-      createConfigChangeWorkflow(appSpec, env));
-  }
+  upsertWorkflows(appRepository.name, newAppIssue.generateAngularStub, newAppIssue.generateQuarkusStub, newAppIssue.appSpec?.name ?? '');
 
   let appMembers = issue.user ? [issue.user] : [];
   appMembers = await removeOrgMembers(appMembers);
@@ -386,4 +340,59 @@ export const createRepository = async (
   }
 
   return {appSpec, appRepository};
+};
+
+export const upsertWorkflows = async (repo: string, generateAngularStub: boolean, generateQuarkusStub: boolean, appName: string, branch = 'main') => {
+  let commit: FileCommit;
+  for (const env of Object.values(appEnvironments)) {
+    commit = await repositoriesUtils.upsertFile(
+      repo,
+      `.github/workflows/${getDeployWorkflowFileName(env)}`,
+      createDeployWorkflow({generateQuarkusStub, generateAngularStub}, env),
+      branch);
+  }
+  commit = await repositoriesUtils.upsertFile(
+    repo,
+    `.github/workflows/${rolloutToProdWorkflowFileName}`,
+    createRolloutToProdWorkflow({generateQuarkusStub, generateAngularStub}),
+    branch);
+  commit = await repositoriesUtils.upsertFile(
+    repo,
+    `.github/workflows/${storeSecretsWorkflowFileName}`,
+    createStoreSecretsWorkflow(),
+    branch);
+  commit = await repositoriesUtils.upsertFile(
+    repo,
+    `.github/workflows/${dependabotAutoApproveWorkflowFileName}`,
+    createDependabotAutoApproveWorkflow(),
+    branch);
+  commit = await repositoriesUtils.upsertFile(
+    repo,
+    `.github/workflows/${encryptWorkflowFileName}`,
+    createEncryptWorkflow({generateQuarkusStub, generateAngularStub}),
+    branch);
+  if (generateAngularStub) {
+    commit = await upsertFile(repo, `.github/workflows/${ciAngularNoChangeWorkflowFileName}`, createCiAngularNoChangeWorkflow(), branch);
+    commit = await upsertFile(repo, `.github/workflows/${ciAngularWorkflowFileName}`, createCiAngularWorkflow({name: appName}), branch);
+  }
+  if (generateQuarkusStub) {
+    commit = await upsertFile(repo, `.github/workflows/${ciQuarkusNoChangeWorkflowFileName}`, createCiQuarkusNoChangeWorkflow(), branch);
+    commit = await upsertFile(repo, `.github/workflows/${ciQuarkusWorkflowFileName}`, createCiQuarkusWorkflow(), branch);
+  }
+  // workflows that are triggered on push should be added last
+  for (const env of Object.values(appEnvironments)) {
+    commit = await repositoriesUtils.upsertFile(
+      repo,
+      `.github/workflows/${getConfigChangeWorkflowFileName(env)}`,
+      createConfigChangeWorkflow({name: appName}, env));
+  }
+};
+
+export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: string, title: string}) => {
+  const {repo, branch, title} = inputs;
+  const appName = extractAppName(repo);
+  const generateAngularStub = await repositoriesUtils.isContentExistent({repo, path: angularStubName});
+  const generateQuarkusStub = await repositoriesUtils.isContentExistent({repo, path: quarkusStubName});
+  await upsertWorkflows(repo, generateAngularStub, generateQuarkusStub, appName, branch);
+  await createAPullRequest(repo, {title, head: branch, base: 'main'});
 };

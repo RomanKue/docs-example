@@ -1,10 +1,10 @@
-import {ReadonlyDeep} from 'type-fest';
-import {AppSpec} from '../../app-spec.js';
 import {getDeployWorkflowFileName} from './deploy-workflow.js';
+import {AppSpec} from '../../app-spec.js';
+import {ReadonlyDeep} from 'type-fest';
 
 export const getConfigChangeWorkflowFileName = (environment: string) => `config-change-${environment}.yaml`;
 export const getConfigChangeWorkflowName = (environment: string) => `config-change-${environment}`;
-export const createConfigChangeWorkflow = (appSpec: ReadonlyDeep<AppSpec>, environment: string) => `
+export const createConfigChangeWorkflow = (appSpec: ReadonlyDeep<Pick<AppSpec, 'name'>>, environment: string) => `
 name: ${getConfigChangeWorkflowName(environment)}
 on:
   push:

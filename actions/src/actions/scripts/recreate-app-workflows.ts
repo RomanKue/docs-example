@@ -12,7 +12,9 @@ export const recreateAppWorkflows = async () => {
   const repositories = (await listOrganizationRepositories()).filter(repo => repo.name.match(appRegex));
   if (repositories) {
     for (const repo of repositories) {
-      await recreateRepoAppWorkflows({repo: repo.name, branch, title});
+      if (!repo.archived) {
+        await recreateRepoAppWorkflows({repo: repo.name, branch, title});
+      }
     }
   }
 };

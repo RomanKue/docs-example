@@ -7,6 +7,16 @@ on:
         required: true
         default: app-test
         type: string
+      branch:
+        description: Branch to be created for the recreation of the workflows
+        required: true
+        default: recreate-workflows
+        type: string
+      title:
+        description: Title of the PR
+        required: true
+        default: Recreate workflows
+        type: string
 jobs:
   recreate-app-workflows:
     runs-on: atc-ubuntu-latest

@@ -2,11 +2,9 @@ import {createRepository, removeOrgMembers} from './index.js';
 
 
 import * as repositoris from '../../github/api/repos/repositories.js';
-import * as git from '../../github/api/git/git.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import {RepositoryInvitation} from '../../github/api/repos/response/repository-invitation.js';
-import {GitReference} from '../../github/api/git/response/git-reference.js';
 import {AppSpecV1Beta1} from '../app-spec.js';
 import {Topic} from '../../github/api/repos/response/topic.js';
 import {partialMock} from '../../mock/partial-mock.js';
@@ -42,7 +40,6 @@ describe('index', () => {
     jest.spyOn(repositoris, 'updateBranchProtection').mockResolvedValue(partialMock<ProtectedBranch>());
     jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
     jest.spyOn(repositoriesUtils, 'createEnvironmentSecret').mockResolvedValue();
-    jest.spyOn(git, 'createAReference').mockResolvedValue(partialMock<GitReference>());
     jest.spyOn(orgs, 'listOrganizationMembers').mockResolvedValue([]);
     jest.spyOn(k8s, 'createK8sObjects').mockResolvedValue('token-string');
 

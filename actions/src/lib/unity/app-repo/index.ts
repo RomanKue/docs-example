@@ -395,7 +395,7 @@ export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: st
   const generateAngularStub = await repositoriesUtils.isContentExistent({repo, path: angularStubName});
   const generateQuarkusStub = await repositoriesUtils.isContentExistent({repo, path: quarkusStubName});
   const mainRef = await getAReference({ref: 'heads/main', repo});
-  await createAReference({repo, ref: branch, sha: mainRef.object.sha});
+  await createAReference({repo, ref: `heads/${branch}`, sha: mainRef.object.sha});
   await upsertWorkflows(repo, generateAngularStub, generateQuarkusStub, appName, branch);
   await createAPullRequest(repo, {title, head: branch, base: 'main'});
 };

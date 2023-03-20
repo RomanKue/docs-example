@@ -40,4 +40,6 @@ jobs:
           KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
           KUBERNETES_HOST: \${{ secrets.KUBERNETES_HOST }}
           KUBERNETES_NAMESPACE: \${{ secrets.KUBERNETES_NAMESPACE }}
+          CRYPT_MASTER_KEY: \${{ secrets.CRYPT_MASTER_KEY }}
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
     `.trim();

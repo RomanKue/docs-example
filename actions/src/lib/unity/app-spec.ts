@@ -97,6 +97,13 @@ export const repoName = (appName: string | null | undefined): string => {
   return repos.appPrefix + appName;
 };
 
+export const extractAppName = (repoName: string | null | undefined): string => {
+  if (!repoName) {
+    return '';
+  }
+  return repoName.replace(repos.appPrefix, '');
+};
+
 export const imageName = (appName: string | null | undefined, deploymentName: string): string => {
   return `${repoName(appName)}-${deploymentName}`;
 };

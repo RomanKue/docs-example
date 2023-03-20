@@ -8,6 +8,12 @@ inputs:
   repository-regex:
     description: repos matching against this regex will be updated
     required: true
+  branch:
+    description: branch to create for updating the workflows
+    required: true
+  title:
+    description: Pull Request title
+    required: true
 runs:
   using: 'node16'
   main: '../../../actions/dist/actions/recreate-app-workflows.js'

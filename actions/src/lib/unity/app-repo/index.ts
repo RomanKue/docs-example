@@ -1,4 +1,4 @@
-import {AppDeployment, AppSpec, imageName, isV1, isV1Beta1, repoName} from '../app-spec.js';
+import {AppDeployment, AppSpec, extractAppName, imageName, isV1, isV1Beta1, repoName} from '../app-spec.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {
@@ -388,12 +388,11 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
   }
 };
 
-export const recreateRepoAppWorkflows = async (repo: string) => {
-  let commit: FileCommit;
-  const branch = 'update-workflows';
-  const appName = repo.replace('app-', '');
+export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: string, title: string}) => {
+  const {repo, branch, title} = inputs;
+  const appName = extractAppName(repo);
   const generateAngularStub = await repositoriesUtils.isContentExistent({repo, path: angularStubName});
   const generateQuarkusStub = await repositoriesUtils.isContentExistent({repo, path: quarkusStubName});
   await upsertWorkflows(repo, generateAngularStub, generateQuarkusStub, appName, branch);
-  await createAPullRequest(repo, {title: 'Update workflows', head: branch, base: 'main'});
+  await createAPullRequest(repo, {title, head: branch, base: 'main'});
 };

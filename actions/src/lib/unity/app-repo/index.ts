@@ -385,7 +385,8 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
     commit = await repositoriesUtils.upsertFile(
       repo,
       `.github/workflows/${getConfigChangeWorkflowFileName(env)}`,
-      createConfigChangeWorkflow({name: appName}, env));
+      createConfigChangeWorkflow({name: appName}, env),
+      branch);
   }
 };
 

@@ -10,7 +10,7 @@ nav_order: 10
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Setup Monitoring Contract](#setup-monitoring-contract)
+- [Steps to perform when migrating a to a new cluster](#steps-to-perform-when-migrating-a-to-a-new-cluster)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

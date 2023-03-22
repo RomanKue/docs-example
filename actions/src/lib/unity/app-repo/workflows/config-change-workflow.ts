@@ -13,7 +13,7 @@ on:
     paths:
       - .github/workflows/${getConfigChangeWorkflowFileName(environment)}
       - .github/workflows/${getDeployWorkflowFileName(environment)}
-      - unity-app.int.yaml
+      - unity-app.${environment}.yaml
 jobs:
   ${getConfigChangeWorkflowName(environment)}:
     runs-on: atc-ubuntu-latest

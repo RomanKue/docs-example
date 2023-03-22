@@ -73,6 +73,7 @@ import {
 import {createDeployWorkflow, getDeployWorkflowFileName} from './workflows/deploy-workflow.js';
 import {createConfigChangeWorkflow, getConfigChangeWorkflowFileName} from './workflows/config-change-workflow.js';
 import {createAPullRequest} from '../../github/api/pulls/pulls.js';
+import {createAReference, getAReference} from '../../github/api/git/git.js';
 
 export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
@@ -384,7 +385,8 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
     commit = await repositoriesUtils.upsertFile(
       repo,
       `.github/workflows/${getConfigChangeWorkflowFileName(env)}`,
-      createConfigChangeWorkflow({name: appName}, env));
+      createConfigChangeWorkflow({name: appName}, env),
+      branch);
   }
 };
 
@@ -393,6 +395,8 @@ export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: st
   const appName = extractAppName(repo);
   const generateAngularStub = await repositoriesUtils.isContentExistent({repo, path: angularStubName});
   const generateQuarkusStub = await repositoriesUtils.isContentExistent({repo, path: quarkusStubName});
+  const mainRef = await getAReference({ref: 'heads/main', repo});
+  await createAReference({repo, ref: `refs/heads/${branch}`, sha: mainRef.object.sha});
   await upsertWorkflows(repo, generateAngularStub, generateQuarkusStub, appName, branch);
   await createAPullRequest(repo, {title, head: branch, base: 'main'});
 };

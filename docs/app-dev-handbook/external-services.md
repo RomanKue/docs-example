@@ -56,6 +56,8 @@ Here is a list of available services
 * `http://localhost:8008/services/api/hsa`
   [HSA (100% Sonderausstattung)](https://pmd.bmwgroup.net/lexicon/app/term/HSA). For detailed information about the
   interface, please refer to the [Swagger](https://pmd-api-int.bmwgroup.net/hsa/hsa-check/#/)
+* `http://localhost:8008/services/api/chars`. For more information about the interface, please refer to the
+  [offical documentation](https://atc.bmwgroup.net/confluence/display/PSKD/Chars)
 
 # Architecture
 

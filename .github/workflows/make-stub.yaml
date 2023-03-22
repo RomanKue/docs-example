@@ -80,7 +80,6 @@ jobs:
           git config --global user.name '${{ github.actor }}'
           git config --global user.email '${{ github.actor }}@no-mail.com'
           git add ${{ github.event.inputs.name}}
-          git add .github/workflows/*.yaml
           git commit --all --message 'create ${{ github.event.inputs.type }} stub: ${{ github.event.inputs.name }}'
           git pull --rebase origin main
       - name: push

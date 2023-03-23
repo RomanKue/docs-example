@@ -146,7 +146,7 @@ The following request sent from the main container of an app returns the secret 
 curl http://localhost:8011/api/v1/namespaces/int/secrets/app-test
 ```
 
-Note that in order to have access to a given resource, you must configure the necessary 
+Note that in order to have access to a given resource, you must configure the necessary
 [RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) objects.
 
 ## Testing Locally

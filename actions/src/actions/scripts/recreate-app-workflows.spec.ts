@@ -21,7 +21,7 @@ describe('recreate-app-workflows', () => {
     jest.spyOn(input, 'getInput').mockImplementation(createMockInputs('^app-.*'));
     jest.spyOn(git, 'createAReference').mockResolvedValue({} as GitReference);
     jest.spyOn(git, 'getAReference').mockResolvedValue({object: {sha: 'sha-123'}} as GitReference);
-    jest.spyOn(repositoriesUtils, 'deleteFile').mockResolvedValue({} as FileCommit);
+    jest.spyOn(repositoriesUtils, 'deleteFileIfExisting').mockResolvedValue({} as FileCommit);
   });
 
   it('should create the correct number of workflows when both quarkus and angular', async () => {

@@ -393,11 +393,11 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
 
   // this part is used in the rollout of the new workflows. To be removed afterwards
   const oldConfigChange = '.github/workflows/config-change.yaml';
-  if (await repositoriesUtils.isContentExistent({path: oldConfigChange})) {
+  if (await repositoriesUtils.isContentExistent({repo, path: oldConfigChange, ref: branch})) {
     commit = await repositoriesUtils.deleteFile(repo, oldConfigChange, branch);
   }
   const oldDeploy = '.github/workflows/deploy.yaml';
-  if (await repositoriesUtils.isContentExistent({path: oldDeploy})) {
+  if (await repositoriesUtils.isContentExistent({repo, path: oldDeploy, ref: branch})) {
     commit = await repositoriesUtils.deleteFile(repo, oldDeploy, branch);
   }
 };

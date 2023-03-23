@@ -14,7 +14,7 @@
     "immer": "^9.0.19",
     "js-yaml": "4.1.0",
     "jsonschema": "1.4.1",
-    "marked": "4.2.12",
+    "marked": "4.3.0",
     "ts-jest": "29.0.5",
     "ts-node": "10.9.1",
     "tweetsodium": "0.0.5",

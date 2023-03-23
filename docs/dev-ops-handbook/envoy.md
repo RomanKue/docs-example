@@ -15,6 +15,7 @@ nav_order: 2
     - [Authorization](#authorization)
     - [Content Encoding](#content-encoding)
     - [TLS Termination](#tls-termination)
+    - [Accessing the Kubernetes API](#accessing-the-kubernetes-api)
   - [Testing Locally](#testing-locally)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -132,6 +133,21 @@ All this is configured in the
 [unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart.
 
 Read more about it in [Securing Envoy](https://www.envoyproxy.io/docs/envoy/latest/start/quick-start/securing.html).
+
+### Accessing the Kubernetes API
+
+It is possible to access the [Kubernetes API](https://kubernetes.io/docs/reference/kubernetes-api/) from an application
+by sending a request to `http://localhost:8011/<path_to_resource>`. The reason for this is to provide information about
+the k8s cluster to the applications managed by the platform.
+
+The following request sent from the main container of an app returns the secret `app-test` from the namespace `int`:
+
+```bash
+curl http://localhost:8011/api/v1/namespaces/int/secrets/app-test
+```
+
+Note that in order to have access to a given resource, you must configure the necessary
+[RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/) objects.
 
 ## Testing Locally
 

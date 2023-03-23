@@ -390,6 +390,16 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
       createConfigChangeWorkflow({name: appName}, env),
       branch);
   }
+
+  // this part is used in the rollout of the new workflows. To be removed afterwards
+  const oldConfigChange = '.github/workflows/config-change.yaml';
+  if (await repositoriesUtils.isContentExistent({path: oldConfigChange})) {
+    commit = await repositoriesUtils.deleteFile(repo, oldConfigChange, branch);
+  }
+  const oldDeploy = '.github/workflows/deploy.yaml';
+  if (await repositoriesUtils.isContentExistent({path: oldDeploy})) {
+    commit = await repositoriesUtils.deleteFile(repo, oldDeploy, branch);
+  }
 };
 
 export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: string, title: string}) => {
@@ -400,5 +410,5 @@ export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: st
   const mainRef = await getAReference({ref: 'heads/main', repo});
   await createAReference({repo, ref: `refs/heads/${branch}`, sha: mainRef.object.sha});
   await upsertWorkflows(repo, generateAngularStub, generateQuarkusStub, appName, branch);
-  await createAPullRequest(repo, {title, head: branch, base: 'main'});
+  await createAPullRequest({repo, title, head: branch, base: 'main'});
 };

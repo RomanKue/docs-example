@@ -1,6 +1,7 @@
 import {repoName} from '../../../unity/app-spec.js';
 import {
   createOrUpdateFileContents,
+  deleteAFile,
   getRepositoryContent,
   listOrganizationRepositories,
   ReposApi
@@ -67,6 +68,19 @@ export const upsertFile = async (repo: string, path: string, content: string, br
       content,
       branch);
   }
+};
+
+export const deleteFile = async (repo: string, path: string, branch = 'main') => {
+  const existingContent = await getRepositoryContent({
+    repo,
+    path,
+    branch,
+  });
+  let sha = '';
+  if ('sha' in existingContent) {
+    sha = existingContent.sha;
+  }
+  return await deleteAFile({path, message: `Remove file ${path}`, sha});
 };
 
 /**

@@ -154,7 +154,6 @@ export const createRepository = async (
   commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(newAppIssue));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(appEnvironments.int), yaml.dump(appSpec));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(appEnvironments.prod), yaml.dump(appSpec));
-  commit = await repositoriesUtils.addFile(appRepository.name, '.github/dependabot.yaml', createDependabot(newAppIssue, userLogin));
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/jsonSchemas.xml', createJsonSchemas());
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/vcs.xml', createVcs());
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/encodings.xml', createEncodings());
@@ -328,6 +327,9 @@ export const createRepository = async (
     }
     commit = await repositoriesUtils.addFile(appRepository.name, `${quarkusStubName}/${quarkusStubName}.iml`, createQuarkusModule(newAppIssue, javaVersion));
   }
+
+  // create dependabot and workflows after the stubs were delivered to avoid failing workflows on first run
+  commit = await repositoriesUtils.addFile(appRepository.name, '.github/dependabot.yaml', createDependabot(newAppIssue, userLogin));
   upsertWorkflows(appRepository.name, newAppIssue.generateAngularStub, newAppIssue.generateQuarkusStub, newAppIssue.appSpec?.name ?? '');
 
   let appMembers = issue.user ? [issue.user] : [];

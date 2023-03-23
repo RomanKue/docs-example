@@ -70,17 +70,19 @@ export const upsertFile = async (repo: string, path: string, content: string, br
   }
 };
 
-export const deleteFile = async (repo: string, path: string, branch = 'main') => {
-  const existingContent = await getRepositoryContent({
-    repo,
-    path,
-    branch,
-  });
-  let sha = '';
-  if ('sha' in existingContent) {
-    sha = existingContent.sha;
+export const deleteFileIfExisting = async (repo: string, path: string, branch = 'main') => {
+  if (await repositoriesUtils.isContentExistent({repo, path, ref: branch})) {
+    const existingContent = await getRepositoryContent({
+      repo,
+      path,
+      branch,
+    });
+    let sha = '';
+    if ('sha' in existingContent) {
+      sha = existingContent.sha;
+      return await deleteAFile({repo, path, branch, message: `Remove ${path}`, sha});
+    }
   }
-  return await deleteAFile({repo, path, branch, message: `Remove ${path}`, sha});
 };
 
 /**

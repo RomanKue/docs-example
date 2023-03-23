@@ -346,7 +346,7 @@ export const createRepository = async (
 };
 
 export const upsertWorkflows = async (repo: string, generateAngularStub: boolean, generateQuarkusStub: boolean, appName: string, branch = 'main') => {
-  let commit: FileCommit;
+  let commit: FileCommit | undefined;
   for (const env of Object.values(appEnvironments)) {
     commit = await repositoriesUtils.upsertFile(
       repo,
@@ -392,14 +392,8 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
   }
 
   // this part is used in the rollout of the new workflows. To be removed afterwards
-  const oldConfigChange = '.github/workflows/config-change.yaml';
-  if (await repositoriesUtils.isContentExistent({repo, path: oldConfigChange, ref: branch})) {
-    commit = await repositoriesUtils.deleteFile(repo, oldConfigChange, branch);
-  }
-  const oldDeploy = '.github/workflows/deploy.yaml';
-  if (await repositoriesUtils.isContentExistent({repo, path: oldDeploy, ref: branch})) {
-    commit = await repositoriesUtils.deleteFile(repo, oldDeploy, branch);
-  }
+  commit = await repositoriesUtils.deleteFileIfExisting(repo, '.github/workflows/config-change.yaml', branch);
+  commit = await repositoriesUtils.deleteFileIfExisting(repo, '.github/workflows/deploy.yaml', branch);
 };
 
 export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: string, title: string}) => {

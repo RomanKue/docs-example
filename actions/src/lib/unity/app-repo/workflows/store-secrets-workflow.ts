@@ -13,21 +13,24 @@ on:
         options:
           - int
           - prod
+      password:
+        required: true
+        description: The password to protect the secrets. It must contain 16 characters at least
+        type: string
 jobs:
   ${storeSecretsWorkflowName}:
     runs-on: atc-ubuntu-latest
     environment: \${{ inputs.environment }}
     steps:
       - uses: actions/checkout@v3
-      - name: write secrets
+      - name: mask password
         shell: bash
-        env:
-          KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}
-        run: echo "\${{ format('KUBERNETES_TOKEN{0} $KUBERNETES_TOKEN', ':') }}" >> secrets.yaml
-      - name: upload secrets
-        uses: actions/upload-artifact@v3
+        run: |
+          PASSWORD=$(jq -r '.inputs.password' $GITHUB_EVENT_PATH)
+          echo "::add-mask::$PASSWORD"
+      - uses: unity/gh-secrets-to-kee-pass@v1
         with:
-          name: secrets.yaml
-          path: secrets.yaml
+          password: \${{ inputs.password }}
+          secrets: \${{ toJson(secrets) }}
     `.trim();
 

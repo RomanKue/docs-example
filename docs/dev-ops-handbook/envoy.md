@@ -15,6 +15,7 @@ nav_order: 2
     - [Authorization](#authorization)
     - [Content Encoding](#content-encoding)
     - [TLS Termination](#tls-termination)
+    - [Accessing the Kubernetes API](#accessing-the-kubernetes-api)
   - [Testing Locally](#testing-locally)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

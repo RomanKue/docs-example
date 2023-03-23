@@ -80,7 +80,7 @@ export const deleteFile = async (repo: string, path: string, branch = 'main') =>
   if ('sha' in existingContent) {
     sha = existingContent.sha;
   }
-  return await deleteAFile({repo, path, message: `Remove ${path}`, sha});
+  return await deleteAFile({repo, path, branch, message: `Remove ${path}`, sha});
 };
 
 /**

@@ -11,7 +11,7 @@
     "@typescript-eslint/eslint-plugin": "5.56.0",
     "@typescript-eslint/parser": "5.56.0",
     "eslint": "8.36.0",
-    "immer": "^9.0.19",
+    "immer": "^9.0.21",
     "js-yaml": "4.1.0",
     "jsonschema": "1.4.1",
     "marked": "4.3.0",

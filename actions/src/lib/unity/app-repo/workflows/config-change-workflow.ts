@@ -1,4 +1,3 @@
-import {getDeployWorkflowFileName} from './deploy-workflow.js';
 import {AppSpec} from '../../app-spec.js';
 import {ReadonlyDeep} from 'type-fest';
 
@@ -11,8 +10,6 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/${getConfigChangeWorkflowFileName(environment)}
-      - .github/workflows/${getDeployWorkflowFileName(environment)}
       - unity-app.${environment}.yaml
 jobs:
   ${getConfigChangeWorkflowName(environment)}:
@@ -23,6 +20,6 @@ jobs:
       id-token: write
     steps:
       - run: |
-          echo "config change in: unity-app.int.yaml"
+          echo "config change in: unity-app.${environment}.yaml"
     `.trim();
 

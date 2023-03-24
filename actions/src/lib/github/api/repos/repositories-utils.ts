@@ -1,6 +1,7 @@
 import {repoName} from '../../../unity/app-spec.js';
 import {
   createOrUpdateFileContents,
+  deleteAFile,
   getRepositoryContent,
   listOrganizationRepositories,
   ReposApi
@@ -66,6 +67,23 @@ export const upsertFile = async (repo: string, path: string, content: string, br
       path,
       content,
       branch);
+  }
+};
+
+export const deleteFileIfExisting = async (repo: string, path: string, branch = 'main') => {
+  if (await repositoriesUtils.isContentExistent({repo, path, ref: branch})) {
+    const existingContent = await getRepositoryContent({
+      repo,
+      path,
+      branch,
+    });
+    let sha = '';
+    if ('sha' in existingContent) {
+      sha = existingContent.sha;
+      return await deleteAFile({repo, path, branch, message: `Remove ${path}`, sha});
+    } else {
+      throw new Error(`sha for ${path} could not be found.`);
+    }
   }
 };
 

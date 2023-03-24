@@ -158,6 +158,24 @@ export const createOrUpdateFileContents = async (
 };
 
 /**
+ * https://docs.github.com/en/rest/repos/contents#delete-a-file
+ */
+export const deleteAFile = async (
+  options: {
+    path: string;
+    message: string;
+    sha: string;
+  } & Partial<Parameters<ReposApi['deleteFile']>[0]>
+): Promise<FileCommit> => {
+  const response = await getOctokitApi().rest.repos.deleteFile({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    ...options
+  });
+  return response.data as FileCommit;
+};
+
+/**
  * https://docs.github.com/en/rest/repos/contents#get-repository-content
  */
 export const getRepositoryContent = async (

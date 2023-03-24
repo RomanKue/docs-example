@@ -3,6 +3,7 @@ import {ciAngularWorkflowName} from './ci-angular-workflow.js';
 import {NewAppIssue} from '../../issues/new-app/new-app-issue.js';
 import {getConfigChangeWorkflowName} from './config-change-workflow.js';
 import {ReadonlyDeep} from 'type-fest';
+import {appEnvironments} from '../../config.js';
 
 export const getDeployWorkflowFileName = (environment: string) => `deploy-${environment}.yaml`;
 export const getDeployWorkflowName = (environment: string) => `deploy-unity-app-${environment}`;
@@ -14,9 +15,9 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - ${getConfigChangeWorkflowName(environment)}
-      ${newAppIssue.generateQuarkusStub ? `- ${ciQuarkusWorkflowName}` : ''}
-      ${newAppIssue.generateAngularStub ? `- ${ciAngularWorkflowName}` : ''}
+      - ${getConfigChangeWorkflowName(environment)}${environment !== appEnvironments.prod
+        && newAppIssue.generateQuarkusStub ? `\n      - ${ciQuarkusWorkflowName}` : ''}${environment !== appEnvironments.prod
+        && newAppIssue.generateAngularStub ? `\n      - ${ciAngularWorkflowName}` : ''}
     types:
       - completed
     branches:

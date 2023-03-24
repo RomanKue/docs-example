@@ -113,13 +113,13 @@ jobs:
           COPY default.conf /etc/nginx/conf.d/
           COPY dist/\${{ env.DEPLOYMENT }}/ /usr/share/nginx/html/${appSpec.name}/\${{ env.DEPLOYMENT }}
           " > Dockerfile
-          docker build -t \${{ env.IMAGE }} -t \${{ env.MOVING_IMAGE }} .
+          docker build -t "\${{ env.IMAGE }}" -t "\${{ env.MOVING_IMAGE }}" .
       - name: push image
         if: \${{ github.ref == 'refs/heads/main' }}
         working-directory: \${{ env.DEPLOYMENT }}
         run: |
-          docker push \${{ env.IMAGE }}
-          docker push \${{ env.MOVING_IMAGE }}
+          docker push "\${{ env.IMAGE }}"
+          docker push "\${{ env.MOVING_IMAGE }}"
       - name: output image tag
         if: \${{ github.ref == 'refs/heads/main' }}
         id: image-tag

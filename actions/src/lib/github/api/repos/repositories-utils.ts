@@ -81,6 +81,8 @@ export const deleteFileIfExisting = async (repo: string, path: string, branch = 
     if ('sha' in existingContent) {
       sha = existingContent.sha;
       return await deleteAFile({repo, path, branch, message: `Remove ${path}`, sha});
+    } else {
+      throw new Error(`sha for ${path} could not be found.`);
     }
   }
 };

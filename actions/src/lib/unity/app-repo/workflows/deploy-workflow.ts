@@ -15,9 +15,9 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - ${getConfigChangeWorkflowName(environment)}
-      ${environment !== appEnvironments.prod && newAppIssue.generateQuarkusStub ? `- ${ciQuarkusWorkflowName}` : ''}
-      ${environment !== appEnvironments.prod && newAppIssue.generateAngularStub ? `- ${ciAngularWorkflowName}` : ''}
+      - ${getConfigChangeWorkflowName(environment)}${environment !== appEnvironments.prod
+        && newAppIssue.generateQuarkusStub ? `\n- ${ciQuarkusWorkflowName}` : ''}${environment !== appEnvironments.prod
+        && newAppIssue.generateAngularStub ? `\n- ${ciAngularWorkflowName}` : ''}
     types:
       - completed
     branches:

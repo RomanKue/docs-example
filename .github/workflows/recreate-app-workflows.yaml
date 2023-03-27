@@ -17,6 +17,10 @@ on:
         required: true
         default: Recreate workflows
         type: string
+      body:
+        description: Body of the PR
+        required: false
+        type: string
 jobs:
   recreate-app-workflows:
     runs-on: atc-ubuntu-latest
@@ -32,3 +36,4 @@ jobs:
           repository-regex: ${{ inputs.repositoryRegex }}
           branch: ${{ inputs.branch }}
           title: ${{ inputs.title }}
+          body: ${{ inputs.body }}

@@ -23,7 +23,8 @@ export type RecreateAppServiceAccountInputs =
 export type RecreateAppWorkflowsInputs =
   'repository-regex' |
   'branch' |
-  'title';
+  'title' |
+  'body';
 
 export type SyncMasterKeysInputs =
   'GITHUB_TOKEN' |

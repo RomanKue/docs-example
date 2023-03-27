@@ -14,6 +14,9 @@ inputs:
   title:
     description: Pull Request title
     required: true
+  body:
+    description: Pull request body
+    required: false
 runs:
   using: 'node16'
   main: '../../../actions/dist/actions/recreate-app-workflows.js'

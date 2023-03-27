@@ -396,13 +396,13 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
   commit = await repositoriesUtils.deleteFileIfExisting(repo, '.github/workflows/deploy.yaml', branch);
 };
 
-export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: string, title: string}) => {
-  const {repo, branch, title} = inputs;
+export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: string, title: string, body?: string}) => {
+  const {repo, branch, title, body} = inputs;
   const appName = extractAppName(repo);
   const generateAngularStub = await repositoriesUtils.isContentExistent({repo, path: angularStubName});
   const generateQuarkusStub = await repositoriesUtils.isContentExistent({repo, path: quarkusStubName});
   const mainRef = await getAReference({ref: 'heads/main', repo});
   await createAReference({repo, ref: `refs/heads/${branch}`, sha: mainRef.object.sha});
   await upsertWorkflows(repo, generateAngularStub, generateQuarkusStub, appName, branch);
-  await createAPullRequest({repo, title, head: branch, base: 'main'});
+  await createAPullRequest({repo, title, body, head: branch, base: 'main'});
 };

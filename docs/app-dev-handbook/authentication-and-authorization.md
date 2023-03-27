@@ -13,6 +13,7 @@ nav_order: 2
 - [Authentication and Authorization](#authentication-and-authorization)
   - [Authentication](#authentication)
     - [Excluded Paths](#excluded-paths)
+    - [Excluded Headers](#excluded-headers)
     - [OAuth2](#oauth2)
     - [Minimum Authentication Level](#minimum-authentication-level)
     - [K8s](#k8s)

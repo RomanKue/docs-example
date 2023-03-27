@@ -2,7 +2,7 @@
 layout: default
 title: Alerts
 parent: DevOps Handbook
-nav_order: 8
+nav_order: 9
 ---
 
 **Table of Contents**
@@ -19,4 +19,4 @@ nav_order: 8
 Setting up a monitoring contract can be done in the following self-service portal: [Application Monitoring Database](http://systemsmgmt-portal.bmwgroup.net).
 Only application operations managers are able to create monitoring contracts. An example request for creating a monitoring
 contract can be seen in the following screenshot:
-![monitoringContract.png](monitoringContract.png)
+![monitoringContract.png](../assets/monitoring-contract.png)

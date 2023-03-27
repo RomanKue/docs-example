@@ -2,7 +2,7 @@
 layout: default
 title: Networking
 parent: DevOps Handbook
-nav_order: 0
+nav_order: 1
 ---
 
 **Table of Contents**

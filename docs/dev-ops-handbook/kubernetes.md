@@ -2,7 +2,7 @@
 layout: default
 title: Kubernetes
 parent: DevOps Handbook
-nav_order: 1
+nav_order: 2
 ---
 
 **Table of Contents**
@@ -20,7 +20,7 @@ nav_order: 1
 
 ## Architecture
 
-The following diagram gives an overview on the entire architecture.
+The following diagram gives an overview on the integration of GitHub Enterprise and Kubernetes architecture.
 
 ```mermaid
 graph LR

@@ -2,7 +2,7 @@
 layout: default
 title: Incident Recovery
 parent: DevOps Handbook
-nav_order: 6
+nav_order: 7
 ---
 
 **Table of Contents**

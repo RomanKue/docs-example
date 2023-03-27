@@ -72,6 +72,21 @@ auth:
     - /my-app/api/openapi
 ```
 
+### Excluded Headers
+
+It is possible disable the authentication and authorization depending on some headers values.
+
+It is possible to also use pseudo-headers. For example, when the :method pseudo-header has one of the given values,
+there won't be any authentication or authorization checks.
+
+```yaml
+auth:
+  excludedHeaders:
+    - name: ":method"
+      values:
+        - OPTIONS
+```
+
 ### OAuth2
 
 If the flag `auth.oauth.enabled` is set to `true`, an unauthenticated request will initiate a redirect to the WebEAM

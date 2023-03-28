@@ -77,15 +77,16 @@ auth:
 
 It is possible disable the authentication and authorization depending on some headers values.
 
-It is possible to also use pseudo-headers. For example, when the :method pseudo-header has one of the given values,
-there won't be any authentication or authorization checks.
+It is possible to also use [pseudo-headers](https://httpwg.org/specs/rfc7540.html#rfc.section.8.1.2.1).
+For example, when the :method pseudo-header has one of the given values, there won't be any authentication or authorization checks.
+
+The headers values are provided via a regular expression, which is in [Google LE2 dialect](https://github.com/google/re2/wiki/Syntax).
 
 ```yaml
 auth:
   excludedHeaders:
     - name: ":method"
-      values:
-        - OPTIONS
+      valuesRegex: OPTIONS|PATCH
 ```
 
 ### OAuth2

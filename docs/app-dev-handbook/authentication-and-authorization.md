@@ -13,6 +13,7 @@ nav_order: 2
 - [Authentication and Authorization](#authentication-and-authorization)
   - [Authentication](#authentication)
     - [Excluded Paths](#excluded-paths)
+    - [Excluded Headers](#excluded-headers)
     - [OAuth2](#oauth2)
     - [Minimum Authentication Level](#minimum-authentication-level)
     - [K8s](#k8s)
@@ -70,6 +71,22 @@ auth:
   excludedPaths:
     - /my-app/api/open-api/swagger-ui
     - /my-app/api/openapi
+```
+
+### Excluded Headers
+
+It is possible disable the authentication and authorization depending on some headers values.
+
+It is possible to also use [pseudo-headers](https://httpwg.org/specs/rfc7540.html#rfc.section.8.1.2.1).
+For example, when the :method pseudo-header has one of the given values, there won't be any authentication or authorization checks.
+
+The headers values are provided via a regular expression, which is in [Google LE2 dialect](https://github.com/google/re2/wiki/Syntax).
+
+```yaml
+auth:
+  excludedHeaders:
+    - name: ":method"
+      valuesRegex: OPTIONS|PATCH
 ```
 
 ### OAuth2

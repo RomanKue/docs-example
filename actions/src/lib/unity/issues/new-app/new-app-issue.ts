@@ -55,6 +55,15 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   const termsOfServiceAccepted = isTermsOfServiceAccepted(body);
   const generateAngularStub = shouldDGenerateAngularStub(body);
   const generateQuarkusStub = shouldGenerateQuarkusStub(body);
+
+  if(appSpec.description=="Description which will be displayed in the UNITY app catalog. If you don't provide one, the description from Connect IT will be displayed in the app catalog."){
+    appSpec.description=null;
+  }
+
+  if(appSpec.displayedName=="Nice App Name"){
+    appSpec.displayedName=null;
+  }
+
   return new NewAppIssue(
     appSpec,
     termsOfServiceAccepted,

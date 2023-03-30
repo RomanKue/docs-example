@@ -58,6 +58,8 @@ export const reviewIssue = async (issue: Issue) => {
   ok &&= await checkTermsOfService(issue, newAppIssue);
   ok &&= await checkAppSchema(issue, newAppIssue);
   ok &&= await checkAppName(issue, newAppIssue);
+  ok &&= newAppIssue.appSpec.displayName && newAppIssue.appSpec.displayName.length <= 50;
+  ok &&= newAppIssue.appSpec.description && newAppIssue.appSpec.description.length <= 500;
 
   core.info(`all checks have been passed with: ${ok}`);
   if (ok) {

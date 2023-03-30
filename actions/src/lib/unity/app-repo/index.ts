@@ -87,9 +87,15 @@ const updateAppDeployments = async (
 ) => {
   if (isV1Beta1(appSpec) || isV1(appSpec)) {
     appSpec = createAppSpec(appSpec, appEnvironments.int, name, deployment, redirect);
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump({...appSpec, environment: appEnvironments.int}));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump({
+      ...appSpec,
+      environment: appEnvironments.int
+    }));
     appSpec = createAppSpec(appSpec, appEnvironments.prod, name, deployment, redirect);
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump({...appSpec, environment: appEnvironments.prod}));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump({
+      ...appSpec,
+      environment: appEnvironments.prod
+    }));
   }
   return appSpec;
 };
@@ -150,6 +156,15 @@ export const createRepository = async (
   if (!userLogin) {
     throw new Error(`user ${JSON.stringify(issue.user, null, 2)} has no login.`);
   }
+
+  if (!appSpec.description) {
+    delete appSpec.description;
+  }
+
+  if (!appSpec.displayedName) {
+    delete appSpec.displayedName;
+  }
+
   commit = await repositoriesUtils.addFile(appRepository.name, '.gitignore', createGitignore());
   commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(newAppIssue));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(appEnvironments.int), yaml.dump(appSpec));
@@ -279,16 +294,16 @@ export const createRepository = async (
     await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.cryptMasterKey, masterKey);
 
     switch (env) {
-    case 'int':
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST'));
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE'));
-      break;
-    case 'prod':
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST'));
-      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE'));
-      break;
-    default:
-      assertUnreachable(env);
+      case 'int':
+        await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST'));
+        await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE'));
+        break;
+      case 'prod':
+        await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST'));
+        await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE'));
+        break;
+      default:
+        assertUnreachable(env);
     }
   }
 
@@ -396,7 +411,7 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
   commit = await repositoriesUtils.deleteFileIfExisting(repo, '.github/workflows/deploy.yaml', branch);
 };
 
-export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: string, title: string, body?: string}) => {
+export const recreateRepoAppWorkflows = async (inputs: { repo: string; branch: string, title: string, body?: string }) => {
   const {repo, branch, title, body} = inputs;
   const appName = extractAppName(repo);
   const generateAngularStub = await repositoriesUtils.isContentExistent({repo, path: angularStubName});

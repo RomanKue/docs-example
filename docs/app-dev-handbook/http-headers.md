@@ -90,5 +90,3 @@ deployments:
         remove:
           - X-Frame-Options
 ```
-
-This is not working unless [UNITYAPPS-303](https://atc.bmwgroup.net/jira/browse/UNITYAPPS-303) is implemented.

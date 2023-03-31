@@ -12,8 +12,8 @@ I wish to run my app in UNITY. Here is the configuration I would like to start w
 ```yaml
 apiVersion: v1
 name: <my-app-name>
-displayName: <my-app-display-name>
-description: <my-app-description>
+displayName: Nice App Name
+description: Here is the description for the app catalog, which will be displayed there. If you don't provide one, the one from Connect IT will be taken.
 ```
 
 *The app's name should be URL compatible, so prefer `my-app` over ~~`MyApp`~~ or ~~`my app`~~.*

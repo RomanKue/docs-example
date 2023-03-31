@@ -51,18 +51,17 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   const tokens = lexMarkdown(body);
   const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
   const appYaml = code[0]?.text ?? '';
-  const appSpec: NewAppIssue['appSpec'] = parseYaml(appYaml);
+  const parseYamlJson = parseYaml(appYaml);
+  if (parseYamlJson?.description === "Description which will be displayed in the UNITY app catalog. If you don't provide one, the description from Connect IT will be displayed in the app catalog.") {
+    delete parseYamlJson.description;
+  }
+  if (parseYamlJson?.displayName === 'Nice App Name') {
+    delete parseYamlJson.displayName;
+  }
+  const appSpec: NewAppIssue['appSpec'] = parseYamlJson;
   const termsOfServiceAccepted = isTermsOfServiceAccepted(body);
   const generateAngularStub = shouldDGenerateAngularStub(body);
   const generateQuarkusStub = shouldGenerateQuarkusStub(body);
-
-  if(appSpec.description=="Description which will be displayed in the UNITY app catalog. If you don't provide one, the description from Connect IT will be displayed in the app catalog."){
-    appSpec.description=null;
-  }
-
-  if(appSpec.displayedName=="Nice App Name"){
-    appSpec.displayedName=null;
-  }
 
   return new NewAppIssue(
     appSpec,

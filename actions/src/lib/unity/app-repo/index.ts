@@ -157,14 +157,6 @@ export const createRepository = async (
     throw new Error(`user ${JSON.stringify(issue.user, null, 2)} has no login.`);
   }
 
-  if (!appSpec.description) {
-    delete appSpec.description;
-  }
-
-  if (!appSpec.displayedName) {
-    delete appSpec.displayedName;
-  }
-
   commit = await repositoriesUtils.addFile(appRepository.name, '.gitignore', createGitignore());
   commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(newAppIssue));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(appEnvironments.int), yaml.dump(appSpec));

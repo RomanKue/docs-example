@@ -7,6 +7,8 @@ import {
 } from './new-app-issue.js';
 import * as fs from 'fs';
 
+
+
 describe('new-app-issue', () => {
   describe('parseIssueBody', () => {
     it('should return empty object when issue body is empty', () => {
@@ -20,6 +22,12 @@ describe('new-app-issue', () => {
       expect(newAppIssue.generateAngularStub).toBe(true);
       expect(newAppIssue.generateQuarkusStub).toBe(true);
       expect(newAppIssue.termsOfServiceAccepted).toBe(false);
+    });
+    it('should delete description and displayName when are default',()=>{
+      const md = fs.readFileSync('../.github/ISSUE_TEMPLATE/new-app.md', 'utf8');
+      const newAppIssue = parseIssueBody(md);
+      expect(newAppIssue.appSpec?.displayName).toBeUndefined();
+      expect(newAppIssue.appSpec?.description).toBeUndefined();
     });
   });
 

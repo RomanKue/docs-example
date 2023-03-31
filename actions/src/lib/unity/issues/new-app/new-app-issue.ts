@@ -52,7 +52,7 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
   const appYaml = code[0]?.text ?? '';
   const parseYamlJson = parseYaml(appYaml);
-  if (parseYamlJson?.description === "Description which will be displayed in the UNITY app catalog. If you don't provide one, the description from Connect IT will be displayed in the app catalog.") {
+  if (parseYamlJson?.description === "Here is the description for the app catalog, which will be displayed there. If you don't provide one, the one from Connect IT will be taken.") {
     delete parseYamlJson.description;
   }
   if (parseYamlJson?.displayName === 'Nice App Name') {

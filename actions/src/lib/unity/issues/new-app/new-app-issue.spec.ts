@@ -7,7 +7,6 @@ import {
 } from './new-app-issue.js';
 import * as fs from 'fs';
 
-
 describe('new-app-issue', () => {
   describe('parseIssueBody', () => {
     it('should return empty object when issue body is empty', () => {

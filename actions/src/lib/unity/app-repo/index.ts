@@ -279,16 +279,16 @@ export const createRepository = async (
     await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.cryptMasterKey, masterKey);
 
     switch (env) {
-      case 'int':
-        await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST'));
-        await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE'));
-        break;
-      case 'prod':
-        await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST'));
-        await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE'));
-        break;
-      default:
-        assertUnreachable(env);
+    case 'int':
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('INT_KUBERNETES_HOST'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('INT_KUBERNETES_NAMESPACE'));
+      break;
+    case 'prod':
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesHost, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_HOST'));
+      await repositoriesUtils.createEnvironmentSecret(appRepository, env, githubSecretKeys.kubernetesNamespace, getInput<IssueUpdatedInputs>('PROD_KUBERNETES_NAMESPACE'));
+      break;
+    default:
+      assertUnreachable(env);
     }
   }
 

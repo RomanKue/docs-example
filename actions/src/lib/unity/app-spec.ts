@@ -53,8 +53,8 @@ export interface AppSpecV1Beta1 extends ApiVersioned {
   environment: string;
   appId?:string | null;
   deployments?: Record<string, AppDeployment>;
-  displayName?: string | null;
-  description?: string | null;
+  displayName?: string;
+  description?: string;
 }
 
 /**
@@ -71,8 +71,8 @@ export interface AppSpecV1 extends ApiVersioned {
   environment: string;
   appId?:string | null;
   deployments?: Record<string, AppDeployment>;
-  displayName?: string | null;
-  description?: string | null;
+  displayName?: string;
+  description?: string;
 }
 
 /**

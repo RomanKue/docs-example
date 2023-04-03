@@ -59,7 +59,6 @@ export const reviewIssue = async (issue: Issue) => {
   ok &&= await checkAppSchema(issue, newAppIssue);
   ok &&= await checkAppName(issue, newAppIssue);
 
-
   core.info(`all checks have been passed with: ${ok}`);
   if (ok) {
     await requestApproval(issue);

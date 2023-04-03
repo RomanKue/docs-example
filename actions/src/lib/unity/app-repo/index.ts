@@ -87,15 +87,9 @@ const updateAppDeployments = async (
 ) => {
   if (isV1Beta1(appSpec) || isV1(appSpec)) {
     appSpec = createAppSpec(appSpec, appEnvironments.int, name, deployment, redirect);
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump({
-      ...appSpec,
-      environment: appEnvironments.int
-    }));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump({...appSpec, environment: appEnvironments.int}));
     appSpec = createAppSpec(appSpec, appEnvironments.prod, name, deployment, redirect);
-    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump({
-      ...appSpec,
-      environment: appEnvironments.prod
-    }));
+    await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump({...appSpec, environment: appEnvironments.prod}));
   }
   return appSpec;
 };
@@ -156,7 +150,6 @@ export const createRepository = async (
   if (!userLogin) {
     throw new Error(`user ${JSON.stringify(issue.user, null, 2)} has no login.`);
   }
-
   commit = await repositoriesUtils.addFile(appRepository.name, '.gitignore', createGitignore());
   commit = await repositoriesUtils.addFile(appRepository.name, 'README.md', createReadme(newAppIssue));
   commit = await repositoriesUtils.addFile(appRepository.name, appYamlPath(appEnvironments.int), yaml.dump(appSpec));

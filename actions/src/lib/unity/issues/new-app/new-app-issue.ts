@@ -9,6 +9,7 @@ import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
 import {Content, ContentFile} from '../../../github/api/repos/response/content.js';
 import {base64Decode} from '../../../strings/encoding.js';
 import Code = marked.Tokens.Code;
+import {descriptionDefault, displayNameDefault} from "../../config.js";
 
 
 /**
@@ -52,10 +53,10 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
   const appYaml = code[0]?.text ?? '';
   const parseYamlJson = parseYaml(appYaml);
-  if (parseYamlJson?.description === "Here is the description for the app catalog, which will be displayed there. If you don't provide one, the one from Connect IT will be taken.") {
+  if (parseYamlJson?.description === descriptionDefault) {
     delete parseYamlJson.description;
   }
-  if (parseYamlJson?.displayName === 'Nice App Name') {
+  if (parseYamlJson?.displayName === displayNameDefault) {
     delete parseYamlJson.displayName;
   }
   const appSpec: NewAppIssue['appSpec'] = parseYamlJson;

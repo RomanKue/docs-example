@@ -9,7 +9,7 @@ import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
 import {Content, ContentFile} from '../../../github/api/repos/response/content.js';
 import {base64Decode} from '../../../strings/encoding.js';
 import Code = marked.Tokens.Code;
-import {descriptionDefault, displayNameDefault} from "../../config.js";
+import {descriptionDefault, displayNameDefault} from '../../config.js';
 
 
 /**

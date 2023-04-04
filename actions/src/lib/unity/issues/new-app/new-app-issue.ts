@@ -9,6 +9,7 @@ import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
 import {Content, ContentFile} from '../../../github/api/repos/response/content.js';
 import {base64Decode} from '../../../strings/encoding.js';
 import Code = marked.Tokens.Code;
+import {descriptionDefault, displayNameDefault} from '../../config.js';
 
 
 /**
@@ -51,10 +52,18 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   const tokens = lexMarkdown(body);
   const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
   const appYaml = code[0]?.text ?? '';
-  const appSpec: NewAppIssue['appSpec'] = parseYaml(appYaml);
+  const parseYamlJson = parseYaml(appYaml);
+  if (parseYamlJson?.description === descriptionDefault) {
+    delete parseYamlJson.description;
+  }
+  if (parseYamlJson?.displayName === displayNameDefault) {
+    delete parseYamlJson.displayName;
+  }
+  const appSpec: NewAppIssue['appSpec'] = parseYamlJson;
   const termsOfServiceAccepted = isTermsOfServiceAccepted(body);
   const generateAngularStub = shouldDGenerateAngularStub(body);
   const generateQuarkusStub = shouldGenerateQuarkusStub(body);
+
   return new NewAppIssue(
     appSpec,
     termsOfServiceAccepted,

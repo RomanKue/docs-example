@@ -396,7 +396,7 @@ export const upsertWorkflows = async (repo: string, generateAngularStub: boolean
   commit = await repositoriesUtils.deleteFileIfExisting(repo, '.github/workflows/deploy.yaml', branch);
 };
 
-export const recreateRepoAppWorkflows = async (inputs: {repo: string; branch: string, title: string, body?: string}) => {
+export const recreateRepoAppWorkflows = async (inputs: { repo: string; branch: string, title: string, body?: string }) => {
   const {repo, branch, title, body} = inputs;
   const appName = extractAppName(repo);
   const generateAngularStub = await repositoriesUtils.isContentExistent({repo, path: angularStubName});

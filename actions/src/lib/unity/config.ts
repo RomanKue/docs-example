@@ -6,6 +6,10 @@ import {Issue} from '../github/api/issues/response/issue.js';
 import {IssueComment} from '../github/api/issues/response/issue-comment.js';
 import {repoName} from './app-spec.js';
 
+/**constants for string default description and display name */
+export const displayNameDefault = 'Nice App Name';
+export const descriptionDefault = 'Here is the description for the app catalog, which will be displayed there. If you don\'t provide one, the one from Connect IT will be taken.';
+
 /** name of the org */
 export const unityOrg = 'UNITY';
 

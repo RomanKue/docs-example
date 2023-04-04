@@ -21,6 +21,12 @@ describe('new-app-issue', () => {
       expect(newAppIssue.generateQuarkusStub).toBe(true);
       expect(newAppIssue.termsOfServiceAccepted).toBe(false);
     });
+    it('should delete description and displayName when are default',()=>{
+      const md = fs.readFileSync('../.github/ISSUE_TEMPLATE/new-app.md', 'utf8');
+      const newAppIssue = parseIssueBody(md);
+      expect(newAppIssue.appSpec?.displayName).toBeUndefined();
+      expect(newAppIssue.appSpec?.description).toBeUndefined();
+    });
   });
 
   describe('shouldDGenerateAngularStub', () => {

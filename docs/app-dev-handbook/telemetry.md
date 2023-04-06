@@ -15,6 +15,7 @@ nav_order: 8
     - [Search in Logs](#search-in-logs)
     - [Live Logs](#live-logs)
   - [Metrics](#metrics)
+    - [Custom Metrics](#custom-metrics)
   - [Tracing](#tracing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

@@ -116,10 +116,10 @@ If the application wants to monitor its own metrics, this can be done be definin
 deployments:
   api:
     container:
-      metrics: /my-metrics
+      metrics: /my-app/api/metrics
 ```
 
-In this case the endpoint `/my-metrics` will be scraped and the exposed metrics can be explored as described above.
+In this case the endpoint `/my-app/api/metrics` will be scraped and the exposed metrics can be explored as described above.
 
 Using a labeling where the cardinality of the value set is high (e.g. email address) can dramatically increase the amount
 of data stored (for more information please refer to [Prometheus's official guide](https://prometheus.io/docs/practices/naming/)).

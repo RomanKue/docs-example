@@ -106,6 +106,26 @@ Here are a few examples to start with:
   avg(container_memory_working_set_bytes{pod=~"app-test-api-.*", container=~"main"}) by (pod, container)
   / avg(kube_pod_container_resource_requests{pod=~"app-test-api-.*", container=~"main", resource="memory"} > 0) by (pod, container)
   ```
+  
+### Custom Metrics
+
+If the application wants to monitor its own metrics, this can be done be defining the metrics endpoint as follows:
+
+```yaml
+deployments:
+  api:
+    container:
+      metrics: /my-metrics
+```
+
+In this case the endpoint `/my-metrics` will be scraped and the exposed metrics can be explored as described above.
+
+Using a labeling where the cardinality of the value set is high (e.g. email address) can dramatically increase the amount 
+of data stored (for more information please refer to [Prometheus's official guide](https://prometheus.io/docs/practices/naming/)).
+Therefore, there are some limitations regarding the custom metrics to prevent overloading and killing the time series
+database:
+* The maximum number of labels per sample is 10
+* The maximum number of samples per scrape is 200
 
 ## Tracing
 

@@ -63,7 +63,6 @@ ng new "$NAME" --defaults --style=scss --skip-git
   < "$SCRIPT_PATH/templates/logo_16x16.png" gomplate > "src/assets/images/favicon/logo_16x16.png"
   < "$SCRIPT_PATH/templates/logo_32x32.png" gomplate > "src/assets/images/favicon/logo_32x32.png"
   < "$SCRIPT_PATH/templates/logo_180x180.png" gomplate > "src/assets/images/favicon/logo_180x180.png"
-  
 
   # fix broken generated density tests, remove when https://atc.bmwgroup.net/jira/browse/DESY-3043 is fixed
   < "$SCRIPT_PATH/templates/app.component.spec.ts" gomplate > "src/app/app.component.spec.ts"

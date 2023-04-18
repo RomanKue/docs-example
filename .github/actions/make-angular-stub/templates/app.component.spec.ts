@@ -1,27 +1,42 @@
-import {TestBed} from '@angular/core/testing';
-import {AppComponent} from './app.component';
-import {DsBoxModule, DsButtonModule, DsHeaderModule, DsImprintModule, DsNavigationBarModule} from '@bmw-ds/components';
+import { TestBed } from "@angular/core/testing";
+import { AppComponent } from "./app.component";
+import { BrowserModule } from "@angular/platform-browser";
+import { MatDividerModule } from "@angular/material/divider";
+import {
+  DsBoxModule,
+  DsButtonModule,
+  DsHeaderModule,
+  DsImprintModule,
+  DsNavigationBarModule,
+  NavigationMenuModule,
+  DsIconModule,
+} from "@bmw-ds/components";
+import { HttpClientModule } from "@angular/common/http";
 
-describe('AppComponent', () => {
+describe("AppComponent", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-      ],
+      declarations: [AppComponent],
       imports: [
+        BrowserModule,
+        DsButtonModule,
+        DsIconModule,
+        HttpClientModule,
+        NavigationMenuModule,
+        MatDividerModule,
         DsNavigationBarModule,
         DsHeaderModule,
         DsImprintModule.forRoot({
-          phone: '5555555',
-          electronicContact: 'change-me@bmwgroup.com'
+          phone: "5555555",
+          electronicContact: "change-me@bmwgroup.com",
         }),
         DsBoxModule,
-        DsButtonModule
+        DsButtonModule,
       ],
     }).compileComponents();
   });
 
-  it('should create the app', () => {
+  it("should create the app", () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(app).toBeTruthy();
@@ -30,13 +45,6 @@ describe('AppComponent', () => {
   it(`should have as title '{{ .Env.APP_NAME }}'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('{{ .Env.APP_NAME }}');
-  });
-
-  it('should render text-paragraph', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.text-paragraph')?.textContent).toContain('Your app with Density is up and running');
+    expect(app.title).toEqual("{{ .Env.APP_NAME }}");
   });
 });

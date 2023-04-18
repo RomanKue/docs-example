@@ -7,7 +7,6 @@ import {
   NavigationMenuModule,
   DsNavigationBarModule,
   DsHeaderModule,
-  DsImprintModule,
   DsIconModule,
 } from "@bmw-ds/components";
 import { MatDividerModule } from "@angular/material/divider";
@@ -25,10 +24,6 @@ import { AuthenticationErrorInterceptor } from "./interceptors/authentication-er
     DsNavigationBarModule,
     DsHeaderModule,
     MatDividerModule,
-    DsImprintModule.forRoot({
-      phone: "123498765",
-      electronicContact: "change-me@bmwgroup.com",
-    }),
   ],
   providers: [
     {

@@ -73,4 +73,3 @@ ng new "$NAME" --defaults --style=scss --skip-git
   # list what has been created
   ls -lah
 )
-

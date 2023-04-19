@@ -1,6 +1,6 @@
-import { DsHeaderTagConfiguration, DsHeaderUserInfo } from "@bmw-ds/components";
+import { DsHeaderTagConfiguration } from "@bmw-ds/components";
 import { DsNavigationItem } from "@bmw-ds/components/ds-interfaces/navigation-bar.interface";
-import { Component, OnInit } from "@angular/core";
+import { Component } from "@angular/core";
 
 /**
  * Extract cookie value by name
@@ -17,7 +17,7 @@ const getCookie = (name: string) => {
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   //Tag with environment for header
   environmentTagConfig: Partial<DsHeaderTagConfiguration> = {
     label: getCookie("{{ .Env.REPO }}-{{ .Env.NAME }}-environment"),
@@ -34,6 +34,4 @@ export class AppComponent implements OnInit {
       icon: "apps",
     },
   ];
-
-  ngOnInit(): void {}
 }

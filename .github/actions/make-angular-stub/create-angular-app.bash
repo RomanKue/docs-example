@@ -50,7 +50,6 @@ ng new "$NAME" --defaults --style=scss --skip-git
   < "$SCRIPT_PATH/templates/index.html" gomplate > "src/index.html"
   < "$SCRIPT_PATH/templates/app.component.html" gomplate > "src/app/app.component.html"
   < "$SCRIPT_PATH/templates/app.component.scss" gomplate > "src/app/app.component.scss"
-  
   # Remove density background-image
   < "$SCRIPT_PATH/templates/styles.scss" gomplate > "src/styles.scss"
 

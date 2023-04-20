@@ -28,8 +28,8 @@ export class AppComponent {
   //Navigation configuration
   navigationItems: DsNavigationItem[] = [
     {
-      id: "appCatalogue",
-      label: "Apps catalogue",
+      id: "home",
+      label: "Home",
       routerLink: "/",
       icon: "apps",
     },

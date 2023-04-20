@@ -35,11 +35,16 @@ a {
     justify-content: center;
     align-items: center;
     .skeleton-title {
+        position: absolute;
+        top: var(--ds-space-9x);
         display: flex;
         flex-direction: column;
         align-self: flex-start;
         margin-left: calc(var(--ds-shape-size-y-header) + var(--ds-space-10x));
         margin-top: var(--ds-space-7x);
+        h1 {
+            margin-bottom: var(--ds-space-1x);
+        }
     }
     .skeleton-content {
         display: flex;
@@ -49,30 +54,31 @@ a {
         #unity_logo {
             width: 30%;
             align-self: center;
-            margin-bottom: var(--ds-space-3x);
+            margin-bottom: var(--ds-space-7x);
         }
         #unity_content_image {
             width: 60%;
+            margin-bottom: var(--ds-space-6x)
         }
         .skeleton-links {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            gap: var(--ds-space-10x);
+            gap: calc(var(--ds-space-8x) + var(--ds-space-15x));
             margin: var(--ds-space-10x);
             div {
                 transition: var(--ds-motion-duration-quick) var(--ds-motion-timing-standard);
                 display: flex;
                 flex-direction: row;
-                gap: var(--ds-space-5x);
+                gap: var(--ds-space-2x);
                 div {
                     flex-direction: column;
-                    gap: var(--ds-space-1x);
+                    gap: 0;
                 }
                 button {
                     border-radius: 100%;
-                    width: var(--ds-space-12x);
-                    height: var(--ds-space-12x);
+                    width: var(--ds-space-14x);
+                    height: var(--ds-space-14x);
                     color: var(--ds-color-surface-neutral-strong);
                     background-color: var(--ds-color-surface-base);
                 }
@@ -81,6 +87,8 @@ a {
                 }
                 p {
                     color: var(--ds-color-typography-neutral);
+                    font-size: var(--ds-typography-size-03);
+                    line-height: var(--ds-typography-size-05);
                 }
             }
             div:hover {
@@ -102,6 +110,7 @@ a {
     position: absolute;
     bottom: 0;
     width: 100vw;
+    max-height: var(--ds-space-8x);
     display: flex;
     justify-content: flex-end;
     background-color: var(--ds-color-surface-neutral);
@@ -116,7 +125,7 @@ a {
             margin: var(--ds-space-1x);
         }
         p {
-            color: var(--ds-color-typography-neutral)
+            color: var(--ds-color-typography-neutral);
         }
     }
 }

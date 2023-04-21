@@ -37,3 +37,20 @@ This (or fixing a broken master key) can be achieved by running the
 [`sync-master-keys`](https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/sync-master-keys.yaml)
 workflow, which stores the master key in GHE for the selected environment and repos matching the specified regular
 expression as `CRYPT_MASTER_KEY` (or updates the existing one if overwrite is set to true).
+
+## Fix Crashing UNITY Operator
+
+In case, the UNITY operator is in a crashing looping state, because one app is configured such that it breaks the
+operator (which should not happen).
+To make sure the UNITY operator gets into normal state, one can exclude an app (causing the issue) from being handled by
+the unity-operator.
+
+To do so, annotate the app's secret with `unity-operator.unity.bmwgroup.net/disabled: 'true'`. This can be done by
+running
+
+```bash
+kubectl annotate secret app-foo --overwrite unity-operator.unity.bmwgroup.net/disabled=true
+```
+
+⚠️ After the root cause of the issue was solved, the annotation must be set back to `false` manually.
+

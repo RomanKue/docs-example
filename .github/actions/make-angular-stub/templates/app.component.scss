@@ -71,6 +71,7 @@ a {
                 display: flex;
                 flex-direction: row;
                 gap: var(--ds-space-2x);
+                justify-content: center;
                 div {
                     flex-direction: column;
                     gap: 0;
@@ -83,7 +84,8 @@ a {
                     background-color: var(--ds-color-surface-base);
                 }
                 p.link-title {
-                    color: var(--ds-color-typography-action)
+                    color: var(--ds-color-typography-action);
+                    margin-bottom: var(--ds-space-05x);
                 }
                 p {
                     color: var(--ds-color-typography-neutral);

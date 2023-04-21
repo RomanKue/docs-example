@@ -13,6 +13,7 @@ nav_order: 7
 - [Incident Recovery](#incident-recovery)
   - [Fix Broken Service Account Token](#fix-broken-service-account-token)
   - [Fix Missing or Broken Master Key](#fix-missing-or-broken-master-key)
+  - [Fix Crashing UNITY Operator](#fix-crashing-unity-operator)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

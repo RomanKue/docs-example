@@ -14,6 +14,7 @@ nav_order: 7
   - [Fix Broken Service Account Token](#fix-broken-service-account-token)
   - [Fix Missing or Broken Master Key](#fix-missing-or-broken-master-key)
   - [Fix Crashing UNITY Operator](#fix-crashing-unity-operator)
+  - [Automatic Alerts](#automatic-alerts)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -54,4 +55,23 @@ kubectl annotate secret app-foo --overwrite unity-operator.unity.bmwgroup.net/di
 ```
 
 ⚠️ After the root cause of the issue was solved, the annotation must be set back to `false` manually.
+
+## Automatic Alerts
+
+There are several automatic alerts which result in both Teams messages on the configured channels and ITSM incidents being
+created. The situations which result in automatic alerts are the following:
+
+- when one of the platform components is not working on either INT or PROD (unity-operator, oauth2-proxy, grafana, grafana-tempo).
+In this case, the UNITY team needs to analyze the problem and come up with a solution (a quick temporary fix to bring the
+component back into a running state and, if necessary, a follow-up fix in the code to prevent the problem from occurring again)
+
+- when an application is not working on PROD. In this case, the UNITY team needs to analyze the problem and determine if
+it is caused by the platform or by the application. In case the problem is caused by the platform, the same steps which
+are done in case platform components are done, need to be followed here. In case the problem is within the application,
+it needs to be informed (via an incident).
+
+The service group corresponding to an application can be found in [`Connect IT`](https://connectit.muc), under the tab
+`CMDB Information` (after searching for the application, by application ID)
+
+![](../assets/connectit.png)
 

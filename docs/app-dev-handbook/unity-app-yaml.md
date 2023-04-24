@@ -60,7 +60,7 @@ The final config looks as follows.
 # Additional information
 
 The unity-app-*.yaml files contains also additional information about an application, which determines the behavior with
-regard to deployments, supported environments and also information which will appear on the UNITY application catalog etc.
+regard to deployments, supported environments, etc. and also information which will appear on the UNITY application catalog.
 
 ## Prototypes
 

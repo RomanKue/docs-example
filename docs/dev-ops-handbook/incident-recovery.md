@@ -14,6 +14,7 @@ nav_order: 7
   - [Fix Broken Service Account Token](#fix-broken-service-account-token)
   - [Fix Missing or Broken Master Key](#fix-missing-or-broken-master-key)
   - [Fix Crashing UNITY Operator](#fix-crashing-unity-operator)
+  - [Automatic Alerts](#automatic-alerts)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

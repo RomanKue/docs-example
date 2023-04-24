@@ -58,7 +58,7 @@ kubectl annotate secret app-foo --overwrite unity-operator.unity.bmwgroup.net/di
 
 ## Automatic Alerts
 
-There are several automatic alerts which result in both Teams messages on the configured channels and ITSM tickets being
+There are several automatic alerts which result in both Teams messages on the configured channels and ITSM incidents being
 created. The situations which result in automatic alerts are the following:
 
 - when one of the platform components is not working on either INT or PROD (unity-operator, oauth2-proxy, grafana, grafana-tempo).
@@ -68,5 +68,10 @@ component back into a running state and, if necessary, a follow-up fix in the co
 - when an application is not working on PROD. In this case, the UNITY team needs to analyze the problem and determine if
 it is caused by the platform or by the application. In case the problem is caused by the platform, the same steps which
 are done in case platform components are done, need to be followed here. In case the problem is within the application,
-it needs to be informed (via a ticket or by contacting directly the application responsible).
+it needs to be informed (via an incident).
+
+The service group corresponding to an application can be found out in[`Connect IT`](https://connectit.muc), under the tab
+`CMDB Information` (after searching for the application, by application ID)
+
+![](../assets/connectit.png)
 

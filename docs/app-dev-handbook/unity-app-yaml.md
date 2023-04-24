@@ -12,8 +12,6 @@ nav_order: 1
 
 - [Unity App Yaml](#unity-app-yaml)
   - [IntelliJ and Other JetBrains IDEs](#intellij-and-other-jetbrains-ides)
-- [Additional information](#additional-information)
-  - [Prototypes](#prototypes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

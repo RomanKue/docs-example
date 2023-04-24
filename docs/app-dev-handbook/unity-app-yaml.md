@@ -56,22 +56,3 @@ Your browser does not support the video tag.
 The final config looks as follows.
 
 ![](../assets/JSON-Schema-Mappings.png)
-
-# Additional information
-
-The unity-app-*.yaml files contains also additional information about an application, which determines the behavior with
-regard to deployments, supported environments, etc. and also information which will appear on the UNITY application catalog.
-
-## Prototypes
-
-Prototypes are UNITY applications which are not meant for productive use. They are used only for trying out different
-solutions with real data. If the prototype needs to be converted to a real application, the BMW process for creating an
-application needs to be followed (creating an application in ConnectIT, etc).
-It is possible to mark a UNITY application as a prototype via a flag in the unity-app-*.yaml file:
-
-```yaml
-prototype: true
-```
-
-It is not possible to deploy an application on the UNITY production environment without either specifying an appId for
-it or marking it as a prototype.

@@ -7,7 +7,7 @@ nav_order: 0
 
 # UNITY
 
-![](assets/unity_logo.png)
+![](assets/unity_logo.svg)
 
 ## Table of Contents
 

@@ -16,6 +16,7 @@ nav_order: 3
     - [Encrypt in the Browser](#encrypt-in-the-browser)
     - [Encrypt via `gh`](#encrypt-via-gh)
   - [Headers and Cookies](#headers-and-cookies)
+  - [Prototypes](#prototypes)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -135,3 +136,17 @@ The name of the cookie `app-foo-ui-environment` should have the following segmen
 
 Setting `Path=/foo/ui` is also recommended.
 Check [Set-Cookie on MDN](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie) for more details.
+
+## Prototypes
+
+Prototypes are UNITY applications which are not meant for productive use. They are used only for trying out different
+solutions with real data. If the prototype needs to be converted to a real application, the BMW process for creating an
+application needs to be followed (creating an application in ConnectIT, etc).
+It is possible to mark a UNITY application as a prototype via a flag in the `unity-app-*.yaml` file:
+
+```yaml
+prototype: true
+```
+
+It is not possible to deploy an application on the UNITY production environment without either specifying an `appId` for
+it or marking it as a prototype.

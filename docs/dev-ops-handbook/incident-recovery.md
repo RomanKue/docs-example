@@ -70,7 +70,7 @@ it is caused by the platform or by the application. In case the problem is cause
 are done in case platform components are done, need to be followed here. In case the problem is within the application,
 it needs to be informed (via an incident).
 
-The service group corresponding to an application can be found in [`Connect IT`](https://connectit.muc), under the tab
+The service group corresponding to an application can be found in [Connect IT](https://connectit.muc), under the tab
 `CMDB Information` (after searching for the application, by application ID)
 
 ![](../assets/connectit.png)

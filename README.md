@@ -1,4 +1,4 @@
-![](docs/assets/Unity%20Logo%20-%20Dark%20backgrounds.svg)
+![](docs/assets/unity_logo.svg)
 
 [![Lint][lint-badge]][lint-workflow]
 [![Test][test-actions-badge]][test-actions-workflow]

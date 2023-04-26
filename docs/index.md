@@ -7,7 +7,7 @@ nav_order: 0
 
 # UNITY
 
-![](assets/unity_logo.svg)
+![](assets/Unity%20Logo%20-%20Dark%20backgrounds.svg)
 
 ## Table of Contents
 

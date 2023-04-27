@@ -132,8 +132,8 @@ database:
 ## ITSM Notification
 
 It is possible to define [Prometheus Alerting Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules)
-which can be configured to trigger incident creation. The prerequisite of this is to have a valid interface contract 
-between your application and ITSM and to use the contracts id and your application id as follows: 
+which can be configured to trigger incident creation. The prerequisite of this is to have a valid interface contract
+between your application and ITSM and to use the contracts id and your application id as follows:
 
 ```yaml
 deployments:
@@ -156,8 +156,8 @@ alerts:
     summary: Foo_total is greater then 10
 ```
 
-For more information regarding alerts integration please refer to 
-[4WHEELS MANAGED](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/monitoring/#alerts-integration) 
+For more information regarding alerts integration please refer to
+[4WHEELS MANAGED](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/monitoring/#alerts-integration)
 documentation.
 
 ## Tracing

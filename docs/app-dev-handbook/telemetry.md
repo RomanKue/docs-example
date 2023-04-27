@@ -122,11 +122,37 @@ deployments:
 In this case the endpoint `/my-app/api/metrics` will be scraped and the exposed metrics can be explored as described above.
 
 Using a labeling where the cardinality of the value set is high (e.g. email address) can dramatically increase the amount
-of data stored (for more information please refer to [Prometheus's official guide](https://prometheus.io/docs/practices/naming/)).
+of data stored (for more information please refer to [Prometheus's official guide](https://prometheus.io/docs/practices/naming)).
 Therefore, there are some limitations regarding the custom metrics to prevent overloading and killing the time series
 database:
 * The maximum number of labels per sample is 10
 * The maximum number of samples per scrape is 200
+
+## ITSM Notification
+
+It is possible to define [Prometheus Alerting Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules)
+which can be configured to trigger ITSM ticket creation.
+
+```yaml
+deployments:
+  api:
+    replicas: 1
+    container:
+      # Container configuration
+alerts:
+  foo_total:
+    description: Foo_total has reached 10 for label 'prom-rule-test'.
+    expr: foo_total{metric="prom-rule-test"} > 10
+    for: 10m
+    labels:
+      itsm_app_id: APP-1234
+      itsm_contract_id: 10APP12034201
+      itsm_enabled: true
+      itsm_event_id: foo_total_reached_10
+      itsm_severity: MINOR
+      severity: other
+    summary: Foo_total is greater then 10
+```
 
 ## Tracing
 

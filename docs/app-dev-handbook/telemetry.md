@@ -16,6 +16,7 @@ nav_order: 8
     - [Live Logs](#live-logs)
   - [Metrics](#metrics)
     - [Custom Metrics](#custom-metrics)
+  - [ITSM Notification](#itsm-notification)
   - [Tracing](#tracing)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

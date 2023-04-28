@@ -15,6 +15,7 @@ nav_order: 7
   - [Fix Missing or Broken Master Key](#fix-missing-or-broken-master-key)
   - [Fix Crashing UNITY Operator](#fix-crashing-unity-operator)
   - [Automatic Alerts](#automatic-alerts)
+    - [Known Issues](#known-issues)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

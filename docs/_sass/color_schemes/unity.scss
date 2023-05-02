@@ -16,6 +16,10 @@ $search-background-color: $body-background-color;
 $feedback-color: $sidebar-color;
 $code-background-color: rgb(34, 39, 48);
 
+.main {
+  max-width: 1024px;
+}
+
 .highlight, pre.highlight {
   background: $code-background-color;
 }

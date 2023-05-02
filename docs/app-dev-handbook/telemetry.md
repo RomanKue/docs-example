@@ -120,35 +120,43 @@ deployments:
       metrics: /my-app/api/metrics
 ```
 
-In this case the endpoint `/my-app/api/metrics` will be scraped and the exposed metrics can be explored as described above.
+In this case the endpoint `/my-app/api/metrics` will be scraped and the exposed metrics can be explored as described
+above.
 
-Using a labeling where the cardinality of the value set is high (e.g. email address) can dramatically increase the amount
-of data stored (for more information please refer to [Prometheus's official guide](https://prometheus.io/docs/practices/naming)).
+Using a labeling where the cardinality of the value set is high (e.g. email address) can dramatically increase the
+amount
+of data stored (for more information please refer
+to [Prometheus's official guide](https://prometheus.io/docs/practices/naming)).
 Therefore, there are some limitations regarding the custom metrics to prevent overloading and killing the time series
 database:
+
 * The maximum number of labels per sample is 10
 * The maximum number of samples per scrape is 200
 
-## ITSM Notification
+## ITSM Alerting
 
-It is possible to define [Prometheus Alerting Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules)
-which can be configured to trigger incident creation. The prerequisite of this is to have a valid interface contract
-between your application and ITSM and to use the contracts id and your application id as follows:
+It is possible to
+define [Prometheus Alerting Rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules)
+which can be configured to trigger incident creation. The prerequisite for this is a valid monitor contract ID (MCID)
+which can be created in the [Application Monitoring Database](http://systemsmgmt-portal.bmwgroup.net).
+
+An alert can then be configured as follows:
 
 ```yaml
+appId: APP-1234
 deployments:
   api:
     replicas: 1
     container:
-      # Container configuration
+    # Container configuration
 alerts:
   foo_total:
     description: Foo_total has reached 10 for label 'prom-rule-test'.
     expr: foo_total{metric="prom-rule-test"} > 10
     for: 10m
     labels:
-      itsm_app_id: APP-1234
-      itsm_contract_id: 10APP12034201
+      # itsm_app_id: APP-789 # optional APP-ID from the MCID. Only required if different from the appId provided above
+      itsm_contract_id: 10APP123456789 # your MCID from the Application Monitoring Database
       itsm_enabled: true
       itsm_event_id: foo_total_reached_10
       itsm_severity: MINOR
@@ -157,7 +165,7 @@ alerts:
 ```
 
 For more information regarding alerts integration please refer to
-[4WHEELS MANAGED](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/monitoring/#alerts-integration)
+[4Wheels Managed](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/monitoring/#alerts-integration)
 documentation.
 
 ## Tracing

@@ -15,6 +15,7 @@ nav_order: 7
   - [Fix Missing or Broken Master Key](#fix-missing-or-broken-master-key)
   - [Fix Crashing UNITY Operator](#fix-crashing-unity-operator)
   - [Automatic Alerts](#automatic-alerts)
+    - [Known Issues](#known-issues)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -75,3 +76,15 @@ The service group corresponding to an application can be found in [Connect IT](h
 
 ![](../assets/connectit.png)
 
+### Known Issues
+
+The following alert is triggered because the total memory limit is higher than the available memory in the cluster.
+
+![](../assets/memory-overcommit-alert.png)
+
+This is not be a problem unless the applications are simultaneously requesting more memory than the property set in
+`container.resources.requests` in their `unity-app.*.yaml`, which is highly unlikely (for more information see the
+[official documentation](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits)).
+
+If this still happens, the problem can be fixed by raising the `container.resources.requests` to a value which is closer
+to the `container.resources.limits`, which should trigger the creation of new nodes by the autoscaler.

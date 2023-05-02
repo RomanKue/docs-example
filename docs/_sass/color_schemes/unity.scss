@@ -17,7 +17,7 @@ $feedback-color: $sidebar-color;
 $code-background-color: rgb(34, 39, 48);
 
 @media (min-width: 50rem) {
-  .main {
+  div.main {
     max-width: 1024px;
   }
 }

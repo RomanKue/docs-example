@@ -79,7 +79,7 @@ export const appYamlPath = (env: 'int' | 'prod') => `unity-app.${env}.yaml`;
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const updateAppDeployments = async (
+const updateIntAppDeployment = async (
   appSpec: ReadonlyDeep<AppSpec>,
   name: string,
   deployment: AppDeployment,
@@ -88,6 +88,17 @@ const updateAppDeployments = async (
   if (isV1Beta1(appSpec) || isV1(appSpec)) {
     appSpec = createAppSpec(appSpec, appEnvironments.int, name, deployment, redirect);
     await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.int), yaml.dump({...appSpec, environment: appEnvironments.int}));
+  }
+  return appSpec;
+};
+
+const updateProdAppDeployment = async (
+  appSpec: ReadonlyDeep<AppSpec>,
+  name: string,
+  deployment: AppDeployment,
+  redirect?: string,
+) => {
+  if (isV1Beta1(appSpec) || isV1(appSpec)) {
     appSpec = createAppSpec(appSpec, appEnvironments.prod, name, deployment, redirect);
     await repositoriesUtils.updateFile(repoName(appSpec.name), appYamlPath(appEnvironments.prod), yaml.dump({...appSpec, environment: appEnvironments.prod}));
   }
@@ -123,7 +134,7 @@ export const createRepository = async (
   issue: ReadonlyDeep<Issue>,
   newAppIssue: ReadonlyDeep<NewAppIssue>,
   appSpec: ReadonlyDeep<AppSpec>
-): Promise<{ appSpec: ReadonlyDeep<AppSpec>; appRepository: ReadonlyDeep<Repository> }> => {
+): Promise<{ appIntSpec: ReadonlyDeep<AppSpec>; appProdSpec: ReadonlyDeep<AppSpec>; appRepository: ReadonlyDeep<Repository> }> => {
   const newAppRepoName = repoName(appSpec.name);
   if (await repositoriesUtils.isRepoExistent(appSpec.name)) {
     throw new Error(`the repository ${newAppRepoName} already exists`);
@@ -160,33 +171,39 @@ export const createRepository = async (
   commit = await repositoriesUtils.addFile(appRepository.name, '.idea/modules.xml', createModules(newAppIssue));
   commit = await repositoriesUtils.addFile(appRepository.name, `.idea/${newAppRepoName}.iml`, createRootModule(newAppIssue));
 
+  let appIntSpec = {...appSpec};
+  let appProdSpec = {...appSpec};
   if (newAppIssue.generateAngularStub) {
     const name = angularStubName;
     commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/install.xml`, createNpmInstallRunConfig());
     commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/start.xml`, createNpmStartRunConfig());
-    appSpec = await updateAppDeployments(appSpec, name,
-      {
-        auth: {
-          oauth2: {
-            enabled: true
-          },
-        },
-        container: {
-          image: imageName(appSpec.name, name),
-          tag: 'latest',
-          tmpDirs: ['/tmp']
-        },
-        headers: {
-          response: {
-            add: {
-              // configure a cookie on non-prod to show which environment we are on
-              'Set-Cookie': `${newAppRepoName}-${name}-environment=int; Secure; SameSite=Strict; Path=/${appSpec.name}/${name}`
-            },
-          },
+    const prodDeploymentUpdates = {
+      auth: {
+        oauth2: {
+          enabled: true
         },
       },
-      'ui/',
-    );
+      container: {
+        image: imageName(appSpec.name, name),
+        tag: 'latest',
+        tmpDirs: ['/tmp']
+      },
+    };
+    appProdSpec = await updateProdAppDeployment(appProdSpec, name, prodDeploymentUpdates, 'ui/');
+
+    const intDeploymentUpdates = {
+      ...prodDeploymentUpdates,
+      headers: {
+        response: {
+          add: {
+            // configure a cookie on non-prod to show which environment we are on
+            'Set-Cookie': `${newAppRepoName}-${name}-environment=int; Secure; SameSite=Strict; Path=/${appSpec.name}/${name}`
+          },
+        },
+      }
+    };
+    appIntSpec = await updateIntAppDeployment(appIntSpec, name, intDeploymentUpdates,'ui/');
+
     await actions.createAWorkflowDispatchEvent({
       ref: 'main',
       workflow_id: makeStubWorkflowId,
@@ -206,28 +223,29 @@ export const createRepository = async (
     const name = quarkusStubName;
     commit = await repositoriesUtils.addFile(appRepository.name, `.idea/misc.xml`, createMisc(javaVersion));
     commit = await repositoriesUtils.addFile(appRepository.name, `.idea/runConfigurations/${name}.xml`, createQuarkusDevRunConfig());
-    appSpec = await updateAppDeployments(appSpec, name,
-      {
-        auth: {
-          oauth2: {
-            enabled: false
-          },
+    const deployment = {
+      auth: {
+        oauth2: {
+          enabled: false
         },
-        container: {
-          image: imageName(appSpec.name, name),
-          tag: 'latest',
-          tmpDirs: ['/tmp'],
-          capabilities: ['DAC_OVERRIDE'],
-          resources: {
-            requests: {
-              memoryMiB: 128
-            },
-            limits: {
-              memoryMiB: 256
-            }
+      },
+      container: {
+        image: imageName(appSpec.name, name),
+        tag: 'latest',
+        tmpDirs: ['/tmp'],
+        capabilities: ['DAC_OVERRIDE'],
+        resources: {
+          requests: {
+            memoryMiB: 128
+          },
+          limits: {
+            memoryMiB: 256
           }
         }
-      },);
+      }
+    };
+    appIntSpec = await updateIntAppDeployment(appIntSpec, name, deployment);
+    appProdSpec = await updateProdAppDeployment(appProdSpec, name, deployment);
     await actions.createAWorkflowDispatchEvent({
       ref: 'main',
       workflow_id: makeStubWorkflowId,
@@ -342,7 +360,7 @@ export const createRepository = async (
     });
   }
 
-  return {appSpec, appRepository};
+  return {appIntSpec, appProdSpec, appRepository};
 };
 
 export const upsertWorkflows = async (repo: string, generateAngularStub: boolean, generateQuarkusStub: boolean, appName: string, branch = 'main') => {

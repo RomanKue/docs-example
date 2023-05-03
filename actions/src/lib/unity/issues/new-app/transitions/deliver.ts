@@ -24,16 +24,13 @@ export const closeWithComment = async (issue: Issue, appRepository: ReadonlyDeep
 
 export const createNewApp = async (issue: Issue): Promise<ReadonlyDeep<Repository>> => {
   const newAppIssue = parseIssueBody(issue.body ?? '');
-  let appSpec = newAppIssue.appSpec;
+  const appSpec = newAppIssue.appSpec;
   if (!appSpec) {
     throw new Error(`could not parse appSpec from issue: ${JSON.stringify(issue, null, 2)}`);
   }
 
   try {
-    const {appSpec: updatedAppSpec, appRepository} = await createRepository(issue, newAppIssue, appSpec);
-
-    // if we ever continue to do something with appSpec, we need to continue with the updated one
-    appSpec = updatedAppSpec;
+    const {appRepository} = await createRepository(issue, newAppIssue, appSpec);
 
     return appRepository;
   } catch (e) {

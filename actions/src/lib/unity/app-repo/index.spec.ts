@@ -1,7 +1,7 @@
 import {createRepository, removeOrgMembers} from './index.js';
 
 
-import * as repositoris from '../../github/api/repos/repositories.js';
+import * as repositories from '../../github/api/repos/repositories.js';
 import {Repository} from '../../github/api/repos/response/repository.js';
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import {RepositoryInvitation} from '../../github/api/repos/response/repository-invitation.js';
@@ -20,6 +20,7 @@ import {jest} from '@jest/globals';
 import issues from '../../github/api/issues/index.js';
 import {IssueComment} from '../../github/api/issues/response/issue-comment.js';
 import {ProtectedBranch} from '../../github/api/repos/response/protected-branch.js';
+import * as githubActions from '../../github/api/actions/actions.js';
 
 
 describe('index', () => {
@@ -30,18 +31,22 @@ describe('index', () => {
     user = partialMock<SimpleUser>({login: 'q123456'});
     issue = partialMock<Issue>({user: user});
     v1beta1 = Object.freeze({apiVersion: 'v1beta1', name: 'foo', environment:'test', members: [{qNumber: 'q1234'}]});
-    jest.spyOn(repositoris, 'listOrganizationRepositories').mockResolvedValue([]);
-    jest.spyOn(repositoris, 'createAnOrganizationRepository').mockResolvedValue(partialMock<Repository>());
-    jest.spyOn(repositoris, 'createOrUpdateFileContents').mockResolvedValue(partialMock<FileCommit>({commit: {sha: 'foo'}}));
-    jest.spyOn(repositoriesUtils, 'isContentExistent').mockResolvedValue(false);
-    jest.spyOn(repositoris, 'addARepositoryCollaborator').mockResolvedValue(partialMock<RepositoryInvitation>());
-    jest.spyOn(repositoris, 'replaceAllRepositoryTopics').mockResolvedValue(partialMock<Topic>());
-    jest.spyOn(repositoris, 'createOrUpdateAnEnvironment').mockResolvedValue(partialMock<Environment>());
-    jest.spyOn(repositoris, 'updateBranchProtection').mockResolvedValue(partialMock<ProtectedBranch>());
+    jest.spyOn(repositories, 'listOrganizationRepositories').mockResolvedValue([]);
+    jest.spyOn(repositories, 'createAnOrganizationRepository').mockResolvedValue(partialMock<Repository>());
+    jest.spyOn(repositories, 'createOrUpdateFileContents').mockResolvedValue(partialMock<FileCommit>({commit: {sha: 'foo'}}));
+    jest.spyOn(repositoriesUtils, 'isContentExistent').mockResolvedValue(true);
+    jest.spyOn(repositories, 'addARepositoryCollaborator').mockResolvedValue(partialMock<RepositoryInvitation>());
+    jest.spyOn(repositories, 'replaceAllRepositoryTopics').mockResolvedValue(partialMock<Topic>());
+    jest.spyOn(repositories, 'createOrUpdateAnEnvironment').mockResolvedValue(partialMock<Environment>());
+    jest.spyOn(repositories, 'updateBranchProtection').mockResolvedValue(partialMock<ProtectedBranch>());
     jest.spyOn(issues, 'commentOnIssue').mockResolvedValue(partialMock<IssueComment>());
     jest.spyOn(repositoriesUtils, 'createEnvironmentSecret').mockResolvedValue();
     jest.spyOn(orgs, 'listOrganizationMembers').mockResolvedValue([]);
     jest.spyOn(k8s, 'createK8sObjects').mockResolvedValue('token-string');
+    jest.spyOn(repositoriesUtils, 'updateFile').mockResolvedValue(null as never);
+    jest.spyOn(repositoriesUtils, 'addFile').mockResolvedValue(null as never);
+    jest.spyOn(repositoriesUtils, 'upsertFile').mockResolvedValue(null as never);
+    jest.spyOn(repositoriesUtils, 'deleteFileIfExisting').mockResolvedValue(null as never);
 
     jest.spyOn(input, 'getInput').mockReturnValue('foo');
   });
@@ -50,18 +55,29 @@ describe('index', () => {
       const newAppIssue = new NewAppIssue(v1beta1, true, false, false);
       const repository = await createRepository(issue, newAppIssue, v1beta1);
       expect(repository).toBeTruthy();
-      expect(repositoris.addARepositoryCollaborator).toHaveBeenCalledTimes(1);
-      expect(repositoris.listOrganizationRepositories).toHaveBeenCalledTimes(1);
-      expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledTimes(1);
-      expect(repositoris.createOrUpdateAnEnvironment).toHaveBeenCalledTimes(2);
-      expect(repositoris.replaceAllRepositoryTopics).toHaveBeenCalledTimes(1);
-      expect(repositoris.updateBranchProtection).toHaveBeenCalledTimes(1);
+      expect(repositories.addARepositoryCollaborator).toHaveBeenCalledTimes(1);
+      expect(repositories.listOrganizationRepositories).toHaveBeenCalledTimes(1);
+      expect(repositories.createAnOrganizationRepository).toHaveBeenCalledTimes(1);
+      expect(repositories.createOrUpdateAnEnvironment).toHaveBeenCalledTimes(2);
+      expect(repositories.replaceAllRepositoryTopics).toHaveBeenCalledTimes(1);
+      expect(repositories.updateBranchProtection).toHaveBeenCalledTimes(1);
 
       expect(k8s.createK8sObjects).toHaveBeenCalledTimes(2);
 
       expect(repositoriesUtils.createEnvironmentSecret).toHaveBeenCalledTimes(8);
 
-      expect(repositoris.createAnOrganizationRepository).toHaveBeenCalledWith(expect.objectContaining({visibility: 'private'}));
+      expect(repositories.createAnOrganizationRepository).toHaveBeenCalledWith(expect.objectContaining({visibility: 'private'}));
+    });
+
+    it('should create angular stub', async () => {
+      const newAppIssue = new NewAppIssue(v1beta1, true, true, false);
+      jest.spyOn(githubActions, 'createAWorkflowDispatchEvent').mockResolvedValue();
+
+      const { appRepository, appIntSpec, appProdSpec} = await createRepository(issue, newAppIssue, v1beta1);
+
+      expect(appRepository).toBeTruthy();
+      expect(appIntSpec?.deployments?.ui?.headers?.response?.add && appIntSpec.deployments.ui.headers.response.add['Set-Cookie']).toBeTruthy();
+      expect(appProdSpec?.deployments?.ui?.headers).toBeUndefined();
     });
   });
   describe('removeOrgMembers', () => {

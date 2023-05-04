@@ -1,54 +1,62 @@
-<div class="navigation-header-wrapper">
-    <ds-header
-        id="navHeader"
-        class="bmw-header"
-        appName="{{ .Env.APP_NAME }}"
-        brandLogos="Rolls-Royce"
-        [navBarRef]="navBar"></ds-header>
-</div>
-<div class="navigation-sidebar-wrapper">
-    <ds-navigation-bar #navBar activeItemId="home" [items]="navigationItems"></ds-navigation-bar>
-</div>
-<section class="skeleton-wrapper">
-    <div class="skeleton-title">
-        <h1>HI, YOU'RE READY TO START YOUR APP DEVELOPMENT!</h1>
+<ds-header
+  id="navHeader"
+  class="bmw-header"
+  appName="{{ .Env.APP_NAME }}"
+  brandLogos="Rolls-Royce"
+  [environmentTag]="environmentTagConfig"
+  [navBarRef]="navBar"></ds-header>
+<div class="d-flex">
+  <div class="navigation-bar__wrapper">
+    <ds-navigation-bar #navBar activeItemId="home" [items]="navigationItems"> </ds-navigation-bar>
+  </div>
+  <div class="container-fluid">
+    <section class="skeleton-wrapper">
+      <div class="skeleton-title-wrapper">
+        <h1 class="skeleton-title">HI, YOU'RE READY TO START YOUR APP DEVELOPMENT!</h1>
         <span>Your UNITY.app is up and running. Now you can start generating business value.</span>
-    </div>
-    <div class="skeleton-content">
-        <img src="./assets/images/Logo-unity.svg" alt="Unity logo" id="unity_logo" />
-        <img src="./assets/images/unity-skeleton.svg" alt="Unity image content" id="unity_content_image" />
+      </div>
+      <div class="skeleton-content-wrapper">
+        <img src="./assets/images/Logo-unity.svg" alt="Unity logo" id="unity_logo" class="unity_logo" />
+        <img
+          src="./assets/images/unity-skeleton.svg"
+          alt="Unity image content"
+          id="unity_content_image"
+          class="unity_content_image" />
         <section class="skeleton-links">
-            <a
-                href="https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/"
-                target="_blank"
-                rel="noopener">
-                <div>
-                    <button ds-button variant="outline">
-                        <ds-icon icon="code" alt="UNITY Documentation" width="22" height="22"></ds-icon>
-                    </button>
-                    <div>
-                        <p class="link-title">UNITY Documentation</p>
-                        <p>Topics & how-to's</p>
-                    </div>
-                </div>
-            </a>
-            <a href="https://density.bmwgroup.net/v7/components" target="_blank" rel="noopener">
-                <div>
-                    <button ds-button variant="outline">
-                        <ds-icon icon="lightbulb" alt="Density Design System" width="22" height="22"></ds-icon>
-                    </button>
-                    <div>
-                        <p class="link-title">Density Design System components</p>
-                        <p>Documentation & Guidelines</p>
-                    </div>
-                </div>
-            </a>
+          <a
+            href="https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/"
+            target="_blank"
+            rel="noopener">
+            <div class="button-wrapper">
+              <button ds-button variant="outline" class="circle-button" icon="code" size="lg"></button>
+              <div class="button-text-wrapper">
+                <p class="link-title text-regular">UNITY AppDev Handbook</p>
+                <p class="link-subtitle">Impl. Guideline & platform details</p>
+              </div>
+            </div>
+          </a>
+          <a href="https://density.bmwgroup.net/v7/components" target="_blank" rel="noopener">
+            <div class="button-wrapper">
+              <button
+                ds-button
+                variant="outline"
+                class="circle-button"
+                icon="lightbulb"
+                size="lg"></button>
+              <div class="button-text-wrapper">
+                <p class="link-title text-regular">Density Design System components</p>
+                <p class="link-subtitle">Documentation & Guidelines</p>
+              </div>
+            </div>
+          </a>
         </section>
-    </div>
-</section>
-<section class="skeleton-footer">
-    <div class="powered-by">
-        <p class="text-smallprint">Powered by</p>
-        <img src="./assets/images/Logo-unity.svg" alt="unity logo" />
-    </div>
+      </div>
+    </section>
+  </div>
+</div>
+<section class="skeleton-footer-wrapper">
+  <div class="powered-by">
+    <p class="text-smallprint">Powered by</p>
+    <img class="footer-image" src="./assets/images/Logo-unity.svg" alt="unity logo" />
+  </div>
 </section>

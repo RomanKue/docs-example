@@ -1,5 +1,5 @@
 import {getInput, RecreateAppServiceAccountInputs} from '../../lib/github/input.js';
-import {appEnvironments, githubSecretKeys} from '../../lib/unity/config.js';
+import {allEnvironments, appEnvironments, githubSecretKeys} from '../../lib/unity/config.js';
 import {listOrganizationRepositories} from '../../lib/github/api/repos/repositories.js';
 import {createK8sObjects, getKubeConfig} from '../../lib/unity/app-repo/k8s.js';
 import {repositoriesUtils} from '../../lib/github/api/repos/index.js';
@@ -10,7 +10,7 @@ import {repositoriesUtils} from '../../lib/github/api/repos/index.js';
  */
 export const recreateAppServiceAccount = async () => {
   const appRegex = getInput<RecreateAppServiceAccountInputs>('repository-regex');
-  const env = Object.values(appEnvironments).find(v => v === getInput<RecreateAppServiceAccountInputs>('environment'));
+  const env = Object.values(allEnvironments).find(v => v === getInput<RecreateAppServiceAccountInputs>('environment'));
   const repositories = (await listOrganizationRepositories()).filter(repo => repo.name.match(appRegex));
   if (env && repositories) {
     const kc = getKubeConfig(env,

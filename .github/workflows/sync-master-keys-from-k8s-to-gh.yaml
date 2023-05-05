@@ -60,3 +60,13 @@ jobs:
           repository-regex: ${{ inputs.repositoryRegex }}
           overwrite: ${{ inputs.overwrite }}
           master-key-secret-suffix: ${{ inputs.master-key-secret-suffix }}
+      - name: upsert-test-k8s-objects
+        if: ${{ inputs.environment == 'test' }}
+        uses: ./.github/actions/recreate-app-service-account
+        with:
+          GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
+          KUBERNETES_TOKEN: ${{ secrets.TEST_KUBERNETES_TOKEN }}
+          KUBERNETES_HOST: ${{ secrets.TEST_KUBERNETES_HOST }}
+          KUBERNETES_NAMESPACE: ${{ secrets.TEST_KUBERNETES_NAMESPACE }}
+          environment: ${{ inputs.environment }}
+          repository-regex: ${{ inputs.repositoryRegex }}

@@ -2,7 +2,7 @@ import {AppSpec, repoName} from '../../app-spec.js';
 import {repositoriesUtils} from '../../../github/api/repos/index.js';
 import {issuesUtils} from '../../../github/api/issues/index.js';
 import {getAllRepositoryTopics, getRepositoryPermissionForAUser} from '../../../github/api/repos/repositories.js';
-import {adminPermission, defaultTopics, unityRepositoryRoles} from '../../config.js';
+import {adminPermission, defaultTopics, unityAppAdminRole} from '../../config.js';
 import {getIssueUserLogin} from '../../../github/api/issues/issues-utils.js';
 import {updateAnIssue} from '../../../github/api/issues/issues.js';
 import {DecommissionAppIssue} from './decommission-app-issue.js';
@@ -65,10 +65,10 @@ const validateIssueUserHasPermission = async (repositoryName: string, githubIssu
     username: issueUser,
     repositoryName: repositoryName
   });
-  if (repositoryPermission.role_name !== unityRepositoryRoles && repositoryPermission.permission !== adminPermission) {
+  if (repositoryPermission.role_name !== unityAppAdminRole && repositoryPermission.permission !== adminPermission) {
     await issuesUtils.addSimpleComment(githubIssue, user =>
       `@${user} unfortunately, I cannot fulfil your request, since you don't have permission to decommission this app.
-      Please make sure you have the "${unityRepositoryRoles}" role or "${adminPermission}" permission on the repository "${repositoryName}".`
+      Please make sure you have the "${unityAppAdminRole}" role or "${adminPermission}" permission on the repository "${repositoryName}".`
     );
     await updateAnIssue({
       state: 'closed',

@@ -2,6 +2,7 @@ import {AppDeployment, AppSpec, extractAppName, imageName, isV1, isV1Beta1, repo
 import {FileCommit} from '../../github/api/repos/response/file-commit.js';
 import * as yaml from 'js-yaml';
 import {
+  adminPermission,
   angularStubName,
   appEnvironments,
   defaultTopics,
@@ -11,8 +12,7 @@ import {
   makeStubWorkflowId,
   nodeVersion,
   quarkusStubName,
-  unityBot,
-  unityRepositoryRoles
+  unityBot
 } from '../config.js';
 import {createGitignore} from './gitignore.js';
 import {createReadme} from './readme.js';
@@ -356,7 +356,7 @@ export const createRepository = async (
     await addARepositoryCollaborator({
       repo: appRepository.name,
       username: member.login,
-      permission: unityRepositoryRoles as never,
+      permission: adminPermission as never,
     });
   }
 

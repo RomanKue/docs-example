@@ -1,17 +1,17 @@
-import { validateDecommissionAppIssue } from './validation';
-import { DecommissionAppIssue } from './decommission-app-issue';
-import { partialMock } from '../../../mock/partial-mock';
-import { Issue } from '../../../github/api/issues/response/issue';
-import { SimpleUser } from '../../../github/api/teams/response/simple-user';
-import { Label } from '../../../github/api/issues/response/label';
-import { issueState } from '../issue-state';
-import { issueType } from '../issue-type';
-import { AppSpec, repoName } from '../../app-spec';
-import { repositoriesUtils } from '../../../github/api/repos';
-import { issuesUtils } from '../../../github/api/issues';
+import {validateDecommissionAppIssue} from './validation';
+import {DecommissionAppIssue} from './decommission-app-issue';
+import {partialMock} from '../../../mock/partial-mock';
+import {Issue} from '../../../github/api/issues/response/issue';
+import {SimpleUser} from '../../../github/api/teams/response/simple-user';
+import {Label} from '../../../github/api/issues/response/label';
+import {issueState} from '../issue-state';
+import {issueType} from '../issue-type';
+import {AppSpec, repoName} from '../../app-spec';
+import {repositoriesUtils} from '../../../github/api/repos';
+import {issuesUtils} from '../../../github/api/issues';
 import * as repositories from '../../../github/api/repos/repositories.js';
-import { Topic } from '../../../github/api/repos/response/topic';
-import { defaultTopics, unityRepositoryRoles } from '../../config';
+import {Topic} from '../../../github/api/repos/response/topic';
+import {defaultTopics, unityAppAdminRole} from '../../config';
 import * as issues from '../../../github/api/issues/issues.js';
 
 describe('validation', () => {
@@ -88,7 +88,7 @@ describe('validation', () => {
       jest.spyOn(issuesUtils, 'addSimpleComment').mockResolvedValue(undefined as never);
       const topic: Topic = { names: [defaultTopics.unityApp] };
       jest.spyOn(repositories, 'getAllRepositoryTopics').mockResolvedValue(topic as never);
-      jest.spyOn(repositories, 'getRepositoryPermissionForAUser').mockResolvedValue({ role_name: unityRepositoryRoles } as never);
+      jest.spyOn(repositories, 'getRepositoryPermissionForAUser').mockResolvedValue({ role_name: unityAppAdminRole } as never);
       jest.spyOn(issues, 'updateAnIssue').mockResolvedValue(undefined as never);
 
       const response = await validateDecommissionAppIssue(getDecommissionAppMock(), getValidIssueMock());

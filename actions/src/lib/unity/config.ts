@@ -18,7 +18,7 @@ export const repoUrl = (appName: string | undefined) => `https://atc-github.azur
 /**
  * @see https://atc-github.azure.cloud.bmw/organizations/UNITY/settings/roles
  */
-export const unityRepositoryRoles = 'app-admin';
+export const unityAppAdminRole = 'app-admin';
 export const adminPermission = 'admin';
 
 export const isUnityBotComment = (comment: Readonly<Pick<IssueComment, 'user'>>): boolean => {

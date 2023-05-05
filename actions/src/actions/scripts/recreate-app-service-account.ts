@@ -1,5 +1,5 @@
 import {getInput, RecreateAppServiceAccountInputs} from '../../lib/github/input.js';
-import {allEnvironments, appEnvironments, githubSecretKeys} from '../../lib/unity/config.js';
+import {allEnvironments, githubSecretKeys} from '../../lib/unity/config.js';
 import {listOrganizationRepositories} from '../../lib/github/api/repos/repositories.js';
 import {createK8sObjects, getKubeConfig} from '../../lib/unity/app-repo/k8s.js';
 import {repositoriesUtils} from '../../lib/github/api/repos/index.js';

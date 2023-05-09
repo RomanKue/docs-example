@@ -1,5 +1,5 @@
 import {getInput, SyncMasterKeysInputs} from '../../lib/github/input.js';
-import {appEnvironments, githubSecretKeys, k8sSecretConstants} from '../../lib/unity/config.js';
+import {allEnvironments, githubSecretKeys, k8sSecretConstants} from '../../lib/unity/config.js';
 import {searchRepositories} from '../../lib/github/api/search/search.js';
 import * as core from '@actions/core';
 import {getKubeConfig, readSecretForEnvironment} from '../../lib/unity/app-repo/k8s.js';
@@ -12,7 +12,7 @@ import {repositoriesUtils} from '../../lib/github/api/repos/index.js';
  */
 export const syncMasterKeysFromK8sToGh = async () => {
   const appRegex = getInput<SyncMasterKeysInputs>('repository-regex');
-  const env = Object.values(appEnvironments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
+  const env = Object.values(allEnvironments).find(v => v === getInput<SyncMasterKeysInputs>('environment'));
   const repositories = (await searchRepositories({q: 'topic:unity-app org:UNITY fork:true'}))
     .filter(repo => repo.name.match(appRegex));
   core.info(`${repositories.length} repos were found matching the search and regex criteria`);

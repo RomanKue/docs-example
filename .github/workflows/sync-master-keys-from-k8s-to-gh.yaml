@@ -25,6 +25,7 @@ on:
         required: true
         type: choice
         options:
+          - test
           - int
           - prod
 jobs:

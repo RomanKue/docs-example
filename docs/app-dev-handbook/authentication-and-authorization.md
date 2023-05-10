@@ -29,7 +29,7 @@ nav_order: 2
 
 Every UNITY app is protected by strong authentication (two-factor authentication with YubiKey) by default.
 
-🚨 Note that the YubiKey needs to be enabled on http://strong-int.bmwgroup.net by every user, to be able to use it on the
+🚨 Note that the YubiKey needs to be enabled on [strong-int.bmwgroup.net](https://strong-int.bmwgroup.net) by every user, to be able to use it on the
 integration environment.
 
 The way, authentication is working can be configured in the `unity-app.*.yaml` files like shown below:

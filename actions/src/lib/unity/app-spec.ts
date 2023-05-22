@@ -45,6 +45,18 @@ export interface AppDeployment {
   },
 }
 
+/**
+ * Contains properties used only by the app-catalog.
+ */
+export interface AppCatalog {
+  showAs: AppDisplayModes;
+}
+
+/**
+ * The mode the app will be shown on the app-catalog.
+ */
+export type AppDisplayModes = undefined | 'API' | 'App' | 'Hidden'
+
 export interface AppSpecV1Beta1 extends ApiVersioned {
   /** field defining the API version, following the K8s concept of API versioning */
   apiVersion: 'v1beta1';
@@ -55,6 +67,7 @@ export interface AppSpecV1Beta1 extends ApiVersioned {
   deployments?: Record<string, AppDeployment>;
   displayName?: string;
   description?: string;
+  appCatalog?: AppCatalog;
 }
 
 /**
@@ -73,6 +86,7 @@ export interface AppSpecV1 extends ApiVersioned {
   deployments?: Record<string, AppDeployment>;
   displayName?: string;
   description?: string;
+  appCatalog?: AppCatalog;
 }
 
 /**

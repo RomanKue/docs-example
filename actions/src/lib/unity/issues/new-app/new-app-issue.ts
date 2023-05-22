@@ -2,7 +2,7 @@ import {lexMarkdown} from '../../../mardown/markdown.js';
 import {marked} from 'marked';
 
 import * as yaml from 'js-yaml';
-import {AppSpec, parseYaml} from '../../app-spec.js';
+import {AppDisplayModes, AppSpec, parseYaml} from '../../app-spec.js';
 import * as core from '@actions/core';
 import {ReadonlyDeep} from 'type-fest';
 import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
@@ -39,7 +39,7 @@ export const isTermsOfServiceAccepted = (body: string): boolean => {
   return looselyIncludes(body, '[x] I accept the [terms of service]');
 };
 
-export const shouldDGenerateAngularStub = (body: string): boolean => {
+export const shouldGenerateAngularStub = (body: string): boolean => {
   return looselyIncludes(body, '[x] please generate a front-end [Angular]');
 };
 
@@ -52,16 +52,27 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   const tokens = lexMarkdown(body);
   const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
   const appYaml = code[0]?.text ?? '';
-  const parseYamlJson = parseYaml(appYaml);
+  let parseYamlJson = parseYaml(appYaml);
   if (parseYamlJson?.description === descriptionDefault) {
     delete parseYamlJson.description;
   }
   if (parseYamlJson?.displayName === displayNameDefault) {
     delete parseYamlJson.displayName;
   }
+
+  const displayMode = getDisplayMode(body);
+  if (displayMode) {
+    parseYamlJson = {
+      ...parseYamlJson,
+      appCatalog: {
+        showAs: displayMode
+      }
+    };
+  }
+
   const appSpec: NewAppIssue['appSpec'] = parseYamlJson;
   const termsOfServiceAccepted = isTermsOfServiceAccepted(body);
-  const generateAngularStub = shouldDGenerateAngularStub(body);
+  const generateAngularStub = shouldGenerateAngularStub(body);
   const generateQuarkusStub = shouldGenerateQuarkusStub(body);
 
   return new NewAppIssue(
@@ -87,4 +98,14 @@ export const loadSchema = async (): Promise<Record<string, unknown>> => {
     return yaml.load(str) as Record<string, unknown>;
   }
   throw new Error(`could not load schema, got ${JSON.stringify(content)} instead`);
+};
+
+export const getDisplayMode = (body: string): AppDisplayModes => {
+  if (shouldGenerateAngularStub(body)) {
+    return undefined;
+  }
+  if (shouldGenerateQuarkusStub(body)) {
+    return 'API';
+  }
+  return 'Hidden';
 };

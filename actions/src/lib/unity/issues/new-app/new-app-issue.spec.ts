@@ -1,8 +1,8 @@
 import {
   isTermsOfServiceAccepted,
   NewAppIssue,
-  parseIssueBody,
-  shouldDGenerateAngularStub,
+  parseIssueBody, getDisplayMode,
+  shouldGenerateAngularStub,
   shouldGenerateQuarkusStub
 } from './new-app-issue.js';
 import * as fs from 'fs';
@@ -27,23 +27,28 @@ describe('new-app-issue', () => {
       expect(newAppIssue.appSpec?.displayName).toBeUndefined();
       expect(newAppIssue.appSpec?.description).toBeUndefined();
     });
+    it('should not set display mode when Angular is selected',()=>{
+      const md = fs.readFileSync('../.github/ISSUE_TEMPLATE/new-app.md', 'utf8');
+      const newAppIssue = parseIssueBody(md);
+      expect(newAppIssue.appSpec?.appCatalog?.showAs).toBeUndefined();
+    });
   });
 
-  describe('shouldDGenerateAngularStub', () => {
+  describe('shouldGenerateAngularStub', () => {
     it('should be false when string is empty', () => {
-      expect(shouldDGenerateAngularStub('')).toBeFalsy();
+      expect(shouldGenerateAngularStub('')).toBeFalsy();
     });
     it('should be true when checkbox checked', () => {
-      expect(shouldDGenerateAngularStub('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
+      expect(shouldGenerateAngularStub('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
     });
     it('should be true when checkbox checked in upper case', () => {
-      expect(shouldDGenerateAngularStub('[X] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
+      expect(shouldGenerateAngularStub('[X] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
     });
     it('should be true when there is some extra space', () => {
-      expect(shouldDGenerateAngularStub('[X]  please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
+      expect(shouldGenerateAngularStub('[X]  please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
     });
     it('should be false when checkbox unchecked', () => {
-      expect(shouldDGenerateAngularStub('[ ] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeFalsy();
+      expect(shouldGenerateAngularStub('[ ] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeFalsy();
     });
   });
   describe('shouldGenerateQuarkusStub', () => {
@@ -66,6 +71,21 @@ describe('new-app-issue', () => {
     });
     it('should be false when checkbox unchecked', () => {
       expect(isTermsOfServiceAccepted('[ ] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html)')).toBeFalsy();
+    });
+  });
+  describe('appCatalog.showAs', () => {
+    it('should be undefined when Angular is selected', () => {
+      expect(getDisplayMode('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeUndefined();
+    });
+    it('should be undefined when both Angular and Quarkus are selected', () => {
+      expect(getDisplayMode('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.\n' +
+        '[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.')).toBeUndefined();
+    });
+    it('should be Api when only Quarkus is selected', () => {
+      expect(getDisplayMode('[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.')).toBe('API');
+    });
+    it('should be Hidden when neither Quarkus and Angular are selected', () => {
+      expect(getDisplayMode('')).toBe('Hidden');
     });
   });
 });

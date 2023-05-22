@@ -55,7 +55,7 @@ export interface AppCatalog {
 /**
  * The mode the app will be shown on the app-catalog.
  */
-export type AppDisplayModes = 'API' | 'App' | 'Hidden'
+export type AppDisplayModes = undefined | 'API' | 'App' | 'Hidden'
 
 export interface AppSpecV1Beta1 extends ApiVersioned {
   /** field defining the API version, following the K8s concept of API versioning */

@@ -102,10 +102,10 @@ export const loadSchema = async (): Promise<Record<string, unknown>> => {
 
 export const getDisplayMode = (body: string): AppDisplayModes => {
   if (shouldGenerateAngularStub(body)) {
-    return null;
-  } else if (shouldGenerateQuarkusStub(body)) {
-    return 'API';
-  } else {
-    return 'Hidden';
+    return undefined;
   }
+  if (shouldGenerateQuarkusStub(body)) {
+    return 'API';
+  }
+  return 'Hidden';
 };

@@ -74,17 +74,17 @@ describe('new-app-issue', () => {
     });
   });
   describe('appCatalog.showAs', () => {
-    it('should be App when Angular is selected', () => {
-      expect(getDisplayMode('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeNull();
+    it('should be undefined when Angular is selected', () => {
+      expect(getDisplayMode('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeUndefined();
     });
-    it('should be App when both Angular and Quarkus are selected', () => {
+    it('should be undefined when both Angular and Quarkus are selected', () => {
       expect(getDisplayMode('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.\n' +
-        '[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.')).toBeNull();
+        '[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.')).toBeUndefined();
     });
     it('should be Api when only Quarkus is selected', () => {
       expect(getDisplayMode('[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.')).toBe('API');
     });
-    it('should be Hidden when neither Quarkus and Angular is selected', () => {
+    it('should be Hidden when neither Quarkus and Angular are selected', () => {
       expect(getDisplayMode('')).toBe('Hidden');
     });
   });

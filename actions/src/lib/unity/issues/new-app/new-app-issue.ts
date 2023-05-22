@@ -2,7 +2,7 @@ import {lexMarkdown} from '../../../mardown/markdown.js';
 import {marked} from 'marked';
 
 import * as yaml from 'js-yaml';
-import {AppSpec, parseYaml} from '../../app-spec.js';
+import {AppDisplayModes, AppSpec, parseYaml} from '../../app-spec.js';
 import * as core from '@actions/core';
 import {ReadonlyDeep} from 'type-fest';
 import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
@@ -59,7 +59,16 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   if (parseYamlJson?.displayName === displayNameDefault) {
     delete parseYamlJson.displayName;
   }
-  parseYamlJson = setDisplayMode(body, parseYamlJson);
+
+  const displayMode = getDisplayMode(body);
+  if (displayMode) {
+    parseYamlJson = {
+      ...parseYamlJson,
+      appCatalog: {
+        showAs: displayMode
+      }
+    };
+  }
 
   const appSpec: NewAppIssue['appSpec'] = parseYamlJson;
   const termsOfServiceAccepted = isTermsOfServiceAccepted(body);
@@ -91,27 +100,12 @@ export const loadSchema = async (): Promise<Record<string, unknown>> => {
   throw new Error(`could not load schema, got ${JSON.stringify(content)} instead`);
 };
 
-const setDisplayMode = (body: string, parseYamlJson: AppSpec): AppSpec => {
+export const getDisplayMode = (body: string): AppDisplayModes => {
   if (shouldGenerateAngularStub(body)) {
-    return {
-      ...parseYamlJson,
-      appCatalog: {
-        showAs: 'App'
-      }
-    };
+    return null;
   } else if (shouldGenerateQuarkusStub(body)) {
-    return {
-      ...parseYamlJson,
-      appCatalog: {
-        showAs: 'API'
-      }
-    };
+    return 'API';
   } else {
-    return {
-      ...parseYamlJson,
-      appCatalog: {
-        showAs: 'Hidden'
-      }
-    };
+    return 'Hidden';
   }
 };

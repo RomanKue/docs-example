@@ -86,6 +86,15 @@ describe('review', () => {
           'type': 'string',
           'description': 'environment:test, int, prod',
         },
+        'appCatalogV1': {
+          'additionalProperties': 'false',
+          'properties': {
+            'showAs': {
+              'type': ['null', 'string'],
+              'enum': ['API', 'App', 'Hidden']
+            }
+          }
+        },
         'v1beta1': {
           'properties': {
             'apiVersion': {
@@ -98,7 +107,8 @@ describe('review', () => {
             'name': {
               '$ref': '#/definitions/nameV1'
             },
-            'environment': '#/definitions/environmentV1'
+            'environment': '#/definitions/environmentV1',
+            'appCatalog': '#/definitions/appCatalogV1',
           },
           'additionalProperties': false,
           'required': [
@@ -116,7 +126,8 @@ describe('review', () => {
             'name': {
               '$ref': '#/definitions/nameV1'
             },
-            'environment': '#/definitions/environmentV1'
+            'environment': '#/definitions/environmentV1',
+            'appCatalog': '#/definitions/appCatalogV1',
           },
           'additionalProperties': false,
           'required': [

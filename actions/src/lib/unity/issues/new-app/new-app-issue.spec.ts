@@ -1,7 +1,7 @@
 import {
   isTermsOfServiceAccepted,
   NewAppIssue,
-  parseIssueBody,
+  parseIssueBody, getDisplayMode,
   shouldGenerateAngularStub,
   shouldGenerateQuarkusStub
 } from './new-app-issue.js';
@@ -27,9 +27,14 @@ describe('new-app-issue', () => {
       expect(newAppIssue.appSpec?.displayName).toBeUndefined();
       expect(newAppIssue.appSpec?.description).toBeUndefined();
     });
+    it('should not set display mode when Angular is selected',()=>{
+      const md = fs.readFileSync('../.github/ISSUE_TEMPLATE/new-app.md', 'utf8');
+      const newAppIssue = parseIssueBody(md);
+      expect(newAppIssue.appSpec?.appCatalog?.showAs).toBeUndefined();
+    });
   });
 
-  describe('shouldDGenerateAngularStub', () => {
+  describe('shouldGenerateAngularStub', () => {
     it('should be false when string is empty', () => {
       expect(shouldGenerateAngularStub('')).toBeFalsy();
     });
@@ -66,6 +71,21 @@ describe('new-app-issue', () => {
     });
     it('should be false when checkbox unchecked', () => {
       expect(isTermsOfServiceAccepted('[ ] I accept the [terms of service](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/Terms-of-Service.html)')).toBeFalsy();
+    });
+  });
+  describe('appCatalog.showAs', () => {
+    it('should be App when Angular is selected', () => {
+      expect(getDisplayMode('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeNull();
+    });
+    it('should be App when both Angular and Quarkus are selected', () => {
+      expect(getDisplayMode('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.\n' +
+        '[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.')).toBeNull();
+    });
+    it('should be Api when only Quarkus is selected', () => {
+      expect(getDisplayMode('[x] please generate a back-end [Quarkus](https://quarkus.io) stub from a template for me.')).toBe('API');
+    });
+    it('should be Hidden when neither Quarkus and Angular is selected', () => {
+      expect(getDisplayMode('')).toBe('Hidden');
     });
   });
 });

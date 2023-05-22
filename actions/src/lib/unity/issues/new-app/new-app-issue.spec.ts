@@ -2,7 +2,7 @@ import {
   isTermsOfServiceAccepted,
   NewAppIssue,
   parseIssueBody,
-  shouldDGenerateAngularStub,
+  shouldGenerateAngularStub,
   shouldGenerateQuarkusStub
 } from './new-app-issue.js';
 import * as fs from 'fs';
@@ -31,19 +31,19 @@ describe('new-app-issue', () => {
 
   describe('shouldDGenerateAngularStub', () => {
     it('should be false when string is empty', () => {
-      expect(shouldDGenerateAngularStub('')).toBeFalsy();
+      expect(shouldGenerateAngularStub('')).toBeFalsy();
     });
     it('should be true when checkbox checked', () => {
-      expect(shouldDGenerateAngularStub('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
+      expect(shouldGenerateAngularStub('[x] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
     });
     it('should be true when checkbox checked in upper case', () => {
-      expect(shouldDGenerateAngularStub('[X] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
+      expect(shouldGenerateAngularStub('[X] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
     });
     it('should be true when there is some extra space', () => {
-      expect(shouldDGenerateAngularStub('[X]  please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
+      expect(shouldGenerateAngularStub('[X]  please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeTruthy();
     });
     it('should be false when checkbox unchecked', () => {
-      expect(shouldDGenerateAngularStub('[ ] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeFalsy();
+      expect(shouldGenerateAngularStub('[ ] please generate a front-end [Angular](http://angular.io) stub from a template for me.')).toBeFalsy();
     });
   });
   describe('shouldGenerateQuarkusStub', () => {

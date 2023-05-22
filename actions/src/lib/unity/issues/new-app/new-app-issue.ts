@@ -39,7 +39,7 @@ export const isTermsOfServiceAccepted = (body: string): boolean => {
   return looselyIncludes(body, '[x] I accept the [terms of service]');
 };
 
-export const shouldDGenerateAngularStub = (body: string): boolean => {
+export const shouldGenerateAngularStub = (body: string): boolean => {
   return looselyIncludes(body, '[x] please generate a front-end [Angular]');
 };
 
@@ -52,16 +52,18 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   const tokens = lexMarkdown(body);
   const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
   const appYaml = code[0]?.text ?? '';
-  const parseYamlJson = parseYaml(appYaml);
+  let parseYamlJson = parseYaml(appYaml);
   if (parseYamlJson?.description === descriptionDefault) {
     delete parseYamlJson.description;
   }
   if (parseYamlJson?.displayName === displayNameDefault) {
     delete parseYamlJson.displayName;
   }
+  parseYamlJson = setDisplayMode(body, parseYamlJson);
+
   const appSpec: NewAppIssue['appSpec'] = parseYamlJson;
   const termsOfServiceAccepted = isTermsOfServiceAccepted(body);
-  const generateAngularStub = shouldDGenerateAngularStub(body);
+  const generateAngularStub = shouldGenerateAngularStub(body);
   const generateQuarkusStub = shouldGenerateQuarkusStub(body);
 
   return new NewAppIssue(
@@ -87,4 +89,29 @@ export const loadSchema = async (): Promise<Record<string, unknown>> => {
     return yaml.load(str) as Record<string, unknown>;
   }
   throw new Error(`could not load schema, got ${JSON.stringify(content)} instead`);
+};
+
+const setDisplayMode = (body: string, parseYamlJson: AppSpec): AppSpec => {
+  if (shouldGenerateAngularStub(body)) {
+    return {
+      ...parseYamlJson,
+      appCatalog: {
+        showAs: 'App'
+      }
+    };
+  } else if (shouldGenerateQuarkusStub(body)) {
+    return {
+      ...parseYamlJson,
+      appCatalog: {
+        showAs: 'API'
+      }
+    };
+  } else {
+    return {
+      ...parseYamlJson,
+      appCatalog: {
+        showAs: 'Hidden'
+      }
+    };
+  }
 };

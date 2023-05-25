@@ -52,7 +52,7 @@ kubectl --server "https://$KUBERNETES_HOST" --token "$KUBERNETES_TOKEN" --namesp
 
 For more information about `kubectl` please refer to the [official documentation](https://kubernetes.io/docs/reference/kubectl/)
 
-###Perform Port-Forwarding
+### Perform Port-Forwarding
 
 The following will forward the `8080` port of the pod to `8080` port of the localhost :
 

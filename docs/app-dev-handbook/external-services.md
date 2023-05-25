@@ -354,9 +354,3 @@ care of mapping the response `record` to JSON.
 ### Deploying to Int
 
 Next, deploy your code to `int` and enjoy UNITY 🚀.
-
-
-
-
-
-

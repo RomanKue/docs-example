@@ -313,7 +313,7 @@ In IntelliJ, this can be set in the run configuration under **Runner > Environme
 
 ![run-config.png](..%2Fassets%2Frun-config.png)
 
-The token can be downloaded after running the `store-secrets` action in your repository as described 
+The token can be downloaded after running the `store-secrets` action in your repository as described
 [here](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/kubernetes.html)
 
 Copy the `KUBERNETES_TOKEN` from the `secrets.kdbx` to the `KUBERNETES_TOKEN` environment variable.
@@ -354,9 +354,3 @@ care of mapping the response `record` to JSON.
 ### Deploying to Int
 
 Next, deploy your code to `int` and enjoy UNITY 🚀.
-
-
-
-
-
-

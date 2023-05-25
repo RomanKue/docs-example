@@ -26,7 +26,7 @@ to perform port forwarding to one of the applications containers. This can be do
 
 The first step when interacting with the cluster should be getting the service account token of the application.
 Using the token you will have access to the kubernetes objects belonging to your application, or you can [call external
-services](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/external-services.html#testing-locally) 
+services](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/external-services.html#testing-locally)
 when developing locally.
 
 Downloading the token is possible using the `store-secrets` workflow.
@@ -42,7 +42,7 @@ token is meant for development purposes and must not be used for external servic
 
 ![store-secrets-result.png](..%2Fassets%2Fstore-secrets-result.png)
 
-## Doing `kubectl` Calls
+### Doing `kubectl` Calls
 
 Using the secrets from the repository, the following returns the secret `app-foo`:
 
@@ -67,7 +67,7 @@ This can be used later for remote debugging and profiling as described in the ne
 In order to start remote profiling and/or remote debugging for an application running on the UNITY cluster, you need to
 address the UNITY development team to configure the application accordingly.
 
-After this has been done, it will be possible to do a [port-forwarding](./external-services.md#perform-port-forwarding) 
+After this has been done, it will be possible to do a [port-forwarding](./external-services.md#perform-port-forwarding)
 to the configured open port, using the secrets from the repository:
 
 ```bash

@@ -317,10 +317,10 @@ In IntelliJ, this can be set in the run configuration under **Runner > Environme
 
 ![run-config.png](..%2Fassets%2Frun-config.png)
 
-The token can be downloaded after running the `store-secrets` action in your repository. You can find more information 
-about how to use this action [here](#getting-the-service-account-token-of-the-application). 
+The token can be downloaded after running the `store-secrets` action in your repository as described 
+[here](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/kubernetes.html)
 
-Copy the token from the `secrets.yaml` to the `KUBERNETES_TOKEN` environment variable.
+Copy the `KUBERNETES_TOKEN` from the `secrets.kdbx` to the `KUBERNETES_TOKEN` environment variable.
 
 ⚠️ Never add the token to your source code, this is confidential information, which should not be shared in plain text.
 ⚠️ The token may be updated by the UNITY platform at any time. So if the token is not valid anymore after some time,
@@ -359,45 +359,7 @@ care of mapping the response `record` to JSON.
 
 Next, deploy your code to `int` and enjoy UNITY 🚀.
 
-## Kubectl
 
-When developing locally, it could be useful to get information about the Kubernetes objects of the application or 
-to perform port forwarding to one of the applications containers. This can be done by using `kubectl`.
-
-To authenticate as the service account of the application, the secrets from GitHub Enterprise are required, which can be
-downloaded by calling the `store-secrets` workflow, as described [here](#getting-the-service-account-token-of-the-application). 
-
-### Doing `kubectl` Calls
-
-Using the secrets from the repository, the following returns the secret `app-foo`:
-
-```bash
-kubectl --server "https://$KUBERNETES_HOST" --token "$KUBERNETES_TOKEN" --namespace "$KUBERNETES_NAMESPACE" get secret app-foo
-```
-
-For more information about `kubectl` please refer to the [official documentation](https://kubernetes.io/docs/reference/kubectl/)
-
-### Perform Port-Forwarding
-
-The following will forward the `8080` port of the pod to `8080` port of the localhost :
-
-```bash
-kubectl --server "https://$KUBERNETES_HOST" --token "$KUBERNETES_TOKEN" --namespace "$KUBERNETES_NAMESPACE" port-forward app-foo-api-5c484fd67c-9x9ll 8080:8080
-```
-
-This can be used later for remote [debugging or profiling](profiling-debugging.md). 
-
-## Getting the Service Account Token of the Application 
-
-🚨 Note that the token may be rolled (new token is generated) by UNITY from time to time. Extracting the service account
-token is meant for development purposes and must not be used for external service interaction.
-
-![store-secrets.png](..%2Fassets%2Fstore-secrets.png)
-
-After the action has completed successfully, the `secrets.yaml` file can be downloaded from the **Summary > Artifacts**
-section.
-
-![store-secrets-result.png](..%2Fassets%2Fstore-secrets-result.png)
 
 
 

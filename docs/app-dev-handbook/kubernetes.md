@@ -55,7 +55,11 @@ For more information about `kubectl` please refer to the [official documentation
 
 ### Perform Port-Forwarding
 
-The following will forward the `8080` port of the pod to `8080` port of the localhost :
+To interact directly with a pod of the application you will require the name of it, which is available by accessing the
+grafana dashboard as described in the [Telemetry section](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/telemetry.html)
+There selecting a dashboard (e.g. **Container Resources**) you can find out the name of the pods.
+
+The following will forward the `8080` port of the pod to `8080` port of the localhost:
 
 ```bash
 kubectl --server "https://$KUBERNETES_HOST" --token "$KUBERNETES_TOKEN" --namespace "$KUBERNETES_NAMESPACE" port-forward app-foo-api-5c484fd67c-9x9ll 8080:8080

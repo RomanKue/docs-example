@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Profiling and Debugging
+title: Kubernetes
 parent: AppDev Handbook
 nav_order: 10
 ---

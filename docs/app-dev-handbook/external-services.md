@@ -316,7 +316,7 @@ In IntelliJ, this can be set in the run configuration under **Runner > Environme
 The token can be downloaded after running the `store-secrets` action in your repository as described
 [here](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/kubernetes.html)
 
-Copy the `KUBERNETES_TOKEN` from the `secrets.kdbx` to the `KUBERNETES_TOKEN` environment variable.
+Copy the token from the `secrets.kdbx` to the `KUBERNETES_TOKEN` environment variable.
 
 ⚠️ Never add the token to your source code, this is confidential information, which should not be shared in plain text.
 ⚠️ The token may be updated by the UNITY platform at any time. So if the token is not valid anymore after some time,

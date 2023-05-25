@@ -190,16 +190,16 @@ in [USING THE REST CLIENT](https://quarkus.io/guides/rest-client).
 <dependencies>
   <dependency>
     <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-rest-client</artifactId>
+    <artifactId>quarkus-rest-client-reactive</artifactId>
   </dependency>
   <dependency>
     <groupId>io.quarkus</groupId>
-    <artifactId>quarkus-rest-client-jackson</artifactId>
+    <artifactId>quarkus-rest-client-reactive-jackson</artifactId>
   </dependency>
 </dependencies>
 ```
 
-The `quarkus-rest-client-jackson` dependency ensures that `records` are automatically mapped to JSON by
+The `quarkus-rest-client-reactive-jackson` dependency ensures that `records` are automatically mapped to JSON by
 the [Jackson](https://github.com/FasterXML/jackson) framework.
 
 Next create the REST client interface.

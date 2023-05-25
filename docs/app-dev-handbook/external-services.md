@@ -23,10 +23,6 @@ nav_order: 9
     - [REST Resource](#rest-resource)
     - [Testing Locally](#testing-locally)
     - [Deploying to Int](#deploying-to-int)
-  - [Kubectl](#kubectl)
-    - [Doing `kubectl` Calls](#doing-kubectl-calls)
-    - [Perform Port-Forwarding](#perform-port-forwarding)
-  - [Getting the Service Account Token of the Application](#getting-the-service-account-token-of-the-application)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

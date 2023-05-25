@@ -17,15 +17,16 @@ nav_order: 10
 # Profiling and Debugging
 
 In order to start remote profiling and/or remote debugging for an application running on the UNITY cluster, you need to
-address the UNITY development team to configure the application accordingly.
+address the UNITY development team to configure the application accordingly. 
 
-After this has been done, it will be possible to do a port-forwarding to the configured open port:
+After this has been done, it will be possible to do a [port-forwarding](./external-services.md#perform-port-forwarding) 
+to the configured open port, using the secrets from the repository:
 
 ```bash
-kubectl port-forward app-services-api-799696f469-p9wcm 10500:10500 -n int
+kubectl --server "https://$KUBERNETES_HOST" --token "$KUBERNETES_TOKEN" --namespace "$KUBERNETES_NAMESPACE" port-forward app-foo-api-5c484fd67c-9x9ll 8080:8080
 ```
 
 For profiling the application, different profilers can be used. An example which comes together with the JDK is Visual VM,
 which can be started by running the command jvisualvm (provided that the JDK is in the Path).
 
-A remote debugger in IntelliJ can be used with a connection to localhost:10500.
+A remote debugger in IntelliJ can be used with a connection to localhost:5005.

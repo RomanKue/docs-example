@@ -313,19 +313,10 @@ In IntelliJ, this can be set in the run configuration under **Runner > Environme
 
 ![run-config.png](..%2Fassets%2Frun-config.png)
 
-The token can be downloaded after running the `store-secrets` action in your repository.
+The token can be downloaded after running the `store-secrets` action in your repository as described
+[here](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/kubernetes.html)
 
-🚨 Note that the token may be rolled (new token is generated) by UNITY from time to time. Extracting the service account
-token is meant for development purposes and must not be used for external service interaction.
-
-![store-secrets.png](..%2Fassets%2Fstore-secrets.png)
-
-After the action has completed successfully, the `secrets.yaml` file can be downloaded from the **Summary > Artifacts**
-section.
-
-![store-secrets-result.png](..%2Fassets%2Fstore-secrets-result.png)
-
-Copy the token from the `secrets.yaml` to the `KUBERNETES_TOKEN` environment variable.
+Copy the token from the `secrets.kdbx` to the `KUBERNETES_TOKEN` environment variable.
 
 ⚠️ Never add the token to your source code, this is confidential information, which should not be shared in plain text.
 ⚠️ The token may be updated by the UNITY platform at any time. So if the token is not valid anymore after some time,

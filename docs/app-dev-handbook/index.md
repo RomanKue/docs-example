@@ -22,6 +22,6 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 * [Security](security.html) topics such as vulnerability scanning on the app's code
 * [Telemetry](telemetry.html) data such as logs, metrics and tracing of UNITY applications.
 * [External services](external-services.html) called from UNITY applications
-* [Profiling and Debugging](profiling-debugging.html) of UNITY applications running on the cluster
+* [Kubernetes](kubernetes.html) interacting with the cluster and the application running on it
 * [HTTP Headers](http-headers.html) configure HTTP headers.
 * [Decommission App](decommission-app.html) decommission UNITY application

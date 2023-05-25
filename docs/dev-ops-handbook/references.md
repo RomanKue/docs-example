@@ -10,9 +10,17 @@ nav_order: 11
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Kubernetes](#kubernetes)
-  - [Architecture](#architecture)
-  - [Labels](#labels)
+- [References](#references)
+  - [Gangway](#gangway)
+    - [Dev (Test and Int)](#dev-test-and-int)
+    - [Prod](#prod)
+  - [Grafana](#grafana)
+    - [Dev (Test and Int)](#dev-test-and-int-1)
+    - [Prod](#prod-1)
+  - [Prometheus](#prometheus)
+    - [Dev (Test and Int)](#dev-test-and-int-2)
+    - [Prod](#prod-2)
+  - [Active Directory Group (ADGR)](#active-directory-group-adgr)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

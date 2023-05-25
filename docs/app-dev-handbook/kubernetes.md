@@ -13,6 +13,7 @@ nav_order: 10
 - [Kubectl](#kubectl)
   - [Getting the Service Account Token of the Application](#getting-the-service-account-token-of-the-application)
     - [Doing `kubectl` Calls](#doing-kubectl-calls)
+    - [Perform Port-Forwarding](#perform-port-forwarding)
   - [Profiling and Debugging](#profiling-and-debugging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->

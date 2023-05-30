@@ -35,5 +35,5 @@ In order to get access to wiz.io, a service request incident to `it-security-csp
 created. Access will be awarded for the entire product, therefore the product (SWP-4236), needs to be specified in the incident.
 One of the owners of the product needs to be added as Contact to the incident. As an example, also see INC000044189072.
 
-More information can be found here: https://atc.bmwgroup.net/confluence/x/BqMMvw.
+More information can be found [here](https://atc.bmwgroup.net/confluence/x/BqMMvw).
 

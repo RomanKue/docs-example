@@ -1,24 +1,20 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-  - [layout: default
-title: Maven Packages
-parent: AppDev Handbook
-nav_order: 12](#layout-default%0Atitle-maven-packages%0Aparent-appdev-handbook%0Anav_order-12)
-- [Maven Packages](#maven-packages)
-  - [Manual upload](#manual-upload)
-  - [GitHub Packages in Dependency Management](#github-packages-in-dependency-management)
-  - [BMW Nexus as Mirror](#bmw-nexus-as-mirror)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 ---
 layout: default
 title: Maven Packages
 parent: AppDev Handbook
 nav_order: 12
 ---
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Maven Packages](#maven-packages)
+  - [Manual upload](#manual-upload)
+  - [GitHub Packages in Dependency Management](#github-packages-in-dependency-management)
+  - [BMW Nexus as Mirror](#bmw-nexus-as-mirror)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Maven Packages
 
@@ -90,8 +86,7 @@ which uses GitHub Packages along with BMW Nexus:
         <repository>
           <id>atc-github-packages</id>
           <name>atc-github-packages</name>
-          <url>https://maven.atc-github.azure.cloud.bmw/UNITY/${env.REPO}/
-          </url>
+          <url>https://maven.atc-github.azure.cloud.bmw/UNITY/${env.REPO}/</url>
         </repository>
       </repositories>
     </profile>

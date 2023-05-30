@@ -14,7 +14,7 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 
 * [Getting Started](getting-started.html) with an app
 * [UNITY App Yaml](unity-app-yaml.html) to configure UNITY features specifically for a UNITY app
-* [Connect IT](connect-it.html)
+* [Connect IT](connect-it.html) document your app in Connect IT
 * [App Configuration](app-configuration.html) of a UNITY app on different environments
 * [Authentication and Authorization](authentication-and-authorization.html) to secure access to a UNITY app
 * [Resources](resources.html) requested by an app for compute and memory
@@ -27,4 +27,11 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 * [Maven Packages](maven-packages.html) maven config for GHE packages or BMW nexus.
 * [Kubernetes](kubernetes.html) interacting with the application's running containers.
 * [Diagnostics](diagnostics.html) debug and profile to troubleshoot UNITY applications.
+* [PostgreSQL Flexible Server](postgresql-flexible-server.html) provision a PostgreSQL database server.
 * [Decommission App](decommission-app.html) decommission UNITY application
+
+<!--
+verify the nav_order by running (-E is for --regexp-extended)
+
+grep "nav_order:" *.md | sed -E 's/(.*):nav_order: ([0-9]+).*/\2 \1/' | sort -V
+-->

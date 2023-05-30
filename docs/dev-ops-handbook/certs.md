@@ -195,3 +195,4 @@ cat svc-tls.crt | openssl x509 -noout -text -certopt no_header,no_version,no_ser
 Finally, it may still be possible that one of the pods backing the service is serving the correct certificate while
 another one does not. To ensure this, map the port of the individual pods instead of mapping the service port and repeat
 the certificate validation.
+

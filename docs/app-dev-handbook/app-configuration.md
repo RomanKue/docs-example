@@ -2,7 +2,7 @@
 layout: default
 title: App Configuration
 parent: AppDev Handbook
-nav_order: 3
+nav_order: 2
 ---
 
 **Table of Contents**

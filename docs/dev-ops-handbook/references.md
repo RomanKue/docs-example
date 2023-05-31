@@ -80,3 +80,11 @@ Access to the K8s clusters is managed via the following groups
 * `APPL_pdm_unity_integration_view`
 * `APPL_pdm_unity_production_admin`
 * `APPL_pdm_unity_production_view`
+
+Owner groups for the clusters are:
+
+* `APPL_pdm_unity_integration` (int)
+* `APPL_pdm_unity_production_admin` (prod)
+
+See [Cluster Owner ADGR Group](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/self_service_api/#cluster-owner-adgr-group)
+for further details.

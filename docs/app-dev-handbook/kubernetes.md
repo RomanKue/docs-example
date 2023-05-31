@@ -50,12 +50,6 @@ cluster. The token is securely stored in GitHub Enterprise as repository secret.
 
 ### Get Service Account Token
 
-[//]: # (TODO move that information)
-The first step when interacting with the cluster should be getting the service account token of the application.
-Using the token you will have access to the kubernetes objects belonging to your application, or you can [call external
-services](https://pages.atc-github.azure.cloud.bmw/UNITY/unity/app-dev-handbook/external-services.html#testing-locally)
-when developing locally.
-
 Downloading the token is possible using the `store-secrets` workflow in your app's repository.
 
 ![store-secrets.png](..%2Fassets%2Fstore-secrets.png)

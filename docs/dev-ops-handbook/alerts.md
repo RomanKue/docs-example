@@ -2,7 +2,7 @@
 layout: default
 title: Alerts
 parent: DevOps Handbook
-nav_order: 9
+nav_order: 8
 ---
 
 **Table of Contents**

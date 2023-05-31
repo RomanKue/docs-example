@@ -2,7 +2,7 @@
 layout: default
 title: Restore decommission App
 parent: DevOps Handbook
-nav_order: 10
+nav_order: 9
 ---
 
 **Table of Contents**

@@ -10,9 +10,11 @@ nav_order: 12
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [JVM Remote Debugging](#jvm-remote-debugging)
-- [JMX Remote Profiling](#jmx-remote-profiling)
-  - [Profiling and Debugging](#profiling-and-debugging)
+- [JVM](#jvm)
+- [Remote Debugging](#remote-debugging)
+- [Java Management Extensions (JMX)](#java-management-extensions-jmx)
+  - [Java Mission Control (JMC)](#java-mission-control-jmc)
+  - [VisualVM](#visualvm)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

@@ -272,22 +272,22 @@ In order to test the service integration locally, a custom client headers factor
 
 ```java
 @ApplicationScoped
-public class CustomAuthorizationHeaderFactory implements ClientHeadersFactory {
+public class CustomAuthorizationHeaderFactory extends ReactiveClientHeadersFactory {
 
   @ConfigProperty(name = "kubernetes-token")
   Optional<String> saToken;
 
   @Override
-  public MultivaluedMap<String, String> update(
-    final MultivaluedMap<String, String> incomingHeaders,
-    final MultivaluedMap<String, String> clientOutgoingHeaders) {
-    if (ConfigUtils.isProfileActive("dev")) {
-      clientOutgoingHeaders.put(AUTHORIZATION, List.of("Bearer " + saToken.orElseThrow(
-        () -> new MissingResourceException("Kubernetes service account token was not found",
-          String.class.getName(), "kubernetes-token"))));
-      clientOutgoingHeaders.put("Unity-Authorization-Type", List.of("Kubernetes-Service-Account"));
-    }
-    return clientOutgoingHeaders;
+  public Uni<MultivaluedMap<String, String>> getHeaders(MultivaluedMap<String, String> incomingHeaders, MultivaluedMap<String, String> clientOutgoingHeaders) {
+    return Uni.createFrom().completionStage(() -> CompletableFuture.supplyAsync(() -> {
+      if (ConfigUtils.isProfileActive("dev")) {
+        clientOutgoingHeaders.put(AUTHORIZATION, List.of("Bearer " + saToken.orElseThrow(
+                () -> new MissingResourceException("Kubernetes service account token was not found",
+                        String.class.getName(), "kubernetes-token"))));
+        clientOutgoingHeaders.put("Unity-Authorization-Type", List.of("Kubernetes-Service-Account"));
+      }
+      return clientOutgoingHeaders;
+    }));
   }
 }
 ```

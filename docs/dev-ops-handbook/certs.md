@@ -36,16 +36,17 @@ graph LR
     client-- "unity.bmwgroup.net (BMW root signed)" -->ingress-controller
 
     subgraph K8s
-      ingress-controller-. "encrypt with tls.key" .->unity-tls
-      ingress-controller-. "ca.crt" .->app-foo-api-tls
       unity-certificate-. "cert manager generates (BMW root signed)" .->unity-tls
-      ingress-controller-- "random cert (self signed)" -->envoy
+      unity-tls-."kyverno generates key with CA (tmp)" .->unity-tls-with-ca
+      unity-tls-with-ca-."mount to file system" .->ingress-controller
+      ingress-controller-. "use ca.crt from mounted ca" .-> validation_context_sds
+      ingress-controller-. "use tls from mounted unity-tls-with-ca" .-> tls_sds
+      validation_context_sds-- "served to envoy to validate server certificate" -->envoy
+      tls_sds-- "use certificate" -->envoy
 
       subgraph pod
           envoy-- "http (in memory)" -->main
       end
-
-      envoy-. "encrypt with tls.key" .->app-foo-api-tls
     end
 ```
 
@@ -80,41 +81,23 @@ the [cert-manager](https://cert-manager.io) is employed.
 The cert manager handles a [`Certificate`](https://cert-manager.io/docs/usage/certificate/) CRD, which instructs the
 cert manager to generate a certificate and store it in a secret.
 
+Then a kyverno policy creates another secret that contains where the CA certificate is appended.
+This method is temporary used by 4WHEELS_MANAGED to [serve intermediate certificates](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/certificates/#serve-intermediate-certificates)
+
 Additional info can be found in
 the [4WHEELS MANAGED](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/certificates/)
 documentation.
 
-Upstream traffic from the ingress controller to the pod is handled by a self-signed certificate.
+Since the cert manager may generate a new certificate at a certain
+point in time, to make sure that the new key is handled correctly by the pods mounting the key we use envoy [Secret discovery service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret).
+With SDS, a central SDS server will push certificates to all Envoy instances. If certificates are expired, the server just pushes new certificates to Envoy instances, Envoy will use the new ones right away without re-deployment.
 
-This simplifies the setup w.r.t certificate rotation. Since the cert manager may generate a new certificate at a certain
-point in time, it must be made sure that the new key is handled correctly by the pods mounting the key.
-The ingress controller can pick up new certificates keys automatically. As soon as a new certificate key is present in
-the secret, it will serve traffic using the new certificate key.
-
-On the other hand, a pod serving traffic may not be capable to handle a new certificate at runtime. Hence, a self-signed
-certificate with almost infinite validity (100 years) is used to encrypt traffic from the ingress controller to the pod.
-This is as secure as any other certificate, since the certificate is never used outside the cluster and no third party
-is required to trust the self-signed certificate.
-
-The self-signed certificate is generated via the
-[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart.
-
-In the pod, TLS is terminated by an [envoy proxy](https://www.envoyproxy.io).
-Configuration of the envoy proxy is part of the
-[unity-app](https://atc-github.azure.cloud.bmw/UNITY/unity-helm-charts/tree/main/charts/unity-app) Helm chart as well.
 Finally, the envoy proxy passes traffic on to the app's main container within the pod without encryption via HTTP.
 By terminating TLS on the envoy, the app's main container does not need to handle any certificates or secrets.
 
 ## How to Inspect Certificates
 
-When something breaks, it is important to know, how to inspect the various certificates.
-
-When the ingress controller stops to serve traffic, one reason can be in issue with the certificate configuration.
-The first step for troubleshooting should be inspecting the logs in Grafana Loki:
-
-![](../assets/Loki-SSL-certificate-veryfy-error-Screenshot.png)
-
-Next, the certificates can be inspected locally as follows.
+The certificates can be inspected locally as follows.
 
 ## Client to Ingress Controller
 
@@ -127,71 +110,13 @@ kubectl get certificate -oyaml unity-certificate
 The certificates can be dumped from the secret where the cert manager places them as follows.
 
 ```bash
-SECRET_NAME=$(kubectl get certificate -ojson unity-certificate | jq -r '.spec.secretName')
-echo $SECRET_NAME
-kubectl get secret $SECRET_NAME -ojson | jq -r '.data["tls.key"] | @base64d'  > ingress-tls.key
-kubectl get secret $SECRET_NAME -ojson | jq -r '.data["tls.crt"] | @base64d'  > ingress-tls.crt
-```
-
-Employing `openssl`, the content can be displayed:
-
-```bash
-cat ingress-tls.crt | openssl x509 -noout -text -certopt no_header,no_version,no_serial,no_signame,no_issuer,no_pubkey,no_sigdump,no_aux
-```
-
-The certificate can be checked with:
-
-```bash
-CRT_MD5=$(openssl x509 -noout -modulus -in ingress-tls.crt | openssl md5)
-KEY_MD5=$(openssl rsa -noout -modulus -in ingress-tls.key | openssl md5)
-echo $CRT_MD5
-echo $KEY_MD5
-echo "diff:"
-diff <(echo "$CRT_MD5") <(echo "$KEY_MD5")
+kubectl get secrets unity-tls -ojson | jq '.data["tls.crt"] | @base64d' -r
+kubectl get secrets unity-tls-with-ca -ojson | jq '.data["tls.crt"] | @base64d' -r
 ```
 
 ## Ingress Controller to Pod
 
-To inspect the setup of an app, set the config of an app to analyze by defining the following env variables
-
-```bash
-NAME=<name of the app, e.g. services>
-DEPLOYMENT=<name of the deployment, e.g. api>
-```
-
-TLS from the ingress controller to the service (pod) is handled by a different certificate, which can be dumped as
-follows.
-
-```bash
-SECRET_NAME=app-$NAME-$DEPLOYMENT-tls
-echo $SECRET_NAME
-kubectl get secret $SECRET_NAME -ojson | jq -r '.data["tls.key"] | @base64d'  > svc-tls.key
-kubectl get secret $SECRET_NAME -ojson | jq -r '.data["tls.crt"] | @base64d'  > svc-tls.crt
-cat svc-tls.crt | openssl x509 -noout -text -certopt no_header,no_version,no_serial,no_signame,no_issuer,no_pubkey,no_sigdump,no_aux
-```
-
-```bash
-CRT_MD5=$(openssl x509 -noout -modulus -in svc-tls.crt | openssl md5)
-KEY_MD5=$(openssl rsa -noout -modulus -in svc-tls.key | openssl md5)
-echo $CRT_MD5
-echo $KEY_MD5
-echo "diff:"
-diff <(echo "$CRT_MD5") <(echo "$KEY_MD5")
-```
-
-The ingress controller should trust this certificate, which is configured in the following annotation:
-
-```bash
-kubectl get ingress app-$NAME-$DEPLOYMENT -ojson | jq -r '.metadata.annotations["nginx.ingress.kubernetes.io/proxy-ssl-secret"]'
-```
-
-It is also crucial that `nginx.ingress.kubernetes.io/proxy-ssl-verify` is set to `on`
-and `nginx.ingress.kubernetes.io/proxy-ssl-name` is set to a value in the certificate. This can be validated with:
-
-```bash
-SNI=$(kubectl get ingress app-$NAME-$DEPLOYMENT -ojson | jq -r '.metadata.annotations["nginx.ingress.kubernetes.io/proxy-ssl-name"]')
-cat svc-tls.crt | openssl x509 -noout -text -certopt no_header,no_version,no_serial,no_signame,no_issuer,no_pubkey,no_sigdump,no_aux | grep $SNI
-```
+TLS from the ingress controller to the service (pod) is handled by the same certificate and the same store, served by sds servers.
 
 It needs to be made sure that the pod is serving traffic with the certificate from the secret (and not using an
 outdated certificate).
@@ -204,23 +129,14 @@ kubectl port-forward svc/app-$NAME-$DEPLOYMENT 8000:8000
 Then, in a separate shell connect to the mapped port and dump the served certificate:
 
 ```bash
-echo -e '
-GET /#/Methods HTTP/1.1
-Host: localhost
-Connection: Close
-' |
-openssl s_client -showcerts -connect localhost:8000 2>&1 |
-grep -A 1000 'BEGIN CERTIFICATE' |
-grep -B 1000 'END CERTIFICATE' > tls.crt
+openssl s_client -showcerts -connect localhost:8000 -servername app-test-api </dev/null 2>/dev/null 
 ```
 
 Make sure the served certificate is that same as the one from secret:
 
 ```bash
-diff --ignore-blank-lines tls.crt svc-tls.crt
+kubectl get secret unity-tls -oyaml | yq -r '.data["tls.crt"]' | base64 -D 
 ```
-
-If this results in a diff, the pod is serving an outdated certificate, which the ingress controller will not accept.
 
 Finally, it may still be possible, that one of the pods backing the service is serving the correct certificate and
 another one does not. To make sure, map the port of the individual pods instead of mapping the service port and repeat

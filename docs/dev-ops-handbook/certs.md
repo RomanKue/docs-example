@@ -11,11 +11,11 @@ nav_order: 4
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Certs](#certs)
-    - [Architecture](#architecture)
-    - [TLS](#tls)
-    - [How to Inspect Certificates](#how-to-inspect-certificates)
-    - [Client to Ingress Controller](#client-to-ingress-controller)
-    - [Ingress Controller to Pod](#ingress-controller-to-pod)
+  - [Architecture](#architecture)
+  - [TLS](#tls)
+  - [How to Inspect Certificates](#how-to-inspect-certificates)
+  - [Client to Ingress Controller](#client-to-ingress-controller)
+  - [Ingress Controller to Pod](#ingress-controller-to-pod)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

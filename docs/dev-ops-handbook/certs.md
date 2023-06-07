@@ -11,11 +11,11 @@ nav_order: 4
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 - [Certs](#certs)
-  - [Architecture](#architecture)
-  - [TLS](#tls)
-  - [How to Inspect Certificates](#how-to-inspect-certificates)
-  - [Client to Ingress Controller](#client-to-ingress-controller)
-  - [Ingress Controller to Pod](#ingress-controller-to-pod)
+    - [Architecture](#architecture)
+    - [TLS](#tls)
+    - [How to Inspect Certificates](#how-to-inspect-certificates)
+    - [Client to Ingress Controller](#client-to-ingress-controller)
+    - [Ingress Controller to Pod](#ingress-controller-to-pod)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -82,15 +82,18 @@ The cert manager handles a [`Certificate`](https://cert-manager.io/docs/usage/ce
 cert manager to generate a certificate and store it in a secret.
 
 Then a kyverno policy creates another secret that contains where the CA certificate is appended.
-This method is temporary used by 4WHEELS_MANAGED to [serve intermediate certificates](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/certificates/#serve-intermediate-certificates)
+This method is temporary used by 4WHEELS_MANAGED
+to [serve intermediate certificates](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/certificates/#serve-intermediate-certificates)
 
 Additional info can be found in
 the [4WHEELS MANAGED](https://developer.bmwgroup.net/docs/4wheels-managed/applications_integration/certificates/)
 documentation.
 
 Since the cert manager may generate a new certificate at a certain
-point in time, to make sure that the new key is handled correctly by the pods mounting the key we use envoy [Secret discovery service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret).
-With SDS, a central SDS server will push certificates to all Envoy instances. If certificates are expired, the server just pushes new certificates to Envoy instances, Envoy will use the new ones right away without re-deployment.
+point in time, to make sure that the new key is handled correctly by the pods mounting the key we use
+envoy [Secret discovery service](https://www.envoyproxy.io/docs/envoy/latest/configuration/security/secret).
+With SDS, a central SDS server will push certificates to all Envoy instances. If certificates are expired, the server
+just pushes new certificates to Envoy instances, Envoy will use the new ones right away without re-deployment.
 
 Finally, the envoy proxy passes traffic on to the app's main container within the pod without encryption via HTTP.
 By terminating TLS on the envoy, the app's main container does not need to handle any certificates or secrets.
@@ -116,7 +119,8 @@ kubectl get secrets unity-tls-with-ca -ojson | jq '.data["tls.crt"] | @base64d' 
 
 ## Ingress Controller to Pod
 
-TLS from the ingress controller to the service (pod) is handled by the same certificate and the same store, served by sds servers.
+TLS from the ingress controller to the service (pod) is handled by the same certificate and the same store, served by
+sds servers.
 
 It needs to be made sure that the pod is serving traffic with the certificate from the secret (and not using an
 outdated certificate).
@@ -129,13 +133,13 @@ kubectl port-forward svc/app-$NAME-$DEPLOYMENT 8000:8000
 Then, in a separate shell connect to the mapped port and dump the served certificate:
 
 ```bash
-openssl s_client -showcerts -connect localhost:8000 -servername app-test-api </dev/null 2>/dev/null 
+openssl s_client -showcerts -connect localhost:8000 -servername app-test-api </dev/null 2>/dev/null
 ```
 
 Make sure the served certificate is that same as the one from secret:
 
 ```bash
-kubectl get secret unity-tls -oyaml | yq -r '.data["tls.crt"]' | base64 -D 
+kubectl get secret unity-tls -oyaml | yq -r '.data["tls.crt"]' | base64 -D
 ```
 
 Finally, it may still be possible, that one of the pods backing the service is serving the correct certificate and

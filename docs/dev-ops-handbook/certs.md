@@ -42,12 +42,10 @@ graph TB
       end
 
       bmw-certificates>bmw-certificates]-. "use as trust store" .->ingress-controller
-      
       unity-tls-with-ca-."use as certificates" .->ingress-controller
       ingress-controller-- "unity.bmwgroup.net (BMW root signed)" -->envoy
-
       bmw-certificates>bmw-certificates]-. "use trust store" .->envoy
-      
+
       subgraph pod
           unity-tls>unity-tls]-."use as certificate" .->envoy
           envoy-- "http (in memory)" -->main

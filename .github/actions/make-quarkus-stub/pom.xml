@@ -13,7 +13,7 @@
     <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
     <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
     <!--    We only use this file for letting dependabot update the quarkus version in an automated way -->
-    <quarkus.platform.version>3.1.0.Final</quarkus.platform.version>
+    <quarkus.platform.version>3.1.1.Final</quarkus.platform.version>
   </properties>
   <dependencyManagement>
     <dependencies>

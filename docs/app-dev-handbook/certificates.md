@@ -2,7 +2,7 @@
 layout: default
 title: Certificates
 parent: AppDev Handbook
-nav_order: 6
+nav_order: 7
 ---
 
 **Table of Contents**

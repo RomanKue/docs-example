@@ -14,6 +14,7 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 
 * [Getting Started](getting-started.html) with an app
 * [UNITY App Yaml](unity-app-yaml.html) to configure UNITY features specifically for a UNITY app
+* [Connect-IT](connect-it.html)
 * [App Configuration](app-configuration.html) of a UNITY app on different environments
 * [Authentication and Authorization](authentication-and-authorization.html) to secure access to a UNITY app
 * [Resources](resources.html) requested by an app for compute and memory

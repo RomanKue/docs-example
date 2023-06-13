@@ -2,7 +2,7 @@
 layout: default
 title: Authentication and Authorization
 parent: AppDev Handbook
-nav_order: 3
+nav_order: 4
 ---
 
 **Table of Contents**

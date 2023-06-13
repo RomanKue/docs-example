@@ -2,7 +2,7 @@
 layout: default
 title: Diagnostics
 parent: AppDev Handbook
-nav_order: 12
+nav_order: 13
 ---
 
 **Table of Contents**
@@ -37,7 +37,7 @@ api:
         -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
 ```
 
-💡 scaling replicas to one, is a good idea to make sure you have only one pod running when debugging API calls via a REST
+💡 Scaling replicas to one, is a good idea to make sure you have only one pod running when debugging API calls via a REST
 interface. Otherwise, it is hard to know if the pod you are profiling will serve the request. There will be a
 performance impact on the running application. Debugging in the production environment is not recommended in general.
 
@@ -67,7 +67,7 @@ Then set a thread breakpoint, where you want to start debugging.
 
 ![](../assets/breakpoint.png)
 
-🚨 it is very important to select **Thread**, which will only stop the current thread. When stopping all threads (default
+🚨 It is very important to select **Thread**, which will only stop the current thread. When stopping all threads (default
 breakpoint), the container cannot respond to readiness and liveness probes. This will result in termination of that "
 unhealthy" pod and the debugging session will stop after a short period of time.
 
@@ -98,7 +98,7 @@ api:
         -Dcom.sun.management.jmxremote.local.only=false
 ```
 
-💡 scaling replicas to one, is a good idea to make sure you have only one pod running when profiling API calls via a REST
+💡 Scaling replicas to one, is a good idea to make sure you have only one pod running when profiling API calls via a REST
 interface in the int environment. Otherwise, it is hard to know if the pod you are profiling will serve the request.
 This does not apply to the prod environment, though. Profiling in prod is not recommended and if you need to do it make
 sure you have a full understanding of replicas and profiling.

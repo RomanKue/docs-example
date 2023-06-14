@@ -56,7 +56,7 @@ import {createStoreSecretsWorkflow, storeSecretsWorkflowFileName} from './workfl
 import {
   createDependabotAutoApproveWorkflow,
   dependabotAutoApproveWorkflowFileName
-} from './workflows/dependabot-auto-merge-workflow.js';
+} from './workflows/dependabot-auto-approve-workflow.js';
 import {createEncryptWorkflow, encryptWorkflowFileName} from './workflows/encrypt-workflow.js';
 import {randomCryptoString} from '../../strings/random.js';
 import {createRolloutToProdWorkflow, rolloutToProdWorkflowFileName} from './workflows/rollout-to-prod-workflow.js';

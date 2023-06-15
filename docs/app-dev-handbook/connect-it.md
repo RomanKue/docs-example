@@ -21,7 +21,7 @@ The central system
 for [Service Asset and Configuration Management](https://wiki.en.it-processmaps.com/index.php/Service_Asset_and_Configuration_Management)
 at BMW is [Connect-IT](https://connectit.muc).
 
-Apps are responsible for maintaining Connect-IT information. To express that an app runs on UNITY, the standard
+Apps are responsible for maintaining Connect-IT information. To indicate that an app runs on UNITY, the standard
 platform [SPL-781: UNITY Application Ecosystem][SPL-781] should be added to the Technical Platform Elements of each app
 running on UNITY.
 
@@ -38,15 +38,15 @@ Next, search [SPL-781: UNITY Application Ecosystem][SPL-781] and add it.
 
 ## App-ID
 
-A valid app id from Connect-IT is required for production deployments in UNITY.
-A production deployment is only possible, when the `appId` is configured in the `unity-app.*.yaml` files.
+A valid app ID from Connect-IT is required for production deployments in UNITY.
+A production deployment is only possible when the `appId` is configured in the `unity-app.*.yaml` files.
 
 ```yaml
 name: foo
 appId: APP-123
 ```
 
-Note that the UNITY team will use that information for change management and incident management. For example, the ITSM
+Note that the UNITY team will use this information for change management and incident management. For example, the ITSM
 Service of the deployment on the CMDB Information tab will be used in case of an incident.
 
 ![](../assets/connect-it-itsm.png)

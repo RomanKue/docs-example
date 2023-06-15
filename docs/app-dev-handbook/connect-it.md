@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Connect-IT
+title: Connect IT
 parent: AppDev Handbook
 nav_order: 2
 ---
@@ -10,18 +10,18 @@ nav_order: 2
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Connect-IT](#connect-it)
+- [Connect IT](#connect-it)
   - [App-ID](#app-id)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# Connect-IT
+# Connect IT
 
 The central system
 for [Service Asset and Configuration Management](https://wiki.en.it-processmaps.com/index.php/Service_Asset_and_Configuration_Management)
-at BMW is [Connect-IT](https://connectit.muc).
+at BMW is [Connect IT](https://connectit.muc).
 
-Apps are responsible for maintaining Connect-IT information. To indicate that an app runs on UNITY, the standard
+Apps are responsible for maintaining Connect IT information. To indicate that an app runs on UNITY, the standard
 platform [SPL-781: UNITY Application Ecosystem][SPL-781] should be added to the Technical Platform Elements of each app
 running on UNITY.
 
@@ -38,7 +38,7 @@ Next, search [SPL-781: UNITY Application Ecosystem][SPL-781] and add it.
 
 ## App-ID
 
-A valid app ID from Connect-IT is required for production deployments in UNITY.
+A valid app ID from Connect IT is required for production deployments in UNITY.
 A production deployment is only possible when the `appId` is configured in the `unity-app.*.yaml` files.
 
 ```yaml

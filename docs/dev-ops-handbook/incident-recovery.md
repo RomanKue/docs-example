@@ -37,7 +37,7 @@ and repos matching the specified regular expression.
 To encrypt the secrets in an automated way, the master key must be stored in GHE.
 
 This (or fixing a broken master key) can be achieved by running the
-[`sync-master-keys`](https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/sync-master-keys.yaml)
+[`sync-master-keys-from-k8s-to-gh`](https://atc-github.azure.cloud.bmw/UNITY/unity/actions/workflows/sync-master-keys-from-k8s-to-gh.yaml)
 workflow, which stores the master key in GHE for the selected environment and repos matching the specified regular
 expression as `CRYPT_MASTER_KEY` (or updates the existing one if overwrite is set to true).
 

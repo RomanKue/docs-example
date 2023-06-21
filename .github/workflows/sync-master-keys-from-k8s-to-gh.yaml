@@ -61,9 +61,9 @@ jobs:
           repository-regex: ${{ inputs.repositoryRegex }}
           overwrite: ${{ inputs.overwrite }}
           master-key-secret-suffix: ${{ inputs.master-key-secret-suffix }}
-      - name: upsert-test-k8s-objects
+      - name: sync-master-keys-from-k8s-to-gh-test
         if: ${{ inputs.environment == 'test' }}
-        uses: ./.github/actions/recreate-app-service-account
+        uses: ./.github/actions/sync-master-keys-from-k8s-to-gh
         with:
           GITHUB_TOKEN: ${{ secrets.UNITY_BOT_TOKEN }}
           KUBERNETES_TOKEN: ${{ secrets.TEST_KUBERNETES_TOKEN }}
@@ -71,3 +71,5 @@ jobs:
           KUBERNETES_NAMESPACE: ${{ secrets.TEST_KUBERNETES_NAMESPACE }}
           environment: ${{ inputs.environment }}
           repository-regex: ${{ inputs.repositoryRegex }}
+          overwrite: ${{ inputs.overwrite }}
+          master-key-secret-suffix: ${{ inputs.master-key-secret-suffix }}

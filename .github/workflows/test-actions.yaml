@@ -73,7 +73,7 @@ jobs:
           sudo apt-get update
           sudo apt install chromium-browser
       - name: ng test
-        working-directory: $WORK_DIR/ui
+        working-directory: ${{ env.WORK_DIR }}/ui
         env:
           CHROME_BIN: /usr/bin/chromium-browser
         run: npx ng test --browsers=ChromeHeadless --watch=false
@@ -85,5 +85,5 @@ jobs:
           JAVA_VERSION: '17'
           JAVA_DISTRIBUTION: 'zulu'
       - name: mvn test
-        working-directory: $WORK_DIR/api
+        working-directory: ${{ env.WORK_DIR }}/api
         run: mvn test

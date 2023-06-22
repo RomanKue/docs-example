@@ -55,24 +55,25 @@ jobs:
     env:
       ORG: ${{ github.repository_owner }}
       NODE_VERSION: '16'
+      WORK_DIR: test-stubs
     steps:
       - uses: actions/checkout@v3
       - name: build-actions
         uses: ./.github/actions/build-actions
       - name: create working directory
-        run: mkdir test-stubs
+        run: mkdir "$WORK_DIR"
       - name: make-angular-stub
         uses: ./.github/actions/make-angular-stub
         env:
           NAME: ui
-          WORKING_DIRECTORY: test-stubs
+          WORKING_DIRECTORY: ${{ env.WORK_DIR }}
           ANGULAR_VERSION: '15'
       - name: install chromium
         run: |
           sudo apt-get update
           sudo apt install chromium-browser
       - name: ng test
-        working-directory: test-stubs/ui
+        working-directory: $WORK_DIR/ui
         env:
           CHROME_BIN: /usr/bin/chromium-browser
         run: npx ng test --browsers=ChromeHeadless --watch=false
@@ -80,9 +81,9 @@ jobs:
         uses: ./.github/actions/make-quarkus-stub
         env:
           NAME: api
-          WORKING_DIRECTORY: test-stubs
+          WORKING_DIRECTORY: ${{ env.WORK_DIR }}
           JAVA_VERSION: '17'
           JAVA_DISTRIBUTION: 'zulu'
       - name: mvn test
-        working-directory: test-stubs/api
+        working-directory: $WORK_DIR/api
         run: mvn test

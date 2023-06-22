@@ -45,6 +45,18 @@ jobs:
 #      - name: test
 #        working-directory: ./actions
 #        run: npm test -- --verbose
+  test-create-stubs:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v3
+      - name: build-actions
+        uses: ./.github/actions/build-actions
       - name: create working directory
         run: mkdir test-stubs
       - name: make-angular-stub
@@ -55,18 +67,30 @@ jobs:
           WORKING_DIRECTORY: test-stubs
           NODE_VERSION: '16'
           ANGULAR_VERSION: '15'
+      - name: install chromium
+        run: |
+          sudo apt-get update
+          sudo apt install chromium-browser
+      - name: ng test
+        working-directory: test-stubs/ui
+        env:
+          CHROME_BIN: /usr/bin/chromium-browser
+        run: npx ng test --browsers=ChromeHeadless --watch=false
+      - name: make-quarkus-stub
+        uses: ./.github/actions/make-quarkus-stub
+        env:
+          ORG: ${{ github.repository_owner }}
+          NAME: api
+          WORKING_DIRECTORY: test-stubs
+          NODE_VERSION: '16'
+          JAVA_VERSION: '17'
+          JAVA_DISTRIBUTION: 'zulu'
       - name: list result temporary
         shell: bash
         run: |
           ls -lah
           ls -lah test-stubs
           ls -lah test-stubs/ui
-      - name: install chromium
-        run: |
-          sudo apt-get update
-          sudo apt install chromium-browser
-      - name: test
-        working-directory: test-stubs/ui
-        env:
-          CHROME_BIN: /usr/bin/chromium-browser
-        run: npx ng test --browsers=ChromeHeadless --watch=false
+      - name: mvn test
+        working-directory: test-stubs/api
+        run: mvn test

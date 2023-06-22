@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-      - UNITYAPPS-546-add-make-stubs-to-test-actions
   pull_request:
 jobs:
   build:
@@ -42,9 +41,9 @@ jobs:
       - uses: actions/checkout@v3
       - name: build-actions
         uses: ./.github/actions/build-actions
-#      - name: test
-#        working-directory: ./actions
-#        run: npm test -- --verbose
+      - name: test
+        working-directory: ./actions
+        run: npm test -- --verbose
   test-create-stubs:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
@@ -53,6 +52,9 @@ jobs:
       id-token: write
     needs:
       - build
+    env:
+      ORG: ${{ github.repository_owner }}
+      NODE_VERSION: '16'
     steps:
       - uses: actions/checkout@v3
       - name: build-actions
@@ -62,10 +64,8 @@ jobs:
       - name: make-angular-stub
         uses: ./.github/actions/make-angular-stub
         env:
-          ORG: ${{ github.repository_owner }}
           NAME: ui
           WORKING_DIRECTORY: test-stubs
-          NODE_VERSION: '16'
           ANGULAR_VERSION: '15'
       - name: install chromium
         run: |
@@ -79,18 +79,10 @@ jobs:
       - name: make-quarkus-stub
         uses: ./.github/actions/make-quarkus-stub
         env:
-          ORG: ${{ github.repository_owner }}
           NAME: api
           WORKING_DIRECTORY: test-stubs
-          NODE_VERSION: '16'
           JAVA_VERSION: '17'
           JAVA_DISTRIBUTION: 'zulu'
-      - name: list result temporary
-        shell: bash
-        run: |
-          ls -lah
-          ls -lah test-stubs
-          ls -lah test-stubs/ui
       - name: mvn test
         working-directory: test-stubs/api
         run: mvn test

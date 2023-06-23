@@ -44,7 +44,7 @@ jobs:
       - name: test
         working-directory: ./actions
         run: npm test -- --verbose
-  test-create-stubs:
+  test-create-angular-stub:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -62,6 +62,9 @@ jobs:
         uses: ./.github/actions/build-actions
       - name: create working directory
         run: mkdir "$WORK_DIR"
+      - name: init repo
+        working-directory: ${{ env.WORK_DIR }}
+        run: git init
       - name: make-angular-stub
         uses: ./.github/actions/make-angular-stub
         env:
@@ -77,6 +80,27 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/chromium-browser
         run: npx ng test --browsers=ChromeHeadless --watch=false
+  test-create-quarkus-stub:
+    runs-on: atc-ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    needs:
+      - build
+    env:
+      ORG: ${{ github.repository_owner }}
+      NODE_VERSION: '16'
+      WORK_DIR: test-stubs
+    steps:
+      - uses: actions/checkout@v3
+      - name: build-actions
+        uses: ./.github/actions/build-actions
+      - name: create working directory
+        run: mkdir "$WORK_DIR"
+      - name: init repo
+        working-directory: ${{ env.WORK_DIR }}
+        run: git init
       - name: make-quarkus-stub
         uses: ./.github/actions/make-quarkus-stub
         env:

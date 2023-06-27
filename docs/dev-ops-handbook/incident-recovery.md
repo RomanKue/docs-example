@@ -14,6 +14,7 @@ nav_order: 7
   - [Fix Broken Service Account Token](#fix-broken-service-account-token)
   - [Fix Missing or Broken Master Key](#fix-missing-or-broken-master-key)
   - [Fix Crashing UNITY Operator](#fix-crashing-unity-operator)
+  - [Fix Terraform Locked State](#fix-terraform-locked-state)
   - [Automatic Alerts](#automatic-alerts)
     - [Known Issues](#known-issues)
 
@@ -56,6 +57,22 @@ kubectl annotate secret app-foo --overwrite unity-operator.unity.bmwgroup.net/di
 ```
 
 ⚠️ After the root cause of the issue was solved, the annotation must be set back to `false` manually.
+
+## Fix Terraform Locked State
+
+Sometimes it might happen that all terraform operations fail because of being in a locked state. There are two possibilities
+to recover from this situation:
+
+- via the Azure portal UI, the lease can be broken:
+  ![](../assets/unlock.png)
+
+- by running the Terraform command `force-unlock`
+```bash
+azcopy login
+azcopy copy https://unitytestv3.blob.core.windows.net/unity-grafana-test . --recursive
+cd unity-grafana-test
+terraform force-unlock <LOCK_ID>
+```
 
 ## Automatic Alerts
 

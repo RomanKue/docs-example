@@ -61,7 +61,7 @@ jobs:
           WORKING_DIRECTORY: ${{ github.event.inputs.repository }}
           NODE_VERSION: ${{ github.event.inputs.nodeVersion }}
           # see https://github.com/angular/angular-cli/releases
-          ANGULAR_VERSION: '15'
+          ANGULAR_VERSION: '16'
         uses: ./unity/.github/actions/make-angular-stub
       - name: make-quarkus-stub
         if: ${{ github.event.inputs.type == 'quarkus' }}

@@ -13,6 +13,7 @@ nav_order: 11
 - [GitHub](#github)
 - [Kubernetes Cluster (M4W)](#kubernetes-cluster-m4w)
 - [wiz.io](#wizio)
+- [Azure Subscriptions](#azure-subscriptions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

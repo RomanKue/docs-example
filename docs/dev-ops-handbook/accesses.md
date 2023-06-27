@@ -37,3 +37,10 @@ One of the owners of the product needs to be added as Contact to the incident. A
 
 More information can be found [here](https://atc.bmwgroup.net/confluence/x/BqMMvw).
 
+# Azure Subscriptions
+
+The Azure Subscription accesses are managed by several ADGR Groups. In order to have access to one or the other Azure
+subscription, a user needs to be added to the correct ADGR group. The ADGR groups are:
+- APPL_unity_dev_azure_admin and APPL_unity_dev_azure - for unity-test and unity-int
+- APPL_unity_prod_azure_admin and APPL_unity_prod_azure - for unity (production)
+

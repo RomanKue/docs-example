@@ -36,7 +36,7 @@ The [create-angular-app.bash](https://atc-github.azure.cloud.bmw/UNITY/unity/blo
 contains a variable for the current Angular major version to use:
 
 ```yaml
-ANGULAR_VERSION: '15'
+ANGULAR_VERSION: '16'
 ```
 
 As soon as a new major angular version is release, which can be found e.g.

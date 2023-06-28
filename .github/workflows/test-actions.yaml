@@ -70,7 +70,10 @@ jobs:
         env:
           NAME: ui
           WORKING_DIRECTORY: ${{ env.WORK_DIR }}
-          ANGULAR_VERSION: '15'
+          ANGULAR_VERSION: '16'
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
       - name: install chromium
         run: |
           sudo apt-get update
@@ -80,6 +83,9 @@ jobs:
         env:
           CHROME_BIN: /usr/bin/chromium-browser
         run: npx ng test --browsers=ChromeHeadless --watch=false
+      - name: lint
+        working-directory: ${{ env.WORK_DIR }}/ui
+        run: npx ng lint
   test-create-quarkus-stub:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10

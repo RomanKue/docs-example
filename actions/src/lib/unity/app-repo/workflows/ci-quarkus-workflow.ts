@@ -71,7 +71,7 @@ jobs:
           QUARKUS_CONTAINER_IMAGE_GROUP: unity
           QUARKUS_CONTAINER_IMAGE_BUILD: "true"
           QUARKUS_CONTAINER_IMAGE_PUSH: \${{ github.ref == 'refs/heads/main' }}
-        run: mvn clean package
+        run: mvn --batch-mode clean package
       - name: output image tag
         if: \${{ github.ref == 'refs/heads/main' }}
         id: image-tag

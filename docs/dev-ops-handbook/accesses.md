@@ -38,6 +38,12 @@ One of the owners of the product needs to be added as Contact to the incident. A
 
 More information can be found [here](https://atc.bmwgroup.net/confluence/x/BqMMvw).
 
+# Azure Self Service Portal
+
+In order to get access to the [Azure Self Service Portal](https://manage.azure.bmw.cloud/), a user needs to be assigned
+a role in this portal. This can be done in the `Users > Assign User` section. This will also provide access to the
+Azure subscription (FPC default user role). If only access to the subscription is needed, please see the following section.
+
 # Azure Subscriptions
 
 The Azure Subscription accesses are managed by several ADGR Groups. In order to have access to one or the other Azure

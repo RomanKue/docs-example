@@ -18,6 +18,8 @@ description: Here is the description for the app catalog, which will be displaye
 
 *The app's name should be URL compatible, so prefer `my-app` over ~~`MyApp`~~ or ~~`my app`~~.*
 
+*Ensure your input above follows [YAML](https://yaml.org) syntax.*
+
 **Application Components**
 
  * [x] please generate a front-end [Angular](https://angular.io) stub from a template for me.

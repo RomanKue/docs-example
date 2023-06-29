@@ -8,8 +8,8 @@ import {ReadonlyDeep} from 'type-fest';
 import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
 import {Content, ContentFile} from '../../../github/api/repos/response/content.js';
 import {base64Decode} from '../../../strings/encoding.js';
-import Code = marked.Tokens.Code;
 import {descriptionDefault, displayNameDefault} from '../../config.js';
+import Code = marked.Tokens.Code;
 
 
 /**
@@ -53,10 +53,10 @@ export const parseIssueBody = (body: string): NewAppIssue => {
   const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
   const appYaml = code[0]?.text ?? '';
   let parseYamlJson = parseYaml(appYaml);
-  if (parseYamlJson?.description === descriptionDefault) {
+  if (parseYamlJson?.description?.trim() === descriptionDefault.trim()) {
     delete parseYamlJson.description;
   }
-  if (parseYamlJson?.displayName === displayNameDefault) {
+  if (parseYamlJson?.displayName?.trim() === displayNameDefault.trim()) {
     delete parseYamlJson.displayName;
   }
 

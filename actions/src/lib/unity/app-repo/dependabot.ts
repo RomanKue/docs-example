@@ -40,6 +40,11 @@ const createForNpm = (userLogin: string) => trimEmptyLines(`
         update-types:
           - "version-update:semver-major"
           - "version-update:semver-minor"
+      - dependency-name: "@angular-eslint/*"
+        update-types:
+          - "version-update:semver-major"
+          - "version-update:semver-minor"
+
     `).trimEnd();
 
 export const createDependabot = (newAppIssue: ReadonlyDeep<NewAppIssue>, userLogin: string) => `

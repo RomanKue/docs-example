@@ -13,6 +13,8 @@ nav_order: 11
 - [GitHub](#github)
 - [Kubernetes Cluster (M4W)](#kubernetes-cluster-m4w)
 - [wiz.io](#wizio)
+- [Azure Self Service Portal](#azure-self-service-portal)
+- [Azure Subscriptions](#azure-subscriptions)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -36,4 +38,17 @@ created. Access will be awarded for the entire product, therefore the product (S
 One of the owners of the product needs to be added as Contact to the incident. As an example, also see INC000044189072.
 
 More information can be found [here](https://atc.bmwgroup.net/confluence/x/BqMMvw).
+
+# Azure Self Service Portal
+
+In order to get access to the [Azure Self Service Portal](https://manage.azure.bmw.cloud/), a user needs to be assigned
+a role in this portal. This can be done in the `Users > Assign User` section. This will also provide access to the
+Azure subscription (FPC default user role). If only access to the subscription is needed, please see the following section.
+
+# Azure Subscriptions
+
+The Azure Subscription accesses are managed by several ADGR Groups. In order to have access to one or the other Azure
+subscription, a user needs to be added to the correct ADGR group. The ADGR groups are:
+- APPL_unity_dev_azure_admin and APPL_unity_dev_azure - for unity-test and unity-int
+- APPL_unity_prod_azure_admin and APPL_unity_prod_azure - for unity (production)
 

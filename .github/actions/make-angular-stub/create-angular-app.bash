@@ -54,7 +54,6 @@ ng new "$NAME" --defaults --style=scss --skip-git
   < "$SCRIPT_PATH/templates/styles.scss" gomplate > "src/styles.scss"
 
   # add images
-
   mkdir -p src/assets/images
   < "$SCRIPT_PATH/templates/Logo-unity.svg" gomplate > "src/assets/images/Logo-unity.svg"
   < "$SCRIPT_PATH/templates/unity-skeleton.svg" gomplate > "src/assets/images/unity-skeleton.svg"
@@ -67,6 +66,10 @@ ng new "$NAME" --defaults --style=scss --skip-git
   < "$SCRIPT_PATH/templates/logo_180x180.png" gomplate > "src/assets/images/favicon/logo_180x180.png"
 
   < "$SCRIPT_PATH/templates/app.component.spec.ts" gomplate > "src/app/app.component.spec.ts"
+
+  # add Dockerfile and nginx config
+  < "$SCRIPT_PATH/templates/Dockerfile" gomplate > "Dockerfile"
+  < "$SCRIPT_PATH/templates/nginx.conf" gomplate > "nginx.conf"
 
   # list what has been created
   ls -lah

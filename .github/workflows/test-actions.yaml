@@ -56,6 +56,8 @@ jobs:
       ORG: ${{ github.repository_owner }}
       NODE_VERSION: '16'
       WORK_DIR: test-stubs
+      IMAGE: "containers.atc-github.azure.cloud.bmw/unity/test-stubs:foo"
+      MOVING_IMAGE: "containers.atc-github.azure.cloud.bmw/unity/test-stubs:latest"
     steps:
       - uses: actions/checkout@v3
       - name: build-actions
@@ -86,6 +88,17 @@ jobs:
       - name: lint
         working-directory: ${{ env.WORK_DIR }}/ui
         run: npx ng lint
+      - name: ci
+        working-directory: ${{ env.WORK_DIR }}/ui
+        run: npm ci --force
+      - name: build
+        working-directory: ${{ env.WORK_DIR }}/ui
+        run: npx ng build -c production
+      - name: docker build
+        working-directory: ${{ env.WORK_DIR }}/ui
+        run: |
+          docker build -t "${{ env.IMAGE }}" -t "${{ env.MOVING_IMAGE }}" . --label "org.opencontainers.image.source=${{ github.event.repository.html_url }}"
+
   test-create-quarkus-stub:
     runs-on: atc-ubuntu-latest
     timeout-minutes: 10
@@ -114,6 +127,6 @@ jobs:
           WORKING_DIRECTORY: ${{ env.WORK_DIR }}
           JAVA_VERSION: '17'
           JAVA_DISTRIBUTION: 'zulu'
-      - name: mvn test
+      - name: mvn package
         working-directory: ${{ env.WORK_DIR }}/api
-        run: mvn test
+        run: mvn --batch-mode clean package

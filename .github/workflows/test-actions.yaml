@@ -54,7 +54,7 @@ jobs:
       - build
     env:
       ORG: ${{ github.repository_owner }}
-      NODE_VERSION: '16'
+      NODE_VERSION: '18'
       WORK_DIR: test-stubs
       IMAGE: "containers.atc-github.azure.cloud.bmw/unity/test-stubs:foo"
       MOVING_IMAGE: "containers.atc-github.azure.cloud.bmw/unity/test-stubs:latest"
@@ -109,7 +109,7 @@ jobs:
       - build
     env:
       ORG: ${{ github.repository_owner }}
-      NODE_VERSION: '16'
+      NODE_VERSION: '18'
       WORK_DIR: test-stubs
     steps:
       - uses: actions/checkout@v3

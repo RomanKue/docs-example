@@ -52,7 +52,7 @@ deployments:
 ```
 
 Which redirects all traffic from
-[unity-test.bmwgroup.net/foo/ui/](https://unity.bmwgroup/foo/)
+[unity-test.bmwgroup.net/foo/](https://unity.bmwgroup/foo/)
 to
 [unity-test.bmwgroup.net/foo/ui/](https://unity.bmwgroup/foo/ui/).
 Back-end only applications may configure redirects to a Swagger UI page instead:

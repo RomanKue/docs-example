@@ -38,7 +38,7 @@ The way, authentication is working can be configured in the `unity-app.*.yaml` f
 auth:
   enabled: true
   minAuthLevel: 7000
-  oauth:
+  oauth2:
     enabled: true
   roles:
     b2x:
@@ -270,7 +270,7 @@ This means, the `unity-app.*.yaml` file should contain a configuration, which on
 
 ```yaml
 auth:
-  oauth:
+  oauth2:
     enabled: true
 ```
 

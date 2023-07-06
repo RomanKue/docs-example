@@ -16,6 +16,10 @@ const createForMaven = (userLogin: string) => trimEmptyLines(`
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
+  - package-ecosystem: "docker"
+    directory: "/${quarkusStubName}/src/main/docker/"
+    schedule:
+      interval: "daily"
   `).trimEnd();
 
 const createForNpm = (userLogin: string) => trimEmptyLines(`

@@ -34,6 +34,10 @@ updates:
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
+  - package-ecosystem: "docker"
+    directory: "/api/src/main/docker/"
+    schedule:
+      interval: "daily"
   - package-ecosystem: "npm"
     directory: "/ui"
     assignees:

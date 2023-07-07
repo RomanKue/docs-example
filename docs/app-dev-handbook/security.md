@@ -13,6 +13,7 @@ nav_order: 8
 - [Security](#security)
 - [Dependabot Alerts](#dependabot-alerts)
   - [Known Issues](#known-issues)
+- [Application Security Testing (AST)](#application-security-testing-ast)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

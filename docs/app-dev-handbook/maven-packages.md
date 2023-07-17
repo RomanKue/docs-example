@@ -76,11 +76,11 @@ Maven provides several mechanisms how additional binary repositories may be used
     <profile>
       <id>ghe-packages</id>
       <repositories>
-         <repository>
-           <id>atc-github-packages</id>
-           <name>atc-github-packages</name>
-           <url>https://maven.atc-github.azure.cloud.bmw/UNITY/<git repository name>/</url>
-         </repository>
+        <repository>
+          <id>atc-github-packages</id>
+          <name>atc-github-packages</name>
+          <url>https://maven.atc-github.azure.cloud.bmw/UNITY/<git repository name>/</url>
+        </repository>
       </repositories>
     </profile>
   </profiles>
@@ -100,4 +100,3 @@ You might commit such a `settings.xml` and use it in your workflows. Therefore y
         run: |
           mvn --batch-mode clean package -s settings.xml
 ```
-

@@ -2,7 +2,7 @@
 layout: default
 title: Decommission App
 parent: AppDev Handbook
-nav_order: 14
+nav_order: 15
 ---
 
 **Table of Contents**

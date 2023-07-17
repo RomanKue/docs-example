@@ -2,7 +2,7 @@
 layout: default
 title: Kubernetes
 parent: AppDev Handbook
-nav_order: 12
+nav_order: 13
 ---
 
 **Table of Contents**

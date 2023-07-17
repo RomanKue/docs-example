@@ -25,7 +25,7 @@ The following HTTP response headers will be set by default by the UNITY platform
 ```
 X-Content-Type-Options: 'nosniff'
 X-Frame-Options: 'deny'
-Content-Security-Policy: frame-ancestors 'self'; form-action: 'self';
+Content-Security-Policy: frame-ancestors 'self'; form-action 'self'; object-src 'none';
 ```
 
 Note that some additional default headers are set by the Nginx Ingress Controller, which can not be overwritten, e.g

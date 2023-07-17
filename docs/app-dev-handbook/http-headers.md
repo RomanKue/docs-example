@@ -28,10 +28,20 @@ X-Frame-Options: 'deny'
 Content-Security-Policy: frame-ancestors 'self'; form-action 'self'; object-src 'none';
 ```
 
-Note that some additional default headers are set by the Nginx Ingress Controller, which can not be overwritten, e.g
+Note that some additional default headers are set by
+the [Nginx Ingress Controller](https://kubernetes.github.io/ingress-nginx), which can not be overwritten, e.g
 `Strict-Transport-Security: 'max-age=15724800; includeSubDomains'`). For more information, please
 refer to the default configuration values of the
-[ingress-nginx](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#configuration-options)
+[ingress-nginx](https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/#configuration-options).
+
+⚠️ The default setting for `Content-Security-Policy` does not provide maximum security, because the most secure
+setting (`default-src 'self'`) breaks
+frameworks, such as [Swagger UI](https://swagger.io/tools/swagger-ui/) and [Angular](https://angular.io).
+Read more about it in [Security](security.html).
+
+`X-XSS-Protection` was a recommended security related header in the past. As it
+is [deprecated](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection), this header is not set
+anymore. Please set a secure `Content-Security-Policy` instead.
 
 ## Customizing the HTTP Headers
 

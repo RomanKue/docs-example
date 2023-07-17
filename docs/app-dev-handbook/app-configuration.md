@@ -66,6 +66,11 @@ To encrypt a value, run the `encrypt` workflow in your repository.
 There are two ways to do this, via the browser or via [`gh`](https://cli.github.com).
 For experts, the preferred way should be using `gh`, since there is no risk of caching secret data in the browser.
 
+Secrets will be available in decrypted form inside the container as environment variable. This means that any user
+that has access to the container can view the secret values, e.g. by running `env`.
+Ideally, secret environment variables would be unset or overwritten after reading them from the application to avoid
+exposing them to a potential attacker. However, this is not possible at the moment out of the box.
+
 ### Encrypt in the Browser
 
 ![](../assets/actions-encrypt-workflow.png)

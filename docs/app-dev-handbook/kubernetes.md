@@ -21,6 +21,7 @@ nav_order: 12
   - [Inspect Containers and Pods](#inspect-containers-and-pods)
     - [Remote Shell](#remote-shell)
     - [Port-Forwarding](#port-forwarding)
+  - [Inspect Events](#inspect-events)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

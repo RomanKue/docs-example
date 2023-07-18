@@ -21,6 +21,7 @@ nav_order: 12
   - [Inspect Containers and Pods](#inspect-containers-and-pods)
     - [Remote Shell](#remote-shell)
     - [Port-Forwarding](#port-forwarding)
+  - [Inspect Events](#inspect-events)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -228,4 +229,13 @@ kubectl port-forward app-foo-api-5c484fd67c-9x9ll 8080:8080
 If your app exposes that port to serve http requests, you should be able to open e.g. the Swagger UI page locally over
 the mapped port by opening [http://localhost:8080/test/api/swagger-ui](http://localhost:8080/test/api/swagger-ui) (after
 adjusting the URL).
+
+## Inspect Events
+
+Sometimes it is useful to inspect the  [events](https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/)
+from the Kubernetes cluster. The application service account token is authorized to list the events from the cluster:
+
+```bash
+kubectl get events
+```
 

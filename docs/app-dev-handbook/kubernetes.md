@@ -229,3 +229,12 @@ If your app exposes that port to serve http requests, you should be able to open
 the mapped port by opening [http://localhost:8080/test/api/swagger-ui](http://localhost:8080/test/api/swagger-ui) (after
 adjusting the URL).
 
+## Inspect Events
+
+Sometimes it is useful to inspect the  [events](https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/)
+from the Kubernetes cluster. The application service account token is authorized to list the events from the cluster:
+
+```bash
+kubectl get events
+```
+

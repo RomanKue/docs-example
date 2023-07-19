@@ -24,6 +24,7 @@ The AppDev Handbook is for the app developer to support implementing an app on t
 * [Telemetry](telemetry.html) data such as logs, metrics and tracing of UNITY applications.
 * [External services](external-services.html) called from UNITY applications.
 * [HTTP Headers](http-headers.html) configure HTTP headers.
+* [Maven Packages](maven-packages.html) maven config for GHE packages or BMW nexus.
 * [Kubernetes](kubernetes.html) interacting with the application's running containers.
 * [Diagnostics](diagnostics.html) debug and profile to troubleshoot UNITY applications.
 * [Decommission App](decommission-app.html) decommission UNITY application

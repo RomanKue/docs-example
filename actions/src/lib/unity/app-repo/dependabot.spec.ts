@@ -36,6 +36,10 @@ updates:
     open-pull-requests-limit: 10
   - package-ecosystem: "docker"
     directory: "/api/src/main/docker/"
+    assignees:
+      - "q1234567"
+    reviewers:
+      - "q1234567"
     schedule:
       interval: "daily"
   - package-ecosystem: "npm"
@@ -63,6 +67,14 @@ updates:
         update-types:
           - "version-update:semver-major"
           - "version-update:semver-minor"
+  - package-ecosystem: "docker"
+    directory: "/ui/"
+    assignees:
+      - "q1234567"
+    reviewers:
+      - "q1234567"
+    schedule:
+      interval: "daily"
       `.trim()
       );
     });

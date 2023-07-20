@@ -18,6 +18,10 @@ const createForMaven = (userLogin: string) => trimEmptyLines(`
     open-pull-requests-limit: 10
   - package-ecosystem: "docker"
     directory: "/${quarkusStubName}/src/main/docker/"
+    assignees:
+      - "${userLogin}"
+    reviewers:
+      - "${userLogin}"
     schedule:
       interval: "daily"
   `).trimEnd();
@@ -48,7 +52,14 @@ const createForNpm = (userLogin: string) => trimEmptyLines(`
         update-types:
           - "version-update:semver-major"
           - "version-update:semver-minor"
-
+  - package-ecosystem: "docker"
+    directory: "/${angularStubName}/"
+    assignees:
+      - "${userLogin}"
+    reviewers:
+      - "${userLogin}"
+    schedule:
+      interval: "daily"
     `).trimEnd();
 
 export const createDependabot = (newAppIssue: ReadonlyDeep<NewAppIssue>, userLogin: string) => `

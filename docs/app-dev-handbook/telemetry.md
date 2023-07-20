@@ -121,7 +121,8 @@ deployments:
 ```
 
 In this case the endpoint `/my-app/api/metrics` will be scraped and the exposed metrics can be explored as described
-above.
+above. This endpoint will be available only from within the cluster. It will not be possible to access the metrics
+endpoint via the ingress (for example https://unity.bmwgroup.net/my-app/api/metrics will be forbidden).
 
 Using a labeling where the cardinality of the value set is high (e.g. email address) can dramatically increase the
 amount

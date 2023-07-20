@@ -2,6 +2,10 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
 
+  - [layout: default
+title: Maven Packages
+parent: AppDev Handbook
+nav_order: 12](#layout-default%0Atitle-maven-packages%0Aparent-appdev-handbook%0Anav_order-12)
 - [Maven Packages](#maven-packages)
   - [Manual upload](#manual-upload)
   - [GitHub Packages in Dependency Management](#github-packages-in-dependency-management)

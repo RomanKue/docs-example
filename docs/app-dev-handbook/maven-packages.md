@@ -1,3 +1,14 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Maven Packages](#maven-packages)
+  - [Manual upload](#manual-upload)
+  - [GitHub Packages in Dependency Management](#github-packages-in-dependency-management)
+  - [BMW Nexus as Mirror](#bmw-nexus-as-mirror)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ---
 layout: default
 title: Maven Packages

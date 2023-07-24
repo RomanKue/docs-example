@@ -108,7 +108,7 @@ to the `container.resources.limits`, which should trigger the creation of new no
 
 ## Restore Database Manually
 
-In case a manual restore of the database server is needed (e.g. the server was accidentally deleted) it can be done by 
+In case a manual restore of the database server is needed (e.g. the server was accidentally deleted) it can be done by
 following these steps:
 
 1. Recreate the azure resources for the database server through the `unity-app.*.yaml` with the exact same configuration.
@@ -120,7 +120,7 @@ azure file share containing the backup in the container to later restore it.
 apiVersion: v1
 kind: Secret
 metadata:
-  name: restore-db-foo-storage-account 
+  name: app-test-pfs-db-foo-storage-account
   namespace: test
 stringData:
   azurestorageaccountname: unitytestbackupv1 # the name of the storage account containing the backups
@@ -200,12 +200,12 @@ spec:
         - bash
         env:
         - name: PGHOST
-          value: db-foo.postgres.database.azure.com
+          value: app-test-pfs-db-foo.postgres.database.azure.com
         - name: PGUSER
-          value: postgres
+          value: postgres # the postgres admin
         - name: PGPASSWORD
-          value: password
-        image: postgres:14 
+          value: password # the admin password
+        image: postgres:14
         name: restore
         resources:
           limits:
@@ -234,11 +234,11 @@ spec:
       - csi:
           driver: file.csi.azure.com
           volumeAttributes:
-            secretName: db-foo-storage-account-secret
-            shareName: db-foo
+            secretName: app-test-pfs-db-foo-storage-account # the name of the secret from step 3 
+            shareName: app-test-pfs-db-foo
         name: backupfileshare
   ttlSecondsAfterFinished: 86400
 ```
-⚠️ It's important to follow the `<app-name>-pfs-<db-server-name>-restore-backup` pattern when naming the job, 
+⚠️ It's important to follow the `<app-name>-pfs-<db-server-name>-restore-backup` pattern when naming the job,
 this will prevent the operator to execute any update on the database during the restore process.
 5. If everything went well and the database is restored delete the secret created in step 3.

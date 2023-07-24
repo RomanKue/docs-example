@@ -188,10 +188,14 @@ spec:
           set -eux
           cd /backupfileshare/db-foo
           tar -xvf db-foo.tar
-          gzip -d -c backup-postgres.gz > backup-postgres.out
-          psql -f backup-postgres.out postgres
           gzip -d -c backup-all.gz > backup-all.out
           psql -f backup-all.out postgres
+          rm backup-all.gz
+          rm backup-all.out
+          gzip -d -c backup-postgres.gz > backup-postgres.out
+          psql -f backup-postgres.out postgres
+          rm backup-postgres.gz
+          rm backup-postgres.out
         command:
         - bash
         env:

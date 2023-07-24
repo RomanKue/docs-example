@@ -1,4 +1,4 @@
-name: Make App Stub
+name: Make App Stub (create new or recreate)
 on:
   workflow_dispatch:
     inputs:
@@ -18,15 +18,27 @@ on:
       dry-run:
         required: false
         description: dry-run flag (if true, don't push results to the repo)
+        type: choice
+        default: "true"
+        options:
+          - "true"
+          - "false"
+      branch:
+        required: true
+        description: The branch to push the result to
+        default: main
       javaVersion:
         required: true
         description: the Java version used for generating the Quarkus stub
+        default: 17
       javaDistribution:
         required: true
         description: the Java distribution used for generating the Quarkus stub
+        default: zulu
       nodeVersion:
         required: true
         description: the node version used for the application generation
+        default: 18
 
 concurrency:
   group: make-stub-${{ github.event.inputs.repository }}
@@ -53,6 +65,12 @@ jobs:
           repository: ${{ github.repository_owner }}/${{ github.event.inputs.repository }}
           token: ${{ secrets.UNITY_BOT_TOKEN }}
           path: ${{ github.event.inputs.repository }}
+      - name: cleanup
+        continue-on-error: true # when folder does not exist, ignore
+        shell: bash
+        working-directory: ${{ github.event.inputs.repository }}
+        run: |
+          git rm -rf ${{ github.event.inputs.name }}
       - name: make-angular-stub
         if: ${{ github.event.inputs.type == 'angular' }}
         env:
@@ -87,6 +105,6 @@ jobs:
         shell: bash
         working-directory: ${{ github.event.inputs.repository }}
         run: |
-          git push -u origin main
+          git push -u origin main:${{ github.event.inputs.branch }}
 
 

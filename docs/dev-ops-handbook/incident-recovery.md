@@ -17,6 +17,7 @@ nav_order: 7
   - [Fix Terraform Locked State](#fix-terraform-locked-state)
   - [Automatic Alerts](#automatic-alerts)
     - [Known Issues](#known-issues)
+  - [Restore Database Manually](#restore-database-manually)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

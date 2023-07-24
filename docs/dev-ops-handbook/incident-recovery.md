@@ -235,7 +235,7 @@ spec:
       - csi:
           driver: file.csi.azure.com
           volumeAttributes:
-            secretName: app-test-pfs-db-foo-storage-account # the name of the secret from step 3 
+            secretName: app-test-pfs-db-foo-storage-account # the name of the secret from step 3
             shareName: app-test-pfs-db-foo
         name: backupfileshare
   ttlSecondsAfterFinished: 86400

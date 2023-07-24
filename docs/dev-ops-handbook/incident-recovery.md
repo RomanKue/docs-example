@@ -136,6 +136,8 @@ kind: Job
 metadata:
   name: app-test-pfs-db-foo-restore-backup
   namespace: test
+  labels:
+    unity.bmwgroup.net/restore-database-backup: "app-test-pfs-db-foo"
 spec:
   template:
     spec:
@@ -240,6 +242,6 @@ spec:
         name: backupfileshare
   ttlSecondsAfterFinished: 86400
 ```
-⚠️ It's important to follow the `<app-name>-pfs-<db-server-name>-restore-backup` pattern when naming the job,
+⚠️ It's important to add the `unity.bmwgroup.net/restore-database-backup` label with the proper value (`<app-name>-pfs-<database-server-name>`),
 this will prevent the operator to execute any update on the database during the restore process.
 5. If everything went well and the database is restored delete the secret created in step 3.

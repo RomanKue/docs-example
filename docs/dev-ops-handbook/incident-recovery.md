@@ -118,7 +118,7 @@ the container of the database in the azure portal, this should also contain the 
 don't forget to delete the container again before recreating the resources).
 2. In the backup storage account (azure portal): delete the newly created blob container and undelete the container
 containing the backup to be restored (⚠️check the last modified timestamps, the names will be the same).
-   ![](../assets/undelete_container.png)
+![](../assets/undelete_container.png)
 3. Create a secret with one of the access keys of the backup storage account. This secret will be used to mount the
 azure file share containing the backup in the container to later restore it.
 ```yaml

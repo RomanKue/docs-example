@@ -17,6 +17,7 @@ nav_order: 7
   - [Fix Terraform Locked State](#fix-terraform-locked-state)
   - [Automatic Alerts](#automatic-alerts)
     - [Known Issues](#known-issues)
+  - [Restore Database Manually](#restore-database-manually)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -105,3 +106,148 @@ This is not be a problem unless the applications are simultaneously requesting m
 
 If this still happens, the problem can be fixed by raising the `container.resources.requests` to a value which is closer
 to the `container.resources.limits`, which should trigger the creation of new nodes by the autoscaler.
+
+## Restore Database Manually
+
+In case a manual restore of the database server is needed (e.g. the server was accidentally deleted) it can be done by
+following these steps:
+
+1. Recreate the azure resources for the database server through the `unity-app.*.yaml` with the exact same configuration.
+You can get the last configuration from the git history of the `unity-app.*.yaml` file. Alternatively you can undelete
+the container of the database in the azure portal, this should also contain the required configuration(⚠️In this case
+don't forget to delete the container again before recreating the resources).
+2. In the backup storage account (azure portal): delete the newly created blob container and undelete the container
+containing the backup to be restored (⚠️check the last modified timestamps, the names will be the same).
+![](../assets/undelete_container.png)
+3. Create a secret with one of the access keys of the backup storage account. This secret will be used to mount the
+azure file share containing the backup in the container to later restore it.
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: app-test-pfs-db-foo-storage-account
+  namespace: test
+stringData:
+  azurestorageaccountname: unitytestbackupv1 # the name of the storage account containing the backups
+  azurestorageaccountkey: unitytestbackupv1_acceskey # one of the access keys to the storage account containing the backups
+type: Opaque
+```
+4. Create a job to restore the DB Server. The job has two steps, first the `initContainer` copies the backup from
+the blob container to the azure file share then the backup will be restored into the database server created in the first step.
+(⚠️The container image must contain the [`psql`](https://www.postgresql.org/docs/current/app-psql.html) with the postgres
+version specified in step 1).
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: app-test-pfs-db-foo-restore-backup
+  namespace: test
+  labels:
+    unity.bmwgroup.net/restore-database-backup: "app-test-pfs-db-foo"
+spec:
+  template:
+    spec:
+      initContainers:
+      - args:
+        - -c
+        - echo $AZURE_CLIENT_CERT_PFX_B64 | base64 -d > $AZCOPY_SPA_CERT_PATH;
+          mkdir /backupfileshare/app-test-pfs-db-foo;
+          azcopy copy "https://unitytestbackupv1.blob.core.windows.net/app-test-pfs-db-foo/app-test-pfs-db-foo.tar" /backupfileshare/app-test-pfs-db-foo;
+        command:
+        - sh
+        env:
+        - name: AZCOPY_AUTO_LOGIN_TYPE
+          value: SPN
+        - name: AZCOPY_TENANT_ID
+          value: tenant-id # the azure tenant id
+        - name: AZCOPY_SPA_CERT_PATH
+          value: /tmp/cert.pfx
+        - name: AZCOPY_SPA_APPLICATION_ID
+          value: application-id # the client id of the service principal
+        - name: AZCOPY_LOG_LOCATION
+          value: /tmp
+        - name: AZCOPY_JOB_PLAN_LOCATION
+          value: /tmp
+        - name: AZURE_CLIENT_CERT_PFX_B64
+          value: client-certificate # the certificate to the SP base64 encoded
+        image: containers.atc-github.azure.cloud.bmw/unity/azcopy:2023-07-04t082112z-52b72fd # the latest azcopy image
+        name: blob-to-fileshare
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false
+        volumeMounts:
+        - mountPath: /backupfileshare
+          name: backupfileshare
+      imagePullSecrets:
+      - name: containers.atc-github.azure.cloud.bmw
+      containers:
+      - args:
+        - -c
+        - |
+          set -eux
+          cd /backupfileshare/db-foo
+          tar -xvf db-foo.tar
+          gzip -d -c backup-all.gz > backup-all.out
+          psql -f backup-all.out postgres
+          rm backup-all.gz
+          rm backup-all.out
+          gzip -d -c backup-postgres.gz > backup-postgres.out
+          psql -f backup-postgres.out postgres
+          rm backup-postgres.gz
+          rm backup-postgres.out
+        command:
+        - bash
+        env:
+        - name: PGHOST
+          value: app-test-pfs-db-foo.postgres.database.azure.com
+        - name: PGUSER
+          value: postgres # the postgres admin
+        - name: PGPASSWORD
+          value: password # the admin password
+        image: postgres:14 # the image must contain the required postgres version
+        name: restore
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 200m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: false
+        volumeMounts:
+        - mountPath: /backupfileshare
+          name: backupfileshare
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10000
+        runAsGroup: 10000
+        seccompProfile:
+          type: RuntimeDefault
+      volumes:
+      - csi:
+          driver: file.csi.azure.com
+          volumeAttributes:
+            secretName: app-test-pfs-db-foo-storage-account # the name of the secret from step 3
+            shareName: app-test-pfs-db-foo
+        name: backupfileshare
+  ttlSecondsAfterFinished: 86400
+```
+⚠️ It's important to add the `unity.bmwgroup.net/restore-database-backup` label with the proper value (`<app-name>-pfs-<database-server-name>`),
+this will prevent the operator to execute any update on the database during the restore process.
+5. If everything went well and the database is restored delete the secret created in step 3.

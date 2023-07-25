@@ -113,8 +113,12 @@ In case a manual restore of the database server is needed (e.g. the server was a
 following these steps:
 
 1. Recreate the azure resources for the database server through the `unity-app.*.yaml` with the exact same configuration.
+You can get the last configuration from the git history of the `unity-app.*.yaml` file. Alternatively you can undelete
+the container of the database in the azure portal, this should also contain the required configuration(⚠️In this case
+don't forget to delete the container again before recreating the resources).
 2. In the backup storage account (azure portal): delete the newly created blob container and undelete the container
 containing the backup to be restored (⚠️check the last modified timestamps, the names will be the same).
+   ![](../assets/undelete_container.png)
 3. Create a secret with one of the access keys of the backup storage account. This secret will be used to mount the
 azure file share containing the backup in the container to later restore it.
 ```yaml
@@ -130,6 +134,8 @@ type: Opaque
 ```
 4. Create a job to restore the DB Server. The job has two steps, first the `initContainer` copies the backup from
 the blob container to the azure file share then the backup will be restored into the database server created in the first step.
+(⚠️The container image must contain the [`psql`](https://www.postgresql.org/docs/current/app-psql.html) with the postgres
+version specified in step 1).
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -208,7 +214,7 @@ spec:
           value: postgres # the postgres admin
         - name: PGPASSWORD
           value: password # the admin password
-        image: postgres:14
+        image: postgres:14 # the image must contain the required postgres version
         name: restore
         resources:
           limits:

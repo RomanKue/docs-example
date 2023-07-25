@@ -36,10 +36,9 @@ mvn "io.quarkus.platform:quarkus-maven-plugin:$QUARKUS_VERSION:create" \
   ./mvnw quarkus:add-extension -Dextensions="container-image-docker,quarkus-smallrye-openapi,quarkus-logging-json"
 
   # patch docker file
-  echo 'RUN \
-      chmod a+x /opt/jboss/container/java/run/run-java.sh && \
-      chmod -R a+x /opt/jboss/container/java
-  ' >> src/main/docker/Dockerfile.jvm
+  echo 'RUN chmod -R a+x /opt/jboss/container/java' >> src/main/docker/Dockerfile.jvm
+
+  rm src/main/docker/Dockerfile.legacy-jar
 
   # remove boiler plate home page
   rm "src/main/resources/META-INF/resources/index.html"

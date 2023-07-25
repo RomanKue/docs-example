@@ -233,7 +233,6 @@ export const createRepository = async (
         image: imageName(appSpec.name, name),
         tag: 'latest',
         tmpDirs: ['/tmp'],
-        capabilities: ['DAC_OVERRIDE'],
         resources: {
           requests: {
             memoryMiB: 128

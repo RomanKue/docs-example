@@ -121,6 +121,7 @@ containing the backup to be restored (⚠️check the last modified timestamps, 
 ![](../assets/undelete_container.png)
 3. Create a secret with one of the access keys of the backup storage account. This secret will be used to mount the
 azure file share containing the backup in the container to later restore it.
+
 ```yaml
 apiVersion: v1
 kind: Secret
@@ -132,10 +133,12 @@ stringData:
   azurestorageaccountkey: unitytestbackupv1_acceskey # one of the access keys to the storage account containing the backups
 type: Opaque
 ```
+
 4. Create a job to restore the DB Server. The job has two steps, first the `initContainer` copies the backup from
 the blob container to the azure file share then the backup will be restored into the database server created in the first step.
 (⚠️The container image must contain the [`psql`](https://www.postgresql.org/docs/current/app-psql.html) with the postgres
 version specified in step 1).
+
 ```yaml
 apiVersion: batch/v1
 kind: Job
@@ -250,4 +253,5 @@ spec:
 ```
 ⚠️ It's important to add the `unity.bmwgroup.net/restore-database-backup` label with the proper value (`<app-name>-pfs-<database-server-name>`),
 this will prevent the operator to execute any update on the database during the restore process.
+
 5. If everything went well and the database is restored delete the secret created in step 3.

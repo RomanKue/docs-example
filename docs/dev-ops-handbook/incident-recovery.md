@@ -259,7 +259,7 @@ the blob container to the azure file share then the backup will be restored into
       ttlSecondsAfterFinished: 86400
     ```
 
-   ⚠️It's important to add the `unity.bmwgroup.net/restore-database-backup` label with the proper value (`<app-name>-pfs-<database-server-name>`),
+    ⚠️It's important to add the `unity.bmwgroup.net/restore-database-backup` label with the proper value (`<app-name>-pfs-<database-server-name>`),
 this will prevent the operator to execute any update on the database during the restore process.
 
 5. After the job is done verify the logs in grafana. It is possible that there are some errors related to database objects

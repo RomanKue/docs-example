@@ -262,6 +262,9 @@ the blob container to the azure file share then the backup will be restored into
     ⚠️It's important to add the `unity.bmwgroup.net/restore-database-backup` label with the proper value (`<app-name>-pfs-<database-server-name>`),
 this will prevent the operator to execute any update on the database during the restore process.
 
+    ⚠️Also please note that when trying to restore a large database, it might be necessary to increase the resources
+(of both the initContainer and the main container).
+
 5. After the job is done verify the logs in grafana. It is possible that there are some errors related to database objects
 managed by azure and/or the default `postgres` database, because the postgres admin user is not a superuser, to whom azure does
 not give access. If there isn't any error related to the database(s) managed by the application and the restore was successful

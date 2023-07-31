@@ -29,14 +29,13 @@ jobs:
     if: \${{ (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success') && github.actor != 'dependabot[bot]' }}
     permissions:
       contents: read
-      packages: read
       id-token: write
     runs-on: atc-ubuntu-latest
     timeout-minutes: 30
     environment: ${environment}
     steps:
       - uses: actions/checkout@v3
-      - uses: unity/deploy-unity-app@v2
+      - uses: unity/deploy-unity-app@v1
         with:
           environment: ${environment}
           KUBERNETES_TOKEN: \${{ secrets.KUBERNETES_TOKEN }}

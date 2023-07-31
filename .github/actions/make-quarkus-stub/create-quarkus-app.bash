@@ -36,7 +36,7 @@ mvn "io.quarkus.platform:quarkus-maven-plugin:$QUARKUS_VERSION:create" \
   ./mvnw quarkus:add-extension -Dextensions="container-image-docker,quarkus-smallrye-openapi,quarkus-logging-json"
 
   # patch docker file
-  echo 'RUN chmod -R a+x /opt/jboss/container/java' >> src/main/docker/Dockerfile.jvm
+  echo 'RUN chmod -R a+x /opt/jboss/container/java && chmod -R a+x /usr/local/s2i' >> src/main/docker/Dockerfile.jvm
 
   rm src/main/docker/Dockerfile.legacy-jar
 

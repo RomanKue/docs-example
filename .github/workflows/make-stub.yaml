@@ -15,9 +15,9 @@ on:
       name:
         required: true
         description: name of the deployable to create
-      dry-run:
+      dryRun:
         required: false
-        description: dry-run flag (if true, don't push results to the repo)
+        description: dryRun flag (if true, don't push results to the repo)
         type: choice
         default: "true"
         options:
@@ -101,7 +101,7 @@ jobs:
           git commit --all --message 'create ${{ github.event.inputs.type }} stub: ${{ github.event.inputs.name }}'
           git pull --rebase origin main
       - name: push
-        if: ${{ github.event.inputs.dry-run != 'true' }}
+        if: ${{ github.event.inputs.dryRun != 'true' }}
         shell: bash
         working-directory: ${{ github.event.inputs.repository }}
         run: |

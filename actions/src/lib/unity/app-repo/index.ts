@@ -209,6 +209,7 @@ export const createRepository = async (
       workflow_id: makeStubWorkflowId,
       inputs: {
         name,
+        dryRun: 'false',
         repository: appRepository.name,
         type: 'angular',
         javaVersion: `${javaVersion}`,
@@ -250,6 +251,7 @@ export const createRepository = async (
       workflow_id: makeStubWorkflowId,
       inputs: {
         name,
+        dryRun: 'false',
         repository: appRepository.name,
         type: 'quarkus',
         javaVersion: `${javaVersion}`,

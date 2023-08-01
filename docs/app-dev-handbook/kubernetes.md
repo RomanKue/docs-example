@@ -144,6 +144,9 @@ Note that the workflows in your app's repository make use of
 the [deploy-unity-app](https://atc-github.azure.cloud.bmw/UNITY/deploy-unity-app) action, which uses `kubectl` and the
 service account to sync the `unity-app.*.yaml` into a Kubernetes secret.
 
+Additionally, it checks if the image and tag/sha256 combination exists and if they correspond to each other.
+If sha256 parameter is not present it is added in the kubernetes secret.
+
 ## Deployments
 
 Assuming you have set the `KUBECONFIG` you can now inspect deployments for your app `app-foo` as follows:

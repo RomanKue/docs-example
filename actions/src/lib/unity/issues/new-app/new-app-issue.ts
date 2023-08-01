@@ -1,5 +1,5 @@
 import {lexMarkdown} from '../../../mardown/markdown.js';
-import {marked} from 'marked';
+import {Tokens} from 'marked';
 
 import * as yaml from 'js-yaml';
 import {AppDisplayModes, AppSpec, parseYaml} from '../../app-spec.js';
@@ -9,7 +9,7 @@ import {getRepositoryContent} from '../../../github/api/repos/repositories.js';
 import {Content, ContentFile} from '../../../github/api/repos/response/content.js';
 import {base64Decode} from '../../../strings/encoding.js';
 import {descriptionDefault, displayNameDefault} from '../../config.js';
-import Code = marked.Tokens.Code;
+import Code = Tokens.Code;
 
 
 /**

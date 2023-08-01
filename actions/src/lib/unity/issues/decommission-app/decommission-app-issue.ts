@@ -1,9 +1,9 @@
-import { ReadonlyDeep } from 'type-fest';
-import { AppSpec, parseYaml } from '../../app-spec.js';
+import {ReadonlyDeep} from 'type-fest';
+import {AppSpec, parseYaml} from '../../app-spec.js';
 import * as core from '@actions/core';
-import { lexMarkdown } from '../../../mardown/markdown.js';
-import {marked} from 'marked';
-import Code = marked.Tokens.Code;
+import {lexMarkdown} from '../../../mardown/markdown.js';
+import {Tokens} from 'marked';
+import Code = Tokens.Code;
 
 export class DecommissionAppIssue {
   constructor (

@@ -1,8 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="actions" type="JavaScriptTestRunnerJest">
     <config-file value="$PROJECT_DIR$/actions/package.json" />
-    <node-interpreter value="/usr/local/opt/node@16/bin/node" />
-    <node-options value="" />
+    <node-interpreter value="project" />
     <jest-package value="$PROJECT_DIR$/actions/node_modules/jest" />
     <working-dir value="$PROJECT_DIR$/actions" />
     <envs />

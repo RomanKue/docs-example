@@ -82,9 +82,14 @@ Here are some aspects to keep in mind:
 
 ## Databases
 
-Databases of type PostgreSQL are experimental and may be used for prototyping only.
+Databases of type PostgreSQL are in piloting phase and may be used on the int environment only.
+Make sure to understand the limitations of
+the [PostgreSQL Flexible Server](app-dev-handbook/postgresql-flexible-server.html).
 
-* PostgreSQL databases must not be used in production.
-* PostgreSQL databases are not backed up
-* PostgreSQL databases cannot be restored
+Most notably:
+
+* PostgreSQL Flexible Server's may have regular maintenance downtimes.
+* PostgreSQL Flexible Server's don't support high availability yet.
+* It is the responsibility of the UNITY team to maintain a stable database server, while the app developer is
+  responsible for everything inside the databases.
 

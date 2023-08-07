@@ -22,6 +22,7 @@ nav_order: 13
     - [Remote Shell](#remote-shell)
     - [Port-Forwarding](#port-forwarding)
   - [Inspect Events](#inspect-events)
+  - [Container Runtime (Docker)](#container-runtime-docker)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -235,10 +236,40 @@ adjusting the URL).
 
 ## Inspect Events
 
-Sometimes it is useful to inspect the  [events](https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/)
+Sometimes it is useful to inspect
+the  [events](https://kubernetes.io/docs/reference/kubernetes-api/cluster-resources/event-v1/)
 from the Kubernetes cluster. The application service account token is authorized to list the events from the cluster:
 
 ```bash
 kubectl get events
 ```
 
+## Container Runtime (Docker)
+
+At the core of the Kubernetes cluster is a container runtime. Each Kubernetes cluster may have a different container
+runtime and configuration at its heart. Most settings are security related, and sometimes it can be hard to troubleshoot
+why a specific container is not running as intended. Here are a few guidelines on preparing and testing containers to
+run in UNITY:
+
+* containers must not require privileged users to run
+  e.g. root user and sudo commands will not work)
+  Reference: [Force the running image to run as a non-root user to ensure least privilege](https://kubesec.io/basics/containers-securitycontext-runasnonroot-true/)
+* containers should run as user 10000 in group 10000
+  See [UID (User Identifier) and GID (Group Identifier) in Linux](https://gggauravgandhi.medium.com/uid-user-identifier-and-gid-group-identifier-in-linux-121ea68bf510)
+  for a quick explanation.
+  A specific user, with uid > 10000, to run the container may be specified via `runAsUser` in the `unity-app.*.yaml`.
+  Reference: [Run as a high-UID user to avoid conflicts with the host’s user table](https://kubesec.io/basics/containers-securitycontext-runasuser/)
+* By default, all capabilities are dropped.
+  See [An Introduction to Linux Capabilities](https://earthly.dev/blog/intro-to-linux-capabilities) for a quick
+  overview.
+  Specific capabilities, such as `NET_BIND_SERVICE` may be added via the `unity-app.*.yaml`.
+  Reference: [Drop all capabilities and add only those required to reduce syscall attack surface](https://kubesec.io/basics/containers-securitycontext-capabilities-drop-index-all/)
+* The root filesystem of a container will be readonly.
+  Temporary directories that the container requires write permission to should be specified as `tmpDirs` in the `unity-app.*.yaml`.
+  Reference: [An immutable root filesystem can prevent malicious binaries being added to PATH and increase attack cost](https://kubesec.io/basics/containers-securitycontext-readonlyrootfilesystem-true/)
+
+To test a container locally, the following docker command gets quite close to the specifications above:
+
+```bash
+docker run --read-only --cap-drop ALL --user 10000:10000 my-image
+```

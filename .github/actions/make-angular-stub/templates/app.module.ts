@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import {isDevMode, NgModule} from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 
 import { AppComponent } from "./app.component";
@@ -12,6 +12,10 @@ import {
 import { MatDividerModule } from "@angular/material/divider";
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
 import { AuthenticationErrorInterceptor } from "./interceptors/authentication-error-interceptor";
+
+if (isDevMode()) {
+  document.cookie = `"{{ .Env.REPO }}-{{ .Env.NAME }}-environment"=dev; Secure; SameSite=Strict; Path=/{{ .Env.APP_NAME }}/{{ .Env.NAME }}`
+}
 
 @NgModule({
   declarations: [AppComponent],

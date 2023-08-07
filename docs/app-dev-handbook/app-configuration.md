@@ -155,3 +155,90 @@ prototype: true
 
 It is not possible to deploy an application on the UNITY production environment without either specifying an `appId` for
 it or marking it as a prototype.
+
+## Environment Configuration with Angular
+
+Angular [recommends](https://angular.io/guide/build#configuring-application-environments) building different artifacts
+for different environments such as int and prod.
+However, this is in contradiction to the concept of running the same docker images on all environments, which is a good
+practice to ensure environments are as close as possible. This approach is recommended by UNITY.
+
+To have minimal environment specific configuration of an angular app, a mechanism is required that does not need to
+build separate images for int and prod.
+The simplest approach is to store this information in a [cookie](#headers-and-cookies).
+
+Then, inside the app, that cookie can be accessed as follows:
+
+```ts
+/**
+ * Extract cookie value by name
+ * @see https://stackoverflow.com/a/15724300/1458343
+ */
+const getCookie = (name: string) => {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    return parts.length === 2 ? parts.pop()?.split(";")?.shift() : undefined;
+  };
+
+@Component({
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
+})
+export class AppComponent {
+  //Tag with environment for header
+  environmentTagConfig: Partial<DsHeaderTagConfiguration> = {
+    label: getCookie("app-foo-ui-environment"),
+  };
+
+  // ...
+}
+```
+
+This little demo shows how the `environmentTagConfig` is set from a cookie `app-foo-ui-environment=int`.
+In the same way, other environment specific config may be loaded, such as a URL of an external system:
+
+*gh.service.ts:*
+```ts
+@Injectable({
+  providedIn: 'root'
+})
+export class GhService {
+
+  private url = getCookie("app-foo-ui-gh-url") ?? ''
+
+  constructor(private http: HttpClient) { }
+
+  getOctocat() {
+    return this.http.get(this.url, {responseType: 'text'})
+  }
+}
+```
+
+To initialize the cookie for local development, add the following block:
+
+*app.module.ts:*
+
+```ts
+if (isDevMode()) {
+    document.cookie = `app-foo-ui-environment=dev; Secure; SameSite=Strict; Path=/foo/ui`
+    document.cookie = `app-foo-ui-gh-url=https://api.github.com/octocat; Secure; SameSite=Strict; Path=/foo/ui`
+}
+```
+
+and in the `unity-app.*.yaml` files add the cookie config to use
+
+```yaml
+    headers:
+      response:
+        add:
+          Set-Cookie:
+            - app-foo-ui-environment=foo; Secure; SameSite=Strict; Path=/foo/ui
+            - app-foo-ui-gh-url=https://api.github.com/octocat; Secure; SameSite=Strict; Path=/foo/ui
+```
+
+Which could be set as `app-foo-ui-gh-url=https://api.github.com/octocat`
+
+An alternative approach would be serving environment specific parameters from a backend's REST resource, which could be
+configured via [environment variables](#environment-variables) or data in a database. Currently, environment variables
+cannot be used directly in a nginx deployment.

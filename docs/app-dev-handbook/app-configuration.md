@@ -17,6 +17,7 @@ nav_order: 3
     - [Encrypt via `gh`](#encrypt-via-gh)
   - [Headers and Cookies](#headers-and-cookies)
   - [Prototypes](#prototypes)
+  - [Environment Configuration with Angular](#environment-configuration-with-angular)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 

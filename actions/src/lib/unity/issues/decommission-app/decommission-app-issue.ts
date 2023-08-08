@@ -3,7 +3,6 @@ import {AppSpec, parseYaml} from '../../app-spec.js';
 import * as core from '@actions/core';
 import {lexMarkdown} from '../../../mardown/markdown.js';
 import {Tokens} from 'marked';
-import Code = Tokens.Code;
 
 export class DecommissionAppIssue {
   constructor (
@@ -15,7 +14,7 @@ export class DecommissionAppIssue {
 export const parseIssueBody = (body: string): DecommissionAppIssue => {
   core.info(`parsing issue body`);
   const tokens = lexMarkdown(body);
-  const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Code[];
+  const code = tokens.filter(token => token.type == 'code' && token.lang == 'yaml') as Tokens.Code[];
   const appYaml = code[0]?.text ?? '';
   const appSpec: DecommissionAppIssue['appSpec'] = parseYaml(appYaml);
   return new DecommissionAppIssue(

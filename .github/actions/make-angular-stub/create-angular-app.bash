@@ -35,6 +35,7 @@ ng new "$NAME" --defaults --style=scss --skip-git
   npm config set @bmw-ds:registry https://nexus.bmwgroup.net/repository/bmw_npm_repositories/
   npm install @angular/cdk@$ANGULAR_VERSION @angular/material@$ANGULAR_VERSION @bmw-ds/components@latest eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin
   npx ng add @angular-eslint/schematics --skip-confirmation
+  npm install --save-dev @angular-devkit/architect
 
   echo "@import '../node_modules/@bmw-ds/components/density-styles/styles/scss/density-styles-ng.scss';" > src/styles.scss
 

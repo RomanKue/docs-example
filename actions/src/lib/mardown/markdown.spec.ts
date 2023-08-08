@@ -1,6 +1,5 @@
 import {Tokens} from 'marked';
 import {lexMarkdown} from './markdown.js';
-import Heading = Tokens.Heading;
 
 describe('markdown', () => {
   describe('lexMarkdown', () => {
@@ -8,7 +7,7 @@ describe('markdown', () => {
       const ast = lexMarkdown('# Foo');
       expect(ast).toBeTruthy();
       expect(ast[0].type).toEqual('heading');
-      const heading = ast[0] as Heading;
+      const heading = ast[0] as Tokens.Heading;
       expect(heading.text).toEqual('Foo');
     });
   });

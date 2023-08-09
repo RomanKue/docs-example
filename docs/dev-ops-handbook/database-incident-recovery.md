@@ -13,7 +13,6 @@ nav_order: 8
 - [Database Incident Recovery](#database-incident-recovery)
   - [Restore Database Manually](#restore-database-manually)
   - [Fix Terraform Locked State](#fix-terraform-locked-state)
-  - [Fix Terraform Output Empty for “Fqdn”](#fix-terraform-output-empty-for-fqdn)
   - [Cleanup Resources When Destroy Is Interrupted](#cleanup-resources-when-destroy-is-interrupted)
   - [Manually Run Terraform Destroy From Local](#manually-run-terraform-destroy-from-local)
   - [Manually Delete Database Resources](#manually-delete-database-resources)
@@ -202,30 +201,6 @@ azcopy copy https://unitytestv3.blob.core.windows.net/unity-grafana-test . --rec
 cd unity-grafana-test
 terraform force-unlock <LOCK_ID>
 ```
-
-## Fix Terraform Output Empty for “Fqdn”
-
-When someone creates a new DB server with an invalid configuration (e.g. too early PITR time stamp).
-Terraform will not be able to create the Server. When trying to delete that DB server,
-the destroy change request will fail, because the backup job cannot be executed,
-because there is no fqdn in the terraform output,
-e.g. error: `"could not read outputs: terraform output empty for \"fqdn\""`.
-
-Steps to follow:
-* Add fqdn property in terraform state outputs in the azure portal ([https://portal.azure.com/](https://portal.azure.com/))
-```bash
-# Make sure the value is changed accordingly
-"fqdn": {
-  "value": "app-test-pfs-db-attila-azure-restore-v2.postgres.database.azure.com",
-  "type": "string"
-},
-
-```
-like shown here:
-    ![](../assets/add-fqdn-to-terraform-state.png)
-* After that, follow the steps from [Cleanup Resources When Destroy Is Interrupted](#cleanup-resources-when-destroy-is-interrupted)
-* If the above steps did not work, follow [Manually Run Terraform Destroy From Local](#manually-run-terraform-destroy-from-local)
-
 ## Cleanup Resources When Destroy Is Interrupted
 
 There are cases when the database destroy operation is interrupted for various reasons.

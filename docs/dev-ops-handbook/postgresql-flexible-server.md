@@ -2,7 +2,7 @@
 layout: default
 title: PostgreSQL Flexible Server
 parent: DevOps Handbook
-nav_order: 12
+nav_order: 14
 ---
 
 **Table of Contents**

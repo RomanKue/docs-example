@@ -75,7 +75,7 @@ jobs:
       - name: output image tag
         if: \${{ github.ref == 'refs/heads/main' }}
         id: image-tag
-        run: echo "::set-output name=image-tag::\${{ env.TAG }}"
+        run: echo "image-tag=\${{ env.TAG }}" >> $GITHUB_OUTPUT
   rollout-to-prod:
     needs:
       - ${ciQuarkusWorkflowName}

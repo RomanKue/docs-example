@@ -57,7 +57,7 @@ jobs:
           git add "\${{ inputs.unity-app-file }}"
           git commit -m "change image tag to \${{ inputs.tag }}"
           git push origin "\${{ inputs.branch }}:\${{ inputs.branch }}"
-          echo "::set-output name=GIT_SHA::$(git rev-parse \${{ inputs.branch }})"
+          echo "GIT_SHA=$(git rev-parse \${{ inputs.branch }})" >> $GITHUB_OUTPUT
       - name: gh login
         shell: bash
         run: >

@@ -201,6 +201,7 @@ azcopy copy https://unitytestv3.blob.core.windows.net/unity-grafana-test . --rec
 cd unity-grafana-test
 terraform force-unlock <LOCK_ID>
 ```
+
 ## Cleanup Resources When Destroy Is Interrupted
 
 There are cases when the database destroy operation is interrupted for various reasons.

@@ -10,7 +10,7 @@
     "@types/node": "20.4.9",
     "@typescript-eslint/eslint-plugin": "6.3.0",
     "@typescript-eslint/parser": "6.3.0",
-    "eslint": "8.46.0",
+    "eslint": "8.50.0",
     "immer": "^10.0.2",
     "js-yaml": "4.1.0",
     "jsonschema": "1.4.1",
